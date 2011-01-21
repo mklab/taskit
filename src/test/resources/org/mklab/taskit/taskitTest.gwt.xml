@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM
+"http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
+
 <module>
   <!-- Inherit our applications main module.                      -->
   <inherits name='org.mklab.taskit.taskit'/>
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/taskit/greet" class="org.mklab.taskit.server.GreetingServiceImpl" />
+  <servlet path="/taskit/db_sample" class="org.mklab.taskit.server.DBSampleServiceImpl" />
 
 </module>
