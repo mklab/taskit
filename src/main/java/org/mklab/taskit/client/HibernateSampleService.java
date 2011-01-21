@@ -1,5 +1,9 @@
 package org.mklab.taskit.client;
 
+import java.util.List;
+
+import org.mklab.taskit.model.Test;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -15,6 +19,6 @@ public interface HibernateSampleService extends RemoteService {
 	 * 
 	 * @return アクセス結果
 	 */
-	String accessThroughHibernate();
+	List<Test> accessThroughHibernate();
 
 }

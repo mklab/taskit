@@ -1,5 +1,9 @@
 package org.mklab.taskit.client;
 
+import java.util.List;
+
+import org.mklab.taskit.model.Test;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -69,14 +73,14 @@ public class Taskit implements EntryPoint {
 			@SuppressWarnings("unused")
 			public void onClick(ClickEvent event) {
 				Taskit.this.hibernateSampleService
-						.accessThroughHibernate(new AsyncCallback<String>() {
+						.accessThroughHibernate(new AsyncCallback<List<Test>>() {
 
 							public void onFailure(Throwable caught) {
 								failed(caught);
 							}
 
-							public void onSuccess(String result) {
-								setResultText(result);
+							public void onSuccess(List<Test> result) {
+								setResultText(result.toString());
 							}
 						});
 			}

@@ -3,7 +3,6 @@ package org.mklab.taskit.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.mklab.taskit.model.Test;
@@ -16,23 +15,25 @@ public class TestDao {
 
 	private EntityManager manager;
 
+	/**
+	 * {@link TestDao}オブジェクトを構築します。
+	 * 
+	 * @param manager
+	 *            エンティティマネージャ
+	 */
 	public TestDao(EntityManager manager) {
 		this.manager = manager;
 	}
 
-	public Test add(Test test) {
-		EntityTransaction t = manager.getTransaction();
-		t.begin();
-		manager.persist(test);
-		t.commit();
-
-		return test;
-	}
-
+	/**
+	 * 全てのTestインスタンスを列挙します。
+	 * 
+	 * @return 全てのTestインスタンス
+	 */
 	@SuppressWarnings("unchecked")
 	public List<Test> list() {
-		Query q = manager.createQuery("select t from test as t");
-		return (List<Test>) q.getResultList();
+		final Query q = this.manager.createQuery("select t from test as t"); //$NON-NLS-1$
+		return q.getResultList();
 	}
 
 }
