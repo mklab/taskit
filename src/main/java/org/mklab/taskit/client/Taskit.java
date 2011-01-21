@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class taskit implements EntryPoint {
+public class Taskit implements EntryPoint {
 
 	final DBSampleServiceAsync dbSampleService = GWT
 			.create(DBSampleService.class);
@@ -48,7 +48,7 @@ public class taskit implements EntryPoint {
 
 			@SuppressWarnings("unused")
 			public void onClick(ClickEvent event) {
-				taskit.this.dbSampleService
+				Taskit.this.dbSampleService
 						.accessToDatabase(new AsyncCallback<String>() {
 
 							public void onFailure(Throwable caught) {
@@ -65,6 +65,7 @@ public class taskit implements EntryPoint {
 		buttonPanel.add(dbAccessButton);
 		return buttonPanel;
 	}
+
 	void setResultText(String text) {
 		this.resultLabel.setText(text);
 	}
@@ -73,5 +74,4 @@ public class taskit implements EntryPoint {
 		setResultText("Fail : " + e.toString()); //$NON-NLS-1$
 	}
 
-	
 }
