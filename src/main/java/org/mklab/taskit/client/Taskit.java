@@ -18,6 +18,8 @@ public class Taskit implements EntryPoint {
 
 	final DBSampleServiceAsync dbSampleService = GWT
 			.create(DBSampleService.class);
+	final HibernateSampleServiceAsync hibernateSampleService = GWT
+			.create(HibernateSampleService.class);
 	private final Messages messages = GWT.create(Messages.class);
 
 	private Label resultLabel;
@@ -43,7 +45,6 @@ public class Taskit implements EntryPoint {
 
 		final Button dbAccessButton = new Button(
 				this.messages.accessToDatabaseButton());
-
 		dbAccessButton.addClickHandler(new ClickHandler() {
 
 			@SuppressWarnings("unused")
@@ -61,8 +62,28 @@ public class Taskit implements EntryPoint {
 						});
 			}
 		});
+		final Button hibernateAccessButton = new Button(
+				this.messages.accessToHibernateButton());
+		hibernateAccessButton.addClickHandler(new ClickHandler() {
+
+			@SuppressWarnings("unused")
+			public void onClick(ClickEvent event) {
+				Taskit.this.hibernateSampleService
+						.accessThroughHibernate(new AsyncCallback<String>() {
+
+							public void onFailure(Throwable caught) {
+								failed(caught);
+							}
+
+							public void onSuccess(String result) {
+								setResultText(result);
+							}
+						});
+			}
+		});
 
 		buttonPanel.add(dbAccessButton);
+		buttonPanel.add(hibernateAccessButton);
 		return buttonPanel;
 	}
 
