@@ -3,6 +3,7 @@ package org.mklab.taskit.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
 /**
  * @author Yuhi Ishikura
@@ -23,6 +24,8 @@ public class GwtTestTaskit extends GWTTestCase {
 	 */
 	public void testDbAccess() {
 		final DBSampleServiceAsync service = GWT.create(DBSampleService.class);
+		final ServiceDefTarget target = (ServiceDefTarget) service;
+		target.setServiceEntryPoint(GWT.getModuleBaseURL() + "taskit/db_sample"); //$NON-NLS-1$
 
 		delayTestFinish(1000 * 10);
 		service.accessToDatabase(new AsyncCallback<String>() {
