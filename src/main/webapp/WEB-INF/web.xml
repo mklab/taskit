@@ -7,18 +7,10 @@
 
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>greetServlet</servlet-name>
-		<servlet-class>org.mklab.taskit.server.GreetingServiceImpl</servlet-class>
-	</servlet>
-	<servlet>
 		<servlet-name>dbSample</servlet-name>
 		<servlet-class>org.mklab.taskit.server.DBSampleServiceImpl</servlet-class>
 	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>greetServlet</servlet-name>
-		<url-pattern>/taskit/greet</url-pattern>
-	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>dbSample</servlet-name>
 		<url-pattern>/taskit/db_sample</url-pattern>
