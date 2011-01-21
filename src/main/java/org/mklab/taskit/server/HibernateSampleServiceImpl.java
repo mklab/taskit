@@ -15,39 +15,37 @@ import org.mklab.taskit.client.HibernateSampleService;
 import org.mklab.taskit.dao.TestDao;
 import org.mklab.taskit.model.Test;
 
+
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 21, 2011
  */
-public class HibernateSampleServiceImpl extends PersistentRemoteService
-		implements HibernateSampleService {
+public class HibernateSampleServiceImpl extends PersistentRemoteService implements HibernateSampleService {
 
-	/** for serialization. */
-	private static final long serialVersionUID = -4392619702326579755L;
-	private TestDao testDao;
+  /** for serialization. */
+  private static final long serialVersionUID = -4392619702326579755L;
+  private TestDao testDao;
 
-	/**
-	 * {@link HibernateSampleServiceImpl}オブジェクトを構築します。
-	 * 
-	 */
-	public HibernateSampleServiceImpl() {
-		final EntityManagerFactory factory = Persistence
-				.createEntityManagerFactory("taskit"); //$NON-NLS-1$
-		final EntityManager entityManager = factory.createEntityManager();
-		this.testDao = new TestDao(entityManager);
+  /**
+   * {@link HibernateSampleServiceImpl}オブジェクトを構築します。
+   */
+  public HibernateSampleServiceImpl() {
+    final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taskit"); //$NON-NLS-1$
+    final EntityManager entityManager = factory.createEntityManager();
+    this.testDao = new TestDao(entityManager);
 
-		final HibernateJpaUtil persistenceUtil = new HibernateJpaUtil(factory);
-		final PersistentBeanManager persistentBeanManager = GwtConfigurationHelper
-				.initGwtStatelessBeanManager(persistenceUtil);
+    final HibernateJpaUtil persistenceUtil = new HibernateJpaUtil(factory);
+    final PersistentBeanManager persistentBeanManager = GwtConfigurationHelper.initGwtStatelessBeanManager(persistenceUtil);
 
-		setBeanManager(persistentBeanManager);
-	}
+    setBeanManager(persistentBeanManager);
+  }
 
-	/**
-	 * @see org.mklab.taskit.client.HibernateSampleService#accessThroughHibernate()
-	 */
-	public List<Test> accessThroughHibernate() {
-		return this.testDao.list();
-	}
+  /**
+   * @see org.mklab.taskit.client.HibernateSampleService#accessThroughHibernate()
+   */
+  @Override
+  public List<Test> accessThroughHibernate() {
+    return this.testDao.list();
+  }
 
 }

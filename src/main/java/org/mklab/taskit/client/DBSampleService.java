@@ -3,6 +3,7 @@ package org.mklab.taskit.client;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+
 /**
  * データベースへのアクセスを行うサンプルサービスです。
  * 
@@ -12,11 +13,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("db_sample")
 public interface DBSampleService extends RemoteService {
 
-	/**
-	 * データベースにアクセスし、その結果を文字列で返します。
-	 * 
-	 * @return アクセスした結果の文字列
-	 */
-	String accessToDatabase();
+  /**
+   * データベースにアクセスし、その結果を文字列で返します。
+   * 
+   * @return アクセスした結果の文字列
+   */
+  String accessToDatabase();
 
 }

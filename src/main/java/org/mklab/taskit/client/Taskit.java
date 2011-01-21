@@ -15,88 +15,90 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Taskit implements EntryPoint {
 
-	final DBSampleServiceAsync dbSampleService = GWT
-			.create(DBSampleService.class);
-	final HibernateSampleServiceAsync hibernateSampleService = GWT
-			.create(HibernateSampleService.class);
-	private final Messages messages = GWT.create(Messages.class);
+  final DBSampleServiceAsync dbSampleService = GWT.create(DBSampleService.class);
+  final HibernateSampleServiceAsync hibernateSampleService = GWT.create(HibernateSampleService.class);
+  private final Messages messages = GWT.create(Messages.class);
 
-	private Label resultLabel;
+  private Label resultLabel;
 
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
-		final Widget buttonPanel = createButtonPanel();
+  /**
+   * This is the entry point method.
+   */
+  @Override
+  public void onModuleLoad() {
+    final Widget buttonPanel = createButtonPanel();
 
-		this.resultLabel = new Label();
+    this.resultLabel = new Label();
 
-		final RootPanel buttonContainer = RootPanel.get("buttonsContainer"); //$NON-NLS-1$
-		final RootPanel resultContainer = RootPanel.get("resultContainer"); //$NON-NLS-1$
-		buttonContainer.add(buttonPanel);
-		resultContainer.add(this.resultLabel);
-		resultContainer.setHeight("3em"); //$NON-NLS-1$
-		resultContainer.setWidth("50em"); //$NON-NLS-1$
-	}
+    final RootPanel buttonContainer = RootPanel.get("buttonsContainer"); //$NON-NLS-1$
+    final RootPanel resultContainer = RootPanel.get("resultContainer"); //$NON-NLS-1$
+    buttonContainer.add(buttonPanel);
+    resultContainer.add(this.resultLabel);
+    resultContainer.setHeight("3em"); //$NON-NLS-1$
+    resultContainer.setWidth("50em"); //$NON-NLS-1$
+  }
 
-	private Widget createButtonPanel() {
-		final HorizontalPanel buttonPanel = new HorizontalPanel();
+  private Widget createButtonPanel() {
+    final HorizontalPanel buttonPanel = new HorizontalPanel();
 
-		final Button dbAccessButton = new Button(
-				this.messages.accessToDatabaseButton());
-		dbAccessButton.addClickHandler(new ClickHandler() {
+    final Button dbAccessButton = new Button(this.messages.accessToDatabaseButton());
+    dbAccessButton.addClickHandler(new ClickHandler() {
 
-			@SuppressWarnings("unused")
-			public void onClick(ClickEvent event) {
-				Taskit.this.dbSampleService
-						.accessToDatabase(new AsyncCallback<String>() {
+      @Override
+      @SuppressWarnings("unused")
+      public void onClick(ClickEvent event) {
+        Taskit.this.dbSampleService.accessToDatabase(new AsyncCallback<String>() {
 
-							public void onFailure(Throwable caught) {
-								failed(caught);
-							}
+          @Override
+          public void onFailure(Throwable caught) {
+            failed(caught);
+          }
 
-							public void onSuccess(String result) {
-								setResultText(result);
-							}
-						});
-			}
-		});
-		final Button hibernateAccessButton = new Button(
-				this.messages.accessToHibernateButton());
-		hibernateAccessButton.addClickHandler(new ClickHandler() {
+          @Override
+          public void onSuccess(String result) {
+            setResultText(result);
+          }
+        });
+      }
+    });
+    final Button hibernateAccessButton = new Button(this.messages.accessToHibernateButton());
+    hibernateAccessButton.addClickHandler(new ClickHandler() {
 
-			@SuppressWarnings("unused")
-			public void onClick(ClickEvent event) {
-				Taskit.this.hibernateSampleService
-						.accessThroughHibernate(new AsyncCallback<List<Test>>() {
+      @Override
+      @SuppressWarnings("unused")
+      public void onClick(ClickEvent event) {
+        Taskit.this.hibernateSampleService.accessThroughHibernate(new AsyncCallback<List<Test>>() {
 
-							public void onFailure(Throwable caught) {
-								failed(caught);
-							}
+          @Override
+          public void onFailure(Throwable caught) {
+            failed(caught);
+          }
 
-							public void onSuccess(List<Test> result) {
-								setResultText(result.toString());
-							}
-						});
-			}
-		});
+          @Override
+          public void onSuccess(List<Test> result) {
+            setResultText(result.toString());
+          }
+        });
+      }
+    });
 
-		buttonPanel.add(dbAccessButton);
-		buttonPanel.add(hibernateAccessButton);
-		return buttonPanel;
-	}
+    buttonPanel.add(dbAccessButton);
+    buttonPanel.add(hibernateAccessButton);
+    return buttonPanel;
+  }
 
-	void setResultText(String text) {
-		this.resultLabel.setText(text);
-	}
+  void setResultText(String text) {
+    this.resultLabel.setText(text);
+  }
 
-	void failed(Throwable e) {
-		setResultText("Fail : " + e.toString()); //$NON-NLS-1$
-	}
+  void failed(Throwable e) {
+    setResultText("Fail : " + e.toString()); //$NON-NLS-1$
+  }
 
 }
