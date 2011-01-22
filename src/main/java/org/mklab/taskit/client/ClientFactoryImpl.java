@@ -3,6 +3,9 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.ui.LoginView;
+import org.mklab.taskit.client.ui.LoginViewImpl;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -52,6 +55,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public Messages getMessages() {
     return this.messages;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ClientFactory#getLoginView()
+   */
+  @Override
+  public LoginView getLoginView() {
+    return new LoginViewImpl(this);
   }
 
 }

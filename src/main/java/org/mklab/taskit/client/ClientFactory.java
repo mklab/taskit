@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.ui.LoginView;
+
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 
@@ -33,5 +35,12 @@ public interface ClientFactory {
    * @return {@link Messages}インスタンス
    */
   Messages getMessages();
+
+  /**
+   * ログインビューを取得します。
+   * 
+   * @return ログインビュー
+   */
+  LoginView getLoginView();
 
 }

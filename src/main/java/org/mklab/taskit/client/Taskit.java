@@ -1,23 +1,20 @@
 package org.mklab.taskit.client;
 
-import java.util.List;
+import org.mklab.taskit.client.activity.TaskitActivityMapper;
+import org.mklab.taskit.client.place.LoginPlace;
+import org.mklab.taskit.client.place.TaskitPlaceHistoryMapper;
 
-import org.mklab.taskit.model.Test;
-import org.mklab.taskit.service.DBSampleService;
-import org.mklab.taskit.service.DBSampleServiceAsync;
-import org.mklab.taskit.service.HibernateSampleService;
-import org.mklab.taskit.service.HibernateSampleServiceAsync;
-
+import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 
 /**
@@ -25,84 +22,27 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class Taskit implements EntryPoint {
 
-  final DBSampleServiceAsync dbSampleService = GWT.create(DBSampleService.class);
-  final HibernateSampleServiceAsync hibernateSampleService = GWT.create(HibernateSampleService.class);
-  private final Messages messages = GWT.create(Messages.class);
-
-  private Label resultLabel;
+  private Place defaultPlace = new LoginPlace("Login Place"); //$NON-NLS-1$
+  private SimplePanel appWidget = new SimplePanel();
 
   /**
    * This is the entry point method.
    */
   @Override
   public void onModuleLoad() {
-    final Widget buttonPanel = createButtonPanel();
+    final ClientFactory clientFactory = GWT.create(ClientFactory.class);
+    final EventBus eventBus = clientFactory.getEventBus();
+    final PlaceController placeController = clientFactory.getPlaceController();
 
-    this.resultLabel = new Label();
+    final ActivityMapper activityMapper = new TaskitActivityMapper(clientFactory);
+    final ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
+    activityManager.setDisplay(this.appWidget);
 
-    final RootPanel buttonContainer = RootPanel.get("buttonsContainer"); //$NON-NLS-1$
-    final RootPanel resultContainer = RootPanel.get("resultContainer"); //$NON-NLS-1$
-    buttonContainer.add(buttonPanel);
-    resultContainer.add(this.resultLabel);
-    resultContainer.setHeight("3em"); //$NON-NLS-1$
-    resultContainer.setWidth("50em"); //$NON-NLS-1$
+    final PlaceHistoryMapper historyMapper = GWT.create(TaskitPlaceHistoryMapper.class);
+    final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
+    historyHandler.register(placeController, eventBus, this.defaultPlace);
+
+    RootPanel.get("appContainer").add(this.appWidget); //$NON-NLS-1$
+    historyHandler.handleCurrentHistory();
   }
-
-  private Widget createButtonPanel() {
-    final HorizontalPanel buttonPanel = new HorizontalPanel();
-
-    final Button dbAccessButton = new Button(this.messages.accessToDatabaseButton());
-    dbAccessButton.addClickHandler(new ClickHandler() {
-
-      @Override
-      @SuppressWarnings("unused")
-      public void onClick(ClickEvent event) {
-        Taskit.this.dbSampleService.accessToDatabase(new AsyncCallback<String>() {
-
-          @Override
-          public void onFailure(Throwable caught) {
-            failed(caught);
-          }
-
-          @Override
-          public void onSuccess(String result) {
-            setResultText(result);
-          }
-        });
-      }
-    });
-    final Button hibernateAccessButton = new Button(this.messages.accessToHibernateButton());
-    hibernateAccessButton.addClickHandler(new ClickHandler() {
-
-      @Override
-      @SuppressWarnings("unused")
-      public void onClick(ClickEvent event) {
-        Taskit.this.hibernateSampleService.accessThroughHibernate(new AsyncCallback<List<Test>>() {
-
-          @Override
-          public void onFailure(Throwable caught) {
-            failed(caught);
-          }
-
-          @Override
-          public void onSuccess(List<Test> result) {
-            setResultText(result.toString());
-          }
-        });
-      }
-    });
-
-    buttonPanel.add(dbAccessButton);
-    buttonPanel.add(hibernateAccessButton);
-    return buttonPanel;
-  }
-
-  void setResultText(String text) {
-    this.resultLabel.setText(text);
-  }
-
-  void failed(Throwable e) {
-    setResultText("Fail : " + e.toString()); //$NON-NLS-1$
-  }
-
 }

@@ -36,4 +36,9 @@ public interface LoginView extends IsWidget {
    */
   HasClickHandlers getSubmitButton();
 
+  /**
+   * このログインビューにフォーカスします。
+   */
+  void requestFocus();
+
 }

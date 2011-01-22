@@ -27,18 +27,18 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class LoginViewImpl extends Composite implements LoginView {
 
-  private static LoginScreenUiBinder uiBinder = GWT.create(LoginScreenUiBinder.class);
+  private static LoginViewUiBinder uiBinder = GWT.create(LoginViewUiBinder.class);
 
-  interface LoginScreenUiBinder extends UiBinder<Widget, LoginViewImpl> {
+  interface LoginViewUiBinder extends UiBinder<Widget, LoginViewImpl> {
     // no members
   }
 
   @UiField
-  private Button loginButton;
+  Button loginButton;
   @UiField
-  private TextBox userIdBox;
+  TextBox userIdBox;
   @UiField
-  private PasswordTextBox passwordBox;
+  PasswordTextBox passwordBox;
 
   /**
    * {@link LoginViewImpl}オブジェクトを構築します。
@@ -47,8 +47,17 @@ public class LoginViewImpl extends Composite implements LoginView {
    */
   public LoginViewImpl(ClientFactory clientFactory) {
     initWidget(uiBinder.createAndBindUi(this));
-    this.loginButton.setText(clientFactory.getMessages().loginButton());
 
+    this.loginButton.setText(clientFactory.getMessages().loginButton());
+    bindTextBoxEnterKeyToSubmitButton();
+
+    this.userIdBox.setFocus(true);
+  }
+
+  /**
+   * テキストフィールド内でEnterキーを入力したときの挙動と、サブミットボタンを押した時の挙動をバインドします。
+   */
+  private void bindTextBoxEnterKeyToSubmitButton() {
     final KeyDownHandler enterHandler = new KeyDownHandler() {
 
       @SuppressWarnings("synthetic-access")
@@ -90,6 +99,14 @@ public class LoginViewImpl extends Composite implements LoginView {
   @Override
   public HasClickHandlers getSubmitButton() {
     return this.loginButton;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.LoginView#requestFocus()
+   */
+  @Override
+  public void requestFocus() {
+    this.userIdBox.setFocus(true);
   }
 
 }

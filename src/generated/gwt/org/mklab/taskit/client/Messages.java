@@ -7,24 +7,6 @@ package org.mklab.taskit.client;
 public interface Messages extends com.google.gwt.i18n.client.Messages {
   
   /**
-   * Translated "Access to Database".
-   * 
-   * @return translated "Access to Database"
-   */
-  @DefaultMessage("Access to Database")
-  @Key("accessToDatabaseButton")
-  String accessToDatabaseButton();
-
-  /**
-   * Translated "Access to Hibernate".
-   * 
-   * @return translated "Access to Hibernate"
-   */
-  @DefaultMessage("Access to Hibernate")
-  @Key("accessToHibernateButton")
-  String accessToHibernateButton();
-
-  /**
    * Translated "Login".
    * 
    * @return translated "Login"

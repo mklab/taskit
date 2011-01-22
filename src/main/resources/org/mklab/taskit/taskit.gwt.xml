@@ -3,29 +3,31 @@
 "http://google-web-toolkit.googlecode.com/svn/trunk/distro-source/core/src/gwt-module.dtd">
 
 <module rename-to='taskit'>
-	<!-- Inherit the core Web Toolkit stuff. -->
+	<!-- Core inheritance -->
 	<inherits name='com.google.gwt.user.User' />
+	<inherits name="com.google.gwt.activity.Activity" />
+	<inherits name="com.google.gwt.place.Place" />
 
-	<!-- Inherit the default GWT style sheet. You can change -->
-	<!-- the theme of your GWT application by uncommenting -->
-	<!-- any one of the following lines. -->
+	<!-- Theme -->
 	<inherits name='com.google.gwt.user.theme.standard.Standard' />
 	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
 	<!-- Internationalization -->
 	<!-- <inherits name="com.google.gwt.i18n.I18N" /> -->
-
-	<inherits name='net.sf.gilead.Gilead4Gwt' />
-
-	<!-- Specify the app entry point class. -->
-	<entry-point class='org.mklab.taskit.client.Taskit' />
 	<!-- Locales -->
 	<extend-property name="locale" values="ja_JP" />
 
-	<!-- Specify the paths for translatable code -->
-	<source path='client' />
-	<source path='shared' />
-	<source path='model' />
+	<!-- for persistence -->
+	<inherits name='net.sf.gilead.Gilead4Gwt' />
 
+	<!-- ClientFactory -->
+	<replace-with class="org.mklab.taskit.client.ClientFactoryImpl">
+		<when-type-is class="org.mklab.taskit.client.ClientFactory" />
+	</replace-with>
+
+	<entry-point class='org.mklab.taskit.client.Taskit' />
+	<source path='client' />
+	<source path='model' />
+	<source path='service' />
 </module>
