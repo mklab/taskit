@@ -1,4 +1,4 @@
-package org.mklab.taskit.client;
+package org.mklab.taskit.service;
 
 import java.util.List;
 

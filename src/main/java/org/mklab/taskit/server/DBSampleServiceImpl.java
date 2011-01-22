@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.mklab.taskit.client.DBSampleService;
+import org.mklab.taskit.service.DBSampleService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -33,7 +33,7 @@ public class DBSampleServiceImpl extends RemoteServiceServlet implements DBSampl
   private static final String DB_PASSWORD = ""; //$NON-NLS-1$
 
   /**
-   * @see org.mklab.taskit.client.DBSampleService#accessToDatabase()
+   * @see org.mklab.taskit.service.DBSampleService#accessToDatabase()
    */
   @Override
   public String accessToDatabase() {

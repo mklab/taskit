@@ -4,6 +4,10 @@ import java.util.List;
 
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.model.Test;
+import org.mklab.taskit.service.DBSampleService;
+import org.mklab.taskit.service.DBSampleServiceAsync;
+import org.mklab.taskit.service.HibernateSampleService;
+import org.mklab.taskit.service.HibernateSampleServiceAsync;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;

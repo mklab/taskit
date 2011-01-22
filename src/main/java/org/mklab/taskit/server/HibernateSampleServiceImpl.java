@@ -11,9 +11,9 @@ import net.sf.gilead.core.hibernate.jpa.HibernateJpaUtil;
 import net.sf.gilead.gwt.GwtConfigurationHelper;
 import net.sf.gilead.gwt.PersistentRemoteService;
 
-import org.mklab.taskit.client.HibernateSampleService;
 import org.mklab.taskit.dao.TestDao;
 import org.mklab.taskit.model.Test;
+import org.mklab.taskit.service.HibernateSampleService;
 
 
 /**
@@ -41,7 +41,7 @@ public class HibernateSampleServiceImpl extends PersistentRemoteService implemen
   }
 
   /**
-   * @see org.mklab.taskit.client.HibernateSampleService#accessThroughHibernate()
+   * @see org.mklab.taskit.service.HibernateSampleService#accessThroughHibernate()
    */
   @Override
   public List<Test> accessThroughHibernate() {
