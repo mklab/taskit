@@ -64,7 +64,7 @@ public class LoginActivity extends AbstractActivity {
 
           @Override
           public void onFailure(Throwable caught) {
-            view.setStatusText("Failed to login");
+            view.setStatusText(caught.getMessage());
           }
         });
       }
