@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.LoginView;
+import org.mklab.taskit.service.LoginFailureException;
 import org.mklab.taskit.service.LoginService;
 import org.mklab.taskit.service.LoginServiceAsync;
 
@@ -64,7 +65,12 @@ public class LoginActivity extends AbstractActivity {
 
           @Override
           public void onFailure(Throwable caught) {
-            view.setStatusText(caught.getMessage());
+            if (caught instanceof LoginFailureException) {
+              view.setStatusText(String.valueOf(((LoginFailureException)caught).getErrorCode()));
+              return;
+            }
+            
+            view.setStatusText("Invalid state."); //$NON-NLS-1$
           }
         });
       }

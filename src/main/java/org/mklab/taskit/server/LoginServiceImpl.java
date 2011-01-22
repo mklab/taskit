@@ -11,6 +11,7 @@ import org.mklab.taskit.dao.AccountDao;
 import org.mklab.taskit.dao.AccountDaoImpl;
 import org.mklab.taskit.service.LoginFailureException;
 import org.mklab.taskit.service.LoginService;
+import org.mklab.taskit.service.LoginFailureException.ErrorCode;
 
 
 /**
@@ -36,10 +37,11 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
    */
   @Override
   public void login(String id, String password) throws LoginFailureException {
-    if (id.length() == 0 || password.length() == 0) throw new LoginFailureException("Empty id or password not were not allowed.");
+    if (id.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_ID);
+    if (password.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_PASSWORD);
 
     final String hashedPassword = this.accountDao.getHashedPasswordIfExists(id);
-    if (hashedPassword == null) throw new LoginFailureException("Your ID is not registered.");
+    if (hashedPassword == null) throw new LoginFailureException(ErrorCode.ID_NOT_EXISTS);
 
     boolean valid = false;
     try {
@@ -47,7 +49,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     } catch (IllegalArgumentException ex) {
       valid = false;
     }
-    if (valid == false) throw new LoginFailureException("Wrong password.");
+    if (valid == false) throw new LoginFailureException(ErrorCode.WRONG_PASSWORD);
 
     final HttpServletRequest request = getThreadLocalRequest();
     final HttpSession session = request.getSession(true);
