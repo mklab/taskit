@@ -3,6 +3,9 @@
  */
 package org.mklab.taskit.dao;
 
+import org.mklab.taskit.model.Account;
+
+
 /**
  * Account関連のDAOです。
  * 
@@ -17,7 +20,7 @@ public interface AccountDao {
    * @param id ID
    * @return ハッシュ関数にかけられたパスワード。IDが存在しない場合はnullを返す。
    */
-  public String getHashedPasswordIfExists(String id);
+  public Account getHashedPasswordIfExists(String id);
 
   /**
    * アカウントを新規作成します。

@@ -26,6 +26,15 @@ public final class Account extends LightEntity {
   private String accountType;
 
   /**
+   * {@link Account}オブジェクトを構築します。
+   * <p>
+   * Serialization用。
+   */
+  public Account() {
+    // do nothing
+  }
+
+  /**
    * Initialize the generated object of {@link Account}.
    * 
    * @param id ID

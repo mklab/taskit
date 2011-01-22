@@ -24,6 +24,15 @@ public class User implements Serializable {
 
   /**
    * {@link User}オブジェクトを構築します。
+   * <p>
+   * for serialization.
+   */
+  public User() {
+    // empty
+  }
+
+  /**
+   * {@link User}オブジェクトを構築します。
    * 
    * @param id ID
    * @param type ユーザーの種別

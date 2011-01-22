@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.LoginView;
+import org.mklab.taskit.model.User;
 import org.mklab.taskit.service.LoginFailureException;
 import org.mklab.taskit.service.LoginService;
 import org.mklab.taskit.service.LoginServiceAsync;
@@ -56,10 +57,10 @@ public class LoginActivity extends AbstractActivity {
 
       @Override
       public void onClick(ClickEvent event) {
-        loginServiceAsync.login(view.getId(), view.getPassword(), new AsyncCallback<Void>() {
+        loginServiceAsync.login(view.getId(), view.getPassword(), new AsyncCallback<User>() {
 
           @Override
-          public void onSuccess(Void result) {
+          public void onSuccess(User result) {
             view.setStatusText("Successfully logged in.");
           }
 
@@ -69,8 +70,8 @@ public class LoginActivity extends AbstractActivity {
               view.setStatusText(String.valueOf(((LoginFailureException)caught).getErrorCode()));
               return;
             }
-            
-            view.setStatusText("Invalid state."); //$NON-NLS-1$
+
+            view.setStatusText("Invalid state." + caught.toString()); //$NON-NLS-1$
           }
         });
       }

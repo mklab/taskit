@@ -9,9 +9,11 @@ import javax.servlet.http.HttpSession;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mklab.taskit.dao.AccountDao;
 import org.mklab.taskit.dao.AccountDaoImpl;
+import org.mklab.taskit.model.Account;
+import org.mklab.taskit.model.User;
 import org.mklab.taskit.service.LoginFailureException;
-import org.mklab.taskit.service.LoginService;
 import org.mklab.taskit.service.LoginFailureException.ErrorCode;
+import org.mklab.taskit.service.LoginService;
 
 
 /**
@@ -36,12 +38,13 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
    *      java.lang.String)
    */
   @Override
-  public void login(String id, String password) throws LoginFailureException {
+  public User login(String id, String password) throws LoginFailureException {
     if (id.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_ID);
     if (password.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_PASSWORD);
 
-    final String hashedPassword = this.accountDao.getHashedPasswordIfExists(id);
-    if (hashedPassword == null) throw new LoginFailureException(ErrorCode.ID_NOT_EXISTS);
+    final Account account = this.accountDao.getHashedPasswordIfExists(id);
+    if (account == null) throw new LoginFailureException(ErrorCode.ID_NOT_EXISTS);
+    final String hashedPassword = account.getPassword();
 
     boolean valid = false;
     try {
@@ -55,6 +58,8 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     final HttpSession session = request.getSession(true);
 
     session.setAttribute(SessionUtil.IS_LOGGED_IN_KEY, Boolean.TRUE);
+    final String sessionId = session.getId();
+    return new User(id, account.getAccountType(), sessionId);
   }
 
   /**

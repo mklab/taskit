@@ -35,17 +35,9 @@ public class AccountDaoImpl implements AccountDao {
    * @see org.mklab.taskit.dao.AccountDao#getHashedPasswordIfExists(java.lang.String)
    */
   @Override
-  public String getHashedPasswordIfExists(String id) {
-    final Query q = this.entityManager.createQuery(String.format("select password from ACCOUNT where id='%s'", id)); //$NON-NLS-1$
-    final List<?> o = q.getResultList();
-    if (o.size() == 0) return null;
-
-    if (o.size() > 1) throw new IllegalStateException();
-
-    final Object hashedPassword = o.get(0);
-    if (hashedPassword instanceof String == false) throw new IllegalStateException();
-
-    return (String)hashedPassword;
+  public Account getHashedPasswordIfExists(String id) {
+    final Account account = this.entityManager.find(Account.class, id);
+    return account;
   }
 
   /**

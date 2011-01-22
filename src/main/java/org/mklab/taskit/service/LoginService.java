@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.service;
 
+import org.mklab.taskit.model.User;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -21,9 +23,10 @@ public interface LoginService extends RemoteService {
    * 
    * @param id ID
    * @param password パスワード
+   * @return ログインに成功した場合はログインユーザーを表すモデル。失敗した場合は例外をスローするため返しません。
    * @throws LoginFailureException ログインに失敗した場合
    */
-  void login(String id, String password) throws LoginFailureException;
+  User login(String id, String password) throws LoginFailureException;
 
   /**
    * ログアウトします。
