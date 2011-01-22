@@ -8,25 +8,30 @@
 			text-align: right
 		}
 		
-		.base {
+		.box {
 			display: table;
+		}
+		
+		.status {
+			color: gray;
 		}
 	</ui:style>
 
 
 	<g:HTMLPanel>
-		<div class="{style.base}">
+		<g:Label styleName='{style.status}' ui:field="statusLabel" />
+		<div class="{style.box}">
 			<table>
 				<tr>
 					<td>User ID : </td>
 					<td>
-						<g:TextBox ui:field="userIdBox" />
+						<g:TextBox ui:field="idText" />
 					</td>
 				</tr>
 				<tr>
 					<td>Password : </td>
 					<td>
-						<g:PasswordTextBox ui:field="passwordBox" />
+						<g:PasswordTextBox ui:field="passwordText" />
 					</td>
 				</tr>
 			</table>

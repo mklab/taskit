@@ -5,9 +5,15 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.LoginView;
+import org.mklab.taskit.service.LoginService;
+import org.mklab.taskit.service.LoginServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
@@ -35,9 +41,35 @@ public class LoginActivity extends AbstractActivity {
    */
   @Override
   public void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
-    final LoginView view = this.clientFactory.getLoginView();
+    final LoginView view = createLoginView();
+
     panel.setWidget(view);
     view.requestFocus();
+  }
+
+  private LoginView createLoginView() {
+    final LoginView view = this.clientFactory.getLoginView();
+    final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
+
+    view.getSubmitButton().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(ClickEvent event) {
+        loginServiceAsync.login(view.getId(), view.getPassword(), new AsyncCallback<Void>() {
+
+          @Override
+          public void onSuccess(Void result) {
+            view.setStatusText("Successfully logged in.");
+          }
+
+          @Override
+          public void onFailure(Throwable caught) {
+            view.setStatusText("Failed to login");
+          }
+        });
+      }
+    });
+    return view;
   }
 
 }

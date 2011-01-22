@@ -7,21 +7,13 @@
 
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>dbSample</servlet-name>
-		<servlet-class>org.mklab.taskit.server.DBSampleServiceImpl</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>hibernateSample</servlet-name>
-		<servlet-class>org.mklab.taskit.server.HibernateSampleServiceImpl</servlet-class>
+		<servlet-name>login</servlet-name>
+		<servlet-class>org.mklab.taskit.server.LoginServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>dbSample</servlet-name>
-		<url-pattern>/taskit/db_sample</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>hibernateSample</servlet-name>
-		<url-pattern>/taskit/hibernate_sample</url-pattern>
+		<servlet-name>login</servlet-name>
+		<url-pattern>/taskit/login</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

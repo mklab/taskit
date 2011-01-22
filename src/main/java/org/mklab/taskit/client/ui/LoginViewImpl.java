@@ -14,6 +14,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,9 +37,11 @@ public class LoginViewImpl extends Composite implements LoginView {
   @UiField
   Button loginButton;
   @UiField
-  TextBox userIdBox;
+  TextBox idText;
   @UiField
-  PasswordTextBox passwordBox;
+  Label statusLabel;
+  @UiField
+  PasswordTextBox passwordText;
 
   /**
    * {@link LoginViewImpl}オブジェクトを構築します。
@@ -51,7 +54,7 @@ public class LoginViewImpl extends Composite implements LoginView {
     this.loginButton.setText(clientFactory.getMessages().loginButton());
     bindTextBoxEnterKeyToSubmitButton();
 
-    this.userIdBox.setFocus(true);
+    this.idText.setFocus(true);
   }
 
   /**
@@ -69,8 +72,8 @@ public class LoginViewImpl extends Composite implements LoginView {
       }
     };
 
-    this.userIdBox.addKeyDownHandler(enterHandler);
-    this.passwordBox.addKeyDownHandler(enterHandler);
+    this.idText.addKeyDownHandler(enterHandler);
+    this.passwordText.addKeyDownHandler(enterHandler);
   }
 
   private void enterKeyPressed() {
@@ -82,7 +85,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    */
   @Override
   public String getId() {
-    return this.userIdBox.getText();
+    return this.idText.getText();
   }
 
   /**
@@ -90,7 +93,7 @@ public class LoginViewImpl extends Composite implements LoginView {
    */
   @Override
   public String getPassword() {
-    return this.passwordBox.getText();
+    return this.passwordText.getText();
   }
 
   /**
@@ -102,11 +105,19 @@ public class LoginViewImpl extends Composite implements LoginView {
   }
 
   /**
+   * @see org.mklab.taskit.client.ui.LoginView#setStatusText(java.lang.String)
+   */
+  @Override
+  public void setStatusText(String status) {
+    this.statusLabel.setText(status);
+  }
+
+  /**
    * @see org.mklab.taskit.client.ui.LoginView#requestFocus()
    */
   @Override
   public void requestFocus() {
-    this.userIdBox.setFocus(true);
+    this.idText.setFocus(true);
   }
 
 }

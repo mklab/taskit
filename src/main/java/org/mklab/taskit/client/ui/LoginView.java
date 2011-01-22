@@ -41,4 +41,13 @@ public interface LoginView extends IsWidget {
    */
   void requestFocus();
 
+  /**
+   * 状態を表示します。
+   * <p>
+   * 例えば、ログインに失敗した場合にその理由を表示します。
+   * 
+   * @param status ステータス文字列
+   */
+  void setStatusText(String status);
+
 }
