@@ -23,4 +23,13 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Access to Hibernate")
   @Key("accessToHibernateButton")
   String accessToHibernateButton();
+
+  /**
+   * Translated "Login".
+   * 
+   * @return translated "Login"
+   */
+  @DefaultMessage("Login")
+  @Key("loginButton")
+  String loginButton();
 }

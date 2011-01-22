@@ -2,6 +2,7 @@ package org.mklab.taskit.client;
 
 import java.util.List;
 
+import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.model.Test;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -42,6 +43,8 @@ public class Taskit implements EntryPoint {
     resultContainer.add(this.resultLabel);
     resultContainer.setHeight("3em"); //$NON-NLS-1$
     resultContainer.setWidth("50em"); //$NON-NLS-1$
+
+    RootPanel.get().add(new LoginView());
   }
 
   private Widget createButtonPanel() {
