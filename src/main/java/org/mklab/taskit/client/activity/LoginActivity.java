@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.DashboardPlace;
+import org.mklab.taskit.client.place.LoginPlace;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.model.User;
 import org.mklab.taskit.service.LoginFailureException;
@@ -16,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -25,6 +27,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @version $Revision$, Jan 22, 2011
  */
 public class LoginActivity extends AbstractActivity {
+
+  /** このアクティビティの場所を表すオブジェクトです。 */
+  public static final Place PLACE = new LoginPlace("login"); //$NON-NLS-1$
 
   private ClientFactory clientFactory;
 
@@ -63,7 +68,7 @@ public class LoginActivity extends AbstractActivity {
           @Override
           public void onSuccess(User result) {
             view.setStatusText("Successfully logged in.");
-            clientFactory.getPlaceController().goTo(new DashboardPlace("dashboard"));
+            clientFactory.getPlaceController().goTo(DashboardActivity.PLACE);
           }
 
           @Override
