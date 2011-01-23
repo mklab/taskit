@@ -11,6 +11,7 @@ import org.mklab.taskit.dao.AccountDao;
 import org.mklab.taskit.dao.AccountDaoImpl;
 import org.mklab.taskit.model.Account;
 import org.mklab.taskit.model.User;
+import org.mklab.taskit.model.UserType;
 import org.mklab.taskit.service.LoginFailureException;
 import org.mklab.taskit.service.LoginFailureException.ErrorCode;
 import org.mklab.taskit.service.LoginService;
@@ -57,9 +58,11 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     final HttpServletRequest request = getThreadLocalRequest();
     final HttpSession session = request.getSession(true);
 
+    final UserType userType = UserType.fromString(account.getAccountType());
     session.setAttribute(SessionUtil.IS_LOGGED_IN_KEY, Boolean.TRUE);
-    final String sessionId = session.getId();
-    return new User(id, account.getAccountType(), sessionId);
+    session.setAttribute(SessionUtil.USER_TYPE_KEY, userType);
+
+    return new User(id, userType);
   }
 
   /**

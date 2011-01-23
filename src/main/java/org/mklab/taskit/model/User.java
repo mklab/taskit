@@ -19,8 +19,7 @@ public class User implements Serializable {
   /** for serialization. */
   private static final long serialVersionUID = -4185866051536719116L;
   private String id;
-  private String type;
-  private String sessionId;
+  private UserType type;
 
   /**
    * {@link User}オブジェクトを構築します。
@@ -36,17 +35,15 @@ public class User implements Serializable {
    * 
    * @param id ID
    * @param type ユーザーの種別
-   * @param sessionId セッションID
    */
-  public User(String id, String type, String sessionId) {
-    if (id == null || type == null || sessionId == null) throw new NullPointerException();
+  public User(String id, UserType type) {
+    if (id == null || type == null) throw new NullPointerException();
     this.id = id;
     this.type = type;
-    this.sessionId = sessionId;
   }
 
   /**
-   * idを取得します。
+   * ユーザーIDを取得します。
    * 
    * @return id
    */
@@ -55,21 +52,14 @@ public class User implements Serializable {
   }
 
   /**
-   * typeを取得します。
+   * ユーザー種別を取得します。
+   * <p>
+   * この値はあくまでユーザーへどの権限があるか通知するためのもので、実際の権限に関してはサーバー内部で保持するため安全です。
    * 
    * @return type
    */
-  public String getType() {
+  public UserType getType() {
     return this.type;
-  }
-
-  /**
-   * sessionIdを取得します。
-   * 
-   * @return sessionId
-   */
-  public String getSessionId() {
-    return this.sessionId;
   }
 
 }
