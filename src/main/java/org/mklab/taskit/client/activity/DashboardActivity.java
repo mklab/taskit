@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.activity;
 
+import org.mklab.taskit.client.place.DashboardPlace;
 import org.mklab.taskit.client.place.LoginPlace;
 import org.mklab.taskit.client.ui.DashboardViewImpl;
 
@@ -19,7 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public class DashboardActivity extends AbstractActivity {
 
   /** このアクティビティの場所を表すオブジェクトです。 */
-  public static final Place PLACE = new LoginPlace("dashboard"); //$NON-NLS-1$
+  public static final Place PLACE = new DashboardPlace("dashboard"); //$NON-NLS-1$
 
   /**
    * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
