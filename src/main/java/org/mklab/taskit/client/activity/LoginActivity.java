@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.DashboardPlace;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.model.User;
 import org.mklab.taskit.service.LoginFailureException;
@@ -62,6 +63,7 @@ public class LoginActivity extends AbstractActivity {
           @Override
           public void onSuccess(User result) {
             view.setStatusText("Successfully logged in.");
+            clientFactory.getPlaceController().goTo(new DashboardPlace("dashboard"));
           }
 
           @Override

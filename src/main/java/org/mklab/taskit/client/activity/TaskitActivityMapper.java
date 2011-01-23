@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.DashboardPlace;
 import org.mklab.taskit.client.place.LoginPlace;
 
 import com.google.gwt.activity.shared.Activity;
@@ -37,6 +38,8 @@ public class TaskitActivityMapper implements ActivityMapper {
   @Override
   public Activity getActivity(final Place place) {
     if (place instanceof LoginPlace) return new LoginActivity(this.clientFactory);
+    if (place instanceof DashboardPlace) return new DashboardActivity();
+
     return null;
   }
 
