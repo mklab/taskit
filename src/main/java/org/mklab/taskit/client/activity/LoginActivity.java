@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.place.DashboardPlace;
 import org.mklab.taskit.client.place.LoginPlace;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.model.User;
@@ -18,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -68,6 +68,7 @@ public class LoginActivity extends AbstractActivity {
           @Override
           public void onSuccess(User result) {
             view.setStatusText("Successfully logged in.");
+            Window.alert("Hello " + result.getId() + ". You are a " + result.getType());
             clientFactory.getPlaceController().goTo(DashboardActivity.PLACE);
           }
 
@@ -85,5 +86,4 @@ public class LoginActivity extends AbstractActivity {
     });
     return view;
   }
-
 }

@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.place.DashboardPlace;
-import org.mklab.taskit.client.place.LoginPlace;
 import org.mklab.taskit.client.ui.DashboardViewImpl;
 
 import com.google.gwt.activity.shared.AbstractActivity;
