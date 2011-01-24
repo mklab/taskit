@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.activity;
 
+import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.DashboardPlace;
 import org.mklab.taskit.client.ui.DashboardViewImpl;
 
@@ -20,6 +21,16 @@ public class DashboardActivity extends AbstractActivity {
 
   /** このアクティビティの場所を表すオブジェクトです。 */
   public static final Place PLACE = new DashboardPlace("dashboard"); //$NON-NLS-1$
+  private ClientFactory clientFactory;
+
+  /**
+   * {@link DashboardActivity}オブジェクトを構築します。
+   * 
+   * @param clientFactory
+   */
+  public DashboardActivity(ClientFactory clientFactory) {
+    this.clientFactory = clientFactory;
+  }
 
   /**
    * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
@@ -27,7 +38,6 @@ public class DashboardActivity extends AbstractActivity {
    */
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    panel.setWidget(new DashboardViewImpl());
+    panel.setWidget(new DashboardViewImpl(this.clientFactory));
   }
-
 }

@@ -42,7 +42,10 @@ public class Taskit implements EntryPoint {
     final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
     historyHandler.register(placeController, eventBus, this.defaultPlace);
 
-    RootPanel.get("appContainer").add(this.appWidget); //$NON-NLS-1$
+    
+    final RootPanel rootPanel = RootPanel.get();
+    rootPanel.setWidth("100%");
+    rootPanel.add(this.appWidget);
     historyHandler.handleCurrentHistory();
   }
 }

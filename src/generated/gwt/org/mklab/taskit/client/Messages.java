@@ -14,4 +14,13 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Login")
   @Key("loginButton")
   String loginButton();
+
+  /**
+   * Translated "Logout".
+   * 
+   * @return translated "Logout"
+   */
+  @DefaultMessage("Logout")
+  @Key("logoutButton")
+  String logoutButton();
 }
