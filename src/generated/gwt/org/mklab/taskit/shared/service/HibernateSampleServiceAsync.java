@@ -1,9 +1,9 @@
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
 import java.util.List;
 
-import org.mklab.taskit.model.Test;
-import org.mklab.taskit.service.HibernateSampleService;
+import org.mklab.taskit.shared.model.Test;
+import org.mklab.taskit.shared.service.HibernateSampleService;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,7 +22,7 @@ public interface HibernateSampleServiceAsync {
    * GWT-RPC service asynchronous (client-side) interface
    * 
    * @param callback コールバック
-   * @see org.mklab.taskit.service.HibernateSampleService
+   * @see org.mklab.taskit.shared.service.HibernateSampleService
    */
   void accessThroughHibernate(AsyncCallback<List<Test>> callback);
 

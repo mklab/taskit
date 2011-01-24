@@ -1,6 +1,6 @@
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
-import org.mklab.taskit.service.DBSampleService;
+import org.mklab.taskit.shared.service.DBSampleService;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,7 +19,7 @@ public interface DBSampleServiceAsync {
    * GWT-RPC service asynchronous (client-side) interface
    * 
    * @param callback コールバック
-   * @see org.mklab.taskit.service.DBSampleService
+   * @see org.mklab.taskit.shared.service.DBSampleService
    */
   void accessToDatabase(AsyncCallback<java.lang.String> callback);
 

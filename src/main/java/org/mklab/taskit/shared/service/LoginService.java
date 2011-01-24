@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
-import org.mklab.taskit.model.User;
+import org.mklab.taskit.shared.model.User;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

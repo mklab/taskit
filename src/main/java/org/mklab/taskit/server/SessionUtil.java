@@ -5,7 +5,7 @@ package org.mklab.taskit.server;
 
 import javax.servlet.http.HttpSession;
 
-import org.mklab.taskit.model.UserType;
+import org.mklab.taskit.shared.model.UserType;
 
 
 /**

@@ -1,8 +1,8 @@
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
 import java.util.List;
 
-import org.mklab.taskit.model.Test;
+import org.mklab.taskit.shared.model.Test;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
 /**
  * ログインに失敗したときに発生する例外です。

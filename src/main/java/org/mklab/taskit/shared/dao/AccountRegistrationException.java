@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.dao;
+package org.mklab.taskit.shared.dao;
 
 /**
  * アカウントの作成に失敗したときにスローされる例外です。

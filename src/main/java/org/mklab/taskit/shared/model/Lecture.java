@@ -1,4 +1,4 @@
-package org.mklab.taskit.model;
+package org.mklab.taskit.shared.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

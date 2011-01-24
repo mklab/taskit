@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.model;
+package org.mklab.taskit.shared.model;
 
 import java.io.Serializable;
 

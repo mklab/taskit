@@ -1,6 +1,7 @@
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
-import org.mklab.taskit.model.User;
+import org.mklab.taskit.shared.model.User;
+import org.mklab.taskit.shared.service.LoginService;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -21,7 +22,7 @@ public interface LoginServiceAsync {
    * @param id ID
    * @param password パスワード
    * @param callback コールバック
-   * @see org.mklab.taskit.service.LoginService
+   * @see org.mklab.taskit.shared.service.LoginService
    */
   void login(java.lang.String id, java.lang.String password, AsyncCallback<User> callback);
 
@@ -29,7 +30,7 @@ public interface LoginServiceAsync {
    * GWT-RPC service asynchronous (client-side) interface
    * 
    * @param callback コールバック
-   * @see org.mklab.taskit.service.LoginService
+   * @see org.mklab.taskit.shared.service.LoginService
    */
   void logout(AsyncCallback<User> callback);
 

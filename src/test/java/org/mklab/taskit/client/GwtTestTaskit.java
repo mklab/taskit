@@ -1,7 +1,7 @@
 package org.mklab.taskit.client;
 
-import org.mklab.taskit.service.DBSampleService;
-import org.mklab.taskit.service.DBSampleServiceAsync;
+import org.mklab.taskit.shared.service.DBSampleService;
+import org.mklab.taskit.shared.service.DBSampleServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;

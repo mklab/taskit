@@ -1,11 +1,11 @@
-package org.mklab.taskit.dao;
+package org.mklab.taskit.shared.dao;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.mklab.taskit.model.Test;
+import org.mklab.taskit.shared.model.Test;
 
 
 /**

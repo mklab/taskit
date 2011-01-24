@@ -6,10 +6,10 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.LoginPlace;
 import org.mklab.taskit.client.ui.LoginView;
-import org.mklab.taskit.model.User;
-import org.mklab.taskit.service.LoginFailureException;
-import org.mklab.taskit.service.LoginService;
-import org.mklab.taskit.service.LoginServiceAsync;
+import org.mklab.taskit.shared.model.User;
+import org.mklab.taskit.shared.service.LoginFailureException;
+import org.mklab.taskit.shared.service.LoginService;
+import org.mklab.taskit.shared.service.LoginServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;

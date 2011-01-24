@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
-import org.mklab.taskit.dao.AccountDao;
-import org.mklab.taskit.dao.AccountDaoImpl;
-import org.mklab.taskit.model.Account;
-import org.mklab.taskit.model.User;
-import org.mklab.taskit.model.UserType;
-import org.mklab.taskit.service.LoginFailureException;
-import org.mklab.taskit.service.LoginFailureException.ErrorCode;
-import org.mklab.taskit.service.LoginService;
+import org.mklab.taskit.shared.dao.AccountDao;
+import org.mklab.taskit.shared.dao.AccountDaoImpl;
+import org.mklab.taskit.shared.model.Account;
+import org.mklab.taskit.shared.model.User;
+import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.service.LoginFailureException;
+import org.mklab.taskit.shared.service.LoginService;
+import org.mklab.taskit.shared.service.LoginFailureException.ErrorCode;
 
 
 /**
@@ -35,7 +35,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
   }
 
   /**
-   * @see org.mklab.taskit.service.LoginService#login(java.lang.String,
+   * @see org.mklab.taskit.shared.service.LoginService#login(java.lang.String,
    *      java.lang.String)
    */
   @Override
@@ -66,7 +66,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
   }
 
   /**
-   * @see org.mklab.taskit.service.LoginService#logout()
+   * @see org.mklab.taskit.shared.service.LoginService#logout()
    */
   @Override
   public void logout() {

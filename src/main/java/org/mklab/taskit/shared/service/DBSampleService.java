@@ -1,4 +1,4 @@
-package org.mklab.taskit.service;
+package org.mklab.taskit.shared.service;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

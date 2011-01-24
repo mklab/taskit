@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.mklab.taskit.model.Lecture;
-import org.mklab.taskit.model.Submission;
+import org.mklab.taskit.shared.model.Lecture;
+import org.mklab.taskit.shared.model.Submission;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;

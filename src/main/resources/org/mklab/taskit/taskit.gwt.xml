@@ -28,6 +28,6 @@
 
 	<entry-point class='org.mklab.taskit.client.Taskit' />
 	<source path='client' />
-	<source path='model' />
-	<source path='service' />
+	<source path='shared' />
+
 </module>

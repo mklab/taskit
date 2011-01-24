@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.mklab.taskit.dao;
+package org.mklab.taskit.shared.dao;
 
-import org.mklab.taskit.model.Account;
+import org.mklab.taskit.shared.model.Account;
 
 
 /**

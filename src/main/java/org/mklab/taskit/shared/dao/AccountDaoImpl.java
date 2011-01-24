@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.dao;
+package org.mklab.taskit.shared.dao;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import org.mklab.taskit.model.Account;
+import org.mklab.taskit.shared.model.Account;
 
 
 /**
@@ -32,7 +32,7 @@ public class AccountDaoImpl implements AccountDao {
   }
 
   /**
-   * @see org.mklab.taskit.dao.AccountDao#getHashedPasswordIfExists(java.lang.String)
+   * @see org.mklab.taskit.shared.dao.AccountDao#getHashedPasswordIfExists(java.lang.String)
    */
   @Override
   public Account getHashedPasswordIfExists(String id) {
@@ -41,7 +41,7 @@ public class AccountDaoImpl implements AccountDao {
   }
 
   /**
-   * @see org.mklab.taskit.dao.AccountDao#registerAccount(java.lang.String,
+   * @see org.mklab.taskit.shared.dao.AccountDao#registerAccount(java.lang.String,
    *      java.lang.String, String)
    */
   @Override
