@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
-import org.mklab.taskit.shared.dao.AccountDao;
-import org.mklab.taskit.shared.dao.AccountDaoImpl;
+import org.mklab.taskit.server.dao.AccountDao;
+import org.mklab.taskit.server.dao.AccountDaoImpl;
 import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.model.UserType;

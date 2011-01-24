@@ -1,4 +1,4 @@
-package org.mklab.taskit.shared.dao;
+package org.mklab.taskit.server.dao;
 
 import java.util.List;
 

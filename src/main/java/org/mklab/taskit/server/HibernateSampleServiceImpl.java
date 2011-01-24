@@ -11,7 +11,7 @@ import net.sf.gilead.core.hibernate.jpa.HibernateJpaUtil;
 import net.sf.gilead.gwt.GwtConfigurationHelper;
 import net.sf.gilead.gwt.PersistentRemoteService;
 
-import org.mklab.taskit.shared.dao.TestDao;
+import org.mklab.taskit.server.dao.TestDao;
 import org.mklab.taskit.shared.model.Test;
 import org.mklab.taskit.shared.service.HibernateSampleService;
 
