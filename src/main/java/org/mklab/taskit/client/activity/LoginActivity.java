@@ -63,8 +63,8 @@ public class LoginActivity extends AbstractActivity {
 
           @Override
           public void onSuccess(User result) {
+            TaskitActivity.LOGIN_USER = result;
             view.setStatusText("Successfully logged in.");
-            Window.alert("Hello " + result.getId() + ". You are a " + result.getType());
             clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
           }
 

@@ -5,19 +5,14 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.StudentListViewImpl;
-
-import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import org.mklab.taskit.client.ui.TaskitView;
 
 
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 23, 2011
  */
-public class StudentListActivity extends AbstractActivity {
-
-  private ClientFactory clientFactory;
+public class StudentListActivity extends TaskitActivity {
 
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
@@ -25,16 +20,14 @@ public class StudentListActivity extends AbstractActivity {
    * @param clientFactory クライアントファクトリ
    */
   public StudentListActivity(ClientFactory clientFactory) {
-    this.clientFactory = clientFactory;
+    super(clientFactory);
   }
 
   /**
-   * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
-   *      com.google.gwt.event.shared.EventBus)
+   * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
    */
-  @SuppressWarnings("unused")
   @Override
-  public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    panel.setWidget(new StudentListViewImpl(this.clientFactory));
+  protected TaskitView createTaskitView(ClientFactory clientFactory) {
+    return new StudentListViewImpl(clientFactory);
   }
 }
