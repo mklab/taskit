@@ -29,5 +29,4 @@
 	<entry-point class='org.mklab.taskit.client.Taskit' />
 	<source path='client' />
 	<source path='shared' />
-
 </module>

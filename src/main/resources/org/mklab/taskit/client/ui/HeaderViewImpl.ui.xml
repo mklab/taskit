@@ -13,6 +13,11 @@
 			border: solid 2px black;
 		}
 		
+		.link {
+			color: blue;
+			text-decoration: underline; 
+		}
+		
 		.title {
 			display: inline;
 			font-weight: bold;
@@ -32,8 +37,8 @@
 		<div class='{style.base}'>
 			<span class="{style.title}">TASKit</span>
 			<span style='padding-left:50px' />
-			<g:Button ui:field='scoreButton'>Score</g:Button>
-			<g:Button ui:field='attendanceButton'>Attendance</g:Button>
+			<g:InlineLabel styleName='{style.link}' ui:field='scoreLink'>Score</g:InlineLabel>
+			<g:InlineLabel styleName='{style.link}' ui:field='attendanceLink'>Attendance</g:InlineLabel>
 			<div class='{style.rightAlignment}'>
 				<g:InlineLabel ui:field="userIdLabel" />
 				<span style='padding-left:10px' />
