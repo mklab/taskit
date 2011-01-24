@@ -1,7 +1,7 @@
 package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.activity.TaskitActivityMapper;
-import org.mklab.taskit.client.place.LoginPlace;
+import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.TaskitPlaceHistoryMapper;
 
 import com.google.gwt.activity.shared.ActivityManager;
@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class Taskit implements EntryPoint {
 
-  private Place defaultPlace = LoginPlace.INSTANCE;
+  private Place defaultPlace = Login.INSTANCE;
   private SimplePanel appWidget = new SimplePanel();
 
   /**

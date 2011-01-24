@@ -4,7 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.place.StudentListPlace;
+import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.service.LoginFailureException;
@@ -65,7 +65,7 @@ public class LoginActivity extends AbstractActivity {
           public void onSuccess(User result) {
             view.setStatusText("Successfully logged in.");
             Window.alert("Hello " + result.getId() + ". You are a " + result.getType());
-            clientFactory.getPlaceController().goTo(StudentListPlace.INSTANCE);
+            clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
           }
 
           @Override

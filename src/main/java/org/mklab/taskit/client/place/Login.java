@@ -11,30 +11,30 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
-public class StudentListPlace extends Place {
+public class Login extends Place {
 
   /** このアクティビティの場所を表すオブジェクトです。 */
-  public static final Place INSTANCE = new StudentListPlace();
+  public static final Place INSTANCE = new Login();
 
   /**
    * @author Yuhi Ishikura
    * @version $Revision$, Jan 22, 2011
    */
-  public static class Tokenizer implements PlaceTokenizer<StudentListPlace> {
+  public static class Tokenizer implements PlaceTokenizer<Login> {
 
     /**
      * @see com.google.gwt.place.shared.PlaceTokenizer#getPlace(java.lang.String)
      */
     @Override
-    public StudentListPlace getPlace(@SuppressWarnings("unused") String token) {
-      return new StudentListPlace();
+    public Login getPlace(@SuppressWarnings("unused") String token) {
+      return new Login();
     }
 
     /**
      * @see com.google.gwt.place.shared.PlaceTokenizer#getToken(com.google.gwt.place.shared.Place)
      */
     @Override
-    public String getToken(@SuppressWarnings("unused") StudentListPlace place) {
+    public String getToken(@SuppressWarnings("unused") Login place) {
       return ""; //$NON-NLS-1$
     }
 
