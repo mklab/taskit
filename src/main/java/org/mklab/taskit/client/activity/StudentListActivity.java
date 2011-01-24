@@ -5,7 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.DashboardPlace;
-import org.mklab.taskit.client.ui.DashboardViewImpl;
+import org.mklab.taskit.client.ui.StudentListViewImpl;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -17,18 +17,18 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 23, 2011
  */
-public class DashboardActivity extends AbstractActivity {
+public class StudentListActivity extends AbstractActivity {
 
   /** このアクティビティの場所を表すオブジェクトです。 */
   public static final Place PLACE = new DashboardPlace("dashboard"); //$NON-NLS-1$
   private ClientFactory clientFactory;
 
   /**
-   * {@link DashboardActivity}オブジェクトを構築します。
+   * {@link StudentListActivity}オブジェクトを構築します。
    * 
-   * @param clientFactory
+   * @param clientFactory クライアントファクトリ
    */
-  public DashboardActivity(ClientFactory clientFactory) {
+  public StudentListActivity(ClientFactory clientFactory) {
     this.clientFactory = clientFactory;
   }
 
@@ -36,8 +36,9 @@ public class DashboardActivity extends AbstractActivity {
    * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
    *      com.google.gwt.event.shared.EventBus)
    */
+  @SuppressWarnings("unused")
   @Override
   public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    panel.setWidget(new DashboardViewImpl(this.clientFactory));
+    panel.setWidget(new StudentListViewImpl(this.clientFactory));
   }
 }

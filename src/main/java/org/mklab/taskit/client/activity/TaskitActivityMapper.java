@@ -38,7 +38,7 @@ public class TaskitActivityMapper implements ActivityMapper {
   @Override
   public Activity getActivity(final Place place) {
     if (place instanceof LoginPlace) return new LoginActivity(this.clientFactory);
-    if (place instanceof DashboardPlace) return new DashboardActivity(this.clientFactory);
+    if (place instanceof DashboardPlace) return new StudentListActivity(this.clientFactory);
 
     return null;
   }

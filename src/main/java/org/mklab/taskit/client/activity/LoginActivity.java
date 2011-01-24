@@ -69,7 +69,7 @@ public class LoginActivity extends AbstractActivity {
           public void onSuccess(User result) {
             view.setStatusText("Successfully logged in.");
             Window.alert("Hello " + result.getId() + ". You are a " + result.getType());
-            clientFactory.getPlaceController().goTo(DashboardActivity.PLACE);
+            clientFactory.getPlaceController().goTo(StudentListActivity.PLACE);
           }
 
           @Override

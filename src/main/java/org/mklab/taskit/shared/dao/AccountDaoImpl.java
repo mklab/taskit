@@ -3,12 +3,9 @@
  */
 package org.mklab.taskit.shared.dao;
 
-import java.util.List;
-
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
 
 import org.mklab.taskit.shared.model.Account;
 
