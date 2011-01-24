@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class Taskit implements EntryPoint {
 
-  private Place defaultPlace = new LoginPlace("Login Place"); //$NON-NLS-1$
+  private Place defaultPlace = LoginPlace.INSTANCE;
   private SimplePanel appWidget = new SimplePanel();
 
   /**
@@ -42,9 +42,8 @@ public class Taskit implements EntryPoint {
     final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
     historyHandler.register(placeController, eventBus, this.defaultPlace);
 
-    
     final RootPanel rootPanel = RootPanel.get();
-    rootPanel.setWidth("100%");
+    //rootPanel.setWidth("100%");
     rootPanel.add(this.appWidget);
     historyHandler.handleCurrentHistory();
   }
