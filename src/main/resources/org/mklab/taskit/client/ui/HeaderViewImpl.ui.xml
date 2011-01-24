@@ -5,36 +5,155 @@
 	<ui:style>
 		.base {
 			background-color: gray;
+			display: inline;
+			position: fixed;
+			top: 0;
 			padding: 4px;
+			width: 100%;
+			border: solid 2px black;
 		}
 		
 		.title {
 			display: inline;
-			　　
+			font-weight: bold;
+			vertical-align: middle;
+			font-size: 18px;
 		}
 		
 		.rightAlignment {
+			position: fixed;
 			display: inline;
-			position: absolute;
-			right: 0;
-			margin: 0;
+			right: 0px;
+			margin: 0px;
 		}
 	</ui:style>
 
-
-	<g:HTMLPanel styleName='{style.base}'>
-		<h2 class="{style.title}">TASKit</h2>
-		<span style='padding-left:50px' />
-		<g:Button ui:field='scoreButton'>Score</g:Button>
-		<g:Button ui:field='attendanceButton'>Attendance</g:Button>
-		<div class='{style.rightAlignment}'>
-			<g:InlineLabel ui:field="userIdLabel" />
-			<span style='padding-left:10px' />
-			|
-			<span style='padding-left:10px' />
-			<g:InlineLabel ui:field="userTypeLabel" />
-			<span style='padding-left:10px' />
-			<g:Button ui:field="logoutButton" />
+	<g:HTMLPanel>
+		<div class='{style.base}'>
+			<span class="{style.title}">TASKit</span>
+			<span style='padding-left:50px' />
+			<g:Button ui:field='scoreButton'>Score</g:Button>
+			<g:Button ui:field='attendanceButton'>Attendance</g:Button>
+			<div class='{style.rightAlignment}'>
+				<g:InlineLabel ui:field="userIdLabel" />
+				<span style='padding-left:10px' />
+				|
+				<span style='padding-left:10px' />
+				<g:InlineLabel ui:field="userTypeLabel" />
+				<span style='padding-left:10px' />
+				<g:Button ui:field="logoutButton" />
+				<span style='padding-left:5px' />
+			</div>
 		</div>
+		a
+		<br />
+		b
+		<br />
+		c
+		<br />
+		d
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
+		a
+		<br />
 	</g:HTMLPanel>
 </ui:UiBinder> 
