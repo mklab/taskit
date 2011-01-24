@@ -20,22 +20,25 @@
 
 	<g:HTMLPanel>
 		<g:Label styleName='{style.status}' ui:field="statusLabel" />
-		<div class="{style.box}">
-			<table>
-				<tr>
-					<td>User ID : </td>
-					<td>
-						<g:TextBox ui:field="idText" />
-					</td>
-				</tr>
-				<tr>
-					<td>Password : </td>
-					<td>
-						<g:PasswordTextBox ui:field="passwordText" />
-					</td>
-				</tr>
-			</table>
-			<g:Button styleName='{style.right}' ui:field="loginButton" />
+		<div align="center">
+			<h1>TASKit</h1>
+			<div class="{style.box}">
+				<table>
+					<tr>
+						<td>User ID : </td>
+						<td>
+							<g:TextBox ui:field="idText" />
+						</td>
+					</tr>
+					<tr>
+						<td>Password : </td>
+						<td>
+							<g:PasswordTextBox ui:field="passwordText" />
+						</td>
+					</tr>
+				</table>
+				<g:Button styleName='{style.right}' ui:field="loginButton" />
+			</div>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 
