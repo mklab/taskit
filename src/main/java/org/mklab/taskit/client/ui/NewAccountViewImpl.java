@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -23,7 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
-public class NewAccountViewImpl extends Composite implements NewAccountView {
+public class NewAccountViewImpl extends AbstractTaskitView implements NewAccountView {
 
   private static NewAccountViewUiBinder uiBinder = GWT.create(NewAccountViewUiBinder.class);
 
@@ -56,6 +55,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
    * @param clientFactory クライアントファクトリ
    */
   public NewAccountViewImpl(ClientFactory clientFactory) {
+    super(clientFactory);
     initWidget(uiBinder.createAndBindUi(this));
 
     final Messages messages = clientFactory.getMessages();
@@ -111,6 +111,14 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   @Override
   public HasClickHandlers getSubmitTrigger() {
     return this.submitButton;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.AbstractTaskitView#createContent()
+   */
+  @Override
+  protected Widget createContent() {
+    return null;
   }
 
 }
