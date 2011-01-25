@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -14,6 +15,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -43,6 +45,11 @@ public class LoginViewImpl extends Composite implements LoginView {
   @UiField
   PasswordTextBox passwordText;
 
+  @UiField
+  InlineLabel idLabel;
+  @UiField
+  InlineLabel passwordLabel;
+
   /**
    * {@link LoginViewImpl}オブジェクトを構築します。
    * 
@@ -51,10 +58,16 @@ public class LoginViewImpl extends Composite implements LoginView {
   public LoginViewImpl(ClientFactory clientFactory) {
     initWidget(uiBinder.createAndBindUi(this));
 
-    this.loginButton.setText(clientFactory.getMessages().loginButton());
-    bindTextBoxEnterKeyToSubmitButton();
+    final Messages messages = clientFactory.getMessages();
+    localizeStrings(messages);
 
-    this.idText.setFocus(true);
+    bindTextBoxEnterKeyToSubmitButton();
+  }
+
+  private void localizeStrings(final Messages messages) {
+    this.idLabel.setText(messages.idLabel());
+    this.passwordLabel.setText(messages.passwordLabel());
+    this.loginButton.setText(messages.loginButton());
   }
 
   /**

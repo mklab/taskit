@@ -7,6 +7,15 @@ package org.mklab.taskit.client;
 public interface Messages extends com.google.gwt.i18n.client.Messages {
   
   /**
+   * Translated "User ID".
+   * 
+   * @return translated "User ID"
+   */
+  @DefaultMessage("User ID")
+  @Key("idLabel")
+  String idLabel();
+
+  /**
    * Translated "Login".
    * 
    * @return translated "Login"
@@ -23,4 +32,13 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Logout")
   @Key("logoutButton")
   String logoutButton();
+
+  /**
+   * Translated "Password".
+   * 
+   * @return translated "Password"
+   */
+  @DefaultMessage("Password")
+  @Key("passwordLabel")
+  String passwordLabel();
 }

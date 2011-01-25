@@ -25,13 +25,19 @@
 			<div class="{style.box}">
 				<table>
 					<tr>
-						<td>User ID : </td>
+						<td>
+							<g:InlineLabel ui:field="idLabel" />
+							:
+						</td>
 						<td>
 							<g:TextBox ui:field="idText" />
 						</td>
 					</tr>
 					<tr>
-						<td>Password : </td>
+						<td>
+							<g:InlineLabel ui:field='passwordLabel' />
+							:
+						</td>
 						<td>
 							<g:PasswordTextBox ui:field="passwordText" />
 						</td>
