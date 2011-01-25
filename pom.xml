@@ -90,6 +90,7 @@
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+		<finalName>taskit</finalName>
 
 		<plugins>
 			<plugin>
@@ -174,9 +175,9 @@
 					<configuration>
 						<type>runtime</type>
 						<properties>
-							<cargo.remote.manager.url>http://localhost:8080/manager/html</cargo.remote.manager.url>
-							<cargo.remote.username>tomcat</cargo.remote.username>
-							<cargo.remote.password>tomcat</cargo.remote.password>
+							<cargo.tomcat.manager.url>http://kamome.mk.ces.kyutech.ac.jp/manager/</cargo.tomcat.manager.url>
+							<cargo.remote.username>taskit</cargo.remote.username>
+							<cargo.remote.password>ta2k3t3</cargo.remote.password>
 						</properties>
 					</configuration>
 					<deployer>
