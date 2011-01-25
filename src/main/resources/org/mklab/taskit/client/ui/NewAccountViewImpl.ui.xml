@@ -24,49 +24,47 @@
 
 	<g:HTMLPanel>
 		<g:Label styleName='{style.status}' ui:field="statusLabel" />
-		<div align="center">
-			<h1>New Account</h1>
-			<div class="{style.box}">
-				<table>
-					<tr>
-						<td>
-							<g:InlineLabel ui:field="idLabel" />
-							:
-						</td>
-						<td>
-							<g:TextBox ui:field="idText" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<g:InlineLabel ui:field='passwordLabel' />
-							:
-						</td>
-						<td>
-							<g:PasswordTextBox ui:field="passwordText" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<g:InlineLabel ui:field='passwordLabelForConfirmation' />
-							:
-						</td>
-						<td>
-							<g:PasswordTextBox ui:field="passwordTextForConfirmation" />
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<g:InlineLabel ui:field='accountTypeLabel' />
-							:
-						</td>
-						<td>
-							<g:ListBox styleName='{style.fill}' ui:field="accountTypeList" />
-						</td>
-					</tr>
-				</table>
-				<g:Button styleName='{style.right}' ui:field="submitButton" />
-			</div>
+		<h1>New Account</h1>
+		<div class="{style.box}">
+			<table>
+				<tr>
+					<td>
+						<g:InlineLabel ui:field="idLabel" />
+						:
+					</td>
+					<td>
+						<g:TextBox ui:field="idText" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<g:InlineLabel ui:field='passwordLabel' />
+						:
+					</td>
+					<td>
+						<g:PasswordTextBox ui:field="passwordText" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<g:InlineLabel ui:field='passwordLabelForConfirmation' />
+						:
+					</td>
+					<td>
+						<g:PasswordTextBox ui:field="passwordTextForConfirmation" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<g:InlineLabel ui:field='accountTypeLabel' />
+						:
+					</td>
+					<td>
+						<g:ListBox styleName='{style.fill}' ui:field="accountTypeList" />
+					</td>
+				</tr>
+			</table>
+			<g:Button styleName='{style.right}' ui:field="submitButton" />
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

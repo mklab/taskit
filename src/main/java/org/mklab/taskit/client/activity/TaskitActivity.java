@@ -4,11 +4,14 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.model.User;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -53,6 +56,18 @@ public abstract class TaskitActivity extends AbstractActivity {
     final HeaderView header = taskitView.getHeader();
     header.setUserId(LOGIN_USER.getId());
     header.setUserType(LOGIN_USER.getType().name());
+
+    header.getAdminLink().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+      }
+    });
+  }
+
+  protected final ClientFactory getClientFactory() {
+    return this.clientFactory;
   }
 
   /**

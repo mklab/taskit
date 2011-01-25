@@ -28,9 +28,11 @@ public class HeaderViewImpl extends Composite implements HeaderView {
   }
 
   @UiField
-  InlineLabel scoreLink;
+  Button scoreLink;
   @UiField
-  InlineLabel attendanceLink;
+  Button attendanceLink;
+  @UiField
+  Button adminLink;
   @UiField
   InlineLabel userIdLabel;
   @UiField
@@ -73,6 +75,14 @@ public class HeaderViewImpl extends Composite implements HeaderView {
   @Override
   public HasClickHandlers getLogoutTrigger() {
     return this.logoutButton;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.HeaderView#getAdminLink()
+   */
+  @Override
+  public HasClickHandlers getAdminLink() {
+    return this.adminLink;
   }
 
 }

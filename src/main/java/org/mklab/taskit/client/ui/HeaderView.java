@@ -30,6 +30,13 @@ public interface HeaderView extends IsWidget {
   void setUserType(String type);
 
   /**
+   * 管理者ビューのリンクを取得します。
+   * 
+   * @return 管理者ビューのリンク
+   */
+  HasClickHandlers getAdminLink();
+
+  /**
    * ログアウトボタンを取得します。
    * 
    * @return ログアウトボタン
