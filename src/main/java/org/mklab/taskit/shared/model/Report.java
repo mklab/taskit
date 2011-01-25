@@ -9,7 +9,7 @@ import net.sf.gilead.pojo.gwt.LightEntity;
 
 
 /**
- * @author Yuhi Ishikura
+ * @author teshima
  * @version $Revision$, Jan 25, 2011
  */
 @Entity(name = "REPORT")

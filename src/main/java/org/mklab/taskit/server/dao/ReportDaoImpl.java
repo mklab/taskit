@@ -10,7 +10,7 @@ import org.mklab.taskit.shared.model.Report;
 
 
 /**
- * @author Yuhi Ishikura
+ * @author teshima
  * @version $Revision$, Jan 26, 2011
  */
 class ReportDaoImpl implements ReportDao {
@@ -23,13 +23,31 @@ class ReportDaoImpl implements ReportDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getReportWithID(java.lang.String)
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromDateAndLevel(java.lang.String,
+   *      String)
    */
   @Override
-  public Report getReportWithID(String id) {
+  public Report getReportFromDate(String date) {
+    Query query = this.entityManager.createQuery("SELECT r.id, r.name, r.detail, r.level, r.allotment FROM Report r WHERE r.date = :date"); //$NON-NLS-1$
+    query.setParameter("date", date); //$NON-NLS-1$
+    Object[] objects = (Object[])query.getSingleResult();
+    String id = (String)objects[0];
+    String name = (String)objects[1];
+    String detail = (String)objects[2];
+    String level = (String)objects[3];
+    String allotment = (String)objects[4];
+    Report report = new Report(id, name, detail, date, level, allotment);
+    return report;
+  }
 
-    Query query = this.entityManager.createQuery("SELECT r.name, r.detail, r.level, r.allotment FROM Report r WHERE r.id = :id");
-    query.setParameter("id", id);
+  /**
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromID(java.lang.String)
+   */
+  @Override
+  public Report getReportFromID(String id) {
+
+    Query query = this.entityManager.createQuery("SELECT r.name, r.detail, r.level, r.allotment FROM Report r WHERE r.id = :id"); //$NON-NLS-1$
+    query.setParameter("id", id); //$NON-NLS-1$
     Object[] objects = (Object[])query.getSingleResult();
     String name = (String)objects[0];
     String detail = (String)objects[1];
@@ -41,14 +59,14 @@ class ReportDaoImpl implements ReportDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getReportWithDateAndLevel(java.lang.String,
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromDateAndLevel(java.lang.String,
    *      String)
    */
   @Override
-  public Report getReportWithDateAndLevel(String date, String level) {
-    Query query = this.entityManager.createQuery("SELECT r.id, r.name, r.detail, r.allotment FROM Report r WHERE r.date = :date AND r.level = :level");
-    query.setParameter("date", date);
-    query.setParameter("level", level);
+  public Report getReportFromDateAndLevel(String date, String level) {
+    Query query = this.entityManager.createQuery("SELECT r.id, r.name, r.detail, r.allotment FROM Report r WHERE r.date = :date AND r.level = :level"); //$NON-NLS-1$
+    query.setParameter("date", date); //$NON-NLS-1$
+    query.setParameter("level", level); //$NON-NLS-1$
     Object[] objects = (Object[])query.getSingleResult();
     String id = (String)objects[0];
     String name = (String)objects[1];
