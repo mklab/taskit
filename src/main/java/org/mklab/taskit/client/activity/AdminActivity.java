@@ -4,8 +4,16 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.AdminViewImpl;
+import org.mklab.taskit.client.ui.NewAccountView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.service.LoginService;
+import org.mklab.taskit.shared.service.LoginServiceAsync;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 
 
 /**
@@ -28,7 +36,17 @@ public class AdminActivity extends TaskitActivity {
    */
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
-    return new AdminViewImpl(clientFactory);
-  }
+    final AdminView view = new AdminViewImpl(clientFactory);
+    final NewAccountView newAccountView = view.getNewAccountView();
+    newAccountView.getSubmitTrigger().addClickHandler(new ClickHandler() {
 
+      @Override
+      public void onClick(ClickEvent event) {
+        final String id = newAccountView.getUserId();
+        final String password = newAccountView.getPassword();
+        final String accountType = newAccountView.getAccountType();
+      }
+    });
+    return view;
+  }
 }

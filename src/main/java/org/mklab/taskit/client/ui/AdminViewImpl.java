@@ -5,7 +5,6 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -14,6 +13,8 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Revision$, Jan 26, 2011
  */
 public class AdminViewImpl extends AbstractTaskitView implements AdminView {
+
+  final NewAccountViewImpl accountView = new NewAccountViewImpl(getClientFactory());
 
   /**
    * {@link AdminViewImpl}オブジェクトを構築します。
@@ -29,8 +30,15 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
    */
   @Override
   protected Widget createContent() {
-    final NewAccountViewImpl accountView = new NewAccountViewImpl(getClientFactory());
-    return accountView;
+    return this.accountView;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.AdminView#getNewAccountView()
+   */
+  @Override
+  public NewAccountView getNewAccountView() {
+    return this.accountView;
   }
 
 }
