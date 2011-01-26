@@ -25,6 +25,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String accountTypeLabel();
 
   /**
+   * Translated "Login automatically".
+   * 
+   * @return translated "Login automatically"
+   */
+  @DefaultMessage("Login automatically")
+  @Key("autoLoginCheck")
+  String autoLoginCheck();
+
+  /**
    * Translated "User ID equals to password.".
    * 
    * @return translated "User ID equals to password."
