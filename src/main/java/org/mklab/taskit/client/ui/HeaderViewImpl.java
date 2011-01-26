@@ -28,6 +28,8 @@ public class HeaderViewImpl extends Composite implements HeaderView {
   }
 
   @UiField
+  Button studentListLink;
+  @UiField
   Button scoreLink;
   @UiField
   Button attendanceLink;
@@ -48,8 +50,8 @@ public class HeaderViewImpl extends Composite implements HeaderView {
   public HeaderViewImpl(ClientFactory clientFactory) {
     initWidget(uiBinder.createAndBindUi(this));
 
-    this.userIdLabel.setText("ID"); //$NON-NLS-1$
-    this.userTypeLabel.setText("Type"); //$NON-NLS-1$
+    this.userIdLabel.setText("not set"); //$NON-NLS-1$
+    this.userTypeLabel.setText("not set"); //$NON-NLS-1$
     this.logoutButton.setText(clientFactory.getMessages().logoutButton());
   }
 
@@ -67,6 +69,14 @@ public class HeaderViewImpl extends Composite implements HeaderView {
   @Override
   public void setUserType(String type) {
     this.userTypeLabel.setText(type);
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.HeaderView#getStudentListLink()
+   */
+  @Override
+  public HasClickHandlers getStudentListLink() {
+    return this.studentListLink;
   }
 
   /**
