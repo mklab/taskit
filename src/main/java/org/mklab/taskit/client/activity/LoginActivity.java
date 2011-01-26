@@ -96,9 +96,10 @@ public class LoginActivity extends AbstractActivity {
             clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
 
             final boolean autoLoginEnabled = view.isAutoLoginEnabled();
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.DAY_OF_MONTH, 30);
-            Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), c.getTime());
+
+            final int A_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+            final Date expire = new Date(System.currentTimeMillis() + 10 * A_DAY_IN_MILLIS);
+            Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), expire);
           }
 
           @Override
