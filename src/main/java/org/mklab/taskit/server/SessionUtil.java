@@ -5,6 +5,7 @@ package org.mklab.taskit.server;
 
 import javax.servlet.http.HttpSession;
 
+import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.model.UserType;
 
 
@@ -15,7 +16,7 @@ import org.mklab.taskit.shared.model.UserType;
 final class SessionUtil {
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
-  static final String USER_TYPE_KEY = "userType"; //$NON-NLS-1$
+  static final String USER_KEY = "user"; //$NON-NLS-1$
 
   /**
    * {@link SessionUtil}オブジェクトを構築します。
@@ -39,20 +40,27 @@ final class SessionUtil {
   }
 
   /**
+   * セッションに保存されたユーザーオブジェクトを取得します。
+   * 
+   * @param request リクエスト
+   * @return ユーザー
+   */
+  static User getUser(final HttpSession session) {
+    if (session == null) throw new IllegalStateException("session == null!!"); //$NON-NLS-1$
+    if (isLoggedIn(session) == false) return null;
+
+    final User user = (User)session.getAttribute(USER_KEY);
+    return user;
+  }
+
+  /**
    * ユーザー種別をセッションから検出します。
    * 
    * @param request リクエスト
    * @return ユーザー種別
    */
   static UserType getUserType(final HttpSession session) {
-    if (isLoggedIn(session) == false) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
-
-    if (session == null) throw new IllegalStateException("session == null!!"); //$NON-NLS-1$
-
-    final UserType type = (UserType)session.getAttribute(USER_TYPE_KEY);
-    if (type == null) throw new IllegalStateException("User type is not stored."); //$NON-NLS-1$
-
-    return type;
+    return getUser(session).getType();
   }
 
   /**

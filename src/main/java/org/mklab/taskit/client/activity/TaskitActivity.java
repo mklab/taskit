@@ -59,10 +59,11 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   private void setupHeader(final TaskitView taskitView) {
-    if (LOGIN_USER == null) return;
     final HeaderView header = taskitView.getHeader();
-    header.setUserId(LOGIN_USER.getId());
-    header.setUserType(LOGIN_USER.getType().name());
+    if (LOGIN_USER != null) {
+      header.setUserId(LOGIN_USER.getId());
+      header.setUserType(LOGIN_USER.getType().name());
+    }
 
     header.getAdminLink().addClickHandler(new ClickHandler() {
 

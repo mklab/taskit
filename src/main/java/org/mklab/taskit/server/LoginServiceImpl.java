@@ -35,11 +35,15 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
   }
 
   /**
-   * @see org.mklab.taskit.shared.service.LoginService#isLoggedIn()
+   * @see org.mklab.taskit.shared.service.LoginService#getLoginUser()
    */
   @Override
-  public boolean isLoggedIn() {
-    return SessionUtil.isLoggedIn(getThreadLocalRequest().getSession(false));
+  public User getLoginUser() {
+    final HttpSession session = getSession();
+    if (session == null) return null;
+    if (SessionUtil.isLoggedIn(session) == false) return null;
+
+    return SessionUtil.getUser(session);
   }
 
   /**
@@ -67,10 +71,12 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     final HttpSession session = request.getSession(true);
 
     final UserType userType = UserType.fromString(account.getAccountType());
-    session.setAttribute(SessionUtil.IS_LOGGED_IN_KEY, Boolean.TRUE);
-    session.setAttribute(SessionUtil.USER_TYPE_KEY, userType);
+    final User user = new User(id, userType);
 
-    return new User(id, userType);
+    session.setAttribute(SessionUtil.IS_LOGGED_IN_KEY, Boolean.TRUE);
+    session.setAttribute(SessionUtil.USER_KEY, user);
+
+    return null;
   }
 
   /**

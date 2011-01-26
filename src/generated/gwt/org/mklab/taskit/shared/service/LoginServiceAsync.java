@@ -18,7 +18,7 @@ public interface LoginServiceAsync
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.mklab.taskit.shared.service.LoginService
      */
-    void isLoggedIn( AsyncCallback<java.lang.Boolean> callback );
+    void getLoginUser( AsyncCallback<org.mklab.taskit.shared.model.User> callback );
 
 
     /**
