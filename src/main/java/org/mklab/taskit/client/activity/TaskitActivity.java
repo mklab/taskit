@@ -5,15 +5,21 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
+import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.model.User;
+import org.mklab.taskit.shared.service.LoginService;
+import org.mklab.taskit.shared.service.LoginServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
@@ -63,6 +69,31 @@ public abstract class TaskitActivity extends AbstractActivity {
       @Override
       public void onClick(@SuppressWarnings("unused") ClickEvent event) {
         getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+      }
+    });
+    header.getLogoutTrigger().addClickHandler(new ClickHandler() {
+
+      @SuppressWarnings("unused")
+      @Override
+      public void onClick(ClickEvent event) {
+        final LoginServiceAsync service = GWT.create(LoginService.class);
+        service.logout(new AsyncCallback<Void>() {
+
+          @Override
+          public void onSuccess(Void result) {
+            logout();
+          }
+
+          @Override
+          public void onFailure(Throwable caught) {
+            logout();
+          }
+
+          private void logout() {
+            Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
+            getClientFactory().getPlaceController().goTo(Login.INSTANCE);
+          }
+        });
       }
     });
   }

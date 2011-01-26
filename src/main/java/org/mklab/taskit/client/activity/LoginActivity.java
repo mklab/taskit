@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public final class LoginActivity extends AbstractActivity {
 
-  private static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
+  static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
   final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
   private ClientFactory clientFactory;
 
