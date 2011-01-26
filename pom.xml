@@ -142,6 +142,8 @@
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 					<i18nMessagesBundle>org.mklab.taskit.client.Messages</i18nMessagesBundle>
 					<generateDirectory>src/generated/gwt</generateDirectory>
+					<draftCompile>true</draftCompile>
+					<disableClassMetadata>true</disableClassMetadata>
 				</configuration>
 			</plugin>
 
