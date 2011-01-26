@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.server.dao;
 
+import java.util.List;
+
 import org.mklab.taskit.shared.model.Account;
 
 
@@ -31,5 +33,12 @@ public interface AccountDao {
    * @throws AccountRegistrationException IDがすでに存在する、またはpasswordが不正で登録できない場合
    */
   public void registerAccount(String id, String hashedPassword, String type) throws AccountRegistrationException;
+
+  /**
+   * 生徒全員のIDを取得します。
+   * 
+   * @return 生徒全員のID
+   */
+  public List<String> getAllStudentIDs();
 
 }

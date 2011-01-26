@@ -3,9 +3,13 @@
  */
 package org.mklab.taskit.server.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import org.mklab.taskit.shared.model.Account;
 
@@ -72,5 +76,15 @@ public class AccountDaoImpl implements AccountDao {
 
   private boolean isRegistered(String id) {
     return getHashedPasswordIfExists(id) != null;
+  }
+
+  public List<String> getAllStudentIDs() {
+    Query query = this.entityManager.createQuery("SELECT s FROM ACCOUNT as s WHERE accountType = 'STUDENT'"); //$NON-NLS-1$
+    List<Account> accounts = query.getResultList();
+    List<String> studentIDs = new ArrayList<String>();
+    for (Account account : accounts) {
+      studentIDs.add(account.getId());
+    }
+    return studentIDs;
   }
 }
