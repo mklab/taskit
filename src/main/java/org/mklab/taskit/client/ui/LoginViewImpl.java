@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
@@ -44,6 +45,8 @@ public class LoginViewImpl extends Composite implements LoginView {
   Label statusLabel;
   @UiField
   PasswordTextBox passwordText;
+  @UiField
+  CheckBox autoLoginCheck;
 
   @UiField
   InlineLabel idLabel;
@@ -107,6 +110,16 @@ public class LoginViewImpl extends Composite implements LoginView {
   @Override
   public String getPassword() {
     return this.passwordText.getText();
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.LoginView#isAutoLoginEnabled()
+   */
+  @Override
+  public boolean isAutoLoginEnabled() {
+    final Boolean value = this.autoLoginCheck.getValue();
+    if (value == null) return false;
+    return value.booleanValue();
   }
 
   /**

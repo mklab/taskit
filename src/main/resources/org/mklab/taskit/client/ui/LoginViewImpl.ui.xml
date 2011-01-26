@@ -4,16 +4,16 @@
 
 	<ui:style>
 		.right {
-			float: right;
-			text-align: right
+		float: right;
+		text-align: right
 		}
-		
+
 		.box {
-			display: table;
+		display: table;
 		}
-		
+
 		.status {
-			color: gray;
+		color: gray;
 		}
 	</ui:style>
 
@@ -43,6 +43,7 @@
 						</td>
 					</tr>
 				</table>
+				<g:CheckBox ui:field='autoLoginCheck' />
 				<g:Button styleName='{style.right}' ui:field="loginButton" />
 			</div>
 		</div>

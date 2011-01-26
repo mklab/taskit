@@ -30,6 +30,13 @@ public interface LoginView extends IsWidget {
   String getPassword();
 
   /**
+   * 自動ログインが有効でるかどうか調べます。
+   * 
+   * @return 自動ログインが有効かどうか
+   */
+  boolean isAutoLoginEnabled();
+
+  /**
    * submitボタンを取得します。
    * 
    * @return サブミットボタン

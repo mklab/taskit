@@ -3,6 +3,9 @@
  */
 package org.mklab.taskit.client.activity;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.LoginView;
@@ -91,6 +94,11 @@ public class LoginActivity extends AbstractActivity {
             TaskitActivity.LOGIN_USER = result;
             view.setStatusText("Successfully logged in.");
             clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
+
+            final boolean autoLoginEnabled = view.isAutoLoginEnabled();
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.DAY_OF_MONTH, 30);
+            Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), c.getTime());
           }
 
           @Override
