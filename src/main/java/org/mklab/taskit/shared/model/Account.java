@@ -93,4 +93,13 @@ public final class Account extends LightEntity {
     return this.accountType;
   }
 
+  /**
+   * アカウントの種類を設定します。
+   * 
+   * @param accountType アカウントの種類
+   */
+  public void setAccountType(String accountType) {
+    this.accountType = accountType;
+  }
+
 }

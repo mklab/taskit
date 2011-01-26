@@ -7,6 +7,24 @@ package org.mklab.taskit.client;
 public interface Messages extends com.google.gwt.i18n.client.Messages {
   
   /**
+   * Translated "Account Type".
+   * 
+   * @return translated "Account Type"
+   */
+  @DefaultMessage("Account Type")
+  @Key("accountTypeLabel")
+  String accountTypeLabel();
+
+  /**
+   * Translated "User ID".
+   * 
+   * @return translated "User ID"
+   */
+  @DefaultMessage("User ID")
+  @Key("idLabel")
+  String idLabel();
+
+  /**
    * Translated "Login".
    * 
    * @return translated "Login"
@@ -23,4 +41,58 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Logout")
   @Key("logoutButton")
   String logoutButton();
+
+  /**
+   * Translated "Password".
+   * 
+   * @return translated "Password"
+   */
+  @DefaultMessage("Password")
+  @Key("passwordLabel")
+  String passwordLabel();
+
+  /**
+   * Translated "Password(for confirmation)".
+   * 
+   * @return translated "Password(for confirmation)"
+   */
+  @DefaultMessage("Password(for confirmation)")
+  @Key("passwordLabelForConfirmation")
+  String passwordLabelForConfirmation();
+
+  /**
+   * Translated "Register".
+   * 
+   * @return translated "Register"
+   */
+  @DefaultMessage("Register")
+  @Key("registerButton")
+  String registerButton();
+
+  /**
+   * Translated "Student".
+   * 
+   * @return translated "Student"
+   */
+  @DefaultMessage("Student")
+  @Key("studentLabel")
+  String studentLabel();
+
+  /**
+   * Translated "TA".
+   * 
+   * @return translated "TA"
+   */
+  @DefaultMessage("TA")
+  @Key("taLabel")
+  String taLabel();
+
+  /**
+   * Translated "Teacher".
+   * 
+   * @return translated "Teacher"
+   */
+  @DefaultMessage("Teacher")
+  @Key("teacherLabel")
+  String teacherLabel();
 }

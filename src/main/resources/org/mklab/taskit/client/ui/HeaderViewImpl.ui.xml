@@ -15,7 +15,7 @@
 		
 		.link {
 			color: blue;
-			text-decoration: underline; 
+			text-decoration: underline;
 		}
 		
 		.title {
@@ -37,8 +37,10 @@
 		<div class='{style.base}'>
 			<span class="{style.title}">TASKit</span>
 			<span style='padding-left:50px' />
-			<g:InlineLabel styleName='{style.link}' ui:field='scoreLink'>Score</g:InlineLabel>
-			<g:InlineLabel styleName='{style.link}' ui:field='attendanceLink'>Attendance</g:InlineLabel>
+			<g:Button styleName='{style.link}' ui:field='scoreLink'>Score</g:Button>
+			<g:Button styleName='{style.link}' ui:field='attendanceLink'>Attendance</g:Button>
+			<g:Button styleName='{style.link}' ui:field='adminLink'>Admin</g:Button>
+
 			<div class='{style.rightAlignment}'>
 				<g:InlineLabel ui:field="userIdLabel" />
 				<span style='padding-left:10px' />
