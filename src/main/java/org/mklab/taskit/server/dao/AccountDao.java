@@ -20,7 +20,7 @@ public interface AccountDao {
    * @param id ID
    * @return ハッシュ関数にかけられたパスワード。IDが存在しない場合はnullを返す。
    */
-  Account getHashedPasswordIfExists(String id);
+  public Account getHashedPasswordIfExists(String id);
 
   /**
    * アカウントを新規作成します。
@@ -30,13 +30,6 @@ public interface AccountDao {
    * @param type アカウント種別
    * @throws AccountRegistrationException IDがすでに存在する、またはpasswordが不正で登録できない場合
    */
-  void registerAccount(String id, String hashedPassword, String type) throws AccountRegistrationException;
-
-  /**
-   * 全ての生徒のIDを取得します。
-   * 
-   * @return 全ての生徒のIDを返す。
-   */
-  String[] getAllStudentIDs();
+  public void registerAccount(String id, String hashedPassword, String type) throws AccountRegistrationException;
 
 }

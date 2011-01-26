@@ -3,7 +3,9 @@
  */
 package org.mklab.taskit.server.dao;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.mklab.taskit.shared.model.Report;
@@ -78,12 +80,33 @@ class ReportDaoImpl implements ReportDao {
 
   /**
    * @see org.mklab.taskit.server.dao.ReportDao#registReport(java.lang.String,
-   *      java.lang.String, java.lang.String, java.lang.String)
+   *      java.lang.String, java.lang.String, java.lang.String,
+   *      java.lang.String, java.lang.String)
    */
   @Override
-  public void registReport(String id, String name, String date, String allotment) {
+  public void registReport(String id, String name, String detail, String date, String level, String allotment) throws ReportRegistrationException {
     // TODO Auto-generated method stub
-
+    final Report report = new Report(id, name, detail, date, level, allotment);
+    EntityTransaction t = this.entityManager.getTransaction();
+    t.begin();
+    try {
+      this.entityManager.persist(report);
+      t.commit();
+    } catch (EntityExistsException e) {
+      if (t.isActive()) {
+        t.rollback();
+      }
+      throw new ReportRegistrationException("report already exists!"); //$NON-NLS-1$
+    } catch (Throwable e) {
+      try {
+        if (t.isActive()) {
+          t.rollback();
+        }
+        throw new ReportRegistrationException("failed to register a report"); //$NON-NLS-1$
+      } catch (Throwable e1) {
+        throw new ReportRegistrationException("failed to register a report, and rollback failed."); //$NON-NLS-1$
+      }
+    }
   }
 
 }

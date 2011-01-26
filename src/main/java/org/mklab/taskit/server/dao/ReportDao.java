@@ -21,7 +21,7 @@ interface ReportDao {
   Report getReportFromID(String id);
 
   /**
-   * 課題の日付とその課題レベル（番号）番号を利用して課題内容を取得します。
+   * 課題の日付を利用して課題内容を取得します。
    * 
    * @param date 課題の出された日付
    * @return 課題内容を返します。
@@ -29,7 +29,7 @@ interface ReportDao {
   Report getReportFromDate(String date);
 
   /**
-   * 課題の日付とその課題レベル（番号）番号を利用して課題内容を取得します。
+   * 課題の日付とその課題レベル（番号）を利用して課題内容を取得します。
    * 
    * @param date 課題の出された日付
    * @param level 課題レベル（番号）
@@ -42,9 +42,12 @@ interface ReportDao {
    * 
    * @param id 課題ID
    * @param name 課題の名前
+   * @param detail TODO
    * @param date 課題の日付
+   * @param level 課題のレベル（番号）
    * @param allotment 課題の配点
+   * @throws ReportRegistrationException 課題がすでに登録されている場合
    */
-  void registReport(String id, String name, String date, String allotment);
+  void registReport(String id, String name, String detail, String date, String level, String allotment) throws ReportRegistrationException;
 
 }
