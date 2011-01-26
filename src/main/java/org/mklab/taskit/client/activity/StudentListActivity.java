@@ -36,6 +36,8 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
     final StudentListView list = new StudentListViewImpl(clientFactory);
+    list.setPresenter(this);
+
     final AccountServiceAsync service = GWT.create(AccountService.class);
     service.getAllStudentIDs(new AsyncCallback<String[]>() {
 
