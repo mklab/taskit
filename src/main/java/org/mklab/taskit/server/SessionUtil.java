@@ -27,7 +27,7 @@ final class SessionUtil {
   /**
    * ユーザーがログインしているかどうか調べます。
    * 
-   * @param session セッション
+   * @param session セッション, nullが与えられた場合には必ずfalseを返します。
    * @return ログインしていればtrue,そうでなければfalse
    */
   static boolean isLoggedIn(final HttpSession session) {

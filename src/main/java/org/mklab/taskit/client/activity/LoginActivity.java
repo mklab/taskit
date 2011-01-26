@@ -16,7 +16,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public class LoginActivity extends AbstractActivity {
 
+  private static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
+  final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
   private ClientFactory clientFactory;
 
   /**
@@ -45,21 +47,44 @@ public class LoginActivity extends AbstractActivity {
    */
   @Override
   public void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
+    if (isAutoLoginEnabledClient()) {
+      this.loginServiceAsync.isLoggedIn(new AsyncCallback<Boolean>() {
+
+        @SuppressWarnings("unused")
+        @Override
+        public void onFailure(Throwable arg0) {
+          // do nothing
+        }
+
+        @SuppressWarnings("unused")
+        @Override
+        public void onSuccess(Boolean arg0) {
+          clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
+        }
+
+      });
+    }
     final LoginView view = createLoginView();
 
     panel.setWidget(view);
     view.requestFocus();
   }
 
+  private boolean isAutoLoginEnabledClient() {
+    String enabled = Cookies.getCookie(COOKIE_AUTO_LOGIN_KEY);
+    if (enabled == null) return false;
+    return enabled.toUpperCase().equals("TRUE"); //$NON-NLS-1$
+  }
+
   private LoginView createLoginView() {
     final LoginView view = this.clientFactory.getLoginView();
-    final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
 
+    final LoginServiceAsync service = this.loginServiceAsync;
     view.getSubmitButton().addClickHandler(new ClickHandler() {
 
       @Override
       public void onClick(ClickEvent event) {
-        loginServiceAsync.login(view.getId(), view.getPassword(), new AsyncCallback<User>() {
+        service.login(view.getId(), view.getPassword(), new AsyncCallback<User>() {
 
           @Override
           public void onSuccess(User result) {

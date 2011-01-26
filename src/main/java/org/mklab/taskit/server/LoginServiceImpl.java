@@ -35,6 +35,14 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
   }
 
   /**
+   * @see org.mklab.taskit.shared.service.LoginService#isLoggedIn()
+   */
+  @Override
+  public boolean isLoggedIn() {
+    return SessionUtil.isLoggedIn(getThreadLocalRequest().getSession(false));
+  }
+
+  /**
    * @see org.mklab.taskit.shared.service.LoginService#login(java.lang.String,
    *      java.lang.String)
    */

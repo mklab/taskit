@@ -1,7 +1,6 @@
 package org.mklab.taskit.shared.service;
 
 import org.mklab.taskit.shared.model.User;
-import org.mklab.taskit.shared.service.LoginService;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,6 +14,14 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
  * @version $Revision$, Jan 22, 2011
  */
 public interface LoginServiceAsync {
+
+  /**
+   * GWT-RPC service asynchronous (client-side) interface
+   * 
+   * @param callback コールバック
+   * @see org.mklab.taskit.shared.service.LoginService
+   */
+  void isLoggedIn(AsyncCallback<Boolean> callback);
 
   /**
    * GWT-RPC service asynchronous (client-side) interface

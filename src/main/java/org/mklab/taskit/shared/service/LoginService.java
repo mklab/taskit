@@ -19,6 +19,13 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface LoginService extends RemoteService {
 
   /**
+   * ログイン状態であるかどうか調べます。
+   * 
+   * @return ログイン状態かどうか
+   */
+  boolean isLoggedIn();
+
+  /**
    * ログインします。
    * 
    * @param id ID
