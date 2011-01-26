@@ -34,7 +34,11 @@ public enum UserType {
     if (type == null) throw new NullPointerException();
 
     final String upperType = type.toUpperCase();
-    return UserType.valueOf(upperType);
+    try {
+      return UserType.valueOf(upperType);
+    } catch (Throwable e) {
+      return null;
+    }
   }
 
 }
