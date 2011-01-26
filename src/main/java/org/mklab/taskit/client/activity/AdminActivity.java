@@ -8,10 +8,7 @@ import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.AdminViewImpl;
 import org.mklab.taskit.client.ui.NewAccountView;
 import org.mklab.taskit.client.ui.TaskitView;
-import org.mklab.taskit.shared.service.LoginService;
-import org.mklab.taskit.shared.service.LoginServiceAsync;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 

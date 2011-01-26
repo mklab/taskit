@@ -34,6 +34,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String loginButton();
 
   /**
+   * Translated "Logged in successfully.".
+   * 
+   * @return translated "Logged in successfully."
+   */
+  @DefaultMessage("Logged in successfully.")
+  @Key("loginSuccessMessage")
+  String loginSuccessMessage();
+
+  /**
    * Translated "Logout".
    * 
    * @return translated "Logout"
