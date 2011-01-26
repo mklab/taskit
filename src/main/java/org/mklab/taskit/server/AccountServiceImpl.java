@@ -41,7 +41,7 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
     if (UserType.fromString(accountType) == null) throw new IllegalArgumentException("Invalid account type : " + accountType); //$NON-NLS-1$
 
     try {
-      this.accountDao.registerAccount(userId, password, accountType);
+      this.accountDao.registerAccount(userId, Passwords.hashPassword(password), accountType);
     } catch (AccountRegistrationException e) {
       throw new IllegalStateException("Failed to register."); //$NON-NLS-1$
     }

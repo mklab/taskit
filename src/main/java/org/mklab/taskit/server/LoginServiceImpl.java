@@ -6,15 +6,14 @@ package org.mklab.taskit.server;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.mindrot.jbcrypt.BCrypt;
 import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
 import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.model.UserType;
 import org.mklab.taskit.shared.service.LoginFailureException;
-import org.mklab.taskit.shared.service.LoginService;
 import org.mklab.taskit.shared.service.LoginFailureException.ErrorCode;
+import org.mklab.taskit.shared.service.LoginService;
 
 
 /**
@@ -61,7 +60,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
 
     boolean valid = false;
     try {
-      valid = BCrypt.checkpw(password, hashedPassword);
+      valid = Passwords.checkPassword(password, hashedPassword);
     } catch (IllegalArgumentException ex) {
       valid = false;
     }
