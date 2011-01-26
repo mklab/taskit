@@ -18,4 +18,27 @@ public interface StudentListView extends TaskitView {
    */
   void setListData(String[] listData);
 
+  /**
+   * プレゼンターを設定します。
+   * 
+   * @param presenter プレゼンター
+   */
+  void setPresenter(Presenter presenter);
+
+  /**
+   * このビューのプレゼンターを表すインターフェースです。
+   * 
+   * @author Yuhi Ishikura
+   * @version $Revision$, 2011/01/26
+   */
+  public static interface Presenter {
+
+    /**
+     * リストデータがクリックされたときに呼び出されます。
+     * 
+     * @param text クリックされたデータ
+     */
+    void listDataClicked(String text);
+  }
+
 }
