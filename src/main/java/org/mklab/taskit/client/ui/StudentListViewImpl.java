@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class StudentListViewImpl extends AbstractTaskitView implements StudentListView {
 
   private FlexTable table;
+  private static final int MAXIMUM_ROW_COUNT = 20;
 
   /**
    * {@link StudentListViewImpl}オブジェクトを構築します。
@@ -42,9 +43,15 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @Override
   public void setListData(String[] listData) {
     this.table.clear();
+    int column = 0;
+    int row = 0;
     for (int i = 0; i < listData.length; i++) {
-      this.table.setText(i, 0, listData[i]);
+      this.table.setText(row, column, listData[i]);
+      row++;
+      if (row >= MAXIMUM_ROW_COUNT) {
+        row = 0;
+        column++;
+      }
     }
   }
-
 }
