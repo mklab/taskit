@@ -76,7 +76,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     session.setAttribute(SessionUtil.IS_LOGGED_IN_KEY, Boolean.TRUE);
     session.setAttribute(SessionUtil.USER_KEY, user);
 
-    return null;
+    return user;
   }
 
   /**

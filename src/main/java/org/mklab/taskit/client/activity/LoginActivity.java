@@ -19,7 +19,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -56,10 +55,10 @@ public final class LoginActivity extends AbstractActivity {
    */
   @Override
   public void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
-//    if (isAutoLoginEnabledClient()) {
-//      tryAutoLoginAsync();
-//      return;
-//    }
+    if (isAutoLoginEnabledClient()) {
+      tryAutoLoginAsync();
+      return;
+    }
     final LoginView view = createLoginView();
 
     panel.setWidget(view);
