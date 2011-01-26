@@ -11,6 +11,7 @@ import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.service.AccountServiceAsync;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
@@ -18,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 23, 2011
  */
-public class StudentListActivity extends TaskitActivity {
+public class StudentListActivity extends TaskitActivity implements StudentListView.Presenter {
 
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
@@ -50,5 +51,13 @@ public class StudentListActivity extends TaskitActivity {
       }
     });
     return list;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.StudentListView.Presenter#listDataClicked(java.lang.String)
+   */
+  @Override
+  public void listDataClicked(String text) {
+    Window.alert("clicked : " + text);
   }
 }
