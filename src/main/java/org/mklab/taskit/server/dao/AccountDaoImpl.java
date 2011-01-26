@@ -78,13 +78,13 @@ public class AccountDaoImpl implements AccountDao {
     return getHashedPasswordIfExists(id) != null;
   }
 
+  /**
+   * @see org.mklab.taskit.server.dao.AccountDao#getAllStudentIDs()
+   */
+  @Override
   public List<String> getAllStudentIDs() {
-    Query query = this.entityManager.createQuery("SELECT s FROM ACCOUNT as s WHERE accountType = 'STUDENT'"); //$NON-NLS-1$
-    List<Account> accounts = query.getResultList();
-    List<String> studentIDs = new ArrayList<String>();
-    for (Account account : accounts) {
-      studentIDs.add(account.getId());
-    }
+    Query query = this.entityManager.createQuery("SELECT id FROM ACCOUNT WHERE accountType = 'STUDENT'"); //$NON-NLS-1$
+    List<String> studentIDs = query.getResultList();
     return studentIDs;
   }
 }
