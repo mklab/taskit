@@ -7,6 +7,15 @@ package org.mklab.taskit.client;
 public interface Messages extends com.google.gwt.i18n.client.Messages {
   
   /**
+   * Translated "Registered a new account {0} successfully.".
+   * 
+   * @return translated "Registered a new account {0} successfully."
+   */
+  @DefaultMessage("Registered a new account {0} successfully.")
+  @Key("accountRegistrationSuccessMessage")
+  String accountRegistrationSuccessMessage(String arg0);
+
+  /**
    * Translated "Account Type".
    * 
    * @return translated "Account Type"
@@ -14,6 +23,24 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Account Type")
   @Key("accountTypeLabel")
   String accountTypeLabel();
+
+  /**
+   * Translated "Login automatically".
+   * 
+   * @return translated "Login automatically"
+   */
+  @DefaultMessage("Login automatically")
+  @Key("autoLoginCheck")
+  String autoLoginCheck();
+
+  /**
+   * Translated "User ID equals to password.".
+   * 
+   * @return translated "User ID equals to password."
+   */
+  @DefaultMessage("User ID equals to password.")
+  @Key("idEqualsPasswordMessage")
+  String idEqualsPasswordMessage();
 
   /**
    * Translated "User ID".
@@ -25,6 +52,24 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String idLabel();
 
   /**
+   * Translated "User ID is too short.".
+   * 
+   * @return translated "User ID is too short."
+   */
+  @DefaultMessage("User ID is too short.")
+  @Key("idTooShortMessage")
+  String idTooShortMessage();
+
+  /**
+   * Translated "{0} is blank.".
+   * 
+   * @return translated "{0} is blank."
+   */
+  @DefaultMessage("{0} is blank.")
+  @Key("isBlankMessage")
+  String isBlankMessage(String arg0);
+
+  /**
    * Translated "Login".
    * 
    * @return translated "Login"
@@ -34,6 +79,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String loginButton();
 
   /**
+   * Translated "Logged in successfully.".
+   * 
+   * @return translated "Logged in successfully."
+   */
+  @DefaultMessage("Logged in successfully.")
+  @Key("loginSuccessMessage")
+  String loginSuccessMessage();
+
+  /**
    * Translated "Logout".
    * 
    * @return translated "Logout"
@@ -41,6 +95,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Logout")
   @Key("logoutButton")
   String logoutButton();
+
+  /**
+   * Translated "Passwords are difference.".
+   * 
+   * @return translated "Passwords are difference."
+   */
+  @DefaultMessage("Passwords are difference.")
+  @Key("passwordConfirmationFailMessage")
+  String passwordConfirmationFailMessage();
 
   /**
    * Translated "Password".
@@ -59,6 +122,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Password(for confirmation)")
   @Key("passwordLabelForConfirmation")
   String passwordLabelForConfirmation();
+
+  /**
+   * Translated "Password is too short.".
+   * 
+   * @return translated "Password is too short."
+   */
+  @DefaultMessage("Password is too short.")
+  @Key("passwordTooShortMessage")
+  String passwordTooShortMessage();
 
   /**
    * Translated "Register".

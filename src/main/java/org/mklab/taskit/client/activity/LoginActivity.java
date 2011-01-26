@@ -3,7 +3,6 @@
  */
 package org.mklab.taskit.client.activity;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import org.mklab.taskit.client.ClientFactory;
@@ -28,7 +27,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
-public class LoginActivity extends AbstractActivity {
+public final class LoginActivity extends AbstractActivity {
 
   private static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
   final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
@@ -42,6 +41,10 @@ public class LoginActivity extends AbstractActivity {
   public LoginActivity(ClientFactory clientFactory) {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
+  }
+
+  ClientFactory getClientFactory() {
+    return this.clientFactory;
   }
 
   /**
@@ -62,7 +65,7 @@ public class LoginActivity extends AbstractActivity {
         @SuppressWarnings("unused")
         @Override
         public void onSuccess(Boolean arg0) {
-          clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
+          getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
         }
 
       });
@@ -86,19 +89,24 @@ public class LoginActivity extends AbstractActivity {
     view.getSubmitButton().addClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick(ClickEvent event) {
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
         service.login(view.getId(), view.getPassword(), new AsyncCallback<User>() {
 
           @Override
           public void onSuccess(User result) {
             TaskitActivity.LOGIN_USER = result;
-            view.setStatusText("Successfully logged in.");
-            clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
+
+            view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
+            getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
 
             final boolean autoLoginEnabled = view.isAutoLoginEnabled();
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.DAY_OF_MONTH, 30);
-            Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), c.getTime());
+            storeAutoLoginState(autoLoginEnabled);
+          }
+
+          private void storeAutoLoginState(final boolean autoLoginEnabled) {
+            final int A_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+            final Date expire = new Date(System.currentTimeMillis() + 10 * A_DAY_IN_MILLIS);
+            Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), expire);
           }
 
           @Override

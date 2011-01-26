@@ -71,6 +71,7 @@ public class LoginViewImpl extends Composite implements LoginView {
     this.idLabel.setText(messages.idLabel());
     this.passwordLabel.setText(messages.passwordLabel());
     this.loginButton.setText(messages.loginButton());
+    this.autoLoginCheck.setText(messages.autoLoginCheck());
   }
 
   /**

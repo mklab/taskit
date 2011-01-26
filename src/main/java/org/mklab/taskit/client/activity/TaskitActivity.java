@@ -13,6 +13,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
@@ -77,5 +78,13 @@ public abstract class TaskitActivity extends AbstractActivity {
    * @return ビュー
    */
   protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+
+  protected final void showErrorMessage(String errorMessage) {
+    Window.alert(errorMessage);
+  }
+
+  protected final void showInformationMessage(String message) {
+    Window.alert(message);
+  }
 
 }

@@ -25,10 +25,10 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AbstractTaskitView#createContent()
+   * @see org.mklab.taskit.client.ui.AbstractTaskitView#initContent()
    */
   @Override
-  protected Widget createContent() {
+  protected Widget initContent() {
     return new Label("Studen List"); //$NON-NLS-1$
   }
 
