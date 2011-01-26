@@ -35,7 +35,7 @@ abstract class AbstractTaskitView extends Composite implements TaskitView {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
     this.header = new HeaderViewImpl(clientFactory);
-    final Widget content = createContent();
+    final Widget content = initContent();
     if (content == null) throw new NullPointerException();
 
     final VerticalPanel vPanel = new VerticalPanel();
@@ -62,7 +62,7 @@ abstract class AbstractTaskitView extends Composite implements TaskitView {
    * 
    * @return コンテンツパート
    */
-  protected abstract Widget createContent();
+  protected abstract Widget initContent();
 
   protected final ClientFactory getClientFactory() {
     return this.clientFactory;

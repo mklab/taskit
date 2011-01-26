@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AdminViewImpl extends AbstractTaskitView implements AdminView {
 
-  final NewAccountViewImpl accountView = new NewAccountViewImpl(getClientFactory());
+  NewAccountViewImpl accountView;
 
   /**
    * {@link AdminViewImpl}オブジェクトを構築します。
@@ -26,10 +26,11 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AbstractTaskitView#createContent()
+   * @see org.mklab.taskit.client.ui.AbstractTaskitView#initContent()
    */
   @Override
-  protected Widget createContent() {
+  protected Widget initContent() {
+    this.accountView = new NewAccountViewImpl(getClientFactory());
     return this.accountView;
   }
 
