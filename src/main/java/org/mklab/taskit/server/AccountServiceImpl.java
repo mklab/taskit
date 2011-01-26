@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.server;
 
+import java.util.List;
+
 import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
 import org.mklab.taskit.server.dao.AccountRegistrationException;
@@ -43,6 +45,15 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
     } catch (AccountRegistrationException e) {
       throw new IllegalStateException("Failed to register."); //$NON-NLS-1$
     }
+  }
+
+  /**
+   * @see org.mklab.taskit.shared.service.AccountService#getAllStudentIDs()
+   */
+  @Override
+  public String[] getAllStudentIDs() {
+    final List<String> ids = this.accountDao.getAllStudentIDs();
+    return ids.toArray(new String[ids.size()]);
   }
 
 }
