@@ -96,9 +96,9 @@ public final class LoginActivity extends AbstractActivity {
         // do nothing
       }
 
+      @SuppressWarnings("unused")
       @Override
       public void onSuccess(final User result) {
-        injectLoginUser(result);
         goToTopPage();
       }
 
@@ -108,6 +108,7 @@ public final class LoginActivity extends AbstractActivity {
   void tryLoginAsync(final LoginView view, final String id, final String password) {
     this.loginServiceAsync.login(id, password, new AsyncCallback<User>() {
 
+      @SuppressWarnings("unused")
       @Override
       public void onSuccess(User result) {
         view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
@@ -115,7 +116,6 @@ public final class LoginActivity extends AbstractActivity {
         final boolean autoLoginEnabled = view.isAutoLoginEnabled();
         storeAutoLoginState(autoLoginEnabled);
 
-        injectLoginUser(result);
         goToTopPage();
       }
 
@@ -141,7 +141,4 @@ public final class LoginActivity extends AbstractActivity {
     getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
   }
 
-  void injectLoginUser(User result) {
-    TaskitActivity.LOGIN_USER = result;
-  }
 }

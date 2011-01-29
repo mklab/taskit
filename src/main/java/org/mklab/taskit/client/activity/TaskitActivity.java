@@ -35,7 +35,7 @@ public abstract class TaskitActivity extends AbstractActivity {
    * うまくユーザーインスタンスを管理することができれば切り替えたいです。
    * この値はこのクラス以外からは利用しないでください。
    */
-  protected static User LOGIN_USER = null;
+  private static User LOGIN_USER_CACHE = null;
   private ClientFactory clientFactory;
 
   /**
@@ -61,10 +61,7 @@ public abstract class TaskitActivity extends AbstractActivity {
 
   private void setupHeader(final TaskitView taskitView) {
     final HeaderView header = taskitView.getHeader();
-    if (LOGIN_USER != null) {
-      header.setUserId(LOGIN_USER.getId());
-      header.setUserType(LOGIN_USER.getType().name());
-    }
+    setupLoginUserView(header);
 
     header.getAdminLink().addClickHandler(new ClickHandler() {
 
@@ -105,6 +102,45 @@ public abstract class TaskitActivity extends AbstractActivity {
         });
       }
     });
+  }
+
+  private void setupLoginUserView(final HeaderView header) {
+    if (LOGIN_USER_CACHE == null) {
+      setupLoginUserViewAsync(header);
+      return;
+    }
+
+    setupLoginUserView(header, LOGIN_USER_CACHE);
+  }
+
+  private void setupLoginUserViewAsync(final HeaderView header) {
+    final LoginServiceAsync service = GWT.create(LoginService.class);
+    service.getLoginUser(new AsyncCallback<User>() {
+
+      /**
+       * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
+       */
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(User arg0) {
+        LOGIN_USER_CACHE = arg0;
+        setupLoginUserView(header, LOGIN_USER_CACHE);
+      }
+
+      /**
+       * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
+       */
+      @Override
+      public void onFailure(Throwable arg0) {
+        showErrorMessage(arg0.toString());
+        return;
+      }
+    });
+  }
+
+  private void setupLoginUserView(final HeaderView header, User loginUser) {
+    header.setUserId(loginUser.getId());
+    header.setUserType(loginUser.getType().name());
   }
 
   protected final ClientFactory getClientFactory() {
