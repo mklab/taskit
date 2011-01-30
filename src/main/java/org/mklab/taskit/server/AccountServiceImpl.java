@@ -35,16 +35,12 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
    *      java.lang.String, java.lang.String)
    */
   @Override
-  public void createNewAccount(String userId, String password, String accountType) {
+  public void createNewAccount(String userId, String password, String accountType) throws AccountRegistrationException {
     final boolean accountIsValidPair = AccountValidator.validate(userId, password) == AccountValidator.Result.VALID;
     if (accountIsValidPair == false) throw new IllegalArgumentException("Invalid pair of id and password."); //$NON-NLS-1$
     if (UserType.fromString(accountType) == null) throw new IllegalArgumentException("Invalid account type : " + accountType); //$NON-NLS-1$
 
-    try {
-      this.accountDao.registerAccount(userId, Passwords.hashPassword(password), accountType);
-    } catch (AccountRegistrationException e) {
-      throw new IllegalStateException("Failed to register. : "+e.getMessage()); //$NON-NLS-1$
-    }
+    this.accountDao.registerAccount(userId, Passwords.hashPassword(password), accountType);
   }
 
   /**

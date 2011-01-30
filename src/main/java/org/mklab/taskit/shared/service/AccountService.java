@@ -22,8 +22,9 @@ public interface AccountService extends RemoteService {
    * @param userId ユーザーID
    * @param password パスワード
    * @param accountType アカウント種別
+   * @throws AccountRegistrationException アカウントの登録に失敗した場合
    */
-  void createNewAccount(String userId, String password, String accountType);
+  void createNewAccount(String userId, String password, String accountType) throws AccountRegistrationException;
 
   /**
    * 全ての学生の学籍番号を取得します。

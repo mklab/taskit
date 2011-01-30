@@ -10,6 +10,7 @@ import org.mklab.taskit.client.ui.AdminViewImpl;
 import org.mklab.taskit.client.ui.NewAccountView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.service.AccountServiceAsync;
 import org.mklab.taskit.shared.validation.AccountValidator;
@@ -99,6 +100,11 @@ public class AdminActivity extends TaskitActivity {
 
           @Override
           public void onFailure(Throwable caught) {
+            if (caught instanceof AccountRegistrationException) {
+              final AccountRegistrationException.ErrorCode errorCode = ((AccountRegistrationException)caught).getErrorCode();
+              showErrorMessage(errorCode.name());
+              return;
+            }
             showErrorMessage(caught.getMessage());
           }
         });
