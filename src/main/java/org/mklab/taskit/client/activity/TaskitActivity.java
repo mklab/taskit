@@ -97,24 +97,29 @@ public abstract class TaskitActivity extends AbstractActivity {
 
       @Override
       public void onClick(@SuppressWarnings("unused") ClickEvent event) {
-        final LoginServiceAsync service = GWT.create(LoginService.class);
-        service.logout(new AsyncCallback<Void>() {
+        logout();
+      }
 
-          @Override
-          public void onSuccess(@SuppressWarnings("unused") Void result) {
-            logout();
-          }
+    });
+  }
 
-          @Override
-          public void onFailure(@SuppressWarnings("unused") Throwable caught) {
-            logout();
-          }
+  void logout() {
+    final LoginServiceAsync service = GWT.create(LoginService.class);
+    service.logout(new AsyncCallback<Void>() {
 
-          private void logout() {
-            Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
-            getClientFactory().getPlaceController().goTo(Login.INSTANCE);
-          }
-        });
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void result) {
+        logout();
+      }
+
+      @Override
+      public void onFailure(@SuppressWarnings("unused") Throwable caught) {
+        logout();
+      }
+
+      private void logout() {
+        Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
+        getClientFactory().getPlaceController().goTo(Login.INSTANCE);
       }
     });
   }
@@ -138,6 +143,10 @@ public abstract class TaskitActivity extends AbstractActivity {
       @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(User arg0) {
+        if (arg0 == null) {
+          logout();
+          return;
+        }
         LOGIN_USER_CACHE = arg0;
         setupLoginUserView(header, LOGIN_USER_CACHE);
       }
