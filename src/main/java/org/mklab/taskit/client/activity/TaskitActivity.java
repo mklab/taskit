@@ -60,6 +60,14 @@ public abstract class TaskitActivity extends AbstractActivity {
     panel.setWidget(taskitView);
   }
 
+  /**
+   * ビューを作成します。
+   * 
+   * @param clientFactory クライアントファクトリ
+   * @return ビュー
+   */
+  protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+
   private void setupHeader(final TaskitView taskitView) {
     final HeaderView header = taskitView.getHeader();
     setupLoginUserView(header);
@@ -153,14 +161,6 @@ public abstract class TaskitActivity extends AbstractActivity {
   protected final ClientFactory getClientFactory() {
     return this.clientFactory;
   }
-
-  /**
-   * ビューを作成します。
-   * 
-   * @param clientFactory クライアントファクトリ
-   * @return ビュー
-   */
-  protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
 
   protected final void showErrorMessage(String errorMessage) {
     Window.alert(errorMessage);

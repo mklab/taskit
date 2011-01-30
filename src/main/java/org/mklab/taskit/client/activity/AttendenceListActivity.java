@@ -3,10 +3,14 @@
  */
 package org.mklab.taskit.client.activity;
 
+import java.util.Iterator;
+
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AttendenceListView;
 import org.mklab.taskit.client.ui.AttendenceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
+
+import com.google.gwt.user.client.Window;
 
 
 /**
@@ -30,6 +34,18 @@ public class AttendenceListActivity extends TaskitActivity implements Attendence
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
     final AttendenceListView view = new AttendenceListViewImpl(clientFactory);
+    view.setPresenter(this);
+
+    final String[] sample = new String[100];
+    for (int i = 0; i < sample.length; i++) {
+      sample[i] = String.valueOf(i + 10675001);
+    }
+
+    for (int i = 0; i < 100; i++) {
+      view.setStudentNumber(i, String.valueOf(i + 10675003));
+      view.setAttendenceType(i, (int)(Math.random() * 4));
+    }
+
     return view;
   }
 
@@ -39,8 +55,15 @@ public class AttendenceListActivity extends TaskitActivity implements Attendence
    */
   @Override
   public void setAttendenceType(String studentNo, String type) {
-    // TODO Auto-generated method stub
 
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.AttendenceListView.Presenter#getChoosableAttendenceTypes()
+   */
+  @Override
+  public String[] getChoosableAttendenceTypes() {
+    return new String[] {"出席", "欠席", "病欠", "公欠"};
   }
 
 }

@@ -16,8 +16,10 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AttendenceListViewImpl extends AbstractTaskitView implements AttendenceListView {
 
+  /** 出席タイプ選択のoptionのグループ名です。 */
+  public static final String ATTENDENCE_GROUP_NAME = "attendence"; //$NON-NLS-1$
   private Presenter presenter;
-  private FlexTable table;
+  private MultiColumnTable table;
 
   /**
    * {@link AttendenceListViewImpl}オブジェクトを構築します。
@@ -34,14 +36,29 @@ public class AttendenceListViewImpl extends AbstractTaskitView implements Attend
   @Override
   public void setPresenter(Presenter presenter) {
     this.presenter = presenter;
+    init();
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendenceListView#setAttendenceTypes(java.lang.String[])
+   * @see org.mklab.taskit.client.ui.AttendenceListView#setStudentNumber(int,
+   *      java.lang.String)
    */
   @Override
-  public void setAttendenceTypes(String[] types) {
+  public void setStudentNumber(int index, String studentNo) {
+    this.table.setText(index, 0, studentNo);
+    for (int i = 0; i < this.presenter.getChoosableAttendenceTypes().length; i++) {
+      this.table.setWidget(index, i + 1, new RadioButton(ATTENDENCE_GROUP_NAME + studentNo));
+    }
+  }
 
+  /**
+   * @see org.mklab.taskit.client.ui.AttendenceListView#setAttendenceType(int,
+   *      int)
+   */
+  @Override
+  public void setAttendenceType(int index, int attendenceTypeIndex) {
+    final RadioButton bt = (RadioButton)this.table.getWidget(index, attendenceTypeIndex + 1);
+    bt.setValue(Boolean.TRUE);
   }
 
   /**
@@ -49,20 +66,22 @@ public class AttendenceListViewImpl extends AbstractTaskitView implements Attend
    */
   @Override
   protected Widget initContent() {
-    final String ATTENDENCE_GROUP_NAME = "attendence";
-    final RadioButton circle = new RadioButton(ATTENDENCE_GROUP_NAME, "○");
-    final RadioButton triangle = new RadioButton(ATTENDENCE_GROUP_NAME, "△");
-    final RadioButton cross = new RadioButton(ATTENDENCE_GROUP_NAME, "×");
 
-    this.table = new FlexTable();
-    this.table.setBorderWidth(1);
-    this.table.setText(0, 0, "Student No.");
-    this.table.setText(0, 1, "Attendence State");
-    this.table.getFlexCellFormatter().setColSpan(0, 1, 3);
-    this.table.setText(1, 0, "10675003");
-    this.table.setWidget(1, 1, circle);
-    this.table.setWidget(1, 2, triangle);
-    this.table.setWidget(1, 3, cross);
+    this.table = new MultiColumnTable() {
+
+      @Override
+      void initTableBase(@SuppressWarnings("hiding") FlexTable table) {
+        table.setBorderWidth(1);
+        table.setText(1, 0, "Student No.");
+        table.setText(0, 1, "Attendence State");
+        final String[] options = presenter.getChoosableAttendenceTypes();
+        for (int i = 0; i < options.length; i++) {
+          table.setText(1, i + 1, options[i]);
+        }
+        table.getFlexCellFormatter().setColSpan(0, 1, options.length);
+      }
+    };
+    this.table.setColumnHeaderRows(2);
 
     return this.table;
   }

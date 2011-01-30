@@ -29,6 +29,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   public StudentListViewImpl(ClientFactory clientFactory) {
     super(clientFactory);
+    init();
   }
 
   /**

@@ -17,14 +17,24 @@ public interface AttendenceListView extends TaskitView {
   void setPresenter(Presenter presenter);
 
   /**
-   * 選択可能な全出席種別のオプションを設定します。
+   * 与えられたインデックスの学生番号を設定します。
    * 
-   * @param types 出席種別
+   * @param index インデックス
+   * @param studentNo 学籍番号
    */
-  void setAttendenceTypes(String[] types);
+  void setStudentNumber(int index, String studentNo);
 
   /**
-   * 出席一覧びゅーのプレゼンターを表すインターフェースです。
+   * 与えられたインデックスの出席種別の値を設定します。
+   * 
+   * @param index インデックス
+   * @param attendenceTypeIndex 出席す別のインデックス。
+   *          {@link Presenter#getChoosableAttendenceTypes()}の配列中のインデックスです。
+   */
+  void setAttendenceType(int index, int attendenceTypeIndex);
+
+  /**
+   * 出席一覧ビューのプレゼンターを表すインターフェースです。
    * 
    * @author Yuhi Ishikura
    * @version $Revision$, Jan 30, 2011
@@ -38,6 +48,13 @@ public interface AttendenceListView extends TaskitView {
      * @param type 出席種別
      */
     void setAttendenceType(String studentNo, String type);
+
+    /**
+     * 選択可能な出席種別を取得します。
+     * 
+     * @return 選択可能な出席種別
+     */
+    String[] getChoosableAttendenceTypes();
   }
 
 }

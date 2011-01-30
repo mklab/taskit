@@ -23,6 +23,7 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
    */
   public AdminViewImpl(ClientFactory clientFactory) {
     super(clientFactory);
+    init();
   }
 
   /**
