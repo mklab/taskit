@@ -57,7 +57,6 @@ public final class LoginActivity extends AbstractActivity {
   public void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
     if (isAutoLoginEnabledClient()) {
       tryAutoLoginAsync();
-      return;
     }
     final LoginView view = createLoginView();
 
