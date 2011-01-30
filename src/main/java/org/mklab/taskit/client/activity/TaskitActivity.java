@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
+import org.mklab.taskit.client.place.AttendenceList;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
@@ -77,21 +78,27 @@ public abstract class TaskitActivity extends AbstractActivity {
         getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
       }
     });
+    header.getAttendenceListLink().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(AttendenceList.INSTANCE);
+      }
+    });
     header.getLogoutTrigger().addClickHandler(new ClickHandler() {
 
-      @SuppressWarnings("unused")
       @Override
-      public void onClick(ClickEvent event) {
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
         final LoginServiceAsync service = GWT.create(LoginService.class);
         service.logout(new AsyncCallback<Void>() {
 
           @Override
-          public void onSuccess(Void result) {
+          public void onSuccess(@SuppressWarnings("unused") Void result) {
             logout();
           }
 
           @Override
-          public void onFailure(Throwable caught) {
+          public void onFailure(@SuppressWarnings("unused") Throwable caught) {
             logout();
           }
 

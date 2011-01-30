@@ -95,4 +95,12 @@ public class HeaderViewImpl extends Composite implements HeaderView {
     return this.adminLink;
   }
 
+  /**
+   * @see org.mklab.taskit.client.ui.HeaderView#getAttendenceListLink()
+   */
+  @Override
+  public HasClickHandlers getAttendenceListLink() {
+    return this.attendanceLink;
+  }
+
 }

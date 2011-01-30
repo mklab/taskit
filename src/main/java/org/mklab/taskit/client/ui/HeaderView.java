@@ -37,6 +37,13 @@ public interface HeaderView extends IsWidget {
   HasClickHandlers getStudentListLink();
 
   /**
+   * 出席一覧ビューのリンクを取得します。
+   * 
+   * @return 出席一覧ビューのリンク
+   */
+  HasClickHandlers getAttendenceListLink();
+
+  /**
    * 管理者ビューのリンクを取得します。
    * 
    * @return 管理者ビューのリンク
