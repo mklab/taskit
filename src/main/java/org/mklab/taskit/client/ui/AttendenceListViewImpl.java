@@ -4,8 +4,11 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -69,12 +72,16 @@ public class AttendenceListViewImpl extends AbstractTaskitView implements Attend
 
     this.table = new MultiColumnTable() {
 
+      @SuppressWarnings("synthetic-access")
       @Override
       void initTableBase(@SuppressWarnings("hiding") FlexTable table) {
+        final Messages m = getClientFactory().getMessages();
         table.setBorderWidth(1);
-        table.setText(1, 0, "Student No.");
-        table.setText(0, 1, "Attendence State");
-        final String[] options = presenter.getChoosableAttendenceTypes();
+        table.setText(1, 0, m.studentNoLabel());
+
+        table.setText(0, 1, m.attendenceTypeLabel());
+        table.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        final String[] options = AttendenceListViewImpl.this.presenter.getChoosableAttendenceTypes();
         for (int i = 0; i < options.length; i++) {
           table.setText(1, i + 1, options[i]);
         }

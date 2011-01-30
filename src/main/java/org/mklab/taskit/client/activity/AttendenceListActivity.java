@@ -3,14 +3,11 @@
  */
 package org.mklab.taskit.client.activity;
 
-import java.util.Iterator;
-
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.ui.AttendenceListView;
 import org.mklab.taskit.client.ui.AttendenceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
-
-import com.google.gwt.user.client.Window;
 
 
 /**
@@ -19,6 +16,8 @@ import com.google.gwt.user.client.Window;
  */
 public class AttendenceListActivity extends TaskitActivity implements AttendenceListView.Presenter {
 
+  private final String[] choosableAttendenceType;
+
   /**
    * {@link AttendenceListActivity}オブジェクトを構築します。
    * 
@@ -26,6 +25,8 @@ public class AttendenceListActivity extends TaskitActivity implements Attendence
    */
   public AttendenceListActivity(ClientFactory clientFactory) {
     super(clientFactory);
+    final Messages m = clientFactory.getMessages();
+    this.choosableAttendenceType = new String[] {m.attendedLabel(), m.absentLabel(), m.illnessLabel(), m.authorizedAbsenceLabel()};
   }
 
   /**
@@ -63,7 +64,7 @@ public class AttendenceListActivity extends TaskitActivity implements Attendence
    */
   @Override
   public String[] getChoosableAttendenceTypes() {
-    return new String[] {"出席", "欠席", "病欠", "公欠"};
+    return this.choosableAttendenceType;
   }
 
 }
