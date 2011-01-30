@@ -31,12 +31,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public abstract class TaskitActivity extends AbstractActivity {
 
-  /*
-   * FIXME ログイン時に設定される値ですが、デザイン的にひどい。
-   * うまくユーザーインスタンスを管理することができれば切り替えたいです。
-   * この値はこのクラス以外からは利用しないでください。
-   */
-  private static User LOGIN_USER_CACHE = null;
   private ClientFactory clientFactory;
 
   /**
@@ -125,12 +119,7 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   private void setupLoginUserView(final HeaderView header) {
-    if (LOGIN_USER_CACHE == null) {
-      setupLoginUserViewAsync(header);
-      return;
-    }
-
-    setupLoginUserView(header, LOGIN_USER_CACHE);
+    setupLoginUserViewAsync(header);
   }
 
   private void setupLoginUserViewAsync(final HeaderView header) {
@@ -147,8 +136,7 @@ public abstract class TaskitActivity extends AbstractActivity {
           logout();
           return;
         }
-        LOGIN_USER_CACHE = arg0;
-        setupLoginUserView(header, LOGIN_USER_CACHE);
+        setupLoginUserView(header, arg0);
       }
 
       /**
