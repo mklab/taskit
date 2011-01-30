@@ -221,4 +221,22 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Teacher")
   @Key("teacherLabel")
   String teacherLabel();
+
+  /**
+   * Translated "Unexpected error occured.".
+   * 
+   * @return translated "Unexpected error occured."
+   */
+  @DefaultMessage("Unexpected error occured.")
+  @Key("unexpectedErrorMessage")
+  String unexpectedErrorMessage();
+
+  /**
+   * Translated "User name was already exists.".
+   * 
+   * @return translated "User name was already exists."
+   */
+  @DefaultMessage("User name was already exists.")
+  @Key("userNameAlreadyExistsMessage")
+  String userNameAlreadyExistsMessage();
 }

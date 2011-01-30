@@ -102,7 +102,19 @@ public class AdminActivity extends TaskitActivity {
           public void onFailure(Throwable caught) {
             if (caught instanceof AccountRegistrationException) {
               final AccountRegistrationException.ErrorCode errorCode = ((AccountRegistrationException)caught).getErrorCode();
-              showErrorMessage(errorCode.name());
+
+              String msg;
+              switch (errorCode) {
+                case USER_NAME_ALREADY_EXISTS:
+                  msg = messages.userNameAlreadyExistsMessage();
+                  break;
+                case UNEXPECTED:
+                  msg = messages.unexpectedErrorMessage();
+                  break;
+                default:
+                  throw new IllegalStateException();
+              }
+              showErrorMessage(msg);
               return;
             }
             showErrorMessage(caught.getMessage());
