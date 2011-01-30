@@ -43,7 +43,7 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
     try {
       this.accountDao.registerAccount(userId, Passwords.hashPassword(password), accountType);
     } catch (AccountRegistrationException e) {
-      throw new IllegalStateException("Failed to register."); //$NON-NLS-1$
+      throw new IllegalStateException("Failed to register. : "+e.getMessage()); //$NON-NLS-1$
     }
   }
 
