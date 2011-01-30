@@ -12,6 +12,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.mklab.taskit.shared.model.Account;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
 /**

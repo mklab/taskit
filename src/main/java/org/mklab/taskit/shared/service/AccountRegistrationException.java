@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.server.dao;
+package org.mklab.taskit.shared.service;
 
 /**
  * アカウントの作成に失敗したときにスローされる例外です。
@@ -13,6 +13,13 @@ public class AccountRegistrationException extends Exception {
 
   /** for serialization. */
   private static final long serialVersionUID = 1420543210165710530L;
+
+  /**
+   * {@link AccountRegistrationException}オブジェクトを構築します。
+   */
+  AccountRegistrationException() {
+    // for serialization
+  }
 
   /**
    * {@link AccountRegistrationException}オブジェクトを構築します。

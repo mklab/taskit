@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
-import org.mklab.taskit.server.dao.AccountRegistrationException;
 import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.validation.AccountValidator;
 
