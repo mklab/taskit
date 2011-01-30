@@ -96,9 +96,9 @@ public final class LoginActivity extends AbstractActivity {
         // do nothing
       }
 
-      @SuppressWarnings("unused")
       @Override
       public void onSuccess(final User result) {
+        if (result == null) return;
         goToTopPage();
       }
 
