@@ -36,6 +36,8 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
    */
   @Override
   public void createNewAccount(String userId, String password, String accountType) throws AccountRegistrationException {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final boolean accountIsValidPair = AccountValidator.validate(userId, password) == AccountValidator.Result.VALID;
     if (accountIsValidPair == false) throw new IllegalArgumentException("Invalid pair of id and password."); //$NON-NLS-1$
     if (UserType.fromString(accountType) == null) throw new IllegalArgumentException("Invalid account type : " + accountType); //$NON-NLS-1$
@@ -48,6 +50,8 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
    */
   @Override
   public String[] getAllStudentIDs() {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final List<String> ids = this.accountDao.getAllStudentIDs();
     return ids.toArray(new String[ids.size()]);
   }

@@ -64,6 +64,30 @@ final class SessionUtil {
   }
 
   /**
+   * TAか先生であるかどうかチェックします。
+   * 
+   * @param session セッション
+   * @throws IllegalStateException TAでも先生でもない場合
+   */
+  static void assertIsTAOrTeacher(HttpSession session) {
+    if (isTAOrTeacher(session)) return;
+
+    throw new IllegalStateException("You are not TA or teacher, or your session was timeout."); //$NON-NLS-1$
+  }
+
+  /**
+   * TAもしくは先生であるかどうか調べます。
+   * 
+   * @param session セッション
+   * @return TAか先生であるかどうか。ログインしていない場合にはfalseを返します。
+   */
+  static boolean isTAOrTeacher(final HttpSession session) {
+    if (isLoggedIn(session) == false) return false;
+    final UserType userType = getUserType(session);
+    return userType == UserType.TA || userType == UserType.TEACHER;
+  }
+
+  /**
    * TAであるかどうか調べます。
    * 
    * @param session セッション
