@@ -2,7 +2,6 @@ package org.mklab.taskit.shared.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
@@ -19,7 +18,7 @@ public final class Account extends LightEntity {
 
   /** for serialization. */
   private static final long serialVersionUID = -4244616815344670645L;
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue
   @Id
   private int accountId = 0;
   /** ユーザー名です。 */
