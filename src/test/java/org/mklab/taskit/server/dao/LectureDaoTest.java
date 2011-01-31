@@ -25,4 +25,15 @@ public class LectureDaoTest extends DaoTest {
     assertEquals(1, dao.getAllLectures().size());
   }
 
+  /**
+   * 講義データ数取得のテストを行ないます。
+   */
+  @Test
+  public void testGetLectureCount() {
+    final LectureDao dao = new LectureDaoImpl(createEntityManager());
+    assertEquals(0, dao.getLectureCount());
+    dao.registerLecture(new Lecture("title", System.currentTimeMillis())); //$NON-NLS-1$
+    assertEquals(1, dao.getLectureCount());
+  }
+
 }
