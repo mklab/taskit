@@ -27,7 +27,7 @@ public final class Report extends LightEntity {
   /** 課題の番号 */
   private String no;
   /** この課題の属する講義のIDです。 */
-  private int lessonId;
+  private int lectureId;
   /** 課題のタイトル */
   private String title;
   /** 課題の詳細 */
@@ -42,14 +42,15 @@ public final class Report extends LightEntity {
    * @param title 課題の名前
    * @param detail 課題の詳細
    * @param allotment 課題の配点
-   * @param lessonId 講義ID
+   * @param lectureId 講義ID
    */
-  public Report(String no, String title, String detail, int allotment, int lessonId) {
+  public Report(String no, String title, String detail, int allotment, int lectureId) {
+    super();
     this.no = no;
     this.title = title;
     this.detail = detail;
     this.allotment = allotment;
-    this.lessonId = lessonId;
+    this.lectureId = lectureId;
   }
 
   /**
@@ -165,17 +166,17 @@ public final class Report extends LightEntity {
    * 
    * @return lessonId
    */
-  public int getLessonId() {
-    return this.lessonId;
+  public int getLectureId() {
+    return this.lectureId;
   }
 
   /**
    * lessonIdを設定します。
    * 
-   * @param lessonId lessonId
+   * @param lectureId lessonId
    */
-  public void setLessonId(int lessonId) {
-    this.lessonId = lessonId;
+  public void setLectureId(int lectureId) {
+    this.lectureId = lectureId;
   }
 
   /**
