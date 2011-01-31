@@ -85,6 +85,11 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.gwtext</groupId>
+			<artifactId>gwtext</artifactId>
+			<version>2.0.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -202,6 +207,10 @@
 			<id>GILEAD</id>
 			<name>GILEAD Repository</name>
 			<url>https://gilead.svn.sourceforge.net/svnroot/gilead/gilead/maven-repo/</url>
+		</repository>
+		<repository>
+			<id>gwtext</id>
+			<url>http://www.gwt-ext.com/maven2/</url>
 		</repository>
 	</repositories>
 </project>
