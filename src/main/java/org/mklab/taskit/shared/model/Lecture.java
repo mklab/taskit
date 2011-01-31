@@ -33,12 +33,12 @@ public final class Lecture extends LightEntity {
    * {@link Lecture}オブジェクトを構築します。
    * 
    * @param date 日付
-   * @param lessonNo 講義回
+   * @param no 講義回
    */
-  public Lecture(String date, int lessonNo) {
+  public Lecture(String date, int no) {
     super();
     this.date = date;
-    this.no = lessonNo;
+    this.no = no;
   }
 
   /**
@@ -89,10 +89,10 @@ public final class Lecture extends LightEntity {
   /**
    * lessonNoを設定します。
    * 
-   * @param lessonNo lessonNo
+   * @param no lessonNo
    */
-  public void setNo(int lessonNo) {
-    this.no = lessonNo;
+  public void setNo(int no) {
+    this.no = no;
   }
 
   /**
