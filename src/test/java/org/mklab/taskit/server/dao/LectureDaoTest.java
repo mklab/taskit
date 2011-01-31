@@ -24,16 +24,15 @@ public class LectureDaoTest extends DaoTest {
     dao.registerLecture(new Lecture("Hello", System.currentTimeMillis())); //$NON-NLS-1$
     assertEquals(1, dao.getAllLectures().size());
   }
-
+  
   /**
-   * 講義データ数取得のテストを行ないます。
+   * 講義数を取得できているかのテストを行ないます。
    */
   @Test
   public void testGetLectureCount() {
     final LectureDao dao = new LectureDaoImpl(createEntityManager());
-    assertEquals(0, dao.getLectureCount());
-    dao.registerLecture(new Lecture("title", System.currentTimeMillis())); //$NON-NLS-1$
-    assertEquals(1, dao.getLectureCount());
+    dao.registerLecture(new Lecture("Hello world.", System.currentTimeMillis())); //$NON-NLS-1$
+    dao.registerLecture(new Lecture("Let's GUI", System.currentTimeMillis())); //$NON-NLS-1$
+    assertEquals(2, dao.getLectureCount());
   }
-
 }
