@@ -6,6 +6,9 @@ package org.mklab.taskit.shared.service;
 import org.mklab.taskit.shared.dto.AttendanceDto;
 import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+
 
 /**
  * 出席管理サービスを表すインターフェースです。
@@ -13,7 +16,8 @@ import org.mklab.taskit.shared.dto.AttendanceBaseDto;
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 1, 2011
  */
-public interface AttendanceService {
+@RemoteServiceRelativePath("attendance")
+public interface AttendanceService extends RemoteService {
 
   /**
    * ユーザーの指定された講義の出席種別を設定します。

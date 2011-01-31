@@ -15,20 +15,16 @@ import org.mklab.taskit.server.dao.AttendanceTypeDao;
 import org.mklab.taskit.server.dao.AttendanceTypeDaoImpl;
 import org.mklab.taskit.server.dao.LectureDao;
 import org.mklab.taskit.server.dao.LectureDaoImpl;
-import org.mklab.taskit.shared.dto.AttendanceDto;
 import org.mklab.taskit.shared.dto.AttendanceBaseDto;
-import org.mklab.taskit.shared.model.Attendance;
+import org.mklab.taskit.shared.dto.AttendanceDto;
 import org.mklab.taskit.shared.model.Lecture;
 import org.mklab.taskit.shared.service.AttendanceService;
-
-import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 1, 2011
  */
-@RemoteServiceRelativePath("attendance")
 public class AttendanceServiceImpl extends TaskitRemoteService implements AttendanceService {
 
   /** for serialization. */
