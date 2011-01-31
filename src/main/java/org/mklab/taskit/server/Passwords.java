@@ -12,16 +12,16 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 26, 2011
  */
-class Passwords {
+public class Passwords {
 
   /**
    * パスワードが正しいかどうかチェックします。
    * 
    * @param rawPassword パスワードそのもの
    * @param hashedDbPassword DB上に登録されているハッシュ関数にかけられたパスワード
-   * @return
+   * @return 正しいかどうか
    */
-  static boolean checkPassword(String rawPassword, String hashedDbPassword) {
+  public static boolean checkPassword(String rawPassword, String hashedDbPassword) {
     try {
       return BCrypt.checkpw(rawPassword, hashedDbPassword);
     } catch (Throwable e) {
@@ -35,7 +35,7 @@ class Passwords {
    * @param rawPassword 生のパスワード
    * @return ハッシュ関数にかけたパスワード
    */
-  static String hashPassword(String rawPassword) {
+  public static String hashPassword(String rawPassword) {
     return BCrypt.hashpw(rawPassword, BCrypt.gensalt());
   }
 
