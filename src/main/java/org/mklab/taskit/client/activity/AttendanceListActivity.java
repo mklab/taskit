@@ -16,6 +16,7 @@ import org.mklab.taskit.shared.service.AttendanceService;
 import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -50,6 +51,15 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
     fetchInitialData();
 
+    final Timer timer = new Timer() {
+
+      @Override
+      public void run() {
+        fetchAttendanceDtoFromLecture();
+      }
+    };
+    timer.scheduleRepeating(10 * 1000);
+
     return this.view;
   }
 
@@ -79,7 +89,13 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     });
   }
 
+  void fetchAttendanceDtoFromLecture() {
+    fetchAttendanceDtoFromLecture(this.view.getSelectedLecture());
+  }
+
   void fetchAttendanceDtoFromLecture(int lectureIndex) {
+    if (this.attendanceTypes == null || this.userNames == null) return;
+
     this.service.getLecturewiseAttendanceData(lectureIndex, new AsyncCallback<AttendanceDto>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
