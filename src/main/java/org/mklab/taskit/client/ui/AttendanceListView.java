@@ -73,10 +73,10 @@ public interface AttendanceListView extends TaskitView {
     /**
      * index番目の学生の出席種別を変更します。
      * 
-     * @param index 表中の学生のインデックス
+     * @param userName ユーザー名
      * @param attendanceTypeIndex 表中の出席種別のインデックス
      */
-    void attendanceTypeEditted(int index, int attendanceTypeIndex);
+    void attendanceTypeEditted(String userName, int attendanceTypeIndex);
 
     /**
      * 選択されている講義が変更されたときに呼び出されます。

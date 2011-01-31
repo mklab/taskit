@@ -8,6 +8,8 @@ import java.util.List;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -46,6 +48,14 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   protected Widget initContent() {
     final VerticalPanel vPanel = new VerticalPanel();
     this.lectureListBox = new ListBox();
+    this.lectureListBox.addChangeHandler(new ChangeHandler() {
+
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
+      @Override
+      public void onChange(@SuppressWarnings("unused") ChangeEvent event) {
+        presenter.lectureSelectionChanged(lectureListBox.getSelectedIndex());
+      }
+    });
     this.table = new MultiColumnTable() {
 
       @SuppressWarnings("synthetic-access")
@@ -76,7 +86,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
           presenter.studentNumberClicked(row);
           return;
         }
-        presenter.attendanceTypeEditted(row, column - 1);
+        presenter.attendanceTypeEditted(table.getText(row, 0), column - 1);
       }
     });
 

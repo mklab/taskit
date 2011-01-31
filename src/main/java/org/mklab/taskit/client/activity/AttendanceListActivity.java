@@ -16,6 +16,7 @@ import org.mklab.taskit.shared.service.AttendanceService;
 import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
@@ -57,11 +58,14 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
       @Override
       public void onSuccess(AttendanceBaseDto result) {
         final List<String> userNames = result.getUserNames();
-        view.setLectures(result.getLectureCount());
+        final int lectureCount = result.getLectureCount();
+
+        view.setLectures(lectureCount);
         view.setAttendanceTypes(result.getAttendanceTypes());
         for (int i = 0; i < userNames.size(); i++) {
           view.setStudentNumber(i, userNames.get(i));
         }
+        if (lectureCount > 0) fetchAttendanceDtoFromLecture(0);
       }
 
       @Override
@@ -73,23 +77,54 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   void fetchAttendanceDtoFromLecture(int lectureIndex) {
-    final AttendanceDto data = null;
-    final int[] attendanceTypes = data.getAttendances();
+    Window.alert(lectureIndex + "");
+    this.service.getLecturewiseAttendanceData(lectureIndex, new AsyncCallback<AttendanceDto>() {
 
+      @Override
+      public void onSuccess(AttendanceDto result) {
+        final int[] attendanceTypes = result.getAttendances();
+        for (int i = 0; i < attendanceTypes.length; i++) {
+          view.setAttendanceType(i, attendanceTypes[i]);
+        }
+      }
+
+      @Override
+      public void onFailure(Throwable caught) {
+        showErrorMessage(caught.toString());
+      }
+
+    });
   }
 
-  void updateAttendanceState(int userIndex, int lectureIndex, int attendanceTypeIndex) {
+  void updateAttendanceState(String userName, int lectureIndex, int attendanceTypeIndex) {
+    this.service.setAttendanceType(userName, lectureIndex, "ABSENT", new AsyncCallback<Void>() {
 
+      /**
+       * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
+       */
+      @Override
+      public void onSuccess(Void result) {
+        // do nothing
+      }
+
+      /**
+       * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
+       */
+      @Override
+      public void onFailure(Throwable caught) {
+        showErrorMessage(caught.toString());
+      }
+    });
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#attendanceTypeEditted(int,
+   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#attendanceTypeEditted(java.lang.String,
    *      int)
    */
   @Override
-  public void attendanceTypeEditted(int index, int attendanceTypeIndex) {
+  public void attendanceTypeEditted(String userName, int attendanceTypeIndex) {
     final int lectureIndex = this.view.getSelectedLecture();
-    updateAttendanceState(index, lectureIndex, attendanceTypeIndex);
+    updateAttendanceState(userName, lectureIndex, attendanceTypeIndex);
   }
 
   /**
