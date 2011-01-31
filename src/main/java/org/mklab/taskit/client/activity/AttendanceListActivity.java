@@ -17,7 +17,6 @@ import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
@@ -31,6 +30,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
   private List<String> attendanceTypes;
   private List<String> userNames;
+  private Timer updateTimer;
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -51,16 +51,26 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
     fetchInitialData();
 
-    final Timer timer = new Timer() {
+    this.updateTimer = new Timer() {
 
       @Override
       public void run() {
         fetchAttendanceDtoFromLecture();
       }
     };
-    timer.scheduleRepeating(10 * 1000);
+    this.updateTimer.scheduleRepeating(10 * 1000);
 
     return this.view;
+  }
+
+  /**
+   * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
+   */
+  @Override
+  public void onStop() {
+    if (this.updateTimer != null) {
+      this.updateTimer.cancel();
+    }
   }
 
   void fetchInitialData() {
