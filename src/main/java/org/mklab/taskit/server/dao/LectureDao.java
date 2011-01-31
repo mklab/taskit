@@ -28,4 +28,11 @@ public interface LectureDao {
    * @return 全ての講義のデータです。
    */
   public List<Lecture> getAllLectures();
+
+  /**
+   * 講義を登録します。
+   * 
+   * @param lecture 講義データ
+   */
+  public void registerLecture(Lecture lecture);
 }

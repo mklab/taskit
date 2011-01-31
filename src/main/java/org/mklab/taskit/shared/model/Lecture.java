@@ -32,14 +32,24 @@ public final class Lecture extends LightEntity {
   /**
    * {@link Lecture}オブジェクトを構築します。
    * 
-   * @param date 日付
    * @param no 講義回
+   * @param title タイトル
+   * @param date 講義日
    */
-  public Lecture(String date, int no) {
-    super();
-    this.date = date;
+  public Lecture(int no, String title, String date) {
     this.no = no;
+    this.title = title;
+    this.date = date;
   }
+
+  /**
+   * {@link Lecture}オブジェクトを構築します。
+   */
+  public Lecture() {
+    // do nothing
+  }
+  
+  
 
   /**
    * idを取得します。
