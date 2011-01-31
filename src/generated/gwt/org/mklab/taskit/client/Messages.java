@@ -115,6 +115,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String isBlankMessage(String arg0);
 
   /**
+   * Translated "{0}".
+   * 
+   * @return translated "{0}"
+   */
+  @DefaultMessage("{0}")
+  @Key("lectureIndexLabel")
+  String lectureIndexLabel(String arg0);
+
+  /**
    * Translated "Login".
    * 
    * @return translated "Login"

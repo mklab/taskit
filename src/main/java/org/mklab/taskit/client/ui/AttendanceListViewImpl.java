@@ -75,7 +75,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
           return;
         }
         presenter.attendanceTypeEditted(row, column - 1);
-        Window.alert(row+","+(column-1));
+        Window.alert(row + "," + (column - 1));
       }
     });
 
@@ -122,8 +122,10 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   @Override
   public void setLectures(Lecture[] lecture) {
     this.lectureListBox.clear();
+    final Messages messages = getClientFactory().getMessages();
+
     for (Lecture l : lecture) {
-      this.lectureListBox.addItem(String.valueOf(l.getLessonNo()));
+      this.lectureListBox.addItem(messages.lectureIndexLabel(String.valueOf(l.getLessonNo())));
     }
   }
 

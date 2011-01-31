@@ -38,6 +38,7 @@ public class AttendenceListActivity extends TaskitActivity implements Attendance
     final AttendanceListView view = new AttendanceListViewImpl(clientFactory);
     view.setAttendanceTypes(this.choosableAttendenceType);
     view.setPresenter(this);
+    view.setLectures(null);
 
     final String[] sample = new String[100];
     for (int i = 0; i < sample.length; i++) {
