@@ -125,7 +125,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
     final Messages messages = getClientFactory().getMessages();
 
     for (Lecture l : lecture) {
-      this.lectureListBox.addItem(messages.lectureIndexLabel(String.valueOf(l.getLessonNo())));
+      this.lectureListBox.addItem(messages.lectureIndexLabel(String.valueOf(l.getNo())));
     }
   }
 
@@ -144,7 +144,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
    */
   @Override
   public void setSelectedLecture(Lecture lecture) {
-    this.lectureListBox.setSelectedIndex(lecture.getLessonNo() - 1);
+    this.lectureListBox.setSelectedIndex(lecture.getNo() - 1);
   }
 
 }
