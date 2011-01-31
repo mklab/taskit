@@ -14,7 +14,13 @@ import org.mklab.taskit.shared.model.Attendance;
  */
 public interface AttendanceDao {
 
-  public List<Attendance> getAttendanceState(String studentNo);
+  /**
+   * 指定のアカウントIDの学生の出席状況を返します。
+   * 
+   * @param accountId アカウントID
+   * @return 出席状況のリスト
+   */
+  public List<Attendance> getAttendanceStateFromAccountId(int accountId);
 
   /**
    * 日付からその日の生徒全員の出席状況を返します。
