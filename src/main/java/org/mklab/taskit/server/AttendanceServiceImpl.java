@@ -17,6 +17,7 @@ import org.mklab.taskit.server.dao.LectureDao;
 import org.mklab.taskit.server.dao.LectureDaoImpl;
 import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 import org.mklab.taskit.shared.dto.AttendanceDto;
+import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.Lecture;
 import org.mklab.taskit.shared.service.AttendanceService;
 
@@ -36,6 +37,8 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
    */
   @Override
   public void setAttendanceType(String userName, int lectureIndex, String attendanceType) {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final EntityManager entityManager = createEntityManager();
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
     final Lecture lecture = getLectureOf(lectureIndex, entityManager);
@@ -54,13 +57,18 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
    */
   @Override
   public AttendanceDto getLecturewiseAttendanceData(int lectureIndex) {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final EntityManager entityManager = createEntityManager();
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
-    final AttendanceTypeDao attendanceTypeDao = new AttendanceTypeDaoImpl(entityManager);
-    final Lecture lecture = getLectureOf(lectureIndex, entityManager);
-    final int[] attendances = null; // TODO
 
-    return new AttendanceDto(lecture, attendances);
+    final Lecture lecture = getLectureOf(lectureIndex, entityManager);
+    final List<Attendance> attendances = attendanceDao.getAllStudentAttendanceDataFromLectureId(lecture.getLectureId());
+    final int[] attendanceTypeIndices = new int[attendances.size()];
+    for (int i = 0; i < attendanceTypeIndices.length; i++) {
+      attendanceTypeIndices[i] = attendances.get(i).getAttendanceTypeId() - 1;
+    }
+    return new AttendanceDto(lecture, attendanceTypeIndices);
   }
 
   /**
@@ -68,13 +76,17 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
    */
   @Override
   public AttendanceBaseDto getBaseData() {
-    EntityManager entityManager = createEntityManager();
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
+    final EntityManager entityManager = createEntityManager();
     final AccountDao accountDao = new AccountDaoImpl(entityManager);
     final LectureDao lectureDao = new LectureDaoImpl(entityManager);
+    final AttendanceTypeDao attendanceTypeDao = new AttendanceTypeDaoImpl(entityManager);
 
     final List<String> userNames = accountDao.getAllStudentUserNames();
-    final int lectureCount = lectureDao.getAllLectures().size();// TODO
-    final List<String> attendanceTypes = null; // TODO
+    final int lectureCount = lectureDao.getLectureCount();
+    final List<String> attendanceTypes = attendanceTypeDao.getAllAttendanceTypes();
+
     return new AttendanceBaseDto(lectureCount, userNames, attendanceTypes);
   }
 }
