@@ -63,10 +63,8 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
     this.idLabel.setText(messages.idLabel());
     this.passwordLabel.setText(messages.passwordLabel());
     this.passwordLabelForConfirmation.setText(messages.passwordLabelForConfirmation());
-
     this.accountTypeLabel.setText(messages.accountTypeLabel());
-    this.accountTypeList.addItem(messages.taLabel());
-    this.accountTypeList.addItem(messages.studentLabel());
+
     this.submitButton.setText(messages.registerButton());
   }
 
@@ -98,11 +96,19 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
    * @see org.mklab.taskit.client.ui.NewAccountView#getAccountType()
    */
   @Override
-  public String getAccountType() {
-    final int selectedIndex = this.accountTypeList.getSelectedIndex();
-    if (selectedIndex == -1) return null;
+  public int getAccountType() {
+    return this.accountTypeList.getSelectedIndex();
+  }
 
-    return this.accountTypeList.getValue(selectedIndex);
+  /**
+   * @see org.mklab.taskit.client.ui.NewAccountView#setChoosableAccountTypes(java.lang.String[])
+   */
+  @Override
+  public void setChoosableAccountTypes(String[] accountTypes) {
+    this.accountTypeList.clear();
+    for (int i = 0; i < accountTypes.length; i++) {
+      this.accountTypeList.addItem(accountTypes[i]);
+    }
   }
 
   /**

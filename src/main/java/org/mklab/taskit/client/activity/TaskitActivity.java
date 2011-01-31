@@ -5,15 +5,23 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
+import org.mklab.taskit.client.place.AttendenceList;
+import org.mklab.taskit.client.place.Login;
+import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.model.User;
+import org.mklab.taskit.shared.service.LoginService;
+import org.mklab.taskit.shared.service.LoginServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
@@ -23,12 +31,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
  */
 public abstract class TaskitActivity extends AbstractActivity {
 
-  /*
-   * FIXME ログイン時に設定される値ですが、デザイン的にひどい。
-   * うまくユーザーインスタンスを管理することができれば切り替えたいです。
-   * この値はこのクラス以外からは利用しないでください。
-   */
-  protected static User LOGIN_USER = null;
   private ClientFactory clientFactory;
 
   /**
@@ -52,11 +54,17 @@ public abstract class TaskitActivity extends AbstractActivity {
     panel.setWidget(taskitView);
   }
 
+  /**
+   * ビューを作成します。
+   * 
+   * @param clientFactory クライアントファクトリ
+   * @return ビュー
+   */
+  protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+
   private void setupHeader(final TaskitView taskitView) {
-    if (LOGIN_USER == null) return;
     final HeaderView header = taskitView.getHeader();
-    header.setUserId(LOGIN_USER.getId());
-    header.setUserType(LOGIN_USER.getType().name());
+    setupLoginUserView(header);
 
     header.getAdminLink().addClickHandler(new ClickHandler() {
 
@@ -65,19 +73,91 @@ public abstract class TaskitActivity extends AbstractActivity {
         getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
       }
     });
+    header.getStudentListLink().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
+      }
+    });
+    header.getAttendenceListLink().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(AttendenceList.INSTANCE);
+      }
+    });
+    header.getLogoutTrigger().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        logout();
+      }
+
+    });
+  }
+
+  void logout() {
+    final LoginServiceAsync service = GWT.create(LoginService.class);
+    service.logout(new AsyncCallback<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void result) {
+        logout();
+      }
+
+      @Override
+      public void onFailure(@SuppressWarnings("unused") Throwable caught) {
+        logout();
+      }
+
+      private void logout() {
+        Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
+        getClientFactory().getPlaceController().goTo(Login.INSTANCE);
+      }
+    });
+  }
+
+  private void setupLoginUserView(final HeaderView header) {
+    setupLoginUserViewAsync(header);
+  }
+
+  private void setupLoginUserViewAsync(final HeaderView header) {
+    final LoginServiceAsync service = GWT.create(LoginService.class);
+    service.getLoginUser(new AsyncCallback<User>() {
+
+      /**
+       * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
+       */
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(User arg0) {
+        if (arg0 == null) {
+          logout();
+          return;
+        }
+        setupLoginUserView(header, arg0);
+      }
+
+      /**
+       * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
+       */
+      @Override
+      public void onFailure(Throwable arg0) {
+        showErrorMessage(arg0.toString());
+        return;
+      }
+    });
+  }
+
+  private void setupLoginUserView(final HeaderView header, User loginUser) {
+    header.setUserId(loginUser.getId());
+    header.setUserType(loginUser.getType().name());
   }
 
   protected final ClientFactory getClientFactory() {
     return this.clientFactory;
   }
-
-  /**
-   * ビューを作成します。
-   * 
-   * @param clientFactory クライアントファクトリ
-   * @return ビュー
-   */
-  protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
 
   protected final void showErrorMessage(String errorMessage) {
     Window.alert(errorMessage);

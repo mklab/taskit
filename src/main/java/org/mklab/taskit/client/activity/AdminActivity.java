@@ -9,6 +9,8 @@ import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.AdminViewImpl;
 import org.mklab.taskit.client.ui.NewAccountView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.service.AccountServiceAsync;
 import org.mklab.taskit.shared.validation.AccountValidator;
@@ -41,6 +43,12 @@ public class AdminActivity extends TaskitActivity {
   protected TaskitView createTaskitView(final ClientFactory clientFactory) {
     final AdminView view = new AdminViewImpl(clientFactory);
     final NewAccountView newAccountView = view.getNewAccountView();
+
+    final Messages messages = clientFactory.getMessages();
+
+    final UserType[] choosableAccountTypes = new UserType[] {UserType.STUDENT, UserType.TA};
+    newAccountView.setChoosableAccountTypes(localizeUserTypes(messages, choosableAccountTypes));
+
     newAccountView.getSubmitTrigger().addClickHandler(new ClickHandler() {
 
       @Override
@@ -48,8 +56,7 @@ public class AdminActivity extends TaskitActivity {
         final String id = newAccountView.getUserId();
         final String password = newAccountView.getPassword();
         final String passwordForConfirmation = newAccountView.getPasswordForComfimation();
-        final String accountType = newAccountView.getAccountType();
-        final Messages messages = clientFactory.getMessages();
+        final int accountTypeIndex = newAccountView.getAccountType();
 
         if (id.length() == 0) {
           showErrorMessage(messages.isBlankMessage(messages.idLabel()));
@@ -59,7 +66,7 @@ public class AdminActivity extends TaskitActivity {
           showErrorMessage(messages.isBlankMessage(messages.passwordLabel()));
           return;
         }
-        if (accountType.length() == 0) {
+        if (accountTypeIndex == -1) {
           showErrorMessage(messages.isBlankMessage(messages.accountTypeLabel()));
           return;
         }
@@ -83,7 +90,7 @@ public class AdminActivity extends TaskitActivity {
         }
 
         final AccountServiceAsync service = GWT.create(AccountService.class);
-        service.createNewAccount(id, password, accountType, new AsyncCallback<Void>() {
+        service.createNewAccount(id, password, choosableAccountTypes[accountTypeIndex].name(), new AsyncCallback<Void>() {
 
           @SuppressWarnings("unused")
           @Override
@@ -93,11 +100,50 @@ public class AdminActivity extends TaskitActivity {
 
           @Override
           public void onFailure(Throwable caught) {
+            if (caught instanceof AccountRegistrationException) {
+              final AccountRegistrationException.ErrorCode errorCode = ((AccountRegistrationException)caught).getErrorCode();
+
+              String msg;
+              switch (errorCode) {
+                case USER_NAME_ALREADY_EXISTS:
+                  msg = messages.userNameAlreadyExistsMessage();
+                  break;
+                case UNEXPECTED:
+                  msg = messages.unexpectedErrorMessage();
+                  break;
+                default:
+                  throw new IllegalStateException();
+              }
+              showErrorMessage(msg);
+              return;
+            }
             showErrorMessage(caught.getMessage());
           }
         });
       }
     });
     return view;
+  }
+
+  private String[] localizeUserTypes(final Messages messages, final UserType[] userTypes) {
+    final String[] localizedUserTypes = new String[userTypes.length];
+    for (int i = 0; i < localizedUserTypes.length; i++) {
+      String localizedType = null;
+      switch (userTypes[i]) {
+        case STUDENT:
+          localizedType = messages.studentLabel();
+          break;
+        case TA:
+          localizedType = messages.taLabel();
+          break;
+        case TEACHER:
+          localizedType = messages.teacherLabel();
+          break;
+        default:
+          throw new IllegalStateException();
+      }
+      localizedUserTypes[i] = localizedType;
+    }
+    return localizedUserTypes;
   }
 }

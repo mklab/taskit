@@ -6,6 +6,7 @@ package org.mklab.taskit.server;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.servlet.http.HttpSession;
 
 import net.sf.gilead.core.PersistentBeanManager;
 import net.sf.gilead.core.hibernate.jpa.HibernateJpaUtil;
@@ -36,6 +37,14 @@ class TaskitRemoteService extends PersistentRemoteService {
     final PersistentBeanManager persistentBeanManager = GwtConfigurationHelper.initGwtStatelessBeanManager(persistenceUtil);
 
     setBeanManager(persistentBeanManager);
+  }
+
+  protected final HttpSession getSession() {
+    return getThreadLocalRequest().getSession(false);
+  }
+
+  protected final HttpSession getSessionNonNull() {
+    return getThreadLocalRequest().getSession(true);
   }
 
   protected EntityManager createEntityManager() {

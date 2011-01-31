@@ -3,10 +3,12 @@
  */
 package org.mklab.taskit.server;
 
+import java.util.List;
+
 import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
-import org.mklab.taskit.server.dao.AccountRegistrationException;
 import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.validation.AccountValidator;
 
@@ -33,16 +35,25 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
    *      java.lang.String, java.lang.String)
    */
   @Override
-  public void createNewAccount(String userId, String password, String accountType) {
+  public void createNewAccount(String userId, String password, String accountType) throws AccountRegistrationException {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final boolean accountIsValidPair = AccountValidator.validate(userId, password) == AccountValidator.Result.VALID;
     if (accountIsValidPair == false) throw new IllegalArgumentException("Invalid pair of id and password."); //$NON-NLS-1$
     if (UserType.fromString(accountType) == null) throw new IllegalArgumentException("Invalid account type : " + accountType); //$NON-NLS-1$
 
-    try {
-      this.accountDao.registerAccount(userId, password, accountType);
-    } catch (AccountRegistrationException e) {
-      throw new IllegalStateException("Failed to register."); //$NON-NLS-1$
-    }
+    this.accountDao.registerAccount(userId, Passwords.hashPassword(password), accountType);
+  }
+
+  /**
+   * @see org.mklab.taskit.shared.service.AccountService#getAllStudentIDs()
+   */
+  @Override
+  public String[] getAllStudentIDs() {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
+    final List<String> ids = this.accountDao.getAllStudentIDs();
+    return ids.toArray(new String[ids.size()]);
   }
 
 }

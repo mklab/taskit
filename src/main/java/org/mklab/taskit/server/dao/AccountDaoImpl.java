@@ -12,6 +12,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import org.mklab.taskit.shared.model.Account;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
 /**
@@ -47,7 +48,7 @@ public class AccountDaoImpl implements AccountDao {
    */
   @Override
   public void registerAccount(String id, String hashedPassword, String type) throws AccountRegistrationException {
-    if (isRegistered(id)) throw new AccountRegistrationException("account already exists!"); //$NON-NLS-1$
+    if (isRegistered(id)) throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.USER_NAME_ALREADY_EXISTS);
 
     final Account account = new Account(id, hashedPassword, type);
 
@@ -61,15 +62,15 @@ public class AccountDaoImpl implements AccountDao {
       if (t.isActive()) {
         t.rollback();
       }
-      throw new AccountRegistrationException("account already exists!"); //$NON-NLS-1$
+      throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.USER_NAME_ALREADY_EXISTS);
     } catch (Throwable e) {
       try {
         if (t.isActive()) {
           t.rollback();
         }
-        throw new AccountRegistrationException("failed to register an account"); //$NON-NLS-1$
+        throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.UNEXPECTED);
       } catch (Throwable e1) {
-        throw new AccountRegistrationException("failed to register an account, and rollback failed."); //$NON-NLS-1$
+        throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.UNEXPECTED); //$NON-NLS-1$
       }
     }
   }

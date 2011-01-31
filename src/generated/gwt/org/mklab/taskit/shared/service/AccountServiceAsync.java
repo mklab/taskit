@@ -15,6 +15,13 @@ public interface AccountServiceAsync
 
 
     /**
+     * GWT-RPC service  asynchronous (client-side) interface
+     * @see org.mklab.taskit.shared.service.AccountService
+     */
+    void getAllStudentIDs( AsyncCallback<java.lang.String[]> callback );
+
+
+    /**
      * Utility class to get the RPC Async interface from client-side code
      */
     public static final class Util 

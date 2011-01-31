@@ -5,6 +5,7 @@ package org.mklab.taskit.server;
 
 import javax.servlet.http.HttpSession;
 
+import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.model.UserType;
 
 
@@ -15,7 +16,7 @@ import org.mklab.taskit.shared.model.UserType;
 final class SessionUtil {
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
-  static final String USER_TYPE_KEY = "userType"; //$NON-NLS-1$
+  static final String USER_KEY = "user"; //$NON-NLS-1$
 
   /**
    * {@link SessionUtil}オブジェクトを構築します。
@@ -39,20 +40,51 @@ final class SessionUtil {
   }
 
   /**
+   * セッションに保存されたユーザーオブジェクトを取得します。
+   * 
+   * @param request リクエスト
+   * @return ユーザー
+   */
+  static User getUser(final HttpSession session) {
+    if (session == null) throw new IllegalStateException("session == null!!"); //$NON-NLS-1$
+    if (isLoggedIn(session) == false) return null;
+
+    final User user = (User)session.getAttribute(USER_KEY);
+    return user;
+  }
+
+  /**
    * ユーザー種別をセッションから検出します。
    * 
    * @param request リクエスト
    * @return ユーザー種別
    */
   static UserType getUserType(final HttpSession session) {
-    if (isLoggedIn(session) == false) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+    return getUser(session).getType();
+  }
 
-    if (session == null) throw new IllegalStateException("session == null!!"); //$NON-NLS-1$
+  /**
+   * TAか先生であるかどうかチェックします。
+   * 
+   * @param session セッション
+   * @throws IllegalStateException TAでも先生でもない場合
+   */
+  static void assertIsTAOrTeacher(HttpSession session) {
+    if (isTAOrTeacher(session)) return;
 
-    final UserType type = (UserType)session.getAttribute(USER_TYPE_KEY);
-    if (type == null) throw new IllegalStateException("User type is not stored."); //$NON-NLS-1$
+    throw new IllegalStateException("You are not TA or teacher, or your session was timeout."); //$NON-NLS-1$
+  }
 
-    return type;
+  /**
+   * TAもしくは先生であるかどうか調べます。
+   * 
+   * @param session セッション
+   * @return TAか先生であるかどうか。ログインしていない場合にはfalseを返します。
+   */
+  static boolean isTAOrTeacher(final HttpSession session) {
+    if (isLoggedIn(session) == false) return false;
+    final UserType userType = getUserType(session);
+    return userType == UserType.TA || userType == UserType.TEACHER;
   }
 
   /**

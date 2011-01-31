@@ -2,10 +2,19 @@ package org.mklab.taskit.client;
 
 /**
  * Interface to represent the messages contained in resource bundle:
- * 	/teshima/workspace/taskit/src/main/resources/org/mklab/taskit/client/Messages.properties'.
+ * 	/home/yuhi/workspace/taskit/src/main/resources/org/mklab/taskit/client/Messages.properties'.
  */
 public interface Messages extends com.google.gwt.i18n.client.Messages {
   
+  /**
+   * Translated "Absentee".
+   * 
+   * @return translated "Absentee"
+   */
+  @DefaultMessage("Absentee")
+  @Key("absentLabel")
+  String absentLabel();
+
   /**
    * Translated "Registered a new account {0} successfully.".
    * 
@@ -23,6 +32,33 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Account Type")
   @Key("accountTypeLabel")
   String accountTypeLabel();
+
+  /**
+   * Translated "Attendee".
+   * 
+   * @return translated "Attendee"
+   */
+  @DefaultMessage("Attendee")
+  @Key("attendedLabel")
+  String attendedLabel();
+
+  /**
+   * Translated "Attendence Type".
+   * 
+   * @return translated "Attendence Type"
+   */
+  @DefaultMessage("Attendence Type")
+  @Key("attendenceTypeLabel")
+  String attendenceTypeLabel();
+
+  /**
+   * Translated "Authorized Absentee".
+   * 
+   * @return translated "Authorized Absentee"
+   */
+  @DefaultMessage("Authorized Absentee")
+  @Key("authorizedAbsenceLabel")
+  String authorizedAbsenceLabel();
 
   /**
    * Translated "Login automatically".
@@ -59,6 +95,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("User ID is too short.")
   @Key("idTooShortMessage")
   String idTooShortMessage();
+
+  /**
+   * Translated "Illness".
+   * 
+   * @return translated "Illness"
+   */
+  @DefaultMessage("Illness")
+  @Key("illnessLabel")
+  String illnessLabel();
 
   /**
    * Translated "{0} is blank.".
@@ -151,6 +196,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String studentLabel();
 
   /**
+   * Translated "Student No.".
+   * 
+   * @return translated "Student No."
+   */
+  @DefaultMessage("Student No.")
+  @Key("studentNoLabel")
+  String studentNoLabel();
+
+  /**
    * Translated "TA".
    * 
    * @return translated "TA"
@@ -167,4 +221,22 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Teacher")
   @Key("teacherLabel")
   String teacherLabel();
+
+  /**
+   * Translated "Unexpected error occured.".
+   * 
+   * @return translated "Unexpected error occured."
+   */
+  @DefaultMessage("Unexpected error occured.")
+  @Key("unexpectedErrorMessage")
+  String unexpectedErrorMessage();
+
+  /**
+   * Translated "User name was already exists.".
+   * 
+   * @return translated "User name was already exists."
+   */
+  @DefaultMessage("User name was already exists.")
+  @Key("userNameAlreadyExistsMessage")
+  String userNameAlreadyExistsMessage();
 }

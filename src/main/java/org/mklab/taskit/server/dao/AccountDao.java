@@ -6,6 +6,7 @@ package org.mklab.taskit.server.dao;
 import java.util.List;
 
 import org.mklab.taskit.shared.model.Account;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
 /**

@@ -30,6 +30,20 @@ public interface HeaderView extends IsWidget {
   void setUserType(String type);
 
   /**
+   * 学生一覧ビューのリンクを取得します。
+   * 
+   * @return 学生一覧ビューのリンク
+   */
+  HasClickHandlers getStudentListLink();
+
+  /**
+   * 出席一覧ビューのリンクを取得します。
+   * 
+   * @return 出席一覧ビューのリンク
+   */
+  HasClickHandlers getAttendenceListLink();
+
+  /**
    * 管理者ビューのリンクを取得します。
    * 
    * @return 管理者ビューのリンク

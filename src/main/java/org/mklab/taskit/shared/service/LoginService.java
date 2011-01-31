@@ -19,11 +19,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface LoginService extends RemoteService {
 
   /**
-   * ログイン状態であるかどうか調べます。
+   * ログインユーザーオブジェクトを取得します。
    * 
-   * @return ログイン状態かどうか
+   * @return セッションにログイン情報があればそのユーザーを表すオブジェクト、ない場合はnull
    */
-  boolean isLoggedIn();
+  User getLoginUser();
 
   /**
    * ログインします。

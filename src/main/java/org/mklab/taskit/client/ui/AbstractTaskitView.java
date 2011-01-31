@@ -16,7 +16,8 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * TASKitアプリケーションのビューの抽象実装です。
  * <p>
- * ヘッダなどの共通部分を実装します。
+ * ヘッダなどの共通部分を実装します。<br>
+ * {@link #init()}を呼び出すことで初めてページの構築を行ないます。
  * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 24, 2011
@@ -34,7 +35,13 @@ abstract class AbstractTaskitView extends Composite implements TaskitView {
   AbstractTaskitView(ClientFactory clientFactory) {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
-    this.header = new HeaderViewImpl(clientFactory);
+  }
+
+  /**
+   * ビューの初期化を行ないます。
+   */
+  public final void init() {
+    this.header = new HeaderViewImpl(this.clientFactory);
     final Widget content = initContent();
     if (content == null) throw new NullPointerException();
 

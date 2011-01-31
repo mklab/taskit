@@ -24,12 +24,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
 /**
+ * ログインページのアクティビティを表すクラスです。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
 public final class LoginActivity extends AbstractActivity {
 
-  private static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
+  static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
   final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
   private ClientFactory clientFactory;
 
@@ -54,21 +56,7 @@ public final class LoginActivity extends AbstractActivity {
   @Override
   public void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
     if (isAutoLoginEnabledClient()) {
-      this.loginServiceAsync.isLoggedIn(new AsyncCallback<Boolean>() {
-
-        @SuppressWarnings("unused")
-        @Override
-        public void onFailure(Throwable arg0) {
-          // do nothing
-        }
-
-        @SuppressWarnings("unused")
-        @Override
-        public void onSuccess(Boolean arg0) {
-          getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
-        }
-
-      });
+      tryAutoLoginAsync();
     }
     final LoginView view = createLoginView();
 
@@ -85,42 +73,71 @@ public final class LoginActivity extends AbstractActivity {
   private LoginView createLoginView() {
     final LoginView view = this.clientFactory.getLoginView();
 
-    final LoginServiceAsync service = this.loginServiceAsync;
     view.getSubmitButton().addClickHandler(new ClickHandler() {
 
       @Override
       public void onClick(@SuppressWarnings("unused") ClickEvent event) {
-        service.login(view.getId(), view.getPassword(), new AsyncCallback<User>() {
-
-          @Override
-          public void onSuccess(User result) {
-            TaskitActivity.LOGIN_USER = result;
-
-            view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
-            getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
-
-            final boolean autoLoginEnabled = view.isAutoLoginEnabled();
-            storeAutoLoginState(autoLoginEnabled);
-          }
-
-          private void storeAutoLoginState(final boolean autoLoginEnabled) {
-            final int A_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
-            final Date expire = new Date(System.currentTimeMillis() + 10 * A_DAY_IN_MILLIS);
-            Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), expire);
-          }
-
-          @Override
-          public void onFailure(Throwable caught) {
-            if (caught instanceof LoginFailureException) {
-              view.setStatusText(String.valueOf(((LoginFailureException)caught).getErrorCode()));
-              return;
-            }
-
-            view.setStatusText("Invalid state." + caught.toString()); //$NON-NLS-1$
-          }
-        });
+        final String id = view.getId();
+        final String password = view.getPassword();
+        tryLoginAsync(view, id, password);
       }
+
     });
     return view;
   }
+
+  void tryAutoLoginAsync() {
+    this.loginServiceAsync.getLoginUser(new AsyncCallback<User>() {
+
+      @SuppressWarnings("unused")
+      @Override
+      public void onFailure(Throwable caught) {
+        // do nothing
+      }
+
+      @Override
+      public void onSuccess(final User result) {
+        if (result == null) return;
+        goToTopPage();
+      }
+
+    });
+  }
+
+  void tryLoginAsync(final LoginView view, final String id, final String password) {
+    this.loginServiceAsync.login(id, password, new AsyncCallback<User>() {
+
+      @SuppressWarnings("unused")
+      @Override
+      public void onSuccess(User result) {
+        view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
+
+        final boolean autoLoginEnabled = view.isAutoLoginEnabled();
+        storeAutoLoginState(autoLoginEnabled);
+
+        goToTopPage();
+      }
+
+      private void storeAutoLoginState(final boolean autoLoginEnabled) {
+        final int A_DAY_IN_MILLIS = 24 * 60 * 60 * 1000;
+        final Date expire = new Date(System.currentTimeMillis() + 10 * A_DAY_IN_MILLIS);
+        Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), expire);
+      }
+
+      @Override
+      public void onFailure(Throwable caught) {
+        if (caught instanceof LoginFailureException) {
+          view.setStatusText(String.valueOf(((LoginFailureException)caught).getErrorCode()));
+          return;
+        }
+
+        view.setStatusText("Invalid state." + caught.toString()); //$NON-NLS-1$
+      }
+    });
+  }
+
+  void goToTopPage() {
+    getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
+  }
+
 }

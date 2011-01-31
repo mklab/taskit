@@ -11,7 +11,7 @@ import javax.persistence.Query;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
-import org.mklab.taskit.server.dao.AccountRegistrationException;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
 /**

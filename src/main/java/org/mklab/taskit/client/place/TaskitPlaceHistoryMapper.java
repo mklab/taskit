@@ -11,7 +11,7 @@ import com.google.gwt.place.shared.WithTokenizers;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
-@WithTokenizers({Login.Tokenizer.class, StudentList.Tokenizer.class, Admin.Tokenizer.class})
+@WithTokenizers({Login.Tokenizer.class, StudentList.Tokenizer.class, Admin.Tokenizer.class, AttendenceList.Tokenizer.class})
 public interface TaskitPlaceHistoryMapper extends PlaceHistoryMapper {
   // empty
 }

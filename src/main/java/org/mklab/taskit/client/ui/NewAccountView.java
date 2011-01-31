@@ -40,7 +40,14 @@ public interface NewAccountView {
    * 
    * @return アカウント種別
    */
-  String getAccountType();
+  int getAccountType();
+
+  /**
+   * 選択可能なアカウント種別を設定します。
+   * 
+   * @param accountTypes 選択可能なアカウント種別
+   */
+  void setChoosableAccountTypes(String[] accountTypes);
 
   /**
    * 決定ボタンを取得します。
