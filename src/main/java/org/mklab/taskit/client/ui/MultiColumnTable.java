@@ -136,6 +136,14 @@ abstract class MultiColumnTable extends HorizontalPanel implements ClickHandler 
     return table.getWidget(rowIndexToLogicalIndex(row), column);
   }
 
+  int getRowCount() {
+    int rowCount = 0;
+    for (int i = 0; i < this.tables.size(); i++) {
+      rowCount += this.tables.get(i).getRowCount() - this.columnHeaderRows;
+    }
+    return rowCount;
+  }
+
   private FlexTable getTableAtRow(int row) {
     final int tableIndex = row / this.maximumRowCount;
     while (tableIndex >= this.tables.size()) {

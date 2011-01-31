@@ -5,16 +5,17 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
-import org.mklab.taskit.client.ui.AttendenceListView;
-import org.mklab.taskit.client.ui.AttendenceListViewImpl;
+import org.mklab.taskit.client.ui.AttendanceListView;
+import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.model.Lecture;
 
 
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 30, 2011
  */
-public class AttendenceListActivity extends TaskitActivity implements AttendenceListView.Presenter {
+public class AttendenceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
 
   private final String[] choosableAttendenceType;
 
@@ -34,7 +35,8 @@ public class AttendenceListActivity extends TaskitActivity implements Attendence
    */
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
-    final AttendenceListView view = new AttendenceListViewImpl(clientFactory);
+    final AttendanceListView view = new AttendanceListViewImpl(clientFactory);
+    view.setAttendanceTypes(this.choosableAttendenceType);
     view.setPresenter(this);
 
     final String[] sample = new String[100];
@@ -44,27 +46,29 @@ public class AttendenceListActivity extends TaskitActivity implements Attendence
 
     for (int i = 0; i < 100; i++) {
       view.setStudentNumber(i, String.valueOf(i + 10675003));
-      view.setAttendenceType(i, (int)(Math.random() * 4));
+      view.setAttendanceType(i, (int)(Math.random() * 4));
     }
 
     return view;
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendenceListView.Presenter#setAttendenceType(java.lang.String,
-   *      java.lang.String)
+   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#attendanceTypeEditted(int,
+   *      int)
    */
   @Override
-  public void setAttendenceType(String studentNo, String type) {
+  public void attendanceTypeEditted(int index, int attendanceTypeIndex) {
+    // TODO Auto-generated method stub
 
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendenceListView.Presenter#getChoosableAttendenceTypes()
+   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#lectureSelectionChanged(org.mklab.taskit.shared.model.Lecture)
    */
   @Override
-  public String[] getChoosableAttendenceTypes() {
-    return this.choosableAttendenceType;
+  public void lectureSelectionChanged(Lecture selectedLecture) {
+    // TODO Auto-generated method stub
+
   }
 
 }
