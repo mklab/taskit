@@ -6,15 +6,14 @@ package org.mklab.taskit.client.activity;
 import java.util.List;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 import org.mklab.taskit.shared.dto.AttendanceDto;
-import org.mklab.taskit.shared.model.Attendance;
-import org.mklab.taskit.shared.service.AccountService;
-import org.mklab.taskit.shared.service.AccountServiceAsync;
+import org.mklab.taskit.shared.service.AttendanceService;
+import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,8 +25,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class AttendanceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
 
-  private final String[] choosableAttendenceType;
   private AttendanceListView view;
+  private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -36,8 +35,6 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   public AttendanceListActivity(ClientFactory clientFactory) {
     super(clientFactory);
-    final Messages m = clientFactory.getMessages();
-    this.choosableAttendenceType = new String[] {m.attendedLabel(), m.absentLabel(), m.illnessLabel(), m.authorizedAbsenceLabel()};
   }
 
   /**
@@ -46,9 +43,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
     this.view = new AttendanceListViewImpl(clientFactory);
-    this.view.setAttendanceTypes(this.choosableAttendenceType);
     this.view.setPresenter(this);
-    //    view.setLectures(null);
 
     fetchInitialData();
 
@@ -56,22 +51,25 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   void fetchInitialData() {
-    AccountServiceAsync service = GWT.create(AccountService.class);
-    service.getAllStudentUserNames(new AsyncCallback<String[]>() {
+    this.service.getBaseData(new AsyncCallback<AttendanceBaseDto>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
-      public void onSuccess(String[] result) {
-        for (int i = 0; i < result.length; i++) {
-          view.setStudentNumber(i, result[i]);
+      public void onSuccess(AttendanceBaseDto result) {
+        final List<String> userNames = result.getUserNames();
+        for (int i = 0; i < userNames.size(); i++) {
+          view.setStudentNumber(i, userNames.get(i));
         }
-        fetchAttendanceDtoFromLecture(view.getSelectedLecture());
+
+        view.setLectures(result.getLectureCount());
+        view.setAttendanceTypes(result.getAttendanceTypes());
       }
 
       @Override
       public void onFailure(Throwable caught) {
         showErrorMessage(caught.toString());
       }
+
     });
   }
 

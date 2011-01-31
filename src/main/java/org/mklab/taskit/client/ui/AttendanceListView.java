@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.client.ui;
 
+import java.util.List;
+
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 30, 2011
@@ -21,7 +23,7 @@ public interface AttendanceListView extends TaskitView {
    * 
    * @param attendanceTypes 選択可能な出席種別の値
    */
-  void setAttendanceTypes(String[] attendanceTypes);
+  void setAttendanceTypes(List<String> attendanceTypes);
 
   /**
    * 選択されている講義を設定します。

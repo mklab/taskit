@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.client.ui;
 
+import java.util.List;
+
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 
@@ -25,7 +27,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   public static final String ATTENDENCE_GROUP_NAME = "attendence"; //$NON-NLS-1$
   private Presenter presenter;
   private MultiColumnTable table;
-  private String[] attendanceTypes;
+  private List<String> attendanceTypes;
   private ListBox lectureListBox;
 
   /**
@@ -55,11 +57,11 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
 
         table.setText(0, 1, m.attendenceTypeLabel());
         table.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
-        final String[] options = AttendanceListViewImpl.this.attendanceTypes;
-        for (int i = 0; i < options.length; i++) {
-          table.setText(1, i + 1, options[i]);
+        final List<String> options = AttendanceListViewImpl.this.attendanceTypes;
+        for (int i = 0; i < options.size(); i++) {
+          table.setText(1, i + 1, options.get(i));
         }
-        table.getFlexCellFormatter().setColSpan(0, 1, options.length);
+        table.getFlexCellFormatter().setColSpan(0, 1, options.size());
       }
     };
     this.table.setColumnHeaderRows(2);
@@ -98,7 +100,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   @Override
   public void setStudentNumber(int index, String studentNo) {
     this.table.setText(index, 0, studentNo);
-    for (int i = 0; i < this.attendanceTypes.length; i++) {
+    for (int i = 0; i < this.attendanceTypes.size(); i++) {
       this.table.setWidget(index, i + 1, new RadioButton(ATTENDENCE_GROUP_NAME + studentNo));
     }
   }
@@ -128,10 +130,10 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView#setAttendanceTypes(java.lang.String[])
+   * @see org.mklab.taskit.client.ui.AttendanceListView#setAttendanceTypes(List)
    */
   @Override
-  public void setAttendanceTypes(String[] attendanceTypes) {
+  public void setAttendanceTypes(List<String> attendanceTypes) {
     if (this.table != null) throw new IllegalStateException();
 
     this.attendanceTypes = attendanceTypes;
