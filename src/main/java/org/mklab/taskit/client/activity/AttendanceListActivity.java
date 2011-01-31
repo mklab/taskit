@@ -15,16 +15,16 @@ import org.mklab.taskit.shared.model.Lecture;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 30, 2011
  */
-public class AttendenceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
+public class AttendanceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
 
   private final String[] choosableAttendenceType;
 
   /**
-   * {@link AttendenceListActivity}オブジェクトを構築します。
+   * {@link AttendanceListActivity}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public AttendenceListActivity(ClientFactory clientFactory) {
+  public AttendanceListActivity(ClientFactory clientFactory) {
     super(clientFactory);
     final Messages m = clientFactory.getMessages();
     this.choosableAttendenceType = new String[] {m.attendedLabel(), m.absentLabel(), m.illnessLabel(), m.authorizedAbsenceLabel()};

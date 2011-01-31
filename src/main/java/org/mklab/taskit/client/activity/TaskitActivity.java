@@ -5,7 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
-import org.mklab.taskit.client.place.AttendenceList;
+import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
@@ -84,7 +84,7 @@ public abstract class TaskitActivity extends AbstractActivity {
 
       @Override
       public void onClick(@SuppressWarnings("unused") ClickEvent event) {
-        getClientFactory().getPlaceController().goTo(AttendenceList.INSTANCE);
+        getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
       }
     });
     header.getLogoutTrigger().addClickHandler(new ClickHandler() {
