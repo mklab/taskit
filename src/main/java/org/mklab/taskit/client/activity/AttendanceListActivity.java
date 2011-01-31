@@ -29,6 +29,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   private AttendanceListView view;
   private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
   private List<String> attendanceTypes;
+  private List<String> userNames;
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -58,7 +59,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void onSuccess(AttendanceBaseDto result) {
-        final List<String> userNames = result.getUserNames();
+        userNames = result.getUserNames();
         final int lectureCount = result.getLectureCount();
         attendanceTypes = result.getAttendanceTypes();
         view.setLectures(lectureCount);
@@ -81,11 +82,13 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   void fetchAttendanceDtoFromLecture(int lectureIndex) {
     this.service.getLecturewiseAttendanceData(lectureIndex, new AsyncCallback<AttendanceDto>() {
 
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void onSuccess(AttendanceDto result) {
-        final int[] attendanceTypes = result.getAttendances();
-        for (int i = 0; i < attendanceTypes.length; i++) {
-          view.setAttendanceType(i, attendanceTypes[i]);
+        for (int i = 0; i < userNames.size(); i++) {
+          final String userName = userNames.get(i);
+          final int index = result.getAttendanceTypeIndex(userName);
+          view.setAttendanceType(i, index == -1 ? 1 : index);
         }
       }
 

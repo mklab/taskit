@@ -4,6 +4,8 @@
 package org.mklab.taskit.server;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 
@@ -17,7 +19,6 @@ import org.mklab.taskit.server.dao.LectureDao;
 import org.mklab.taskit.server.dao.LectureDaoImpl;
 import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 import org.mklab.taskit.shared.dto.AttendanceDto;
-import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.Lecture;
 import org.mklab.taskit.shared.service.AttendanceService;
 
@@ -63,12 +64,11 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
 
     final Lecture lecture = getLectureOf(lectureIndex, entityManager);
-    final List<Attendance> attendances = attendanceDao.getAllStudentAttendanceDataFromLectureId(lecture.getLectureId());
-    final int[] attendanceTypeIndices = new int[attendances.size()];
-    for (int i = 0; i < attendanceTypeIndices.length; i++) {
-      attendanceTypeIndices[i] = attendances.get(i).getAttendanceTypeId() - 1;
+    final Map<String, Integer> attendances = attendanceDao.getAllStudentAttendanceDataFromLectureId(lecture.getLectureId());
+    for (Entry<String, Integer> entry : attendances.entrySet()) {
+      entry.setValue(Integer.valueOf(entry.getValue().intValue() - 1));
     }
-    return new AttendanceDto(lecture, attendanceTypeIndices);
+    return new AttendanceDto(lecture, attendances);
   }
 
   /**

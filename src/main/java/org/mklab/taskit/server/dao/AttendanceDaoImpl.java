@@ -3,7 +3,9 @@
  */
 package org.mklab.taskit.server.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -129,11 +131,16 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @SuppressWarnings("boxing")
   @Override
-  public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId) {
-    Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
+  public Map<String, Integer> getAllStudentAttendanceDataFromLectureId(int lectureId) {
+    Query query = this.entityManager
+        .createQuery("SELECT account.userName,attendance.attendanceTypeId FROM ATTENDANCE attendance, ACCOUNT account WHERE attendance.lectureId = :lectureId AND attendance.accountId = account.accountId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    @SuppressWarnings("unchecked")
-    List<Attendance> attendances = query.getResultList();
-    return attendances;
+
+    Map<String, Integer> userNameToAttendanceType = new HashMap<String, Integer>();
+    List<Object[]> list = query.getResultList();
+    for (Object[] userNameAttendance : list) {
+      userNameToAttendanceType.put((String)userNameAttendance[0], (Integer)userNameAttendance[1]);
+    }
+    return userNameToAttendanceType;
   }
 }

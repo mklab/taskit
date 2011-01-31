@@ -4,6 +4,7 @@
 package org.mklab.taskit.server.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mklab.taskit.shared.model.Attendance;
 
@@ -60,6 +61,6 @@ public interface AttendanceDao {
    * @param lectureId 講義データ
    * @return 与えられたIDの講義における全生徒の出席データ
    */
-  public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId);
+  public Map<String, Integer> getAllStudentAttendanceDataFromLectureId(int lectureId);
 
 }
