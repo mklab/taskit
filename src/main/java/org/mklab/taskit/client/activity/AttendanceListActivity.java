@@ -57,7 +57,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
   void fetchInitialData() {
     AccountServiceAsync service = GWT.create(AccountService.class);
-    service.getAllStudentIDs(new AsyncCallback<String[]>() {
+    service.getAllStudentUserNames(new AsyncCallback<String[]>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override

@@ -39,7 +39,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     list.setPresenter(this);
 
     final AccountServiceAsync service = GWT.create(AccountService.class);
-    service.getAllStudentIDs(new AsyncCallback<String[]>() {
+    service.getAllStudentUserNames(new AsyncCallback<String[]>() {
 
       @Override
       public void onSuccess(String[] result) {
