@@ -3,28 +3,34 @@
  */
 package org.mklab.taskit.shared.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+import net.sf.gilead.pojo.gwt.LightEntity;
+
+
 /**
  * 出欠に関するクラスです。
  * 
  * @author teshima
  * @version $Revision$, Jan 28, 2011
  */
-public class Attendance {
+@Entity(name = "ATTENDANCE")
+public class Attendance extends LightEntity {
 
+  /** for serialization. */
+  private static final long serialVersionUID = -2297779723580546537L;
+  @GeneratedValue
+  @Id
+  private int attendanceId = 0;
   /** 出席状態を表します。 */
-  private int attendance;
+  private int typeId;
   /** 遅刻を表します。 */
   private boolean late;
   /** 早退を表します。 */
   private boolean earlyLeft;
-  /** 欠席 */
-  private final static int ABSENT = 0;
-  /** 出席 */
-  private final static int ATTENDANCE = 1;
-  /** 病欠 */
-  private final static int ILLNESS = 2;
-  /** 忌引き */
-  private final static int BEREAVEMENT = 3;
+
   /**
    * {@link Attendance}オブジェクトを構築します。
    * 
@@ -34,56 +40,80 @@ public class Attendance {
    */
   public Attendance(int attendance, boolean late, boolean earlyLeft) {
     super();
-    this.setAttendance(attendance);
+    this.setTypeId(attendance);
     this.setLate(late);
     this.setEarlyLeft(earlyLeft);
   }
+
+  /**
+   * attendanceIdを取得します。
+   * 
+   * @return attendanceId
+   */
+  public int getAttendanceId() {
+    return this.attendanceId;
+  }
+
+  /**
+   * attendanceIdを設定します。
+   * 
+   * @param attendanceId attendanceId
+   */
+  public void setAttendanceId(int attendanceId) {
+    this.attendanceId = attendanceId;
+  }
+
   /**
    * attendanceを設定します。
-   *
+   * 
    * @param attendance attendance
    */
-  public void setAttendance(int attendance) {
-    this.attendance = attendance;
+  public void setTypeId(int attendance) {
+    this.typeId = attendance;
   }
+
   /**
-   * attendanceを取得します。
-  　*
+   * attendanceを取得します。 　*
+   * 
    * @return attendance
    */
-  public int getAttendance() {
-    return attendance;
+  public int getTypeId() {
+    return this.typeId;
   }
+
   /**
    * lateを設定します。
-   *
+   * 
    * @param late late
    */
   public void setLate(boolean late) {
     this.late = late;
   }
+
   /**
-   * lateを取得します。
-  　*
+   * lateを取得します。 　*
+   * 
    * @return late
    */
   public boolean isLate() {
-    return late;
+    return this.late;
   }
+
   /**
    * earlyLeftを設定します。
-   *
+   * 
    * @param earlyLeft earlyLeft
    */
   public void setEarlyLeft(boolean earlyLeft) {
     this.earlyLeft = earlyLeft;
   }
+
   /**
-   * earlyLeftを取得します。
-  　*
+   * earlyLeftを取得します。 　*
+   * 
    * @return earlyLeft
    */
   public boolean isEarlyLeft() {
-    return earlyLeft;
+    return this.earlyLeft;
   }
 }
