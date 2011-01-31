@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.shared.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -10,11 +11,20 @@ import java.util.List;
  * @author Yuhi Ishikura
  * @version $Revision$, 2011/02/01
  */
-public class AttendanceBaseDto {
+public class AttendanceBaseDto implements Serializable {
 
+  /** for serialization. */
+  private static final long serialVersionUID = 8411404526275386015L;
   private int lectureCount;
   private List<String> userNames;
   private List<String> attendanceTypes;
+
+  /**
+   * {@link AttendanceBaseDto}オブジェクトを構築します。
+   */
+  AttendanceBaseDto() {
+    // do nothing
+  }
 
   /**
    * {@link AttendanceBaseDto}オブジェクトを構築します。
