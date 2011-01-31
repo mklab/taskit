@@ -23,7 +23,7 @@ public final class Account extends LightEntity {
   /** アカウントのパスワードです。 */
   private String password;
   /** アカウントの種類です。 */
-  private String accountType;
+  private String accountType;//
 
   /**
    * {@link Account}オブジェクトを構築します。

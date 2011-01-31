@@ -11,13 +11,6 @@ public interface LoginServiceAsync
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.mklab.taskit.shared.service.LoginService
      */
-    void logout( AsyncCallback<Void> callback );
-
-
-    /**
-     * GWT-RPC service  asynchronous (client-side) interface
-     * @see org.mklab.taskit.shared.service.LoginService
-     */
     void login( java.lang.String p0, java.lang.String p1, AsyncCallback<org.mklab.taskit.shared.model.User> callback );
 
 
@@ -26,6 +19,13 @@ public interface LoginServiceAsync
      * @see org.mklab.taskit.shared.service.LoginService
      */
     void getLoginUser( AsyncCallback<org.mklab.taskit.shared.model.User> callback );
+
+
+    /**
+     * GWT-RPC service  asynchronous (client-side) interface
+     * @see org.mklab.taskit.shared.service.LoginService
+     */
+    void logout( AsyncCallback<Void> callback );
 
 
     /**

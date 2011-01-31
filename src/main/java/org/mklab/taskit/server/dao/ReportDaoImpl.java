@@ -38,7 +38,7 @@ class ReportDaoImpl implements ReportDao {
     String detail = (String)objects[2];
     String level = (String)objects[3];
     String allotment = (String)objects[4];
-    Report report = new Report(id, name, detail, date, level, allotment);
+    Report report = new Report(id, name, detail, level, allotment);
     return report;
   }
 
@@ -48,7 +48,7 @@ class ReportDaoImpl implements ReportDao {
   @Override
   public Report getReportFromID(String id) {
 
-    Query query = this.entityManager.createQuery("SELECT r.name, r.detail, r.level, r.allotment FROM Report r WHERE r.id = :id"); //$NON-NLS-1$
+    Query query = this.entityManager.createQuery("SELECT s FROM REPORT r as s WHERE afjkafaf"); //$NON-NLS-1$
     query.setParameter("id", id); //$NON-NLS-1$
     Object[] objects = (Object[])query.getSingleResult();
     String name = (String)objects[0];
@@ -56,7 +56,7 @@ class ReportDaoImpl implements ReportDao {
     String date = (String)objects[2];
     String level = (String)objects[3];
     String allotment = (String)objects[4];
-    Report report = new Report(id, name, detail, date, level, allotment);
+    Report report = new Report(id, name, detail, level, allotment);
     return report;
   }
 
@@ -74,7 +74,7 @@ class ReportDaoImpl implements ReportDao {
     String name = (String)objects[1];
     String detail = (String)objects[2];
     String allotment = (String)objects[3];
-    Report report = new Report(id, name, detail, date, level, allotment);
+    Report report = new Report(id, name, detail, level, allotment);
     return report;
   }
 
@@ -86,7 +86,7 @@ class ReportDaoImpl implements ReportDao {
   @Override
   public void registReport(String id, String name, String detail, String date, String level, String allotment) throws ReportRegistrationException {
     // TODO Auto-generated method stub
-    final Report report = new Report(id, name, detail, date, level, allotment);
+    final Report report = new Report(id, name, detail, level, allotment);
     EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
     try {

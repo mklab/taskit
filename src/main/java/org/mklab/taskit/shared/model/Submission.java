@@ -22,10 +22,12 @@ public class Submission extends LightEntity {
   private String id;
   /** 問題のIDです。 */
   private String problemId;
-  /** 問題を出された日を表します。 */
-  private String date;
+  /** 問題を出された時間を表します。 */
+  private long time;
   /** 提出状況のタイプです。 */
   private int submissionType;
+  /** 学籍番号 */
+  private String studentNo;
   /** 生徒に公開するコメントです。 */
   private String publicComment;
   /** 生徒に公開しないコメントです。 */
@@ -52,7 +54,7 @@ public class Submission extends LightEntity {
     super();
     this.id = id;
     this.problemId = problemId;
-    this.date = date;
+    this.time = time;
     this.submissionType = submissionType;
   }
 
@@ -61,16 +63,16 @@ public class Submission extends LightEntity {
    * 
    * @param id 生徒のIDです。
    * @param problemId 問題のIDです。
-   * @param date 問題を出された日です。
+   * @param time 問題を出された日です。
    * @param submissionType 提出物の状態です。
    * @param publicComment 生徒に公開するコメントです。
    * @param privateComment 生徒に公開しないコメントです。
    */
-  public Submission(String id, String problemId, String date, int submissionType, String publicComment, String privateComment) {
+  public Submission(String id, String problemId, long time, int submissionType, String publicComment, String privateComment) {
     super();
     this.id = id;
     this.problemId = problemId;
-    this.date = date;
+    this.time = time;
     this.submissionType = submissionType;
     this.publicComment = publicComment;
     this.privateComment = privateComment;
@@ -126,17 +128,17 @@ public class Submission extends LightEntity {
    * 
    * @return 問題を出された日です。
    */
-  public String getDate() {
-    return this.date;
+  public long getDate() {
+    return this.time;
   }
 
   /**
    * 問題を出された日を設定します。
    * 
-   * @param date 問題を出された日です。
+   * @param time 問題を出された日です。
    */
-  public void setDate(String date) {
-    this.date = date;
+  public void setDate(long time) {
+    this.time = time;
   }
 
   /**

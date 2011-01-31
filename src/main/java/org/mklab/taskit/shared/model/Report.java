@@ -21,15 +21,13 @@ public final class Report extends LightEntity {
 
   /** 課題のID */
   @Id
-  private String id;
-  /** 課題の名前 */
-  private String name;
+  private String reportId;
+  /** 課題の番号 */
+  private String no;
+  /** 課題のタイトル */
+  private String title;
   /** 課題の詳細 */
   private String detail;
-  /** 課題が出された日付 */
-  private String date;
-  /** 課題のレベル（番号） */
-  private String level;
   /** 課題の配点 */
   private String allotment;
 
@@ -37,19 +35,17 @@ public final class Report extends LightEntity {
    * {@link Report}オブジェクトを構築します。
    * 
    * @param id 課題ID
-   * @param name 課題の名前
+   * @param no 課題の番号
+   * @param title 課題の名前
    * @param detail 課題の詳細
-   * @param date 課題が出された日付
-   * @param level 課題のレベル（番号）
    * @param allotment 課題の配点
    */
-  public Report(String id, String name, String detail, String date, String level, String allotment) {
+  public Report(String id, String no, String title, String detail, String allotment) {
     super();
     this.setId(id);
-    this.setName(name);
+    this.setNo(no);
+    this.setTitle(title);
     this.setDetail(detail);
-    this.setDate(date);
-    this.setLevel(level);
     this.setAllotment(allotment);
   }
 
@@ -59,16 +55,16 @@ public final class Report extends LightEntity {
    * @param id 課題ID
    */
   public void setId(String id) {
-    this.id = id;
+    this.reportId = id;
   }
 
   /**
-   * 課題IDを取得します。 　*
+   * 課題IDを取得します。
    * 
    * @return 課題ID
    */
   public String getId() {
-    return this.id;
+    return this.reportId;
   }
 
   /**
@@ -76,8 +72,8 @@ public final class Report extends LightEntity {
    * 
    * @param name 課題の名前
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setTitle(String name) {
+    this.title = name;
   }
 
   /**
@@ -86,7 +82,7 @@ public final class Report extends LightEntity {
    * @return 課題の名前
    */
   public String getName() {
-    return this.name;
+    return this.title;
   }
 
   /**
@@ -108,30 +104,12 @@ public final class Report extends LightEntity {
   }
 
   /**
-   * 課題の出された日付を設定します。
-   * 
-   * @param date 課題の出された日付
-   */
-  public void setDate(String date) {
-    this.date = date;
-  }
-
-  /**
-   * 課題の出された日付を取得します。 　*
-   * 
-   * @return 課題の出された日付
-   */
-  public String getDate() {
-    return this.date;
-  }
-
-  /**
    * 課題のレベル（番号）を設定します。
    * 
-   * @param level 課題のレベル（番号）
+   * @param no 課題のレベル（番号）
    */
-  public void setLevel(String level) {
-    this.level = level;
+  public void setNo(String no) {
+    this.no = no;
   }
 
   /**
@@ -140,7 +118,7 @@ public final class Report extends LightEntity {
    * @return 課題のレベル（番号）
    */
   public String getLevel() {
-    return this.level;
+    return this.no;
   }
 
   /**
