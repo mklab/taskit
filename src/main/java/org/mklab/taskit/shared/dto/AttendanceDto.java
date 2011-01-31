@@ -56,4 +56,22 @@ public class AttendanceDto implements Serializable {
   public int[] getAttendances() {
     return this.attendances;
   }
+
+  /**
+   * lectureを設定します。
+   * 
+   * @param lecture lecture
+   */
+  void setLecture(Lecture lecture) {
+    this.lecture = lecture;
+  }
+
+  /**
+   * attendancesを設定します。
+   * 
+   * @param attendances attendances
+   */
+  void setAttendances(int[] attendances) {
+    this.attendances = attendances;
+  }
 }

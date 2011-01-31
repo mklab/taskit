@@ -34,9 +34,6 @@ public class Attendance extends LightEntity {
   private int lectureId;
   /** 学籍番号です。 */
   private int accountId;
-  
-
-
 
   /**
    * {@link Attendance}オブジェクトを構築します。
@@ -54,6 +51,13 @@ public class Attendance extends LightEntity {
     this.earlyLeft = earlyLeft;
     this.lectureId = lectureId;
     this.accountId = accountId;
+  }
+
+  /**
+   * {@link Attendance}オブジェクトを構築します。
+   */
+  Attendance() {
+    // do nothing
   }
 
   /**

@@ -28,6 +28,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
   private AttendanceListView view;
   private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
+  private List<String> attendanceTypes;
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -59,9 +60,10 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
       public void onSuccess(AttendanceBaseDto result) {
         final List<String> userNames = result.getUserNames();
         final int lectureCount = result.getLectureCount();
-
+        attendanceTypes = result.getAttendanceTypes();
         view.setLectures(lectureCount);
-        view.setAttendanceTypes(result.getAttendanceTypes());
+
+        view.setAttendanceTypes(attendanceTypes);
         for (int i = 0; i < userNames.size(); i++) {
           view.setStudentNumber(i, userNames.get(i));
         }
@@ -77,7 +79,6 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   void fetchAttendanceDtoFromLecture(int lectureIndex) {
-    Window.alert(lectureIndex + "");
     this.service.getLecturewiseAttendanceData(lectureIndex, new AsyncCallback<AttendanceDto>() {
 
       @Override
@@ -97,7 +98,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   void updateAttendanceState(String userName, int lectureIndex, int attendanceTypeIndex) {
-    this.service.setAttendanceType(userName, lectureIndex, "ABSENT", new AsyncCallback<Void>() {
+    this.service.setAttendanceType(userName, lectureIndex, this.attendanceTypes.get(attendanceTypeIndex), new AsyncCallback<Void>() {
 
       /**
        * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
