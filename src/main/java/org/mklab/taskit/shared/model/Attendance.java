@@ -30,6 +30,10 @@ public class Attendance extends LightEntity {
   private boolean late;
   /** 早退を表します。 */
   private boolean earlyLeft;
+  /** 講義のIDです。 */
+  private int lessonId;
+  /** 学籍番号です。 */
+  private int accountId;
 
   /**
    * {@link Attendance}オブジェクトを構築します。
@@ -91,7 +95,7 @@ public class Attendance extends LightEntity {
   }
 
   /**
-   * lateを取得します。 　*
+   * lateを取得します。
    * 
    * @return late
    */
@@ -109,11 +113,47 @@ public class Attendance extends LightEntity {
   }
 
   /**
-   * earlyLeftを取得します。 　*
+   * earlyLeftを取得します。
    * 
    * @return earlyLeft
    */
   public boolean isEarlyLeft() {
     return this.earlyLeft;
+  }
+
+  /**
+   * lessonIdを設定します。
+   * 
+   * @param lessonId lessonId
+   */
+  public void setLessonId(int lessonId) {
+    this.lessonId = lessonId;
+  }
+
+  /**
+   * lessonIdを取得します。 　*
+   * 
+   * @return lessonId
+   */
+  public int getLessonId() {
+    return this.lessonId;
+  }
+
+  /**
+   * studentNoを設定します。
+   * 
+   * @param studentNo studentNo
+   */
+  public void setAccountId(int studentNo) {
+    this.accountId = studentNo;
+  }
+
+  /**
+   * studentNoを取得します。 　*
+   * 
+   * @return studentNo
+   */
+  public int getAccountId() {
+    return this.accountId;
   }
 }

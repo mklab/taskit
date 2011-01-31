@@ -28,9 +28,21 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @Override
   public List<Attendance> getAttendanceState(String studentNo) {
-    Query query = this.entityManager.createQuery("select s from ATTENDANCE as s where studentNo = '" + studentNo + "'");
-    List<Attendance> attendances = (List<Attendance>)query.getSingleResult();
+    Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.studentNo =: studentNo");
     
+    List<Attendance> attendances = (List<Attendance>)query.getSingleResult();
+
+    return attendances;
+  }
+
+  /**
+   * @see org.mklab.taskit.server.dao.AttendanceDao#getAttendanceStateFromLessonId(int)
+   */
+  @Override
+  public List<Attendance> getAttendanceStateFromLessonId(int lessonId) {
+    Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.lessonId = :lessonId"); //$NON-NLS-1$
+    query.setParameter("lessonId", lessonId); //$NON-NLS-1$
+    List<Attendance> attendances = query.getResultList();
     return attendances;
   }
 
