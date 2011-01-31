@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
@@ -11,7 +12,6 @@ import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.service.AccountServiceAsync;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
@@ -56,10 +56,11 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.StudentListView.Presenter#listDataClicked(java.lang.String)
+   * @see org.mklab.taskit.client.ui.StudentListView.Presenter#listDataClicked(int)
    */
   @Override
-  public void listDataClicked(String text) {
-    Window.alert("clicked : " + text);
+  public void listDataClicked(int index) {
+    getClientFactory().getPlaceController().goTo(new StudentScore(index));
   }
+
 }

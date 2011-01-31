@@ -79,6 +79,13 @@ public interface AttendanceListView extends TaskitView {
      */
     void lectureSelectionChanged(Lecture selectedLecture);
 
+    /**
+     * 学生番号がクリックされたときに呼び出されます。
+     * 
+     * @param index クリックされた行インデックス
+     */
+    void studentNumberClicked(int index);
+
   }
 
 }

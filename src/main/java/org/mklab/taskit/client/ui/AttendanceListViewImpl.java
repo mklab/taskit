@@ -7,7 +7,6 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.shared.model.Lecture;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -71,11 +70,10 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
       @Override
       public void cellClicked(int row, int column) {
         if (column == 0) {
-          Window.alert(table.getText(row, column)); // 生徒別ページを見せる
+          presenter.studentNumberClicked(row);
           return;
         }
         presenter.attendanceTypeEditted(row, column - 1);
-        Window.alert(row + "," + (column - 1));
       }
     });
 

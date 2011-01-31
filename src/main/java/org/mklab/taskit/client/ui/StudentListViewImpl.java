@@ -47,9 +47,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
-      public void cellClicked(int row, int column) {
-        final String clickedData = table.getText(row, column);
-        presenter.listDataClicked(clickedData);
+      public void cellClicked(int row, @SuppressWarnings("unused") int column) {
+        presenter.listDataClicked(row);
       }
     });
     return this.table;

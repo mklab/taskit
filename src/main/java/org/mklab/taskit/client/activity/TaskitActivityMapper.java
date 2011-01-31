@@ -8,6 +8,7 @@ import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.place.Login;
+import org.mklab.taskit.client.place.StudentScore;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -42,6 +43,7 @@ public class TaskitActivityMapper implements ActivityMapper {
     if (place instanceof Login) return new LoginActivity(this.clientFactory);
     if (place instanceof StudentList) return new StudentListActivity(this.clientFactory);
     if (place instanceof AttendanceList) return new AttendanceListActivity(this.clientFactory);
+    if (place instanceof StudentScore) return new StudentScoreActivity(this.clientFactory);
     if (place instanceof Admin) return new AdminActivity(this.clientFactory);
 
     return null;

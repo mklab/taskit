@@ -1,66 +1,44 @@
 package org.mklab.taskit.client.ui;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.mklab.taskit.shared.model.Lecture;
-import org.mklab.taskit.shared.model.Submission;
-
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-
-
 /**
- * 生徒の提出チェック画面を表すクラスです。
+ * 学生別成績ビューを表すインターフェースです。
  * 
- * @author teshima
- * @version $Revision$, 2011/01/19
+ * @author Yuhi Ishikura
+ * @version $Revision$, Jan 31, 2011
  */
-public class StudentScoreView extends Composite {
-
-  /** 成績チェック用のテーブルです。 */
-  private FlexTable scoreCheckTable;
+public interface StudentScoreView extends TaskitView {
 
   /**
-   * Initialize the generated object of {@link StudentScoreView}.
+   * index番目のタイトルを設定します。
    * 
-   * @param id 生徒のIDです。
+   * @param index 行インデックス
+   * @param title タイトル
    */
-  public StudentScoreView(String id) {
-    ListBox scoreListBox = new ListBox();
-    scoreListBox.setItemText(0, "〇");
-    scoreListBox.setItemText(1, "△");
-    scoreListBox.setItemText(2, "×");
-
-    Label informationLabel = new Label(id + " さんの提出チェック画面");
-    this.scoreCheckTable = new FlexTable();
-  }
+  void setTitle(int index, String title);
 
   /**
-   * 指定した講義の日付と同じ日付の行が何行目かを調べ、その行番号を返します。。
+   * 評価値を設定します。
    * 
-   * @param date 講義の日付です。
-   * @return 指定した講義の日付と同じ日付の行番号です。
+   * @param index 第何回か
+   * @param no 何番か
+   * @param evaluation 評価値
    */
-  private int getRowOfSameDate(String date) {
-    int row = 0;
-    for (int i = 0; i < this.scoreCheckTable.getRowCount(); i++) {
-      if (this.scoreCheckTable.getText(i, 0).equals(date)) {
-        row = i;
-      }
-    }
-    return row;
-  }
+  void setEvaluation(int index, int no, int evaluation);
 
   /**
-   * 日付だけでなく第何講なのかも示す時に用います。
-   * 
-   * @param lectures 講義回
+   * @author Yuhi Ishikura
+   * @version $Revision$, Jan 31, 2011
    */
-  public void setLecture(List<Lecture> lectures) {
-    // TODO
+  public static interface Presenter {
+
+    /**
+     * 成績が変更されたときに呼び出されます。
+     * 
+     * @param index 行インデックス
+     * @param no 問題ナンバー
+     * @param evaluation 評価値
+     */
+    void onEvaluationChange(int index, int no, int evaluation);
   }
+
 }

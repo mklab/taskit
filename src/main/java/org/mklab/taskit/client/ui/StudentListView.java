@@ -36,9 +36,9 @@ public interface StudentListView extends TaskitView {
     /**
      * リストデータがクリックされたときに呼び出されます。
      * 
-     * @param text クリックされたデータ
+     * @param index クリックされた行インデックス
      */
-    void listDataClicked(String text);
+    void listDataClicked(int index);
   }
 
 }

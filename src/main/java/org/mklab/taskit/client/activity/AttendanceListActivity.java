@@ -5,10 +5,13 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
+import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.model.Lecture;
+
+import com.google.gwt.user.client.Window;
 
 
 /**
@@ -38,7 +41,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     final AttendanceListView view = new AttendanceListViewImpl(clientFactory);
     view.setAttendanceTypes(this.choosableAttendenceType);
     view.setPresenter(this);
-    view.setLectures(null);
+    //    view.setLectures(null);
 
     final String[] sample = new String[100];
     for (int i = 0; i < sample.length; i++) {
@@ -59,8 +62,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   public void attendanceTypeEditted(int index, int attendanceTypeIndex) {
-    // TODO Auto-generated method stub
-
+    Window.alert(index + "," + attendanceTypeIndex);
   }
 
   /**
@@ -68,8 +70,15 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   public void lectureSelectionChanged(Lecture selectedLecture) {
-    // TODO Auto-generated method stub
 
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#studentNumberClicked(int)
+   */
+  @Override
+  public void studentNumberClicked(int index) {
+    getClientFactory().getPlaceController().goTo(new StudentScore(index));
   }
 
 }
