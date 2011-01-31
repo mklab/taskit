@@ -3,7 +3,6 @@
  */
 package org.mklab.taskit.server.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -37,9 +36,14 @@ public class AccountDaoImpl implements AccountDao {
    * @see org.mklab.taskit.server.dao.AccountDao#getHashedPasswordIfExists(java.lang.String)
    */
   @Override
-  public Account getHashedPasswordIfExists(String id) {
-    final Account account = this.entityManager.find(Account.class, id);
-    return account;
+  public Account getHashedPasswordIfExists(String userName) {
+    final Query q = this.entityManager.createQuery(String.format("select a from ACCOUNT a where userName='%s'", userName)); //$NON-NLS-1$
+    final List<Account> accountList = q.getResultList();
+    if (accountList.size() == 0) return null;
+
+    if (accountList.size() > 1) throw new IllegalStateException("Multiple user was detected!"); //$NON-NLS-1$
+
+    return accountList.get(0);
   }
 
   /**
@@ -47,10 +51,10 @@ public class AccountDaoImpl implements AccountDao {
    *      java.lang.String, String)
    */
   @Override
-  public void registerAccount(String id, String hashedPassword, String type) throws AccountRegistrationException {
-    if (isRegistered(id)) throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.USER_NAME_ALREADY_EXISTS);
+  public void registerAccount(String userName, String hashedPassword, String type) throws AccountRegistrationException {
+    if (isRegistered(userName)) throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.USER_NAME_ALREADY_EXISTS);
 
-    final Account account = new Account(id, hashedPassword, type);
+    final Account account = new Account(userName, hashedPassword, type);
 
     final EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
@@ -70,7 +74,7 @@ public class AccountDaoImpl implements AccountDao {
         }
         throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.UNEXPECTED);
       } catch (Throwable e1) {
-        throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.UNEXPECTED); //$NON-NLS-1$
+        throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.UNEXPECTED);
       }
     }
   }
@@ -84,7 +88,8 @@ public class AccountDaoImpl implements AccountDao {
    */
   @Override
   public List<String> getAllStudentIDs() {
-    Query query = this.entityManager.createQuery("SELECT id FROM ACCOUNT WHERE accountType = 'STUDENT'"); //$NON-NLS-1$
+    Query query = this.entityManager.createQuery("SELECT userName FROM ACCOUNT WHERE accountType = 'STUDENT'"); //$NON-NLS-1$
+    @SuppressWarnings("unchecked")
     List<String> studentIDs = query.getResultList();
     return studentIDs;
   }

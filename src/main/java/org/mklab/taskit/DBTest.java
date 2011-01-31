@@ -24,7 +24,7 @@ public class DBTest {
     final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("taskit"); //$NON-NLS-1$
     final EntityManager entityManager = entityManagerFactory.createEntityManager();
     final AccountDao dao = new AccountDaoImpl(entityManager);
-    dao.registerAccount("10675003", BCrypt.hashpw("taskit", BCrypt.gensalt()), "TA");
+    dao.registerAccount("10675002", BCrypt.hashpw("taskit", BCrypt.gensalt()), "STUDENT");
   }
 
 }

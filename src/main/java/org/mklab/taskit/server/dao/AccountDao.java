@@ -18,22 +18,22 @@ import org.mklab.taskit.shared.service.AccountRegistrationException;
 public interface AccountDao {
 
   /**
-   * 与えられたIDに対応する、ハッシュ関数にかけられたパスワードを取得します。
+   * 与えられたユーザー名に対応する、ハッシュ関数にかけられたパスワードを取得します。
    * 
-   * @param id ID
+   * @param userName ユーザー名
    * @return ハッシュ関数にかけられたパスワード。IDが存在しない場合はnullを返す。
    */
-  public Account getHashedPasswordIfExists(String id);
+  public Account getHashedPasswordIfExists(String userName);
 
   /**
    * アカウントを新規作成します。
    * 
-   * @param id ID
+   * @param userName ユーザー名
    * @param hashedPassword ハッシュ関数にかけられたパスワード
    * @param type アカウント種別
    * @throws AccountRegistrationException IDがすでに存在する、またはpasswordが不正で登録できない場合
    */
-  public void registerAccount(String id, String hashedPassword, String type) throws AccountRegistrationException;
+  public void registerAccount(String userName, String hashedPassword, String type) throws AccountRegistrationException;
 
   /**
    * 生徒全員のIDを取得します。

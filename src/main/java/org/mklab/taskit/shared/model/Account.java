@@ -1,6 +1,8 @@
 package org.mklab.taskit.shared.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
@@ -17,9 +19,11 @@ public final class Account extends LightEntity {
 
   /** for serialization. */
   private static final long serialVersionUID = -4244616815344670645L;
-  /** アカウントのIDです。 */
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Id
-  private String id;
+  private int accountId = 0;
+  /** ユーザー名です。 */
+  private String userName;
   /** アカウントのパスワードです。 */
   private String password;
   /** アカウントの種類です。 */
@@ -37,13 +41,13 @@ public final class Account extends LightEntity {
   /**
    * Initialize the generated object of {@link Account}.
    * 
-   * @param id ID
+   * @param userName ID
    * @param password パスワード
    * @param accountType アカウントの種類
    */
-  public Account(String id, String password, String accountType) {
+  public Account(String userName, String password, String accountType) {
     super();
-    this.id = id;
+    this.userName = userName;
     this.password = password;
     this.accountType = accountType;
   }
@@ -53,8 +57,8 @@ public final class Account extends LightEntity {
    * 
    * @return ID
    */
-  public String getId() {
-    return this.id;
+  public int getAccountId() {
+    return this.accountId;
   }
 
   /**
@@ -62,17 +66,26 @@ public final class Account extends LightEntity {
    * 
    * @param id ID
    */
-  public void setId(String id) {
-    this.id = id;
+  public void setAccountId(int id) {
+    this.accountId = id;
   }
 
   /**
-   * パスワードを設定します。
+   * ユーザー名を取得します。
    * 
-   * @param password パスワード
+   * @return ユーザー名
    */
-  public void setPassword(String password) {
-    this.password = password;
+  public String getUserName() {
+    return this.userName;
+  }
+
+  /**
+   * ユーザー名を設定します。
+   * 
+   * @param userName ユーザー名
+   */
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
   /**
@@ -82,6 +95,15 @@ public final class Account extends LightEntity {
    */
   public String getPassword() {
     return this.password;
+  }
+
+  /**
+   * パスワードを設定します。
+   * 
+   * @param password パスワード
+   */
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   /**
