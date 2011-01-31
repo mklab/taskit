@@ -4,6 +4,7 @@
 package org.mklab.taskit.shared.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
@@ -21,32 +22,34 @@ public final class Report extends LightEntity {
 
   /** 課題のID */
   @Id
-  private String reportId;
+  @GeneratedValue
+  private int reportId;
   /** 課題の番号 */
   private String no;
+  /** この課題の属する講義のIDです。 */
+  private int lessonId;
   /** 課題のタイトル */
   private String title;
   /** 課題の詳細 */
   private String detail;
   /** 課題の配点 */
-  private String allotment;
+  private int allotment;
 
   /**
    * {@link Report}オブジェクトを構築します。
    * 
-   * @param id 課題ID
    * @param no 課題の番号
    * @param title 課題の名前
    * @param detail 課題の詳細
    * @param allotment 課題の配点
+   * @param lessonId 講義ID
    */
-  public Report(String id, String no, String title, String detail, String allotment) {
-    super();
-    this.setId(id);
-    this.setNo(no);
-    this.setTitle(title);
-    this.setDetail(detail);
-    this.setAllotment(allotment);
+  public Report(String no, String title, String detail, int allotment, int lessonId) {
+    this.no = no;
+    this.title = title;
+    this.detail = detail;
+    this.allotment = allotment;
+    this.lessonId = lessonId;
   }
 
   /**
@@ -54,7 +57,7 @@ public final class Report extends LightEntity {
    * 
    * @param id 課題ID
    */
-  public void setId(String id) {
+  public void setId(int id) {
     this.reportId = id;
   }
 
@@ -63,7 +66,7 @@ public final class Report extends LightEntity {
    * 
    * @return 課題ID
    */
-  public String getId() {
+  public int getId() {
     return this.reportId;
   }
 
@@ -126,7 +129,7 @@ public final class Report extends LightEntity {
    * 
    * @param allotment 課題の配点
    */
-  public void setAllotment(String allotment) {
+  public void setAllotment(int allotment) {
     this.allotment = allotment;
   }
 
@@ -135,8 +138,62 @@ public final class Report extends LightEntity {
    * 
    * @return 課題の配点
    */
-  public String getAllotment() {
+  public int getAllotment() {
     return this.allotment;
+  }
+
+  /**
+   * reportIdを取得します。
+   * 
+   * @return reportId
+   */
+  public int getReportId() {
+    return this.reportId;
+  }
+
+  /**
+   * reportIdを設定します。
+   * 
+   * @param reportId reportId
+   */
+  public void setReportId(int reportId) {
+    this.reportId = reportId;
+  }
+
+  /**
+   * lessonIdを取得します。
+   * 
+   * @return lessonId
+   */
+  public int getLessonId() {
+    return this.lessonId;
+  }
+
+  /**
+   * lessonIdを設定します。
+   * 
+   * @param lessonId lessonId
+   */
+  public void setLessonId(int lessonId) {
+    this.lessonId = lessonId;
+  }
+
+  /**
+   * noを取得します。
+   * 
+   * @return no
+   */
+  public String getNo() {
+    return this.no;
+  }
+
+  /**
+   * titleを取得します。
+   * 
+   * @return title
+   */
+  public String getTitle() {
+    return this.title;
   }
 
 }

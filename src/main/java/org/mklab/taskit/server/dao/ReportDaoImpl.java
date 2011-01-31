@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.server.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -25,68 +27,32 @@ class ReportDaoImpl implements ReportDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromDateAndLevel(java.lang.String,
-   *      String)
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromDate(java.lang.String)
    */
   @Override
-  public Report getReportFromDate(String date) {
-    Query query = this.entityManager.createQuery("SELECT r.id, r.name, r.detail, r.level, r.allotment FROM Report r WHERE r.date = :date"); //$NON-NLS-1$
+  public List<Report> getReportFromDate(String date) {
+    final Query query = this.entityManager.createQuery("SELECT r FROM Report r WHERE r.date = :date"); //$NON-NLS-1$
     query.setParameter("date", date); //$NON-NLS-1$
-    Object[] objects = (Object[])query.getSingleResult();
-    String id = (String)objects[0];
-    String name = (String)objects[1];
-    String detail = (String)objects[2];
-    String level = (String)objects[3];
-    String allotment = (String)objects[4];
-    Report report = new Report(id, name, detail, level, allotment);
-    return report;
+    @SuppressWarnings("unchecked")
+    final List<Report> reportList = query.getResultList();
+    if (reportList.size() == 0) return null;
+    if (reportList.size() > 1) throw new IllegalStateException();
+    return reportList;
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromID(java.lang.String)
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromID(int)
    */
   @Override
-  public Report getReportFromID(String id) {
-
-    Query query = this.entityManager.createQuery("SELECT s FROM REPORT r as s WHERE afjkafaf"); //$NON-NLS-1$
-    query.setParameter("id", id); //$NON-NLS-1$
-    Object[] objects = (Object[])query.getSingleResult();
-    String name = (String)objects[0];
-    String detail = (String)objects[1];
-    String date = (String)objects[2];
-    String level = (String)objects[3];
-    String allotment = (String)objects[4];
-    Report report = new Report(id, name, detail, level, allotment);
-    return report;
+  public Report getReportFromID(int id) {
+    return this.entityManager.find(Report.class, Integer.valueOf(id));
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getReportFromDateAndLevel(java.lang.String,
-   *      String)
+   * @see org.mklab.taskit.server.dao.ReportDao#registerReport(org.mklab.taskit.shared.model.Report)
    */
   @Override
-  public Report getReportFromDateAndLevel(String date, String level) {
-    Query query = this.entityManager.createQuery("SELECT r.id, r.name, r.detail, r.allotment FROM Report r WHERE r.date = :date AND r.level = :level"); //$NON-NLS-1$
-    query.setParameter("date", date); //$NON-NLS-1$
-    query.setParameter("level", level); //$NON-NLS-1$
-    Object[] objects = (Object[])query.getSingleResult();
-    String id = (String)objects[0];
-    String name = (String)objects[1];
-    String detail = (String)objects[2];
-    String allotment = (String)objects[3];
-    Report report = new Report(id, name, detail, level, allotment);
-    return report;
-  }
-
-  /**
-   * @see org.mklab.taskit.server.dao.ReportDao#registReport(java.lang.String,
-   *      java.lang.String, java.lang.String, java.lang.String,
-   *      java.lang.String, java.lang.String)
-   */
-  @Override
-  public void registReport(String id, String name, String detail, String date, String level, String allotment) throws ReportRegistrationException {
-    // TODO Auto-generated method stub
-    final Report report = new Report(id, name, detail, level, allotment);
+  public void registerReport(Report report) throws ReportRegistrationException {
     EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
     try {

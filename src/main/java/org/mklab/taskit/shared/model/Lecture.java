@@ -21,9 +21,11 @@ public final class Lecture extends LightEntity {
   /** 管理用IDです。 */
   @Id
   @GeneratedValue
-  private int id;
+  private int lectureId = 0;
   /** 講義の日付です。 */
   private String date;
+  /** 講義タイトルです。 */
+  private String title;
   /** 講義回です。 */
   private int lessonNo;
 
@@ -44,8 +46,8 @@ public final class Lecture extends LightEntity {
    * 
    * @return id
    */
-  public int getId() {
-    return this.id;
+  public int getLectureId() {
+    return this.lectureId;
   }
 
   /**
@@ -53,8 +55,8 @@ public final class Lecture extends LightEntity {
    * 
    * @param id id
    */
-  public void setId(int id) {
-    this.id = id;
+  public void setLectureId(int id) {
+    this.lectureId = id;
   }
 
   /**
@@ -91,6 +93,24 @@ public final class Lecture extends LightEntity {
    */
   public void setLessonNo(int lessonNo) {
     this.lessonNo = lessonNo;
+  }
+
+  /**
+   * titleを取得します。
+   * 
+   * @return title
+   */
+  public String getTitle() {
+    return this.title;
+  }
+
+  /**
+   * titleを設定します。
+   * 
+   * @param title title
+   */
+  public void setTitle(String title) {
+    this.title = title;
   }
 
 }
