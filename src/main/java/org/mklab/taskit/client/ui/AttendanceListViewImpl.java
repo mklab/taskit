@@ -86,6 +86,8 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
           presenter.studentNumberClicked(row);
           return;
         }
+        RadioButton bt = (RadioButton)table.getWidget(row, column);
+        bt.setValue(Boolean.TRUE);
         presenter.attendanceTypeEditted(table.getText(row, 0), column - 1);
       }
     });
