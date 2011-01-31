@@ -8,13 +8,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-
 import org.junit.Test;
-import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.AttendanceType;
+import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
 /**
@@ -25,12 +22,20 @@ public class AttendanceDaoTest extends DaoTest {
 
   /**
    * 出席状況変更のテストを行ないます。
+   * @throws AccountRegistrationException 
    */
   @Test
-  public void testSetAttendanceType() {
+  public void testSetAttendanceType() throws AccountRegistrationException {
+    final AccountDao accountDao = new AccountDaoImpl(createEntityManager());
+    accountDao.registerAccount("10236001", "taskit", "STUDENT");
+    accountDao.registerAccount("10236002", "taskit", "STUDENT");
+    accountDao.registerAccount("10236003", "taskit", "STUDENT");
+    
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
-    final Attendance attendance = new Attendance(1, false, false, 0, 0);
-    attendanceDao.registerAttendance(attendance);
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 1));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 2));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 3));
+    
     final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(createEntityManager());
     typeDao.registerAttendanceType(new AttendanceType("absent")); //$NON-NLS-1$
     typeDao.registerAttendanceType(new AttendanceType("attend")); //$NON-NLS-1$
@@ -38,13 +43,18 @@ public class AttendanceDaoTest extends DaoTest {
 
     List<String> expectedAttendanceTypes = new ArrayList<String>();
     expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
+    expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
+    expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
     assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
 
-    final Account dummyUser = createUniqueUser("TA"); //$NON-NLS-1$
-    attendanceDao.setAttendanceType(0, dummyUser.getUserName(), "attend"); //$NON-NLS-1$
+//    final Account dummyUser = createUniqueUser("TA"); //$NON-NLS-1$
+//    attendanceDao.setAttendanceType(0, dummyUser.getUserName(), "attend"); //$NON-NLS-1$
+    attendanceDao.setAttendanceType(0, "10236001", "attend");
     actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
-    expectedAttendanceTypes.remove(0);
+    expectedAttendanceTypes.clear();
     expectedAttendanceTypes.add("attend"); //$NON-NLS-1$
+    expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
+    expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
     assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
   }
 
@@ -77,4 +87,30 @@ public class AttendanceDaoTest extends DaoTest {
     assertEquals("attend", attendanceTypes.get(5)); //$NON-NLS-1$
   }
 
+  @Test
+  public void testGetAllStudentAttendanceDataFromLectureId() {
+    final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 0));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 1));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 2));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 3));
+    attendanceDao.registerAttendance(new Attendance(2, false, false, 0, 4));
+    attendanceDao.registerAttendance(new Attendance(2, false, false, 0, 5));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 0));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 1));
+    attendanceDao.registerAttendance(new Attendance(2, false, false, 1, 2));
+    attendanceDao.registerAttendance(new Attendance(2, false, false, 1, 3));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 4));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 5));
+    
+    final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(createEntityManager());
+    AttendanceType type_absent = new AttendanceType("absent"); //$NON-NLS-1$
+    AttendanceType type_attend = new AttendanceType("attend"); //$NON-NLS-1$
+    typeDao.registerAttendanceType(type_absent);
+    typeDao.registerAttendanceType(type_attend);
+    
+    List<Attendance> attendances = attendanceDao.getAllStudentAttendanceDataFromLectureId(0);
+    assertEquals(6, attendances.size());
+    
+  }
 }
