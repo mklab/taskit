@@ -1,6 +1,7 @@
 package org.mklab.taskit.shared.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import net.sf.gilead.pojo.gwt.LightEntity;
@@ -17,23 +18,24 @@ public class Submission extends LightEntity {
 
   /** for serialization. */
   private static final long serialVersionUID = 594166644251110376L;
-  /** アカウントのIDです。 */
   @Id
-  private String id;
+  @GeneratedValue
+  private int submissionId;
   /** 問題のIDです。 */
-  private String problemId;
-  /** 問題を出された時間を表します。 */
+  private int reportId;
+  /** 提出された日時(ms)です。 */
   private long time;
-  /** 提出状況のタイプです。 */
-  private int submissionType;
-  /** 学籍番号 */
-  private String studentNo;
+  /** 提出者のアカウントのIDです。 */
+  private int accountId;
+  /** この提出に対する評価値です。 */
+  private int evaluation;
+  /** この提出の評価を行ったユーザーのアカウントIDです。 */
+  private int evaluatorId;
+
   /** 生徒に公開するコメントです。 */
   private String publicComment;
   /** 生徒に公開しないコメントです。 */
   private String privateComment;
-  /** 問題レベルです。 */
-  private int level;
 
   /**
    * {@link Submission}オブジェクトを構築します。
@@ -43,165 +45,168 @@ public class Submission extends LightEntity {
   }
 
   /**
-   * Initialize the generated object of {@link Submission}.
+   * {@link Submission}オブジェクトを構築します。
    * 
-   * @param id 生徒のIDです。
-   * @param problemId 問題のIDです。
-   * @param date 問題を出された日です。
-   * @param submissionType 提出物の状態です。
+   * @param reportId 問題ID
+   * @param time 提出時間
+   * @param accountId 提出者ID
+   * @param evaluation 評価
+   * @param evaluatorId 評価したユーザーのアカウントID
+   * @param publicComment 生徒に公開するコメント
+   * @param privateComment 生徒に非公開のコメント
    */
-  public Submission(String id, String problemId, String date, int submissionType) {
-    super();
-    this.id = id;
-    this.problemId = problemId;
+  public Submission(int reportId, long time, int accountId, int evaluation, int evaluatorId, String publicComment, String privateComment) {
+    this.reportId = reportId;
     this.time = time;
-    this.submissionType = submissionType;
-  }
-
-  /**
-   * Initialize the generated object of {@link Submission}.
-   * 
-   * @param id 生徒のIDです。
-   * @param problemId 問題のIDです。
-   * @param time 問題を出された日です。
-   * @param submissionType 提出物の状態です。
-   * @param publicComment 生徒に公開するコメントです。
-   * @param privateComment 生徒に公開しないコメントです。
-   */
-  public Submission(String id, String problemId, long time, int submissionType, String publicComment, String privateComment) {
-    super();
-    this.id = id;
-    this.problemId = problemId;
-    this.time = time;
-    this.submissionType = submissionType;
+    this.accountId = accountId;
+    this.evaluation = evaluation;
+    this.evaluatorId = evaluatorId;
     this.publicComment = publicComment;
     this.privateComment = privateComment;
   }
 
   /**
-   * 生徒のIDを設定します。
+   * submissionIdを取得します。
    * 
-   * @param id id
+   * @return submissionId
    */
-  public void setId(String id) {
-    this.id = id;
+  public int getSubmissionId() {
+    return this.submissionId;
   }
 
   /**
-   * 問題IDを設定します。
+   * submissionIdを設定します。
    * 
-   * @param problemId problemId
+   * @param submissionId submissionId
    */
-  public void setProblemId(String problemId) {
-    this.problemId = problemId;
+  public void setSubmissionId(int submissionId) {
+    this.submissionId = submissionId;
   }
 
   /**
-   * 提出物のタイプを設定します。
+   * reportIdを取得します。
    * 
-   * @param submissionType submissionType
+   * @return reportId
    */
-  public void setSubmissionType(int submissionType) {
-    this.submissionType = submissionType;
+  public int getReportId() {
+    return this.reportId;
   }
 
   /**
-   * 生徒のIDを取得します。
+   * reportIdを設定します。
    * 
-   * @return 生徒のIDです。
+   * @param reportId reportId
    */
-  public String getId() {
-    return this.id;
+  public void setReportId(int reportId) {
+    this.reportId = reportId;
   }
 
   /**
-   * 問題のIDを取得します。
+   * timeを取得します。
    * 
-   * @return 問題のIDです。
+   * @return time
    */
-  public String getProblemId() {
-    return this.problemId;
-  }
-
-  /**
-   * 問題を出された日を取得します。
-   * 
-   * @return 問題を出された日です。
-   */
-  public long getDate() {
+  public long getTime() {
     return this.time;
   }
 
   /**
-   * 問題を出された日を設定します。
+   * timeを設定します。
    * 
-   * @param time 問題を出された日です。
+   * @param time time
    */
-  public void setDate(long time) {
+  public void setTime(long time) {
     this.time = time;
   }
 
   /**
-   * 提出物の状態を取得します。
+   * accountIdを取得します。
    * 
-   * @return 提出物の状態です。
+   * @return accountId
    */
-  public int getSubmissionType() {
-    return this.submissionType;
+  public int getAccountId() {
+    return this.accountId;
   }
 
   /**
-   * 生徒に公開するコメントを設定します。
+   * accountIdを設定します。
    * 
-   * @param publicComment 生徒に公開するコメントです。
+   * @param accountId accountId
    */
-  public void setPublicComment(String publicComment) {
-    this.publicComment = publicComment;
+  public void setAccountId(int accountId) {
+    this.accountId = accountId;
   }
 
   /**
-   * 生徒に公開するコメントを取得します。
+   * evaluationを取得します。
    * 
-   * @return 生徒に公開するコメントです。
+   * @return evaluation
+   */
+  public int getEvaluation() {
+    return this.evaluation;
+  }
+
+  /**
+   * evaluationを設定します。
+   * 
+   * @param evaluation evaluation
+   */
+  public void setEvaluation(int evaluation) {
+    this.evaluation = evaluation;
+  }
+
+  /**
+   * evaluatorIdを取得します。
+   * 
+   * @return evaluatorId
+   */
+  public int getEvaluatorId() {
+    return this.evaluatorId;
+  }
+
+  /**
+   * evaluatorIdを設定します。
+   * 
+   * @param evaluatorId evaluatorId
+   */
+  public void setEvaluatorId(int evaluatorId) {
+    this.evaluatorId = evaluatorId;
+  }
+
+  /**
+   * publicCommentを取得します。
+   * 
+   * @return publicComment
    */
   public String getPublicComment() {
     return this.publicComment;
   }
 
   /**
-   * 生徒に公開しないコメントを設定します。
+   * publicCommentを設定します。
    * 
-   * @param privateComment 生徒に公開しないコメントです。
+   * @param publicComment publicComment
    */
-  public void setPrivateComment(String privateComment) {
-    this.privateComment = privateComment;
+  public void setPublicComment(String publicComment) {
+    this.publicComment = publicComment;
   }
 
   /**
-   * 生徒に公開しないコメントを取得します。
+   * privateCommentを取得します。
    * 
-   * @return 生徒に公開しないコメントです。
+   * @return privateComment
    */
   public String getPrivateComment() {
     return this.privateComment;
   }
 
   /**
-   * 提出の重要度(重み付け)を取得します。
+   * privateCommentを設定します。
    * 
-   * @return レベル
+   * @param privateComment privateComment
    */
-  public int getLevel() {
-    return this.level;
-  }
-
-  /**
-   * 提出の重要度(重み付け)を設定します。
-   * 
-   * @param level レベル
-   */
-  public void setLevel(int level) {
-    this.level = level;
+  public void setPrivateComment(String privateComment) {
+    this.privateComment = privateComment;
   }
 
 }
