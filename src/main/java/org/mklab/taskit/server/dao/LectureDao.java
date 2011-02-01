@@ -27,4 +27,9 @@ public interface LectureDao {
    * @param lecture 講義データ
    */
   public void registerLecture(Lecture lecture);
+  /**
+   * 講義数を取得します。
+   * @return 講義数
+   */
+  public int getLectureCount();
 }

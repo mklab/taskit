@@ -56,4 +56,13 @@ public class LectureDaoImpl implements LectureDao {
     }
   }
 
+  /**
+   * @see org.mklab.taskit.server.dao.LectureDao#getLectureCount()
+   */
+  @Override
+  public int getLectureCount() {
+    // TODO 未実装です。
+    return 0;
+  }
+
 }
