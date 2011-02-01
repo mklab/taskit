@@ -84,10 +84,10 @@ public class AccountDaoImpl implements AccountDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.AccountDao#getAllStudentIDs()
+   * @see org.mklab.taskit.server.dao.AccountDao#getAllStudentUserNames()
    */
   @Override
-  public List<String> getAllStudentIDs() {
+  public List<String> getAllStudentUserNames() {
     Query query = this.entityManager.createQuery("SELECT userName FROM ACCOUNT WHERE accountType = 'STUDENT'"); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<String> studentIDs = query.getResultList();

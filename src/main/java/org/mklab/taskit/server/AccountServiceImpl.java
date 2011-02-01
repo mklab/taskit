@@ -46,13 +46,13 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
   }
 
   /**
-   * @see org.mklab.taskit.shared.service.AccountService#getAllStudentIDs()
+   * @see org.mklab.taskit.shared.service.AccountService#getAllStudentUserNames()
    */
   @Override
-  public String[] getAllStudentIDs() {
+  public String[] getAllStudentUserNames() {
     SessionUtil.assertIsTAOrTeacher(getSession());
 
-    final List<String> ids = this.accountDao.getAllStudentIDs();
+    final List<String> ids = this.accountDao.getAllStudentUserNames();
     return ids.toArray(new String[ids.size()]);
   }
 

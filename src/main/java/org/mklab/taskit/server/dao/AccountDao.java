@@ -40,6 +40,6 @@ public interface AccountDao {
    * 
    * @return 生徒全員のID
    */
-  public List<String> getAllStudentIDs();
+  public List<String> getAllStudentUserNames();
 
 }
