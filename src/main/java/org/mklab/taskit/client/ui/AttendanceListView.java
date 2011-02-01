@@ -3,9 +3,6 @@
  */
 package org.mklab.taskit.client.ui;
 
-import org.mklab.taskit.shared.model.Lecture;
-
-
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 30, 2011
@@ -13,11 +10,11 @@ import org.mklab.taskit.shared.model.Lecture;
 public interface AttendanceListView extends TaskitView {
 
   /**
-   * 選択可能な講義を設定します。
+   * 選択可能な講義数を設定します。
    * 
-   * @param lecture 選択可能な講義
+   * @param lectureCount 選択可能な講義数
    */
-  void setLectures(Lecture[] lecture);
+  void setLectures(int lectureCount);
 
   /**
    * 選択可能な出席種別の値を設定します。
@@ -29,9 +26,9 @@ public interface AttendanceListView extends TaskitView {
   /**
    * 選択されている講義を設定します。
    * 
-   * @param lecture 選択されている講義
+   * @param index 選択する講義のインデックス
    */
-  void setSelectedLecture(Lecture lecture);
+  void setSelectedLecture(int index);
 
   /**
    * プレゼンターを設定します。
@@ -75,9 +72,9 @@ public interface AttendanceListView extends TaskitView {
     /**
      * 選択されている講義が変更されたときに呼び出されます。
      * 
-     * @param selectedLecture 選択されている講義
+     * @param selectedLectureIndex 選択されている講義のインデックス
      */
-    void lectureSelectionChanged(Lecture selectedLecture);
+    void lectureSelectionChanged(int selectedLectureIndex);
 
     /**
      * 学生番号がクリックされたときに呼び出されます。
