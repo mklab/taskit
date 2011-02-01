@@ -4,22 +4,14 @@
 package org.mklab.taskit.client.ui.smartgwt;
 
 import org.mklab.taskit.client.ui.HeaderView;
+import org.mklab.taskit.client.ui.event.ClickHandler;
+import org.mklab.taskit.client.ui.event.SmartGwtClickHandler;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.smartgwt.client.util.SC;
-import com.smartgwt.client.widgets.menu.Menu;
-import com.smartgwt.client.widgets.menu.MenuItem;
-import com.smartgwt.client.widgets.menu.events.ClickHandler;
-import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.client.widgets.toolbar.ToolStripButton;
-import com.smartgwt.client.widgets.toolbar.ToolStripMenuButton;
-import com.smartgwt.client.widgets.toolbar.ToolStripSpacer;
 
 
 /**
@@ -28,38 +20,52 @@ import com.smartgwt.client.widgets.toolbar.ToolStripSpacer;
  */
 public class SmartHeaderView extends Composite implements HeaderView {
 
+  private ToolStripButton studentListButton;
+  private ToolStripButton checkListButton;
+  private ToolStripButton attendanceButton;
+  private ToolStripButton adminLinkButton;
+  private ToolStripButton logoutButton;
+
   /**
    * {@link SmartHeaderView}オブジェクトを構築します。
    */
   public SmartHeaderView() {
+    final ToolStrip toolStrip = createToolBar();
+    initWidget(toolStrip);
+  }
+
+  @SuppressWarnings("nls")
+  private ToolStrip createToolBar() {
     final ToolStrip toolStrip = new ToolStrip();
-    
-    final Menu menu = new Menu();
-    final ToolStripButton button = new ToolStripButton();
-    button.setIcon(GWT.getModuleBaseURL() + "check.png");
+    toolStrip.setWidth100();
+
+    this.studentListButton = createToolStripButton("StudentList", "student64.png");
+    this.checkListButton = createToolStripButton("check64.png");
+    this.attendanceButton = createToolStripButton("attendance64.png");
+    this.adminLinkButton = createToolStripButton("admin64.png");
+    this.logoutButton = createToolStripButton("logout64.png");
+
+    toolStrip.addButton(this.studentListButton);
+    toolStrip.addButton(this.checkListButton);
+    toolStrip.addButton(this.attendanceButton);
+    toolStrip.addButton(this.adminLinkButton);
+    toolStrip.addFill();
+    toolStrip.addButton(this.logoutButton);
+
+    return toolStrip;
+  }
+
+  private ToolStripButton createToolStripButton(String iconName) {
+    return createToolStripButton(null, iconName);
+  }
+
+  @SuppressWarnings("nls")
+  private ToolStripButton createToolStripButton(String title, String iconName) {
+    final ToolStripButton button = new ToolStripButton(title);
+    button.setIcon(GWT.getModuleBaseURL() + iconName);
     button.setSize("64px", "64px");
     button.setIconSize(50);
-    
-    final ToolStripButton button2 = new ToolStripButton();
-    button2.setIcon(GWT.getModuleBaseURL()+"wc.png");
-    button2.setSize("64px", "64px");
-    button2.setIconSize(50);
-    
-    final MenuItem item = new MenuItem("Student List");
-    item.addClickHandler(new ClickHandler() {
-
-      @Override
-      public void onClick(MenuItemClickEvent event) {
-        SC.say("Hello");
-      }
-    });
-    menu.addItem(item);
-    
-    toolStrip.setHeight(60);
-    toolStrip.addButton(button);
-    toolStrip.addButton(button2);
-    toolStrip.setWidth100();
-    initWidget(toolStrip);
+    return button;
   }
 
   /**
@@ -87,35 +93,35 @@ public class SmartHeaderView extends Composite implements HeaderView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getStudentListLink()
+   * @see org.mklab.taskit.client.ui.HeaderView#addStudentListLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getStudentListLink() {
-    return new Button();
+  public void addStudentListLinkClickHandler(ClickHandler h) {
+    this.studentListButton.addClickHandler(new SmartGwtClickHandler(h));
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getAttendenceListLink()
+   * @see org.mklab.taskit.client.ui.HeaderView#addAttendanceListLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getAttendenceListLink() {
-    return new Button();
+  public void addAttendanceListLinkClickHandler(ClickHandler h) {
+    this.attendanceButton.addClickHandler(new SmartGwtClickHandler(h));
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getAdminLink()
+   * @see org.mklab.taskit.client.ui.HeaderView#addAdminLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getAdminLink() {
-    return new Button();
+  public void addAdminLinkClickHandler(ClickHandler h) {
+    this.adminLinkButton.addClickHandler(new SmartGwtClickHandler(h));
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getLogoutTrigger()
+   * @see org.mklab.taskit.client.ui.HeaderView#addLogoutLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getLogoutTrigger() {
-    return new Button();
+  public void addLogoutLinkClickHandler(ClickHandler h) {
+    this.logoutButton.addClickHandler(new SmartGwtClickHandler(h));
   }
 
 }
