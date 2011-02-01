@@ -123,9 +123,10 @@ public class AttendanceDaoImpl implements AttendanceDao {
   /**
    * @see org.mklab.taskit.server.dao.AttendanceDao#getAllStudentAttendanceDataFromLectureId(int)
    */
+  @SuppressWarnings("boxing")
   @Override
   public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId) {
-    Query query = this.entityManager.createQuery("SELECT s FROM ATTENDANCE a AS s WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
+    Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     List<Attendance> attendances = query.getResultList();
     return attendances;

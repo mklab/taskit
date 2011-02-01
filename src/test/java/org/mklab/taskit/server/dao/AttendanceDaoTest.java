@@ -49,7 +49,7 @@ public class AttendanceDaoTest extends DaoTest {
 
 //    final Account dummyUser = createUniqueUser("TA"); //$NON-NLS-1$
 //    attendanceDao.setAttendanceType(0, dummyUser.getUserName(), "attend"); //$NON-NLS-1$
-    attendanceDao.setAttendanceType(0, "10236001", "attend");
+    attendanceDao.setAttendanceType(0, "10236001", "attend"); //$NON-NLS-1$ //$NON-NLS-2$
     actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
     expectedAttendanceTypes.clear();
     expectedAttendanceTypes.add("attend"); //$NON-NLS-1$
@@ -102,15 +102,19 @@ public class AttendanceDaoTest extends DaoTest {
     attendanceDao.registerAttendance(new Attendance(2, false, false, 1, 3));
     attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 4));
     attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 5));
+    attendanceDao.registerAttendance(new Attendance(1, false, false, 1, 6));
     
     final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(createEntityManager());
     AttendanceType type_absent = new AttendanceType("absent"); //$NON-NLS-1$
     AttendanceType type_attend = new AttendanceType("attend"); //$NON-NLS-1$
     typeDao.registerAttendanceType(type_absent);
     typeDao.registerAttendanceType(type_attend);
-    
-    List<Attendance> attendances = attendanceDao.getAllStudentAttendanceDataFromLectureId(0);
-    assertEquals(6, attendances.size());
+
+    List<Attendance> attendances_lecture0 = attendanceDao.getAllStudentAttendanceDataFromLectureId(0);
+    assertEquals(6, attendances_lecture0.size());
+    List<Attendance> attendances_lecture1 = attendanceDao.getAllStudentAttendanceDataFromLectureId(1);
+    assertEquals(7, attendances_lecture1.size());
+    assertEquals(2, attendances_lecture0.get(5).getAttendanceTypeId());
     
   }
 }
