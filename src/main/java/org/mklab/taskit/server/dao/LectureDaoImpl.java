@@ -61,8 +61,9 @@ public class LectureDaoImpl implements LectureDao {
    */
   @Override
   public int getLectureCount() {
-    // TODO 未実装です。
-    return 0;
+    Query query = this.entityManager.createQuery("SELECT s FROM LECTURE as s"); //$NON-NLS-1$
+    List<Lecture> lectures = query.getResultList();
+    return lectures.size();
   }
 
 }
