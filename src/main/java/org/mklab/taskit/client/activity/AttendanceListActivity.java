@@ -3,12 +3,20 @@
  */
 package org.mklab.taskit.client.activity;
 
+import java.util.List;
+
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.dto.AttendanceBaseDto;
+import org.mklab.taskit.shared.dto.AttendanceDto;
+import org.mklab.taskit.shared.service.AttendanceService;
+import org.mklab.taskit.shared.service.AttendanceServiceAsync;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 /**
@@ -17,8 +25,8 @@ import org.mklab.taskit.client.ui.TaskitView;
  */
 public class AttendanceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
 
-  private final String[] choosableAttendenceType;
   private AttendanceListView view;
+  private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -27,8 +35,6 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   public AttendanceListActivity(ClientFactory clientFactory) {
     super(clientFactory);
-    final Messages m = clientFactory.getMessages();
-    this.choosableAttendenceType = new String[] {m.attendedLabel(), m.absentLabel(), m.illnessLabel(), m.authorizedAbsenceLabel()};
   }
 
   /**
@@ -37,24 +43,39 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
     this.view = new AttendanceListViewImpl(clientFactory);
-    this.view.setAttendanceTypes(this.choosableAttendenceType);
     this.view.setPresenter(this);
-    //    view.setLectures(null);
 
-    fetchUserNames();
+    fetchInitialData();
 
     return this.view;
   }
 
-  void fetchUserNames() {
-    
-  }
+  void fetchInitialData() {
+    this.service.getBaseData(new AsyncCallback<AttendanceBaseDto>() {
 
-  void fetchLectureCount() {
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
+      @Override
+      public void onSuccess(AttendanceBaseDto result) {
+        final List<String> userNames = result.getUserNames();
+        for (int i = 0; i < userNames.size(); i++) {
+          view.setStudentNumber(i, userNames.get(i));
+        }
 
+        view.setLectures(result.getLectureCount());
+        view.setAttendanceTypes(result.getAttendanceTypes());
+      }
+
+      @Override
+      public void onFailure(Throwable caught) {
+        showErrorMessage(caught.toString());
+      }
+
+    });
   }
 
   void fetchAttendanceDtoFromLecture(int lectureIndex) {
+    final AttendanceDto data = null;
+    final int[] attendanceTypes = data.getAttendances();
 
   }
 

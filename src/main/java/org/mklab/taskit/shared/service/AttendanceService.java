@@ -4,6 +4,10 @@
 package org.mklab.taskit.shared.service;
 
 import org.mklab.taskit.shared.dto.AttendanceDto;
+import org.mklab.taskit.shared.dto.AttendanceBaseDto;
+
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 
 /**
@@ -12,7 +16,8 @@ import org.mklab.taskit.shared.dto.AttendanceDto;
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 1, 2011
  */
-public interface AttendanceService {
+@RemoteServiceRelativePath("attendance")
+public interface AttendanceService extends RemoteService {
 
   /**
    * ユーザーの指定された講義の出席種別を設定します。
@@ -29,6 +34,13 @@ public interface AttendanceService {
    * @param lectureIndex 講義
    * @return 出席状況
    */
-  AttendanceDto[] getAttendanceTypesOfStudents(int lectureIndex);
+  AttendanceDto getLecturewiseAttendanceData(int lectureIndex);
+
+  /**
+   * 出席ビューのベースデータ（講義数、ユーザー名集合）を取得します。
+   * 
+   * @return 出席ビューのベースデータ
+   */
+  AttendanceBaseDto getBaseData();
 
 }

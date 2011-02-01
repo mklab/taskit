@@ -3,43 +3,46 @@
  */
 package org.mklab.taskit.shared.dto;
 
+import org.mklab.taskit.shared.model.Lecture;
+
+
 /**
+ * 出席ビューで講義の選択が変更されたときに転送されるデータオブジェクトです。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 1, 2011
  */
 public class AttendanceDto {
 
-  private String userName;
-  private int attendanceType;
+  private Lecture lecture;
+  private int[] attendances;
 
   /**
    * {@link AttendanceDto}オブジェクトを構築します。
    * 
-   * @param userName ユーザー名
-   * @param attendanceType 出席種別
+   * @param lecture 講義データ
+   * @param attendances 出欠データ
    */
-  public AttendanceDto(String userName, int attendanceType) {
-    super();
-    this.userName = userName;
-    this.attendanceType = attendanceType;
+  public AttendanceDto(Lecture lecture, int[] attendances) {
+    this.lecture = lecture;
+    this.attendances = attendances;
   }
 
   /**
-   * userNameを取得します。
+   * lectureを取得します。
    * 
-   * @return userName
+   * @return lecture
    */
-  public String getUserName() {
-    return this.userName;
+  public Lecture getLecture() {
+    return this.lecture;
   }
 
   /**
-   * attendanceTypeを取得します。
+   * attendancesを取得します。
    * 
-   * @return attendanceType
+   * @return attendances
    */
-  public int getAttendanceType() {
-    return this.attendanceType;
+  public int[] getAttendances() {
+    return this.attendances;
   }
-
 }

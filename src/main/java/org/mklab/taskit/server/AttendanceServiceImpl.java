@@ -3,15 +3,21 @@
  */
 package org.mklab.taskit.server;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
 import org.mklab.taskit.server.dao.AttendanceDao;
 import org.mklab.taskit.server.dao.AttendanceDaoImpl;
+import org.mklab.taskit.server.dao.AttendanceTypeDao;
+import org.mklab.taskit.server.dao.AttendanceTypeDaoImpl;
 import org.mklab.taskit.server.dao.LectureDao;
 import org.mklab.taskit.server.dao.LectureDaoImpl;
+import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 import org.mklab.taskit.shared.dto.AttendanceDto;
+import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.Lecture;
 import org.mklab.taskit.shared.service.AttendanceService;
 
@@ -31,6 +37,8 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
    */
   @Override
   public void setAttendanceType(String userName, int lectureIndex, String attendanceType) {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final EntityManager entityManager = createEntityManager();
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
     final Lecture lecture = getLectureOf(lectureIndex, entityManager);
@@ -45,14 +53,40 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
   }
 
   /**
-   * @see org.mklab.taskit.shared.service.AttendanceService#getAttendanceTypesOfStudents(int)
+   * @see org.mklab.taskit.shared.service.AttendanceService#getLecturewiseAttendanceData(int)
    */
   @Override
-  public AttendanceDto[] getAttendanceTypesOfStudents(int lectureIndex) {
+  public AttendanceDto getLecturewiseAttendanceData(int lectureIndex) {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final EntityManager entityManager = createEntityManager();
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
+
     final Lecture lecture = getLectureOf(lectureIndex, entityManager);
-    attendanceDao.getAttendanceTypes(lecture.getLectureId());
-    return null;
+    final List<Attendance> attendances = attendanceDao.getAllStudentAttendanceDataFromLectureId(lecture.getLectureId());
+    final int[] attendanceTypeIndices = new int[attendances.size()];
+    for (int i = 0; i < attendanceTypeIndices.length; i++) {
+      attendanceTypeIndices[i] = attendances.get(i).getAttendanceTypeId() - 1;
+    }
+    return new AttendanceDto(lecture, attendanceTypeIndices);
+  }
+
+  /**
+   * @see org.mklab.taskit.shared.service.AttendanceService#getBaseData()
+   */
+  @Override
+  public AttendanceBaseDto getBaseData() {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
+    final EntityManager entityManager = createEntityManager();
+    final AccountDao accountDao = new AccountDaoImpl(entityManager);
+    final LectureDao lectureDao = new LectureDaoImpl(entityManager);
+    final AttendanceTypeDao attendanceTypeDao = new AttendanceTypeDaoImpl(entityManager);
+
+    final List<String> userNames = accountDao.getAllStudentUserNames();
+    final int lectureCount = lectureDao.getLectureCount();
+    final List<String> attendanceTypes = attendanceTypeDao.getAllAttendanceTypes();
+
+    return new AttendanceBaseDto(lectureCount, userNames, attendanceTypes);
   }
 }
