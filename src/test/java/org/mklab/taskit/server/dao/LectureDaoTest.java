@@ -21,7 +21,7 @@ public class LectureDaoTest extends DaoTest {
   @Test
   public void testRegisterLecture() {
     final LectureDao dao = new LectureDaoImpl(createEntityManager());
-    dao.registerLecture(new Lecture(1, "Hello", "20100131")); //$NON-NLS-1$//$NON-NLS-2$
+    dao.registerLecture(new Lecture("Hello", System.currentTimeMillis())); //$NON-NLS-1$
     assertEquals(1, dao.getAllLectures().size());
   }
 

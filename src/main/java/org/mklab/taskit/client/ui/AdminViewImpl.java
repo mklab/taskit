@@ -52,10 +52,10 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
     tabPanel.add(this.reportEditor, "Report");
     tabPanel.selectTab(0);
 
-    Lecture l = new Lecture(0, "title1", "10000");
-    Report report = new Report("1", "report1", "detail", 0, l.getLectureId());
+    Lecture l = new Lecture("title1", 10000);
+    Report report = new Report(1, "report1", "detail", 0, l.getLectureId());
     this.reportEditor.setLectures(new Lecture[] {l});
-//    this.reportEditor.setReports(l, new Report[] {report});
+    //    this.reportEditor.setReports(l, new Report[] {report});
 
     return tabPanel;
   }

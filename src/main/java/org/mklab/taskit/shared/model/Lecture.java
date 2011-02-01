@@ -23,23 +23,19 @@ public final class Lecture extends LightEntity {
   @GeneratedValue
   private int lectureId = 0;
   /** 講義の日付です。 */
-  private String date;
+  private long time;
   /** 講義タイトルです。 */
   private String title;
-  /** 講義回です。 */
-  private int no;
 
   /**
    * {@link Lecture}オブジェクトを構築します。
    * 
-   * @param no 講義回
    * @param title タイトル
    * @param date 講義日
    */
-  public Lecture(int no, String title, String date) {
-    this.no = no;
+  public Lecture(String title, long date) {
     this.title = title;
-    this.date = date;
+    this.time = date;
   }
 
   /**
@@ -48,8 +44,6 @@ public final class Lecture extends LightEntity {
   public Lecture() {
     // do nothing
   }
-  
-  
 
   /**
    * idを取得します。
@@ -70,39 +64,21 @@ public final class Lecture extends LightEntity {
   }
 
   /**
-   * dateを取得します。
+   * timeを取得します。
    * 
-   * @return date
+   * @return time
    */
-  public String getDate() {
-    return this.date;
+  public long getTime() {
+    return this.time;
   }
 
   /**
-   * dateを設定します。
+   * timeを設定します。
    * 
-   * @param date date
+   * @param time time
    */
-  public void setDate(String date) {
-    this.date = date;
-  }
-
-  /**
-   * lessonNoを取得します。
-   * 
-   * @return lessonNo
-   */
-  public int getNo() {
-    return this.no;
-  }
-
-  /**
-   * lessonNoを設定します。
-   * 
-   * @param no lessonNo
-   */
-  public void setNo(int no) {
-    this.no = no;
+  public void setTime(long time) {
+    this.time = time;
   }
 
   /**
