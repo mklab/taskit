@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.junit.After;
+import org.junit.Before;
 import org.mklab.taskit.server.Passwords;
 import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.service.AccountRegistrationException;
@@ -23,6 +25,22 @@ public abstract class DaoTest {
 
   static {
     factory = Persistence.createEntityManagerFactory("taskit-test"); //$NON-NLS-1$
+  }
+
+  /**
+   * テスト前に呼び出されます。
+   */
+  @Before
+  public void setUp() {
+    factory = Persistence.createEntityManagerFactory("taskit-test"); //$NON-NLS-1$
+  }
+
+  /**
+   * テスト後に呼び出されます。
+   */
+  @After
+  public void tearDown() {
+    factory.close();
   }
 
   protected EntityManager createEntityManager() {
