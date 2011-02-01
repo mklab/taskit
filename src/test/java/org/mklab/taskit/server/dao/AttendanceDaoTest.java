@@ -28,11 +28,10 @@ public class AttendanceDaoTest extends DaoTest {
    */
   @Test
   public void testSetAttendanceType() {
-    final EntityManager entityManager = Persistence.createEntityManagerFactory("taskit-test").createEntityManager(); //$NON-NLS-1$
-    final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
+    final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
     final Attendance attendance = new Attendance(1, false, false, 0, 0);
     attendanceDao.registerAttendance(attendance);
-    final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(entityManager);
+    final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(createEntityManager());
     typeDao.registerAttendanceType(new AttendanceType("absent")); //$NON-NLS-1$
     typeDao.registerAttendanceType(new AttendanceType("attend")); //$NON-NLS-1$
     List<String> actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
