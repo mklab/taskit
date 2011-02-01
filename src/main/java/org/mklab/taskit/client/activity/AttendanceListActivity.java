@@ -57,12 +57,11 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
       @Override
       public void onSuccess(AttendanceBaseDto result) {
         final List<String> userNames = result.getUserNames();
+        view.setLectures(result.getLectureCount());
+        view.setAttendanceTypes(result.getAttendanceTypes());
         for (int i = 0; i < userNames.size(); i++) {
           view.setStudentNumber(i, userNames.get(i));
         }
-
-        view.setLectures(result.getLectureCount());
-        view.setAttendanceTypes(result.getAttendanceTypes());
       }
 
       @Override

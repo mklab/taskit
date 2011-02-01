@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.shared.dto;
 
+import java.io.Serializable;
+
 import org.mklab.taskit.shared.model.Lecture;
 
 
@@ -12,10 +14,19 @@ import org.mklab.taskit.shared.model.Lecture;
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 1, 2011
  */
-public class AttendanceDto {
+public class AttendanceDto implements Serializable {
 
+  /** for serialization. */
+  private static final long serialVersionUID = -3716375602172699191L;
   private Lecture lecture;
   private int[] attendances;
+
+  /**
+   * {@link AttendanceDto}オブジェクトを構築します。
+   */
+  AttendanceDto() {
+    // empty
+  }
 
   /**
    * {@link AttendanceDto}オブジェクトを構築します。

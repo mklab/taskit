@@ -58,10 +58,12 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
         table.setText(0, 1, m.attendenceTypeLabel());
         table.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
         final List<String> options = AttendanceListViewImpl.this.attendanceTypes;
-        for (int i = 0; i < options.size(); i++) {
-          table.setText(1, i + 1, options.get(i));
+        if (options != null) {
+          for (int i = 0; i < options.size(); i++) {
+            table.setText(1, i + 1, options.get(i));
+          }
+          table.getFlexCellFormatter().setColSpan(0, 1, options.size());
         }
-        table.getFlexCellFormatter().setColSpan(0, 1, options.size());
       }
     };
     this.table.setColumnHeaderRows(2);
@@ -134,9 +136,8 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
    */
   @Override
   public void setAttendanceTypes(List<String> attendanceTypes) {
-    if (this.table != null) throw new IllegalStateException();
-
     this.attendanceTypes = attendanceTypes;
+    this.table.clearTables();
   }
 
   /**
