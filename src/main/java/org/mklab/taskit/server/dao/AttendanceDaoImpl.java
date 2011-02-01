@@ -119,4 +119,13 @@ public class AttendanceDaoImpl implements AttendanceDao {
     // TODO　未実装です。
     return null;
   }
+
+  /**
+   * @see org.mklab.taskit.server.dao.AttendanceDao#setAttendanceType(java.lang.String, int, java.lang.String)
+   */
+  @Override
+  public void setAttendanceType(String userName, int lectureId, String attendanceType) {
+    // TODO 未実装です。
+    
+  }
 }

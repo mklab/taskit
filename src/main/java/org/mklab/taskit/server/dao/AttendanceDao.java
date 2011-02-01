@@ -6,6 +6,7 @@ package org.mklab.taskit.server.dao;
 import java.util.List;
 
 import org.mklab.taskit.shared.model.Attendance;
+import org.mklab.taskit.shared.model.Lecture;
 
 
 /**
@@ -53,10 +54,20 @@ public interface AttendanceDao {
    * @param attendance 講義の出席状況
    */
   public void registerAttendance(Attendance attendance);
+
   /**
    * 講義IDから全生徒の出席データを取得します。
+   * 
    * @param lectureId 講義データ
    * @return 与えられたIDの講義における全生徒の出席データ
    */
   public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId);
+
+  /**
+   * 出席データを変更します。
+   * @param userName ユーザー名
+   * @param lectureId 講義ID
+   * @param attendanceType 出席のタイプ
+   */
+  public void setAttendanceType(String userName, int lectureId, String attendanceType);
 }
