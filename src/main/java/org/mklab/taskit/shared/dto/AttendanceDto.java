@@ -3,9 +3,6 @@
  */
 package org.mklab.taskit.shared.dto;
 
-import java.util.List;
-
-import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.Lecture;
 
 
@@ -18,7 +15,7 @@ import org.mklab.taskit.shared.model.Lecture;
 public class AttendanceDto {
 
   private Lecture lecture;
-  private List<Attendance> attendances;
+  private int[] attendances;
 
   /**
    * {@link AttendanceDto}オブジェクトを構築します。
@@ -26,7 +23,7 @@ public class AttendanceDto {
    * @param lecture 講義データ
    * @param attendances 出欠データ
    */
-  public AttendanceDto(Lecture lecture, List<Attendance> attendances) {
+  public AttendanceDto(Lecture lecture, int[] attendances) {
     this.lecture = lecture;
     this.attendances = attendances;
   }
@@ -45,7 +42,7 @@ public class AttendanceDto {
    * 
    * @return attendances
    */
-  public List<Attendance> getAttendances() {
+  public int[] getAttendances() {
     return this.attendances;
   }
 }

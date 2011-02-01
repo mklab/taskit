@@ -3,12 +3,21 @@
  */
 package org.mklab.taskit.client.activity;
 
+import java.util.List;
+
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.dto.AttendanceDto;
+import org.mklab.taskit.shared.model.Attendance;
+import org.mklab.taskit.shared.service.AccountService;
+import org.mklab.taskit.shared.service.AccountServiceAsync;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 /**
@@ -41,20 +50,34 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     this.view.setPresenter(this);
     //    view.setLectures(null);
 
-    fetchUserNames();
+    fetchInitialData();
 
     return this.view;
   }
 
-  void fetchUserNames() {
-    
-  }
+  void fetchInitialData() {
+    AccountServiceAsync service = GWT.create(AccountService.class);
+    service.getAllStudentIDs(new AsyncCallback<String[]>() {
 
-  void fetchLectureCount() {
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
+      @Override
+      public void onSuccess(String[] result) {
+        for (int i = 0; i < result.length; i++) {
+          view.setStudentNumber(i, result[i]);
+        }
+        fetchAttendanceDtoFromLecture(view.getSelectedLecture());
+      }
 
+      @Override
+      public void onFailure(Throwable caught) {
+        showErrorMessage(caught.toString());
+      }
+    });
   }
 
   void fetchAttendanceDtoFromLecture(int lectureIndex) {
+    final AttendanceDto data = null;
+    final int[] attendanceTypes = data.getAttendances();
 
   }
 

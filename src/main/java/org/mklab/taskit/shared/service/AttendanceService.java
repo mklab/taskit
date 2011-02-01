@@ -4,6 +4,7 @@
 package org.mklab.taskit.shared.service;
 
 import org.mklab.taskit.shared.dto.AttendanceDto;
+import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 
 
 /**
@@ -30,5 +31,12 @@ public interface AttendanceService {
    * @return 出席状況
    */
   AttendanceDto getLecturewiseAttendanceData(int lectureIndex);
+
+  /**
+   * 出席ビューのベースデータ（講義数、ユーザー名集合）を取得します。
+   * 
+   * @return 出席ビューのベースデータ
+   */
+  AttendanceBaseDto getBaseData();
 
 }
