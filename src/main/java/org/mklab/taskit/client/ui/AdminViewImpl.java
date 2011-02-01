@@ -4,6 +4,8 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.admin.LectureEditor;
+import org.mklab.taskit.client.ui.admin.LectureEditorImpl;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
 import org.mklab.taskit.client.ui.admin.NewAccountViewImpl;
 
@@ -17,7 +19,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AdminViewImpl extends AbstractTaskitView implements AdminView {
 
-  NewAccountViewImpl accountView;
+  private NewAccountViewImpl accountView;
+  private LectureEditor lectureEditor;
 
   /**
    * {@link AdminViewImpl}オブジェクトを構築します。
@@ -36,8 +39,11 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
   protected Widget initContent() {
     final TabPanel tabPanel = new TabPanel();
     this.accountView = new NewAccountViewImpl(getClientFactory());
+    this.lectureEditor = new LectureEditorImpl(getClientFactory());
     tabPanel.add(this.accountView, "Account"); //$NON-NLS-1$
+    tabPanel.add(this.lectureEditor, "Lecture"); //$NON-NLS-1$
     tabPanel.selectTab(0);
+
     return tabPanel;
   }
 
@@ -47,6 +53,14 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
   @Override
   public NewAccountView getNewAccountView() {
     return this.accountView;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.AdminView#getLectureEditor()
+   */
+  @Override
+  public LectureEditor getLectureEditor() {
+    return this.lectureEditor;
   }
 
 }

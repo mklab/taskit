@@ -3,7 +3,9 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.client.ui.admin.LectureEditor;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
+
 
 /**
  * 管理者用ビューを提供するクラスです。
@@ -19,4 +21,11 @@ public interface AdminView extends TaskitView {
    * @return 新規アカウント作成ビュー
    */
   NewAccountView getNewAccountView();
+
+  /**
+   * 講義データを編集するエディタを取得します。
+   * 
+   * @return 講義データを編集するエディタ
+   */
+  LectureEditor getLectureEditor();
 }
