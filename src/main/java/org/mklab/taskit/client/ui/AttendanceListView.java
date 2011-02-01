@@ -31,6 +31,13 @@ public interface AttendanceListView extends TaskitView {
   void setSelectedLecture(int index);
 
   /**
+   * 選択されている講義のインデックスを取得します。
+   * 
+   * @return 選択されている講義のインデックス
+   */
+  int getSelectedLecture();
+
+  /**
    * プレゼンターを設定します。
    * 
    * @param presenter

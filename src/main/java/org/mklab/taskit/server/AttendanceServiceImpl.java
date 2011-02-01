@@ -9,6 +9,8 @@ import org.mklab.taskit.server.dao.AccountDao;
 import org.mklab.taskit.server.dao.AccountDaoImpl;
 import org.mklab.taskit.server.dao.AttendanceDao;
 import org.mklab.taskit.server.dao.AttendanceDaoImpl;
+import org.mklab.taskit.server.dao.LectureDao;
+import org.mklab.taskit.server.dao.LectureDaoImpl;
 import org.mklab.taskit.shared.dto.AttendanceDto;
 import org.mklab.taskit.shared.model.Lecture;
 import org.mklab.taskit.shared.service.AttendanceService;
@@ -25,22 +27,32 @@ public class AttendanceServiceImpl extends TaskitRemoteService implements Attend
 
   /**
    * @see org.mklab.taskit.shared.service.AttendanceService#setAttendanceType(java.lang.String,
-   *      org.mklab.taskit.shared.model.Lecture, java.lang.String)
+   *      int, java.lang.String)
    */
   @Override
-  public void setAttendanceType(String userName, Lecture lecture, String attendanceType) {
+  public void setAttendanceType(String userName, int lectureIndex, String attendanceType) {
     final EntityManager entityManager = createEntityManager();
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
+    final Lecture lecture = getLectureOf(lectureIndex, entityManager);
     attendanceDao.setAttendanceType(lecture.getLectureId(), userName, attendanceType);
   }
 
-  /**
-   * @see org.mklab.taskit.shared.service.AttendanceService#getAttendanceTypesOfStudents(org.mklab.taskit.shared.model.Lecture)
-   */
-  @Override
-  public AttendanceDto[] getAttendanceTypesOfStudents(Lecture lecture) {
-    // TODO Auto-generated method stub
-    return null;
+  private Lecture getLectureOf(int lectureIndex, final EntityManager entityManager) {
+    final LectureDao lectureDao = new LectureDaoImpl(entityManager);
+
+    final Lecture lecture = lectureDao.getAllLectures().get(lectureIndex);
+    return lecture;
   }
 
+  /**
+   * @see org.mklab.taskit.shared.service.AttendanceService#getAttendanceTypesOfStudents(int)
+   */
+  @Override
+  public AttendanceDto[] getAttendanceTypesOfStudents(int lectureIndex) {
+    final EntityManager entityManager = createEntityManager();
+    final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
+    final Lecture lecture = getLectureOf(lectureIndex, entityManager);
+    attendanceDao.getAttendanceTypes(lecture.getLectureId());
+    return null;
+  }
 }

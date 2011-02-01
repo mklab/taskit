@@ -9,9 +9,6 @@ import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.TaskitView;
-import org.mklab.taskit.shared.model.Lecture;
-
-import com.google.gwt.user.client.Window;
 
 
 /**
@@ -21,6 +18,7 @@ import com.google.gwt.user.client.Window;
 public class AttendanceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
 
   private final String[] choosableAttendenceType;
+  private AttendanceListView view;
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -38,26 +36,18 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
-    final AttendanceListView view = new AttendanceListViewImpl(clientFactory);
-    view.setAttendanceTypes(this.choosableAttendenceType);
-    view.setPresenter(this);
+    this.view = new AttendanceListViewImpl(clientFactory);
+    this.view.setAttendanceTypes(this.choosableAttendenceType);
+    this.view.setPresenter(this);
     //    view.setLectures(null);
 
-    final String[] sample = new String[100];
-    for (int i = 0; i < sample.length; i++) {
-      sample[i] = String.valueOf(i + 10675001);
-    }
+    fetchUserNames();
 
-    for (int i = 0; i < 100; i++) {
-      view.setStudentNumber(i, String.valueOf(i + 10675003));
-      view.setAttendanceType(i, (int)(Math.random() * 4));
-    }
-
-    return view;
+    return this.view;
   }
 
   void fetchUserNames() {
-
+    
   }
 
   void fetchLectureCount() {
@@ -68,7 +58,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
   }
 
-  void updateAttendanceState(int userIndex, int lectureIndex, int attendanceType) {
+  void updateAttendanceState(int userIndex, int lectureIndex, int attendanceTypeIndex) {
 
   }
 
@@ -78,7 +68,8 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   public void attendanceTypeEditted(int index, int attendanceTypeIndex) {
-    //final int selectedLectureIndex = this.
+    final int lectureIndex = this.view.getSelectedLecture();
+    updateAttendanceState(index, lectureIndex, attendanceTypeIndex);
   }
 
   /**
@@ -86,8 +77,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   public void lectureSelectionChanged(int selectedLectureIndex) {
-    // TODO Auto-generated method stub
-
+    fetchAttendanceDtoFromLecture(selectedLectureIndex);
   }
 
   /**

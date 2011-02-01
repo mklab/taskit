@@ -138,6 +138,14 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   }
 
   /**
+   * @see org.mklab.taskit.client.ui.AttendanceListView#getSelectedLecture()
+   */
+  @Override
+  public int getSelectedLecture() {
+    return this.lectureListBox.getSelectedIndex();
+  }
+
+  /**
    * @see org.mklab.taskit.client.ui.AttendanceListView#setSelectedLecture(int)
    */
   @Override
