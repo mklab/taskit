@@ -110,4 +110,13 @@ public class AttendanceDaoImpl implements AttendanceDao {
       t.rollback();
     }
   }
+
+  /**
+   * @see org.mklab.taskit.server.dao.AttendanceDao#getAllStudentAttendanceDataFromLectureId(int)
+   */
+  @Override
+  public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId) {
+    // TODO　未実装です。
+    return null;
+  }
 }

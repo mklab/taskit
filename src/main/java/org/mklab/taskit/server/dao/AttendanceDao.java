@@ -50,6 +50,13 @@ public interface AttendanceDao {
   /**
    * 指定された講義の出席状況を設定します。
    * 
+   * @param attendance 講義の出席状況
    */
   public void registerAttendance(Attendance attendance);
+  /**
+   * 講義IDから全生徒の出席データを取得します。
+   * @param lectureId 講義データ
+   * @return 与えられたIDの講義における全生徒の出席データ
+   */
+  public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId);
 }
