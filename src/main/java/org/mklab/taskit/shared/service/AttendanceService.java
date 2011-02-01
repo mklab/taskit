@@ -29,6 +29,6 @@ public interface AttendanceService {
    * @param lectureIndex 講義
    * @return 出席状況
    */
-  AttendanceDto[] getAttendanceTypesOfStudents(int lectureIndex);
+  AttendanceDto getLecturewiseAttendanceData(int lectureIndex);
 
 }
