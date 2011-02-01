@@ -3,7 +3,10 @@
  */
 package org.mklab.taskit.server.dao;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -51,6 +54,27 @@ public class AccountDaoTest extends DaoTest {
       fail();
     }
     dao.registerAccount(name, Passwords.hashPassword("taskit"), "TA");
+  }
+  
+  /**
+   * 生徒のユーザ名一覧を取得できるかテストします。
+   * @throws AccountRegistrationException 
+   */
+  @Test
+  public void testGetAllStudentUserName() throws AccountRegistrationException {
+    final AccountDao dao = new AccountDaoImpl(createEntityManager());
+    dao.registerAccount("10236001", "taskit", "STUDENT");
+    dao.registerAccount("10236002", "taskit", "STUDENT");
+    dao.registerAccount("10236003", "taskit", "STUDENT");
+    dao.registerAccount("10236004", "taskit", "STUDENT");
+    dao.registerAccount("10236005", "taskit", "STUDENT");
+    
+    List<String> userNames = dao.getAllStudentUserNames();
+    assertEquals("10236001", userNames.get(0));    
+    assertEquals("10236002", userNames.get(1));    
+    assertEquals("10236003", userNames.get(2));    
+    assertEquals("10236004", userNames.get(3));    
+    assertEquals("10236005", userNames.get(4));    
   }
 
 }
