@@ -5,7 +5,6 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
-import org.mklab.taskit.shared.model.Lecture;
 
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -28,7 +27,6 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   private MultiColumnTable table;
   private String[] attendanceTypes;
   private ListBox lectureListBox;
-  private Lecture[] lectures;
 
   /**
    * {@link AttendanceListViewImpl}オブジェクトを構築します。
@@ -116,15 +114,14 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView#setLectures(org.mklab.taskit.shared.model.Lecture[])
+   * @see org.mklab.taskit.client.ui.AttendanceListView#setLectures(int)
    */
   @Override
-  public void setLectures(Lecture[] lecture) {
-    this.lectures = lecture;
+  public void setLectures(int lectureCount) {
     this.lectureListBox.clear();
     final Messages messages = getClientFactory().getMessages();
 
-    for (int i = 0; i < lecture.length; i++) {
+    for (int i = 0; i < lectureCount; i++) {
       this.lectureListBox.addItem(messages.lectureIndexLabel(String.valueOf(i + 1)));
 
     }
@@ -141,17 +138,10 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView#setSelectedLecture(org.mklab.taskit.shared.model.Lecture)
+   * @see org.mklab.taskit.client.ui.AttendanceListView#setSelectedLecture(int)
    */
   @Override
-  public void setSelectedLecture(Lecture lecture) {
-    int index = -1;
-    for (int i = 0; i < this.lectures.length; i++) {
-      if (this.lectures[i] == lecture) {
-        index = i;
-      }
-    }
-    if (index == -1) return;
+  public void setSelectedLecture(int index) {
     this.lectureListBox.setSelectedIndex(index);
   }
 

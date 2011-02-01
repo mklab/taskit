@@ -31,6 +31,6 @@ public interface AccountService extends RemoteService {
    * 
    * @return 学籍番号の配列
    */
-  String[] getAllStudentIDs();
+  String[] getAllStudentUserNames();
 
 }

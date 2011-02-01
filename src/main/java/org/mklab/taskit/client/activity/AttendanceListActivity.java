@@ -56,20 +56,37 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     return view;
   }
 
+  void fetchUserNames() {
+
+  }
+
+  void fetchLectureCount() {
+
+  }
+
+  void fetchAttendanceDtoFromLecture(int lectureIndex) {
+
+  }
+
+  void updateAttendanceState(int userIndex, int lectureIndex, int attendanceType) {
+
+  }
+
   /**
    * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#attendanceTypeEditted(int,
    *      int)
    */
   @Override
   public void attendanceTypeEditted(int index, int attendanceTypeIndex) {
-    Window.alert(index + "," + attendanceTypeIndex);
+    //final int selectedLectureIndex = this.
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#lectureSelectionChanged(org.mklab.taskit.shared.model.Lecture)
+   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#lectureSelectionChanged(int)
    */
   @Override
-  public void lectureSelectionChanged(Lecture selectedLecture) {
+  public void lectureSelectionChanged(int selectedLectureIndex) {
+    // TODO Auto-generated method stub
 
   }
 
