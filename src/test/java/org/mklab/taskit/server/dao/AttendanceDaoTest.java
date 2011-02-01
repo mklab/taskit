@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.AttendanceType;
 
@@ -19,6 +20,9 @@ import org.mklab.taskit.shared.model.AttendanceType;
  */
 public class AttendanceDaoTest extends DaoTest {
 
+  /**
+   * 出席状況変更のテストを行ないます。
+   */
   @Test
   public void testSetAttendanceType() {
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
@@ -28,16 +32,20 @@ public class AttendanceDaoTest extends DaoTest {
     typeDao.registerAttendanceType(new AttendanceType("absent"));
     typeDao.registerAttendanceType(new AttendanceType("attend"));
     List<String> actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
-    
+
     List<String> expectedAttendanceTypes = new ArrayList<String>();
     expectedAttendanceTypes.add("absent");
     assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
 
-    attendanceDao.setAttendanceType(0, 0, 2);
+    final Account dummyUser = createUniqueUser("TA"); //$NON-NLS-1$
+    attendanceDao.setAttendanceType(0, dummyUser.getUserName(), "attend");
     actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
     assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
   }
 
+  /**
+   * 全学生の出席状況を取得するメソッドのテストを行ないます。
+   */
   @Test
   public void testGetAttendanceTypes() {
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
@@ -47,13 +55,13 @@ public class AttendanceDaoTest extends DaoTest {
     attendanceDao.registerAttendance(new Attendance(2, false, false, 0, 3));
     attendanceDao.registerAttendance(new Attendance(2, false, false, 0, 4));
     attendanceDao.registerAttendance(new Attendance(2, false, false, 0, 5));
-    
+
     final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(createEntityManager());
     AttendanceType type_absent = new AttendanceType("absent");
     AttendanceType type_attend = new AttendanceType("attend");
     typeDao.registerAttendanceType(type_absent);
     typeDao.registerAttendanceType(type_attend);
-    
+
     List<String> attendanceTypes = attendanceDao.getAttendanceTypes(0);
     assertEquals("absent", attendanceTypes.get(0));
     assertEquals("absent", attendanceTypes.get(1));

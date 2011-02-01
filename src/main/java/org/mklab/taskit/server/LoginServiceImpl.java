@@ -54,7 +54,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     if (id.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_ID);
     if (password.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_PASSWORD);
 
-    final Account account = this.accountDao.getHashedPasswordIfExists(id);
+    final Account account = this.accountDao.getAccountIfExists(id);
     if (account == null) throw new LoginFailureException(ErrorCode.ID_NOT_EXISTS);
     final String hashedPassword = account.getPassword();
 
