@@ -18,26 +18,32 @@ import org.mklab.taskit.shared.model.Attendance;
  */
 public class AttendanceDaoImpl implements AttendanceDao {
 
+  /** エンティティマネージャ*/
   private EntityManager entityManager;
 
+  /**
+   * {@link AttendanceDaoImpl}オブジェクトを構築します。
+   * 
+   * @param entityManager エンティティマネージャ
+   */
   public AttendanceDaoImpl(EntityManager entityManager) {
     this.entityManager = entityManager;
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.AttendanceDaoTest#getAttendanceStateFromAccountId(int)
+   * @see org.mklab.taskit.server.dao.AttendanceDao#getAttendanceStateFromAccountId(int)
    */
   @Override
   public List<Attendance> getAttendanceStateFromAccountId(int accountId) {
     Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.accountId = :accountId"); //$NON-NLS-1$
     query.setParameter("accountId", accountId); //$NON-NLS-1$
-    List<Attendance> attendances = (List<Attendance>)query.getResultList();
+    List<Attendance> attendances = query.getResultList();
 
     return attendances;
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.AttendanceDaoTest#getAttendanceStateFromLessonId(int)
+   * @see org.mklab.taskit.server.dao.AttendanceDao#getAttendanceStateFromLessonId(int)
    */
   @Override
   public List<Attendance> getAttendanceStateFromLessonId(int lectureId) {
@@ -65,13 +71,13 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @SuppressWarnings("boxing")
   @Override
-  public void setAttendanceType(int lectureId, int accountId, int attendanceType) {
+  public void setAttendanceType(int lectureId, int accountId, int attendanceTypeId) {
     final EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
-    Query query = this.entityManager.createQuery("UPDATE ATTENDANCE a SET a.attendanceType = :attendanceType_ WHERE a.lectureId = :lectureId_ AND a.accountId = :accountId_"); //$NON-NLS-1$
-    query.setParameter("attendanceType_", attendanceType); //$NON-NLS-1$
-    query.setParameter("lectureId_", lectureId); //$NON-NLS-1$
-    query.setParameter("accountId_", accountId); //$NON-NLS-1$
+    Query query = this.entityManager.createQuery("UPDATE ATTENDANCE a SET a.attendanceTypeId = :attendanceTypeId WHERE a.lectureId = :lectureId AND a.accountId = :accountId"); //$NON-NLS-1$
+    query.setParameter("attendanceTypeId", attendanceTypeId); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    query.setParameter("accountId", accountId); //$NON-NLS-1$
     query.executeUpdate();
     try {
       t.commit();
@@ -82,8 +88,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.AttendanceDao#registerAttendance(int, int,
-   *      String)
+   * @see org.mklab.taskit.server.dao.AttendanceDao#registerAttendance(org.mklab.taskit.shared.model.Attendance)
    */
   @Override
   public void registerAttendance(Attendance attendance) {
