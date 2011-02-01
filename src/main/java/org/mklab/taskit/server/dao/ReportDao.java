@@ -29,7 +29,6 @@ public interface ReportDao {
    * @return 課題内容を返します。
    */
   List<Report> getReportFromDate(String date);
-
   /**
    * 課題の新規登録を行ないます。
    * 
