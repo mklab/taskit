@@ -24,7 +24,6 @@
 
 	<g:HTMLPanel>
 		<g:Label styleName='{style.status}' ui:field="statusLabel" />
-		<h1>New Account</h1>
 		<div class="{style.box}">
 			<table>
 				<tr>

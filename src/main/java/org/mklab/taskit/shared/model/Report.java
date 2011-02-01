@@ -25,7 +25,7 @@ public final class Report extends LightEntity {
   @GeneratedValue
   private int reportId;
   /** 課題の番号 */
-  private String no;
+  private int no;
   /** この課題の属する講義のIDです。 */
   private int lectureId;
   /** 課題のタイトル */
@@ -44,7 +44,7 @@ public final class Report extends LightEntity {
    * @param allotment 課題の配点
    * @param lectureId 講義ID
    */
-  public Report(String no, String title, String detail, int allotment, int lectureId) {
+  public Report(int no, String title, String detail, int allotment, int lectureId) {
     super();
     this.no = no;
     this.title = title;
@@ -112,17 +112,8 @@ public final class Report extends LightEntity {
    * 
    * @param no 課題のレベル（番号）
    */
-  public void setNo(String no) {
+  public void setNo(int no) {
     this.no = no;
-  }
-
-  /**
-   * 課題のレベル（番号）を取得します。 　*
-   * 
-   * @return 課題のレベル（番号）
-   */
-  public String getLevel() {
-    return this.no;
   }
 
   /**
@@ -184,7 +175,7 @@ public final class Report extends LightEntity {
    * 
    * @return no
    */
-  public String getNo() {
+  public int getNo() {
     return this.no;
   }
 

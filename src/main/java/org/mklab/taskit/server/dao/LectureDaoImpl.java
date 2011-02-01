@@ -31,21 +31,6 @@ public class LectureDaoImpl implements LectureDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.LectureDao#getTitleFromDate(java.lang.String)
-   */
-  @Override
-  public String getTitleFromDate(String date) {
-    final Query query = this.entityManager.createQuery("SELECT l.title FROM LECTURE l WHERE l.date = :date"); //$NON-NLS-1$
-    query.setParameter("date", date); //$NON-NLS-1$
-    @SuppressWarnings("unchecked")
-    final List<String> titleList = query.getResultList();
-    if (titleList.size() == 0) return null;
-    if (titleList.size() > 1) throw new IllegalStateException();
-
-    return titleList.get(0);
-  }
-
-  /**
    * @see org.mklab.taskit.server.dao.LectureDao#getAllLectures()
    */
   @Override

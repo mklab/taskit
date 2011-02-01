@@ -28,6 +28,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   private MultiColumnTable table;
   private String[] attendanceTypes;
   private ListBox lectureListBox;
+  private Lecture[] lectures;
 
   /**
    * {@link AttendanceListViewImpl}オブジェクトを構築します。
@@ -119,11 +120,13 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
    */
   @Override
   public void setLectures(Lecture[] lecture) {
+    this.lectures = lecture;
     this.lectureListBox.clear();
     final Messages messages = getClientFactory().getMessages();
 
-    for (Lecture l : lecture) {
-      this.lectureListBox.addItem(messages.lectureIndexLabel(String.valueOf(l.getNo())));
+    for (int i = 0; i < lecture.length; i++) {
+      this.lectureListBox.addItem(messages.lectureIndexLabel(String.valueOf(i + 1)));
+
     }
   }
 
@@ -142,7 +145,14 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
    */
   @Override
   public void setSelectedLecture(Lecture lecture) {
-    this.lectureListBox.setSelectedIndex(lecture.getNo() - 1);
+    int index = -1;
+    for (int i = 0; i < this.lectures.length; i++) {
+      if (this.lectures[i] == lecture) {
+        index = i;
+      }
+    }
+    if (index == -1) return;
+    this.lectureListBox.setSelectedIndex(index);
   }
 
 }

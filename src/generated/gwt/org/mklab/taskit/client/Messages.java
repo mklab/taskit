@@ -115,6 +115,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   String isBlankMessage(String arg0);
 
   /**
+   * Translated "Lecture Date".
+   * 
+   * @return translated "Lecture Date"
+   */
+  @DefaultMessage("Lecture Date")
+  @Key("lectureDateLabel")
+  String lectureDateLabel();
+
+  /**
    * Translated "{0}".
    * 
    * @return translated "{0}"
@@ -230,6 +239,15 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Teacher")
   @Key("teacherLabel")
   String teacherLabel();
+
+  /**
+   * Translated "Title".
+   * 
+   * @return translated "Title"
+   */
+  @DefaultMessage("Title")
+  @Key("titleLabel")
+  String titleLabel();
 
   /**
    * Translated "Unexpected error occured.".

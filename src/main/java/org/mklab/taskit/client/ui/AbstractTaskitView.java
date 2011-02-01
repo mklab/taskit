@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 24, 2011
  */
-abstract class AbstractTaskitView extends Composite implements TaskitView {
+public abstract class AbstractTaskitView extends Composite implements TaskitView {
 
   private HeaderView header;
   private ClientFactory clientFactory;
@@ -32,7 +32,7 @@ abstract class AbstractTaskitView extends Composite implements TaskitView {
    * 
    * @param clientFactory クライアントファクトリ
    */
-  AbstractTaskitView(ClientFactory clientFactory) {
+  public AbstractTaskitView(ClientFactory clientFactory) {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
   }
