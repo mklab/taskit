@@ -29,4 +29,27 @@ public interface AttendanceDao {
    * @return 指定した日付の生徒全員の状況
    */
   public List<Attendance> getAttendanceStateFromLessonId(int lessonId);
+
+  /**
+   * 与えられた講義の全生徒の出席状況を取得します。 取得された出席のタイプはアカウントIDの昇順で配列に格納されます。
+   * 
+   * @param lectureId 講義ID
+   * @return 与えられた講義の全生徒の出席状況
+   */
+  public List<String> getAttendanceTypes(int lectureId);
+
+  /**
+   * 指定された講義の出席状況を設定します。
+   * 
+   * @param lectureId 講義ID
+   * @param accountId アカウントID　
+   * @param attendanceType 出席のタイプ
+   */
+  public void setAttendanceType(int lectureId, int accountId, int attendanceType);
+
+  /**
+   * 指定された講義の出席状況を設定します。
+   * 
+   */
+  public void registerAttendance(Attendance attendance);
 }

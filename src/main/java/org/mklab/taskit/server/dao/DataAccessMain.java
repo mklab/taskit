@@ -21,8 +21,8 @@ public class DataAccessMain {
   public static void main(String[] args) throws ReportRegistrationException {
     final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("taskit");
     final EntityManager entityManager = entityManagerFactory.createEntityManager();
-    final LectureDao lectureDao = new LectureDaoImpl(entityManager);
-    List<Lecture> lectures = lectureDao.getAllLectures();
-    System.out.println(lectures.size());
+    final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
+    List<String> attendanceTypes = attendanceDao.getAttendanceTypes(0);
+    System.out.println(attendanceTypes.size());
   }
 }
