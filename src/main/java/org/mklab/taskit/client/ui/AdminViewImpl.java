@@ -4,6 +4,8 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.admin.NewAccountView;
+import org.mklab.taskit.client.ui.admin.NewAccountViewImpl;
 
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;

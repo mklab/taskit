@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.admin;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.admin;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
@@ -69,7 +69,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.NewAccountView#getUserId()
+   * @see org.mklab.taskit.client.ui.admin.NewAccountView#getUserId()
    */
   @Override
   public String getUserId() {
@@ -77,7 +77,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.NewAccountView#getPassword()
+   * @see org.mklab.taskit.client.ui.admin.NewAccountView#getPassword()
    */
   @Override
   public String getPassword() {
@@ -85,7 +85,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.NewAccountView#getPasswordForComfimation()
+   * @see org.mklab.taskit.client.ui.admin.NewAccountView#getPasswordForComfimation()
    */
   @Override
   public String getPasswordForComfimation() {
@@ -93,7 +93,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.NewAccountView#getAccountType()
+   * @see org.mklab.taskit.client.ui.admin.NewAccountView#getAccountType()
    */
   @Override
   public int getAccountType() {
@@ -101,7 +101,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.NewAccountView#setChoosableAccountTypes(java.lang.String[])
+   * @see org.mklab.taskit.client.ui.admin.NewAccountView#setChoosableAccountTypes(java.lang.String[])
    */
   @Override
   public void setChoosableAccountTypes(String[] accountTypes) {
@@ -112,7 +112,7 @@ public class NewAccountViewImpl extends Composite implements NewAccountView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.NewAccountView#getSubmitTrigger()
+   * @see org.mklab.taskit.client.ui.admin.NewAccountView#getSubmitTrigger()
    */
   @Override
   public HasClickHandlers getSubmitTrigger() {

@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.client.ui.admin.NewAccountView;
+
 /**
  * 管理者用ビューを提供するクラスです。
  * 
