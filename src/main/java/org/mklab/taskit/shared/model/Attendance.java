@@ -41,15 +41,15 @@ public class Attendance extends LightEntity {
   /**
    * {@link Attendance}オブジェクトを構築します。
    * 
-   * @param attendanceType 出席のタイプ
+   * @param attendanceTypeId 出席のタイプ
    * @param late 遅刻したかどうか
    * @param earlyLeft 早退したかどうか
    * @param lectureId 講義ID
    * @param accountId アカウントID
    */
-  public Attendance(int attendanceType, boolean late, boolean earlyLeft, int lectureId, int accountId) {
+  public Attendance(int attendanceTypeId, boolean late, boolean earlyLeft, int lectureId, int accountId) {
     super();
-    this.attendanceTypeId = attendanceType;
+    this.attendanceTypeId = attendanceTypeId;
     this.late = late;
     this.earlyLeft = earlyLeft;
     this.lectureId = lectureId;
