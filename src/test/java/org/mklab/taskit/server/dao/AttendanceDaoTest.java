@@ -27,9 +27,9 @@ public class AttendanceDaoTest extends DaoTest {
   @Test
   public void testSetAttendanceType() throws AccountRegistrationException {
     final AccountDao accountDao = new AccountDaoImpl(createEntityManager());
-    accountDao.registerAccount("10236001", "taskit", "STUDENT");
-    accountDao.registerAccount("10236002", "taskit", "STUDENT");
-    accountDao.registerAccount("10236003", "taskit", "STUDENT");
+    accountDao.registerAccount("10236001", "taskit", "STUDENT"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    accountDao.registerAccount("10236002", "taskit", "STUDENT");  //$NON-NLS-1$ //$NON-NLS-2$//$NON-NLS-3$
+    accountDao.registerAccount("10236003", "taskit", "STUDENT"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
     attendanceDao.registerAttendance(new Attendance(1, false, false, 0, 1));
@@ -87,6 +87,9 @@ public class AttendanceDaoTest extends DaoTest {
     assertEquals("attend", attendanceTypes.get(5)); //$NON-NLS-1$
   }
 
+  /**
+   * 講義IDの全生徒の出席データを取得できるかどうかテストします。
+   */
   @Test
   public void testGetAllStudentAttendanceDataFromLectureId() {
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());

@@ -82,7 +82,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     q1.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
     int attendanceTypeId = (Integer)q1.getSingleResult();
     Query q2 = this.entityManager.createQuery("SELECT account.accountId FROM ATTENDANCE a, ACCOUNT account WHERE a.accountId = account.accountId AND account.userName = :userName"); //$NON-NLS-1$
-    q2.setParameter("userName", userName);
+    q2.setParameter("userName", userName); //$NON-NLS-1$
     int accountId = (Integer)q2.getSingleResult();
     Query query = this.entityManager.createQuery("UPDATE ATTENDANCE a SET a.attendanceTypeId = :attendanceTypeId WHERE a.accountId = :accountId AND a.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("attendanceTypeId", attendanceTypeId); //$NON-NLS-1$
@@ -104,6 +104,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
       t.rollback();
     }
   }
+
 
   /**
    * @see org.mklab.taskit.server.dao.AttendanceDao#registerAttendance(org.mklab.taskit.shared.model.Attendance)
@@ -128,16 +129,8 @@ public class AttendanceDaoImpl implements AttendanceDao {
   public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId) {
     Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    @SuppressWarnings("unchecked")
     List<Attendance> attendances = query.getResultList();
     return attendances;
-  }
-
-  /**
-   * @see org.mklab.taskit.server.dao.AttendanceDao#setAttendanceType(java.lang.String, int, java.lang.String)
-   */
-  @Override
-  public void setAttendanceType(String userName, int lectureId, String attendanceType) {
-    // TODO 未実装です。
-    
   }
 }
