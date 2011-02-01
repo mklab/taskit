@@ -78,15 +78,25 @@ public class AttendanceDaoImpl implements AttendanceDao {
   public void setAttendanceType(int lectureId, String userName, String attendanceType) {
     final EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
-    StringBuilder sb = new StringBuilder();
-    sb.append("UPDATE ATTENDANCE a "); //$NON-NLS-1$
-    sb.append("SET a.attendanceTypeId = (SELECT type.attendanceTypeId FROM ACCOUNT account, ATTENDANCE_TYPE type WHERE a.accountId=account.accountId AND account.userName = :userName AND type.type = :attendanceType) "); //$NON-NLS-1$
-    sb.append("WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
-    String ejbqlString = sb.toString();
-    Query query = this.entityManager.createQuery(ejbqlString);
-    query.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
+    Query q1 = this.entityManager.createQuery("SELECT type.attendanceTypeId FROM ATTENDANCE_TYPE type WHERE type.type = :attendanceType"); //$NON-NLS-1$
+    q1.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
+    int attendanceTypeId = (Integer)q1.getSingleResult();
+    Query q2 = this.entityManager.createQuery("SELECT account.accountId FROM ATTENDANCE a, ACCOUNT account WHERE a.accountId = account.accountId AND account.userName = :userName"); //$NON-NLS-1$
+    q2.setParameter("userName", userName);
+    int accountId = (Integer)q2.getSingleResult();
+    Query query = this.entityManager.createQuery("UPDATE ATTENDANCE a SET a.attendanceTypeId = :attendanceTypeId WHERE a.accountId = :accountId AND a.lectureId = :lectureId"); //$NON-NLS-1$
+    query.setParameter("attendanceTypeId", attendanceTypeId); //$NON-NLS-1$
+    query.setParameter("accountId", accountId); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    query.setParameter("userName", userName); //$NON-NLS-1$
+//    StringBuilder sb = new StringBuilder();
+//    sb.append("UPDATE ATTENDANCE a "); //$NON-NLS-1$
+//    sb.append("SET a.attendanceTypeId = (SELECT type.attendanceTypeId FROM ACCOUNT account, ATTENDANCE_TYPE type WHERE a.accountId=account.accountId AND account.userName = :userName AND type.type = :attendanceType) "); //$NON-NLS-1$
+//    sb.append("WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
+//    String ejbqlString = sb.toString();
+//    Query query = this.entityManager.createQuery(ejbqlString);
+//    query.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
+//    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+//    query.setParameter("userName", userName); //$NON-NLS-1$
     query.executeUpdate();
     try {
       t.commit();
