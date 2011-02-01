@@ -80,9 +80,8 @@ public class AttendanceDaoImpl implements AttendanceDao {
     t.begin();
     StringBuilder sb = new StringBuilder();
     sb.append("UPDATE ATTENDANCE a "); //$NON-NLS-1$
-    sb.append("SET a.attendanceTypeId = type.attendanceTypeId "); //$NON-NLS-1$
-    sb.append("FROM ACCOUNT account, ATTENDANCE_TYPE type "); //$NON-NLS-1$
-    sb.append("WHERE a.lectureId = :lectureId AND a.accountId = account.accountId AND account.userName = :userName AND type.attendanceType = :attendanceType"); //$NON-NLS-1$
+    sb.append("SET a.attendanceTypeId = (SELECT type.attendanceTypeId FROM ACCOUNT account, ATTENDANCE_TYPE type WHERE a.accountId=account.accountId AND account.userName = :userName AND type.type = :attendanceType) "); //$NON-NLS-1$
+    sb.append("WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
     String ejbqlString = sb.toString();
     Query query = this.entityManager.createQuery(ejbqlString);
     query.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
@@ -116,8 +115,10 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @Override
   public List<Attendance> getAllStudentAttendanceDataFromLectureId(int lectureId) {
-    // TODO　未実装です。
-    return null;
+    Query query = this.entityManager.createQuery("SELECT s FROM ATTENDANCE a AS s WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    List<Attendance> attendances = query.getResultList();
+    return attendances;
   }
 
   /**
