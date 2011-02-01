@@ -5,6 +5,7 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -31,8 +32,11 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
    */
   @Override
   protected Widget initContent() {
+    final TabPanel tabPanel = new TabPanel();
     this.accountView = new NewAccountViewImpl(getClientFactory());
-    return this.accountView;
+    tabPanel.add(this.accountView, "Account"); //$NON-NLS-1$
+    tabPanel.selectTab(0);
+    return tabPanel;
   }
 
   /**
