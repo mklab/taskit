@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
 import org.junit.Test;
+import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.model.Attendance;
 import org.mklab.taskit.shared.model.AttendanceType;
 
@@ -22,6 +23,35 @@ import org.mklab.taskit.shared.model.AttendanceType;
  */
 public class AttendanceDaoTest extends DaoTest {
 
+  /**
+   * 出席状況変更のテストを行ないます。
+   */
+  @Test
+  public void testSetAttendanceType() {
+    final EntityManager entityManager = Persistence.createEntityManagerFactory("taskit-test").createEntityManager(); //$NON-NLS-1$
+    final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
+    final Attendance attendance = new Attendance(1, false, false, 0, 0);
+    attendanceDao.registerAttendance(attendance);
+    final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(entityManager);
+    typeDao.registerAttendanceType(new AttendanceType("absent")); //$NON-NLS-1$
+    typeDao.registerAttendanceType(new AttendanceType("attend")); //$NON-NLS-1$
+    List<String> actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
+
+    List<String> expectedAttendanceTypes = new ArrayList<String>();
+    expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
+    assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
+
+    final Account dummyUser = createUniqueUser("TA"); //$NON-NLS-1$
+    attendanceDao.setAttendanceType(0, dummyUser.getUserName(), "attend"); //$NON-NLS-1$
+    actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
+    expectedAttendanceTypes.remove(0);
+    expectedAttendanceTypes.add("attend"); //$NON-NLS-1$
+    assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
+  }
+
+  /**
+   * 全学生の出席状況を取得するメソッドのテストを行ないます。
+   */
   @Test
   public void testGetAttendanceTypes() {
     final AttendanceDao attendanceDao = new AttendanceDaoImpl(createEntityManager());
@@ -46,28 +76,6 @@ public class AttendanceDaoTest extends DaoTest {
     assertEquals("attend", attendanceTypes.get(3)); //$NON-NLS-1$
     assertEquals("attend", attendanceTypes.get(4)); //$NON-NLS-1$
     assertEquals("attend", attendanceTypes.get(5)); //$NON-NLS-1$
-  }
-  
-  @Test
-  public void testSetAttendanceType() {
-    final EntityManager entityManager = Persistence.createEntityManagerFactory("taskit-test").createEntityManager(); //$NON-NLS-1$
-    final AttendanceDao attendanceDao = new AttendanceDaoImpl(entityManager);
-    final Attendance attendance = new Attendance(1, false, false, 0, 0);
-    attendanceDao.registerAttendance(attendance);
-    final AttendanceTypeDao typeDao = new AttendanceTypeDaoImpl(entityManager);
-    typeDao.registerAttendanceType(new AttendanceType("absent")); //$NON-NLS-1$
-    typeDao.registerAttendanceType(new AttendanceType("attend")); //$NON-NLS-1$
-    List<String> actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
-
-    List<String> expectedAttendanceTypes = new ArrayList<String>();
-    expectedAttendanceTypes.add("absent"); //$NON-NLS-1$
-    assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
-
-    attendanceDao.setAttendanceType(0, 0, 2);
-    actualAttendanceTypes = attendanceDao.getAttendanceTypes(0);
-    expectedAttendanceTypes.remove(0);
-    expectedAttendanceTypes.add("attend"); //$NON-NLS-1$
-    assertEquals(expectedAttendanceTypes, actualAttendanceTypes);
   }
 
 }

@@ -33,10 +33,10 @@ public class AccountDaoImpl implements AccountDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.AccountDao#getHashedPasswordIfExists(java.lang.String)
+   * @see org.mklab.taskit.server.dao.AccountDao#getAccountIfExists(java.lang.String)
    */
   @Override
-  public Account getHashedPasswordIfExists(String userName) {
+  public Account getAccountIfExists(String userName) {
     final Query q = this.entityManager.createQuery(String.format("select a from ACCOUNT a where userName='%s'", userName)); //$NON-NLS-1$
     final List<Account> accountList = q.getResultList();
     if (accountList.size() == 0) return null;
@@ -80,7 +80,7 @@ public class AccountDaoImpl implements AccountDao {
   }
 
   private boolean isRegistered(String id) {
-    return getHashedPasswordIfExists(id) != null;
+    return getAccountIfExists(id) != null;
   }
 
   /**

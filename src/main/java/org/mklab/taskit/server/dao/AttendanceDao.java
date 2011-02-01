@@ -42,10 +42,10 @@ public interface AttendanceDao {
    * 指定された講義の出席状況を設定します。
    * 
    * @param lectureId 講義ID
-   * @param accountId アカウントID　
+   * @param userName アカウントID　
    * @param attendanceType 出席のタイプ
    */
-  public void setAttendanceType(int lectureId, int accountId, int attendanceType);
+  public void setAttendanceType(int lectureId, String userName, String attendanceType);
 
   /**
    * 指定された講義の出席状況を設定します。
