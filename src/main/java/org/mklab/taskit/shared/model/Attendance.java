@@ -25,28 +25,35 @@ public class Attendance extends LightEntity {
   @Id
   private int attendanceId = 0;
   /** 出席状態を表します。 */
-  private int typeId;
+  private int attendanceTypeId;
   /** 遅刻を表します。 */
   private boolean late;
   /** 早退を表します。 */
   private boolean earlyLeft;
   /** 講義のIDです。 */
-  private int lessonId;
+  private int lectureId;
   /** 学籍番号です。 */
   private int accountId;
+  
+
+
 
   /**
    * {@link Attendance}オブジェクトを構築します。
    * 
-   * @param attendance 出席状況
-   * @param late 遅刻
-   * @param earlyLeft 早退
+   * @param attendanceType 出席のタイプ
+   * @param late 遅刻したかどうか
+   * @param earlyLeft 早退したかどうか
+   * @param lectureId 講義ID
+   * @param accountId アカウントID
    */
-  public Attendance(int attendance, boolean late, boolean earlyLeft) {
+  public Attendance(int attendanceType, boolean late, boolean earlyLeft, int lectureId, int accountId) {
     super();
-    this.setTypeId(attendance);
-    this.setLate(late);
-    this.setEarlyLeft(earlyLeft);
+    this.attendanceTypeId = attendanceType;
+    this.late = late;
+    this.earlyLeft = earlyLeft;
+    this.lectureId = lectureId;
+    this.accountId = accountId;
   }
 
   /**
@@ -72,8 +79,8 @@ public class Attendance extends LightEntity {
    * 
    * @param attendance attendance
    */
-  public void setTypeId(int attendance) {
-    this.typeId = attendance;
+  public void setAttendanceTypeId(int attendance) {
+    this.attendanceTypeId = attendance;
   }
 
   /**
@@ -81,8 +88,8 @@ public class Attendance extends LightEntity {
    * 
    * @return attendance
    */
-  public int getTypeId() {
-    return this.typeId;
+  public int getAttendanceTypeId() {
+    return this.attendanceTypeId;
   }
 
   /**
@@ -122,21 +129,21 @@ public class Attendance extends LightEntity {
   }
 
   /**
-   * lessonIdを設定します。
+   * lectureIdを設定します。
    * 
-   * @param lessonId lessonId
+   * @param lectureId lectureId
    */
-  public void setLessonId(int lessonId) {
-    this.lessonId = lessonId;
+  public void setLectureId(int lectureId) {
+    this.lectureId = lectureId;
   }
 
   /**
-   * lessonIdを取得します。 　*
+   * lectureIdを取得します。 　*
    * 
    * @return lessonId
    */
-  public int getLessonId() {
-    return this.lessonId;
+  public int getLectureId() {
+    return this.lectureId;
   }
 
   /**

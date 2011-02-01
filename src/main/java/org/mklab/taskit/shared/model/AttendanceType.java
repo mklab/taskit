@@ -23,6 +23,14 @@ public class AttendanceType {
   private String type;
 
   /**
+   * {@link AttendanceType}オブジェクトを構築します。
+   * 
+   * @param type タイプ
+   */
+  public AttendanceType(String type) {
+    this.type = type;
+  }
+  /**
    * attendanceTypeIdを取得します。
    * 
    * @return attendanceTypeId
