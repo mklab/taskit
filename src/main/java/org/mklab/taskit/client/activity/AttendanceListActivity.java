@@ -120,7 +120,8 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
       @Override
       public void onFailure(Throwable caught) {
-        showErrorMessage(caught.toString());
+        logout();
+        showErrorMessage(caught);
       }
 
     });

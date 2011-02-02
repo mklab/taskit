@@ -48,8 +48,8 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
 
       @Override
       public void onFailure(Throwable caught) {
-        list.setListData(new String[] {"Could'nt fetch list data."}); //$NON-NLS-1$
-        showErrorMessage(caught.getMessage());
+        logout();
+        showErrorMessage(caught);
       }
     });
     return list;

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.server.rpc.UnexpectedException;
 
 
 /**
@@ -97,7 +98,7 @@ public abstract class TaskitActivity extends AbstractActivity {
     });
   }
 
-  void logout() {
+  protected void logout() {
     final LoginServiceAsync service = GWT.create(LoginService.class);
     service.logout(new AsyncCallback<Void>() {
 
@@ -161,6 +162,15 @@ public abstract class TaskitActivity extends AbstractActivity {
 
   protected final void showErrorMessage(String errorMessage) {
     Window.alert(errorMessage);
+  }
+
+  protected final void showErrorMessage(Throwable e) {
+    if (e instanceof UnexpectedException) {
+      showErrorMessage(e.getCause().getMessage());
+      return;
+    }
+
+    showErrorMessage(e.toString());
   }
 
   protected final void showInformationMessage(String message) {
