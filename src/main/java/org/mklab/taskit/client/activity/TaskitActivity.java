@@ -23,7 +23,6 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.server.rpc.UnexpectedException;
 
 
 /**
@@ -165,8 +164,9 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   protected final void showErrorMessage(Throwable e) {
-    if (e instanceof UnexpectedException) {
-      showErrorMessage(e.getCause().getMessage());
+    final Throwable cause = e.getCause();
+    if (cause != null) {
+      showErrorMessage(cause.getMessage());
       return;
     }
 
