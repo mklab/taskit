@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.smartgwt.SmartHeaderView;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
@@ -41,7 +42,7 @@ public abstract class AbstractTaskitView extends Composite implements TaskitView
    * ビューの初期化を行ないます。
    */
   public final void init() {
-    this.header = new HeaderViewImpl(this.clientFactory);
+    this.header = new SmartHeaderView();
     final Widget content = initContent();
     if (content == null) throw new NullPointerException();
 
