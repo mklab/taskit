@@ -64,8 +64,8 @@ public class SmartHeaderView extends Composite implements HeaderView {
   private ToolStripButton createToolStripButton(String title, String iconName) {
     final ToolStripButton button = new ToolStripButton(title);
     button.setIcon(GWT.getModuleBaseURL() + iconName);
-    button.setSize("64px", "64px");
-    button.setIconSize(50);
+    button.setSize("40px", "40px");
+    button.setIconSize(32);
     return button;
   }
 
