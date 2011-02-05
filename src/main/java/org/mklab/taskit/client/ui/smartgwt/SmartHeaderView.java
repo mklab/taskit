@@ -39,7 +39,7 @@ public class SmartHeaderView extends Composite implements HeaderView {
     final ToolStrip toolStrip = new ToolStrip();
     toolStrip.setWidth100();
 
-    this.studentListButton = createToolStripButton("StudentList", "student64.png");
+    this.studentListButton = createToolStripButton("students64.png");
     this.checkListButton = createToolStripButton("check64.png");
     this.attendanceButton = createToolStripButton("attendance64.png");
     this.adminLinkButton = createToolStripButton("admin64.png");
@@ -48,6 +48,7 @@ public class SmartHeaderView extends Composite implements HeaderView {
     toolStrip.addButton(this.studentListButton);
     toolStrip.addButton(this.checkListButton);
     toolStrip.addButton(this.attendanceButton);
+    toolStrip.addSeparator();
     toolStrip.addButton(this.adminLinkButton);
     toolStrip.addFill();
     toolStrip.addButton(this.logoutButton);
