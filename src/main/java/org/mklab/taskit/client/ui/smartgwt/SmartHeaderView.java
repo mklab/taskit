@@ -9,6 +9,8 @@ import org.mklab.taskit.client.ui.event.SmartGwtClickHandler;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.client.widgets.toolbar.ToolStripButton;
@@ -25,6 +27,8 @@ public class SmartHeaderView extends Composite implements HeaderView {
   private ToolStripButton attendanceButton;
   private ToolStripButton adminLinkButton;
   private ToolStripButton logoutButton;
+  private Label userTypeLabel;
+  private Label userNameLabel;
 
   /**
    * {@link SmartHeaderView}オブジェクトを構築します。
@@ -39,11 +43,19 @@ public class SmartHeaderView extends Composite implements HeaderView {
     final ToolStrip toolStrip = new ToolStrip();
     toolStrip.setWidth100();
 
+    // toolbar buttons
     this.studentListButton = createToolStripButton("students64.png");
     this.checkListButton = createToolStripButton("check64.png");
     this.attendanceButton = createToolStripButton("attendance64.png");
     this.adminLinkButton = createToolStripButton("admin64.png");
     this.logoutButton = createToolStripButton("logout64.png");
+
+    // user information display
+    this.userNameLabel = new Label();
+    this.userTypeLabel = new Label();
+    final VerticalPanel labelsPanel = new VerticalPanel();
+    labelsPanel.add(this.userNameLabel);
+    labelsPanel.add(this.userTypeLabel);
 
     toolStrip.addButton(this.studentListButton);
     toolStrip.addButton(this.checkListButton);
@@ -51,6 +63,7 @@ public class SmartHeaderView extends Composite implements HeaderView {
     toolStrip.addSeparator();
     toolStrip.addButton(this.adminLinkButton);
     toolStrip.addFill();
+    toolStrip.addMember(labelsPanel);
     toolStrip.addButton(this.logoutButton);
 
     return toolStrip;
@@ -82,7 +95,7 @@ public class SmartHeaderView extends Composite implements HeaderView {
    */
   @Override
   public void setUserId(String id) {
-
+    this.userNameLabel.setText(id);
   }
 
   /**
@@ -90,7 +103,7 @@ public class SmartHeaderView extends Composite implements HeaderView {
    */
   @Override
   public void setUserType(String type) {
-
+    this.userTypeLabel.setText(type);
   }
 
   /**
