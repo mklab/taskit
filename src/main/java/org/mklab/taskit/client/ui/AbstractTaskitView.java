@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.smartgwt.SmartGwtHeaderView;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
@@ -48,11 +47,8 @@ public abstract class AbstractTaskitView extends Composite implements TaskitView
 
     final VerticalPanel vPanel = new VerticalPanel();
     vPanel.setWidth("100%"); //$NON-NLS-1$
-    final HTML headerSpace = new HTML();
-    headerSpace.setHeight("3.5em"); //$NON-NLS-1$
 
     vPanel.add(this.header);
-    vPanel.add(headerSpace);
     vPanel.add(createCenteringWidget(content));
 
     initWidget(vPanel);

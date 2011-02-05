@@ -5,6 +5,7 @@ package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
+import org.mklab.taskit.client.ui.StudentListView;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
@@ -50,5 +51,12 @@ public interface ClientFactory {
    * @return ヘッダビュー
    */
   HeaderView getHeaderView();
+
+  /**
+   * 学生一覧ビューを取得します。
+   * 
+   * @return 学生一覧ビュー
+   */
+  StudentListView getStudentListView();
 
 }
