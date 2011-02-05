@@ -20,7 +20,7 @@ import com.smartgwt.client.widgets.toolbar.ToolStripButton;
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 4, 2011
  */
-public class SmartHeaderView extends Composite implements HeaderView {
+public class SmartGwtHeaderView extends Composite implements HeaderView {
 
   private ToolStripButton studentListButton;
   private ToolStripButton checkListButton;
@@ -31,9 +31,9 @@ public class SmartHeaderView extends Composite implements HeaderView {
   private Label userNameLabel;
 
   /**
-   * {@link SmartHeaderView}オブジェクトを構築します。
+   * {@link SmartGwtHeaderView}オブジェクトを構築します。
    */
-  public SmartHeaderView() {
+  public SmartGwtHeaderView() {
     final ToolStrip toolStrip = createToolBar();
     initWidget(toolStrip);
   }

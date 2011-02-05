@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 
 import com.google.gwt.event.shared.EventBus;
@@ -42,5 +43,12 @@ public interface ClientFactory {
    * @return ログインビュー
    */
   LoginView getLoginView();
+
+  /**
+   * ヘッダビューを取得します。
+   * 
+   * @return ヘッダビュー
+   */
+  HeaderView getHeaderView();
 
 }
