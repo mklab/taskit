@@ -3,13 +3,18 @@
  */
 package org.mklab.taskit.client.ui.smartgwt;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
 import org.mklab.taskit.client.ui.StudentScoreView;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridEditEvent;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.grid.CellEditValueFormatter;
 import com.smartgwt.client.widgets.grid.CellEditValueParser;
 import com.smartgwt.client.widgets.grid.CellFormatter;
@@ -54,12 +59,14 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
 
       @Override
       public void onEditComplete(EditCompleteEvent event) {
-        final int no = event.getColNum() - 1;
         final int lecture = event.getRowNum();
-
-        final String fieldKey = String.valueOf(no);
-        final Integer newValue = (Integer)event.getNewValues().get(fieldKey);
-        presenter.onEvaluationChange(lecture, no, newValue.intValue());
+        Map<?, ?> newValues = event.getNewValues();
+        for (Entry<?, ?> entry : newValues.entrySet()) {
+          final String fieldName = (String)entry.getKey();
+          final Integer score = (Integer)entry.getValue();
+          final int no = Integer.parseInt(fieldName);
+          presenter.onEvaluationChange(lecture, no, score.intValue());
+        }
       }
     });
     return this.listGrid;
