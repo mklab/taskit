@@ -9,12 +9,20 @@ package org.mklab.taskit.client.ui;
 public interface StudentScoreView extends TaskitView {
 
   /**
-   * index番目のタイトルを設定します。
+   * 全講義数を設定します。
+   * 
+   * @param lectureCount 講義数
+   */
+  void setLectureCount(int lectureCount);
+
+  /**
+   * 講義情報を設定します。
    * 
    * @param index 行インデックス
-   * @param title タイトル
+   * @param reportCount レポート数
+   * @param title 講義名
    */
-  void setTitle(int index, String title);
+  void setLectureInfo(int index, int reportCount, String title);
 
   /**
    * 評価値を設定します。
@@ -24,6 +32,13 @@ public interface StudentScoreView extends TaskitView {
    * @param evaluation 評価値
    */
   void setEvaluation(int index, int no, int evaluation);
+
+  /**
+   * プレゼンターを設定します。
+   * 
+   * @param presenter プレゼンター
+   */
+  void setPresenter(Presenter presenter);
 
   /**
    * @author Yuhi Ishikura
