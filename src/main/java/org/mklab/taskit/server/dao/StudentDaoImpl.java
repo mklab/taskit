@@ -41,9 +41,11 @@ public class StudentDaoImpl implements StudentDao {
   /**
    * @see org.mklab.taskit.server.dao.StudentDao#getAllStudentsSubmissionFromLectureId(int)
    */
+  @SuppressWarnings("boxing")
   @Override
   public List<Submission> getAllStudentsSubmissionFromLectureId(int lectureId) {
-    // TODO 未実装です。
+    Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.lectureId = :lectureId"); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     return null;
   }
 

@@ -80,12 +80,13 @@ public final class Report extends LightEntity {
     this.title = name;
   }
 
+
   /**
-   * 課題の名前を取得します。 　*
+   * titleを取得します。
    * 
-   * @return 課題の名前
+   * @return title
    */
-  public String getName() {
+  public String getTitle() {
     return this.title;
   }
 
@@ -108,15 +109,6 @@ public final class Report extends LightEntity {
   }
 
   /**
-   * 課題のレベル（番号）を設定します。
-   * 
-   * @param no 課題のレベル（番号）
-   */
-  public void setNo(int no) {
-    this.no = no;
-  }
-
-  /**
    * 課題の配点を設定します。
    * 
    * @param allotment 課題の配点
@@ -135,15 +127,6 @@ public final class Report extends LightEntity {
   }
 
   /**
-   * reportIdを取得します。
-   * 
-   * @return reportId
-   */
-  public int getReportId() {
-    return this.reportId;
-  }
-
-  /**
    * reportIdを設定します。
    * 
    * @param reportId reportId
@@ -153,12 +136,12 @@ public final class Report extends LightEntity {
   }
 
   /**
-   * lessonIdを取得します。
+   * reportIdを取得します。
    * 
-   * @return lessonId
+   * @return reportId
    */
-  public int getLectureId() {
-    return this.lectureId;
+  public int getReportId() {
+    return this.reportId;
   }
 
   /**
@@ -171,21 +154,30 @@ public final class Report extends LightEntity {
   }
 
   /**
+   * lessonIdを取得します。
+   * 
+   * @return lessonId
+   */
+  public int getLectureId() {
+    return this.lectureId;
+  }
+
+  /**
+   * 課題のレベル（番号）を設定します。
+   * 
+   * @param no 課題のレベル（番号）
+   */
+  public void setNo(int no) {
+    this.no = no;
+  }
+
+  /**
    * noを取得します。
    * 
    * @return no
    */
   public int getNo() {
     return this.no;
-  }
-
-  /**
-   * titleを取得します。
-   * 
-   * @return title
-   */
-  public String getTitle() {
-    return this.title;
   }
 
 }
