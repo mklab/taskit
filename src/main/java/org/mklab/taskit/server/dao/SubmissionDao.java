@@ -35,9 +35,9 @@ public interface SubmissionDao {
    * 提出物を登録します。
    * 
    * @param submission
-   * @throws Exception
+   * @throws ReportRegistrationException
    */
-  void registerSubmission(Submission submission) throws Exception;
+  void registerSubmission(Submission submission) throws SubmissionRegistrationException;
 
   /**
    * "useName"の"lectureId"回の講義の"no"番目の課題の成績を"evaluation"に変更します。
@@ -45,6 +45,10 @@ public interface SubmissionDao {
    * @param userName ユーザ名です。
    * @param reportId 講義IDです。
    * @param evaluation 評価
+   * @param evaluatorId 評価した人のID
+   * @param publicComment パブリックコメント
+   * @param privateComment プライベートコメント
+   * @throws ReportRegistrationException 
    */
-  void setEvaluation(String userName, int reportId, int evaluation);
+  void setEvaluation(String userName, int reportId, int evaluation, int evaluatorId, String publicComment, String privateComment) throws SubmissionRegistrationException;
 }

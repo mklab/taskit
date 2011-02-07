@@ -90,15 +90,6 @@ public class AttendanceDaoImpl implements AttendanceDao {
     query.setParameter("attendanceTypeId", attendanceTypeId); //$NON-NLS-1$
     query.setParameter("accountId", accountId); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    //    StringBuilder sb = new StringBuilder();
-    //    sb.append("UPDATE ATTENDANCE a "); //$NON-NLS-1$
-    //    sb.append("SET a.attendanceTypeId = (SELECT type.attendanceTypeId FROM ACCOUNT account, ATTENDANCE_TYPE type WHERE a.accountId=account.accountId AND account.userName = :userName AND type.type = :attendanceType) "); //$NON-NLS-1$
-    //    sb.append("WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
-    //    String ejbqlString = sb.toString();
-    //    Query query = this.entityManager.createQuery(ejbqlString);
-    //    query.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
-    //    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    //    query.setParameter("userName", userName); //$NON-NLS-1$
     int executedCount = 0;
     try {
       executedCount = query.executeUpdate();
