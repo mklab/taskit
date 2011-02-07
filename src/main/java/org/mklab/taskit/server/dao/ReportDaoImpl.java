@@ -87,4 +87,14 @@ class ReportDaoImpl implements ReportDao {
     return selectedReports;
   }
 
+  /**
+   * @see org.mklab.taskit.server.dao.ReportDao#getAllReports()
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Report> getAllReports() {
+    final Query query = this.entityManager.createQuery("SELECT r FROM REPORT r"); //$NON-NLS-1$
+    return query.getResultList();
+  }
+
 }

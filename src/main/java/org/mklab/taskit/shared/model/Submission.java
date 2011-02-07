@@ -26,7 +26,7 @@ public class Submission extends LightEntity {
   /** 提出された日時(ms)です。 */
   private long time;
   /** 提出者のアカウントのIDです。 */
-  private int accountId;
+  private String userName;
   /** この提出に対する評価値です。 */
   private int evaluation;
   /** この提出の評価を行ったユーザーのアカウントIDです。 */
@@ -49,16 +49,16 @@ public class Submission extends LightEntity {
    * 
    * @param reportId 問題ID
    * @param time 提出時間
-   * @param accountId 提出者ID
+   * @param userName 提出者ID
    * @param evaluation 評価
    * @param evaluatorId 評価したユーザーのアカウントID
    * @param publicComment 生徒に公開するコメント
    * @param privateComment 生徒に非公開のコメント
    */
-  public Submission(int reportId, long time, int accountId, int evaluation, int evaluatorId, String publicComment, String privateComment) {
+  public Submission(int reportId, long time, String userName, int evaluation, int evaluatorId, String publicComment, String privateComment) {
     this.reportId = reportId;
     this.time = time;
-    this.accountId = accountId;
+    this.userName = userName;
     this.evaluation = evaluation;
     this.evaluatorId = evaluatorId;
     this.publicComment = publicComment;
@@ -124,8 +124,8 @@ public class Submission extends LightEntity {
    * 
    * @return accountId
    */
-  public int getAccountId() {
-    return this.accountId;
+  public String getUserName() {
+    return this.userName;
   }
 
   /**
@@ -133,8 +133,8 @@ public class Submission extends LightEntity {
    * 
    * @param accountId accountId
    */
-  public void setAccountId(int accountId) {
-    this.accountId = accountId;
+  public void setUserName(String accountId) {
+    this.userName = accountId;
   }
 
   /**

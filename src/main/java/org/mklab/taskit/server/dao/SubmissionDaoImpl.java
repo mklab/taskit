@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import org.mklab.taskit.shared.model.Report;
 import org.mklab.taskit.shared.model.Submission;
 
 
@@ -44,23 +43,6 @@ public class SubmissionDaoImpl implements SubmissionDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getEvaluation(java.lang.String,
-   *      int, int)
-   */
-  @SuppressWarnings("boxing")
-  @Override
-  public int getEvaluation(String useName, int lectureId, int no) {
-    Query q1 = this.entityManager.createQuery("SELECT r.reportId FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
-    q1.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    int reportId = (Integer)q1.getSingleResult();
-    Query query = this.entityManager.createQuery("SELECT s.evaluation FROM SUBMISSION s WHERE s.studentNo = :userName AND s.reportId = :reportId AND s.no = :no"); //$NON-NLS-1$
-    query.setParameter("userName", useName); //$NON-NLS-1$
-    query.setParameter("reportId", reportId); //$NON-NLS-1$
-    query.setParameter("no", no); //$NON-NLS-1$
-    return (Integer)query.getSingleResult();
-  }
-
-  /**
    * @see org.mklab.taskit.server.dao.ReportDao#registerReport(org.mklab.taskit.shared.model.Report)
    */
   @Override
@@ -85,5 +67,35 @@ public class SubmissionDaoImpl implements SubmissionDao {
         throw new Exception("failed to submission a report, and rollback failed."); //$NON-NLS-1$
       }
     }
+  }
+
+  /**
+   * @see org.mklab.taskit.server.dao.SubmissionDao#setEvaluation(String, int,
+   *      int)
+   */
+  @SuppressWarnings("boxing")
+  @Override
+  public void setEvaluation(String userName, int reportId, int evaluation) {
+    this.entityManager.getTransaction().begin();
+    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation WHERE userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    query.setParameter("evaluation", evaluation); //$NON-NLS-1$
+    query.setParameter("reportId", reportId); //$NON-NLS-1$
+    query.setParameter("userName", userName); //$NON-NLS-1$
+    query.executeUpdate();
+    this.entityManager.getTransaction().commit();
+
+  }
+
+  /**
+   * @see org.mklab.taskit.server.dao.SubmissionDao#getEvaluationFromReportId(String,
+   *      int)
+   */
+  @SuppressWarnings("boxing")
+  @Override
+  public int getEvaluationFromReportId(String userName, int reportId) {
+    final Query query = this.entityManager.createQuery("SELECT s.evaluation FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    query.setParameter("userName", userName); //$NON-NLS-1$
+    query.setParameter("reportId", reportId); //$NON-NLS-1$
+    return (Integer)query.getSingleResult();
   }
 }

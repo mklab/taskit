@@ -46,4 +46,10 @@ public interface ReportDao {
    */
   void registerReport(Report report) throws ReportRegistrationException;
 
+  /**
+   * 全ての課題をリストで返します。
+   * 
+   * @return 全ての課題のリスト
+   */
+  List<Report> getAllReports();
 }
