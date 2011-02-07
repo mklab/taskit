@@ -14,7 +14,13 @@ import org.mklab.taskit.shared.model.Submission;
  */
 public interface SubmissionDao {
 
-  List<Submission> getAllSubmission(String studentNo);
+  /**
+   * ある学生の全ての提出物を取得します。reportID順（昇順）にリストに追加されています。
+   * 
+   * @param userName ユーザー名
+   * @return ある学生の全ての提出物
+   */
+  List<Submission> getSubmissionsFromUserName(String userName);
 
   /**
    * 提出物を登録します。

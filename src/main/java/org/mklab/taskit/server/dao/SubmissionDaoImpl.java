@@ -31,13 +31,14 @@ public class SubmissionDaoImpl implements SubmissionDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.SubmissionDao#getAllSubmission(java.lang.String)
+   * @see org.mklab.taskit.server.dao.SubmissionDao#getSubmissionsFromUserName(java.lang.String)
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public List<Submission> getAllSubmission(String studentNo) {
-    Query query = this.entityManager.createQuery("select s from SUBMISSION as s where studentNo = '" + studentNo + "'"); //$NON-NLS-1$ //$NON-NLS-2$
-    @SuppressWarnings({"cast", "unchecked"})
-    List<Submission> submissions = (List<Submission>)query.getResultList();
+  public List<Submission> getSubmissionsFromUserName(String userName) {
+    Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName ORDER BY s.reportId"); //$NON-NLS-1$
+    query.setParameter("userName", userName); //$NON-NLS-1$
+    List<Submission> submissions = query.getResultList();
 
     return submissions;
   }
