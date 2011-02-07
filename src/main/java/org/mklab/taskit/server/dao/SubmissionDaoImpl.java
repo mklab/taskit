@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import org.jboss.cache.RegionEmptyException;
 import org.mklab.taskit.shared.model.Submission;
 
 
@@ -47,7 +48,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
    * @see org.mklab.taskit.server.dao.ReportDao#registerReport(org.mklab.taskit.shared.model.Report)
    */
   @Override
-  public void registerSubmission(Submission submission) throws Exception {
+  public void registerSubmission(Submission submission) throws SubmissionRegistrationException {
     EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
     try {
@@ -57,33 +58,45 @@ public class SubmissionDaoImpl implements SubmissionDao {
       if (t.isActive()) {
         t.rollback();
       }
-      throw new Exception("submission already exists!"); //$NON-NLS-1$
+      throw new SubmissionRegistrationException("submission already exists!"); //$NON-NLS-1$
     } catch (Throwable e) {
       try {
         if (t.isActive()) {
           t.rollback();
         }
-        throw new Exception("failed to submission a report"); //$NON-NLS-1$
+        throw new SubmissionRegistrationException("failed to submission a report"); //$NON-NLS-1$
       } catch (Throwable e1) {
-        throw new Exception("failed to submission a report, and rollback failed."); //$NON-NLS-1$
+        throw new SubmissionRegistrationException("failed to submission a report, and rollback failed."); //$NON-NLS-1$
       }
     }
   }
 
   /**
+   * @throws SubmissionRegistrationException 
    * @see org.mklab.taskit.server.dao.SubmissionDao#setEvaluation(String, int,
-   *      int)
+   *      int, int, String, String)
    */
   @SuppressWarnings("boxing")
   @Override
-  public void setEvaluation(String userName, int reportId, int evaluation) {
-    this.entityManager.getTransaction().begin();
-    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation WHERE userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+  public void setEvaluation(String userName, int reportId, int evaluation, int evaluatorId, String publicComment, String privateComment) throws SubmissionRegistrationException {
+    final EntityTransaction t = this.entityManager.getTransaction();
+    t.begin();
+    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation s.evaluatorId = :evaluatorId WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("evaluation", evaluation); //$NON-NLS-1$
+    query.setParameter("evaluatorId", evaluatorId); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
-    query.executeUpdate();
-    this.entityManager.getTransaction().commit();
+    int executedCount = 0;
+    try {
+      query.executeUpdate();
+      t.commit();
+    } catch (Throwable e) {
+      t.rollback();
+      
+    }
+    if (executedCount == 0) {
+      registerSubmission(new Submission(reportId, System.currentTimeMillis(), userName, evaluation, evaluatorId, publicComment, privateComment));
+    }
 
   }
 

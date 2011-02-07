@@ -54,6 +54,28 @@ public class ReportDaoImpl implements ReportDao {
   }
 
   /**
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportsFromLectureId(int)
+   */
+  @SuppressWarnings({"boxing", "unchecked"})
+  @Override
+  public List<Report> getReportsFromLectureId(int lectureId) {
+    Query query = this.entityManager.createQuery("SELECT r FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    List<Report> selectedReports = query.getResultList();
+    return selectedReports;
+  }
+
+  /**
+   * @see org.mklab.taskit.server.dao.ReportDao#getAllReports()
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Report> getAllReports() {
+    final Query query = this.entityManager.createQuery("SELECT r FROM REPORT r ORDER BY r.lectureId, r.no"); //$NON-NLS-1$
+    return query.getResultList();
+  }
+
+  /**
    * @see org.mklab.taskit.server.dao.ReportDao#registerReport(org.mklab.taskit.shared.model.Report)
    */
   @Override
@@ -81,25 +103,28 @@ public class ReportDaoImpl implements ReportDao {
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getReportsFromLectureId(int)
+   * @see org.mklab.taskit.server.dao.ReportDao#getTitle(int, int)
    */
-  @SuppressWarnings({"boxing", "unchecked"})
+  @SuppressWarnings("boxing")
   @Override
-  public List<Report> getReportsFromLectureId(int lectureId) {
-    Query query = this.entityManager.createQuery("SELECT r FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
+  public String getTitle(int lectureId, int no) {
+    final Query query = this.entityManager.createQuery("SELECT r.title FROM REPORT r WHERE r.lectureId = :lectureId AND r.no = :no"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    List<Report> selectedReports = query.getResultList();
-    return selectedReports;
+    query.setParameter("no", no); //$NON-NLS-1$
+    final String title = (String)query.getSingleResult();
+    return title;
   }
 
   /**
-   * @see org.mklab.taskit.server.dao.ReportDao#getAllReports()
+   * @see org.mklab.taskit.server.dao.ReportDao#getDetail(int, int)
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("boxing")
   @Override
-  public List<Report> getAllReports() {
-    final Query query = this.entityManager.createQuery("SELECT r FROM REPORT r ORDER BY r.lectureId, r.no"); //$NON-NLS-1$
-    return query.getResultList();
+  public String getDetail(int lectureId, int no) {
+    final Query query = this.entityManager.createQuery("SELECT r.detail FROM REPORT r WHERE r.lectureId = lectureId AND r.no = :no"); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    query.setParameter("no", no); //$NON-NLS-1$
+    return null;
   }
 
 }
