@@ -75,7 +75,7 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
       if (scores[lectureIndex] == null) {
         scores[lectureIndex] = new int[lecture.getReportCount()];
       }
-      scores[lectureIndex][report.getNo()] = submission.getEvaluation();
+      scores[lectureIndex][report.getNo() - 1] = submission.getEvaluation();
     }
 
     final StudentwiseScoresDto dto = new StudentwiseScoresDto(lecturesDto, new StudentwiseScoreTable(scores));
@@ -91,7 +91,7 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
     final LectureDto lectureDto = this.lectureQuery.getLecture(lectureIndex);
     final Report report = lectureDto.getReport(reportIndex);
     try {
-      this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation,0,"","");
+      this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation, 0, "", "");
     } catch (SubmissionRegistrationException e) {
       throw new RuntimeException(e);
     }
