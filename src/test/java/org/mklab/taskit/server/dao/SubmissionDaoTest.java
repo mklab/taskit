@@ -57,6 +57,8 @@ public class SubmissionDaoTest extends DaoTest {
     submissionDao.registerSubmission(new Submission(1, 123456800, "10236002", 65, 2, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     submissionDao.setEvaluation("10236001", 0, 80); //$NON-NLS-1$
     assertEquals(80, submissionDao.getEvaluationFromReportId("10236001", 0)); //$NON-NLS-1$
+    submissionDao.setEvaluation("10236002", 1, 100); //$NON-NLS-1$
+    assertEquals(100, submissionDao.getEvaluationFromReportId("10236002", 1)); //$NON-NLS-1$
 
   }
 

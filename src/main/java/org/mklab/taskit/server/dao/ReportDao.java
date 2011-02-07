@@ -52,4 +52,11 @@ public interface ReportDao {
    * @return 全ての課題のリスト
    */
   List<Report> getAllReports();
+  /**
+   * 第何回目の何番目の課題のタイトルを取得します。
+   * @param lectureId 講義IDです。
+   * @param no 何番目かを表します。
+   * @return 課題のタイトル
+   */
+  String getTitle(int lectureId, int no);
 }

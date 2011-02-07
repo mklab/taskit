@@ -37,13 +37,6 @@ public final class Report extends LightEntity {
 
   /**
    * {@link Report}オブジェクトを構築します。
-   */
-  Report() {
-    // for serialization.
-  }
-
-  /**
-   * {@link Report}オブジェクトを構築します。
    * 
    * @param no 課題の番号
    * @param title 課題の名前

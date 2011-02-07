@@ -47,7 +47,7 @@ public class ReportDaoTest extends DaoTest {
   @Test
   public void testGetAllReports() throws ReportRegistrationException {
     final ReportDao dao = new ReportDaoImpl(createEntityManager());
-    dao.registerReport(new Report(1, "Appletviewer.", "detail", 1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+    dao.registerReport(new Report(1, "About appletviewer.", "detail", 1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
     dao.registerReport(new Report(0, "Hello World.", "detail", 1, 0)); //$NON-NLS-1$//$NON-NLS-2$
     dao.registerReport(new Report(0, "Let's use GUI.", "detail", 1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
     dao.registerReport(new Report(1, "Show your name.", "detail", 1, 0)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -55,6 +55,23 @@ public class ReportDaoTest extends DaoTest {
     assertEquals("Hello World.", reports.get(0).getTitle()); //$NON-NLS-1$
     assertEquals("Show your name.", reports.get(1).getTitle()); //$NON-NLS-1$
     assertEquals("Let's use GUI.", reports.get(2).getTitle()); //$NON-NLS-1$
-    assertEquals("Appletviewer.", reports.get(3).getTitle()); //$NON-NLS-1$
+    assertEquals("About appletviewer.", reports.get(3).getTitle()); //$NON-NLS-1$
+  }
+  /**
+   * 第何講義目の第何回目のタイトルを取得できるかどうかテストします。
+   * @throws ReportRegistrationException 課題登録に失敗した時の例外
+   */
+  @Test
+  public void testGetTitle() throws ReportRegistrationException {
+    final ReportDao dao = new ReportDaoImpl(createEntityManager());
+    dao.registerReport(new Report(1, "About appletviewer.", "detail", 1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+    dao.registerReport(new Report(0, "Hello World.", "detail", 1, 0)); //$NON-NLS-1$//$NON-NLS-2$
+    dao.registerReport(new Report(0, "Let's use GUI.", "detail", 1, 1)); //$NON-NLS-1$ //$NON-NLS-2$
+    dao.registerReport(new Report(1, "Show your name.", "detail", 1, 0)); //$NON-NLS-1$ //$NON-NLS-2$
+    assertEquals("Hello World.", dao.getTitle(0, 0)); //$NON-NLS-1$
+    assertEquals("Show your name.", dao.getTitle(0, 1)); //$NON-NLS-1$
+    assertEquals("Let's use GUI.", dao.getTitle(1, 0)); //$NON-NLS-1$
+    assertEquals("About appletviewer.", dao.getTitle(1, 1)); //$NON-NLS-1$
+    
   }
 }

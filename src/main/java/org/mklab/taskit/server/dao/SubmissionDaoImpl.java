@@ -78,7 +78,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
   @Override
   public void setEvaluation(String userName, int reportId, int evaluation) {
     this.entityManager.getTransaction().begin();
-    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation WHERE userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("evaluation", evaluation); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
