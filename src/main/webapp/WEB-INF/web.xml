@@ -17,6 +17,10 @@
 		<servlet-name>attendance</servlet-name>
 		<servlet-class>org.mklab.taskit.server.AttendanceServiceImpl</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>lecture</servlet-name>
+		<servlet-class>org.mklab.taskit.server.LectureServiceImpl</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>login</servlet-name>
@@ -29,6 +33,10 @@
 	<servlet-mapping>
 		<servlet-name>attendance</servlet-name>
 		<url-pattern>/taskit/attendance</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>lecture</servlet-name>
+		<url-pattern>/taskit/lecture</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

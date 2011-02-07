@@ -17,6 +17,7 @@ import org.mklab.taskit.server.dao.AttendanceTypeDaoImpl;
 import org.mklab.taskit.server.dao.LectureDao;
 import org.mklab.taskit.server.dao.LectureDaoImpl;
 import org.mklab.taskit.server.dao.ReportDao;
+import org.mklab.taskit.server.dao.ReportDaoImpl;
 import org.mklab.taskit.server.dao.ReportRegistrationException;
 import org.mklab.taskit.shared.model.AttendanceType;
 import org.mklab.taskit.shared.model.Lecture;
@@ -36,10 +37,10 @@ public class _SampleDataInitializer {
     final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("taskit"); //$NON-NLS-1$
     final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-    // createAccounts(new AccountDaoImpl(entityManager));
-    // createAttendanceTypes(new AttendanceTypeDaoImpl(entityManager));
+    createAccounts(new AccountDaoImpl(entityManager));
+    createAttendanceTypes(new AttendanceTypeDaoImpl(entityManager));
     createLectures(new LectureDaoImpl(entityManager));
-    //createReports(new ReportDaoImpl(entityManager));
+    createReports(new ReportDaoImpl(entityManager));
     entityManagerFactory.close();
   }
 

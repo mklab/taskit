@@ -54,6 +54,7 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
     final ListGridField titleField = new ListGridField("title", "Title"); //$NON-NLS-1$ //$NON-NLS-2$
     this.listGrid.setFields(titleField);
     this.listGrid.setHeight100();
+    this.listGrid.setWidth100();
     this.listGrid.setEditEvent(ListGridEditEvent.CLICK);
     this.listGrid.addEditCompleteHandler(new EditCompleteHandler() {
 
