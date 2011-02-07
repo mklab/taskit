@@ -3,7 +3,8 @@
  */
 package org.mklab.taskit.client.ui;
 
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import org.mklab.taskit.client.ui.event.ClickHandler;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 
@@ -30,31 +31,31 @@ public interface HeaderView extends IsWidget {
   void setUserType(String type);
 
   /**
-   * 学生一覧ビューのリンクを取得します。
+   * 学生一覧ビューのリンクを監視します。
    * 
-   * @return 学生一覧ビューのリンク
+   * @param h リスナ
    */
-  HasClickHandlers getStudentListLink();
+  void addStudentListLinkClickHandler(ClickHandler h);
 
   /**
-   * 出席一覧ビューのリンクを取得します。
+   * 出席一覧ビューのリンクを監視します。
    * 
-   * @return 出席一覧ビューのリンク
+   * @param h リスナ
    */
-  HasClickHandlers getAttendenceListLink();
+  void addAttendanceListLinkClickHandler(ClickHandler h);
 
   /**
-   * 管理者ビューのリンクを取得します。
+   * 管理者ビューのリンクを監視します。
    * 
-   * @return 管理者ビューのリンク
+   * @param h リスナ
    */
-  HasClickHandlers getAdminLink();
+  void addAdminLinkClickHandler(ClickHandler h);
 
   /**
-   * ログアウトボタンを取得します。
+   * ログアウトボタンの監視をします。
    * 
-   * @return ログアウトボタン
+   * @param h リスナ
    */
-  HasClickHandlers getLogoutTrigger();
+  void addLogoutLinkClickHandler(ClickHandler h);
 
 }

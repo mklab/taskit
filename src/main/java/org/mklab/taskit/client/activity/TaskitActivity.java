@@ -16,8 +16,7 @@ import org.mklab.taskit.shared.service.LoginServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import org.mklab.taskit.client.ui.event.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
@@ -66,34 +65,34 @@ public abstract class TaskitActivity extends AbstractActivity {
     final HeaderView header = taskitView.getHeader();
     setupLoginUserView(header);
 
-    header.getAdminLink().addClickHandler(new ClickHandler() {
+    header.addAdminLinkClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+      public void onClick() {
         getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
       }
+
     });
-    header.getStudentListLink().addClickHandler(new ClickHandler() {
+    header.addStudentListLinkClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+      public void onClick() {
         getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
       }
     });
-    header.getAttendenceListLink().addClickHandler(new ClickHandler() {
+    header.addAttendanceListLinkClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+      public void onClick() {
         getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
       }
     });
-    header.getLogoutTrigger().addClickHandler(new ClickHandler() {
+    header.addLogoutLinkClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+      public void onClick() {
         logout();
       }
-
     });
   }
 

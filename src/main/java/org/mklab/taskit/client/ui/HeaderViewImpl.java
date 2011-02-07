@@ -4,9 +4,10 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.event.ClickHandler;
+import org.mklab.taskit.client.ui.event.GwtClickHandler;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
@@ -72,35 +73,35 @@ public class HeaderViewImpl extends Composite implements HeaderView {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getStudentListLink()
+   * @see org.mklab.taskit.client.ui.HeaderView#addStudentListLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getStudentListLink() {
-    return this.studentListLink;
+  public void addStudentListLinkClickHandler(ClickHandler h) {
+    this.studentListLink.addClickHandler(new GwtClickHandler(h));
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getLogoutTrigger()
+   * @see org.mklab.taskit.client.ui.HeaderView#addAttendanceListLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getLogoutTrigger() {
-    return this.logoutButton;
+  public void addAttendanceListLinkClickHandler(ClickHandler h) {
+    this.attendanceLink.addClickHandler(new GwtClickHandler(h));
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getAdminLink()
+   * @see org.mklab.taskit.client.ui.HeaderView#addAdminLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getAdminLink() {
-    return this.adminLink;
+  public void addAdminLinkClickHandler(ClickHandler h) {
+    this.adminLink.addClickHandler(new GwtClickHandler(h));
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.HeaderView#getAttendenceListLink()
+   * @see org.mklab.taskit.client.ui.HeaderView#addLogoutLinkClickHandler(org.mklab.taskit.client.ui.event.ClickHandler)
    */
   @Override
-  public HasClickHandlers getAttendenceListLink() {
-    return this.attendanceLink;
+  public void addLogoutLinkClickHandler(ClickHandler h) {
+    this.logoutButton.addClickHandler(new GwtClickHandler(h));
   }
 
 }

@@ -13,6 +13,9 @@
 	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
+	<!-- SmartGWT -->
+	<inherits name='com.smartgwt.SmartGwt' />
+
 	<!-- Internationalization -->
 	<!-- <inherits name="com.google.gwt.i18n.I18N" /> -->
 	<!-- Locales -->

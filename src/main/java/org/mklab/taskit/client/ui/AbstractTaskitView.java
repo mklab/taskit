@@ -41,17 +41,14 @@ public abstract class AbstractTaskitView extends Composite implements TaskitView
    * ビューの初期化を行ないます。
    */
   public final void init() {
-    this.header = new HeaderViewImpl(this.clientFactory);
+    this.header = this.clientFactory.getHeaderView();
     final Widget content = initContent();
     if (content == null) throw new NullPointerException();
 
     final VerticalPanel vPanel = new VerticalPanel();
     vPanel.setWidth("100%"); //$NON-NLS-1$
-    final HTML headerSpace = new HTML();
-    headerSpace.setHeight("3.5em"); //$NON-NLS-1$
 
     vPanel.add(this.header);
-    vPanel.add(headerSpace);
     vPanel.add(createCenteringWidget(content));
 
     initWidget(vPanel);

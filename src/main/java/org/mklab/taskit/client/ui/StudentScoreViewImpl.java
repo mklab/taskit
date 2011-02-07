@@ -28,11 +28,19 @@ public class StudentScoreViewImpl extends AbstractTaskitView implements StudentS
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.StudentScoreView#setTitle(int, String)
+   * @see org.mklab.taskit.client.ui.StudentScoreView#setLectureInfo(int, int,
+   *      java.lang.String)
    */
   @Override
-  public void setTitle(int index, String title) {
+  public void setLectureInfo(int index, int reportCount, String title) {
     this.table.setText(index, 0, title);
+    for (int i = 0; i < reportCount; i++) {
+      final ListBox evaluationList = new ListBox();
+      evaluationList.addItem("○"); //$NON-NLS-1$
+      evaluationList.addItem("△"); //$NON-NLS-1$
+      evaluationList.addItem("×"); //$NON-NLS-1$
+      this.table.setWidget(index, i + 1, evaluationList);
+    }
   }
 
   /**
@@ -64,6 +72,22 @@ public class StudentScoreViewImpl extends AbstractTaskitView implements StudentS
     };
     this.table.setColumnHeaderRows(1);
     return this.table;
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.StudentScoreView#setLectureCount(int)
+   */
+  @Override
+  public void setLectureCount(@SuppressWarnings("unused") int lectureCount) {
+    // do nothing
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.StudentScoreView#setPresenter(org.mklab.taskit.client.ui.StudentScoreView.Presenter)
+   */
+  @Override
+  public void setPresenter(Presenter presenter) {
+    // not implemented
   }
 
 }
