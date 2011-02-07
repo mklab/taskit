@@ -75,4 +75,16 @@ class ReportDaoImpl implements ReportDao {
     }
   }
 
+  /**
+   * @see org.mklab.taskit.server.dao.ReportDao#getReportsFromLectureId(int)
+   */
+  @SuppressWarnings({"boxing", "unchecked"})
+  @Override
+  public List<Report> getReportsFromLectureId(int lectureId) {
+    Query query = this.entityManager.createQuery("SELECT r FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    List<Report> selectedReports = query.getResultList();
+    return selectedReports;
+  }
+
 }

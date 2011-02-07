@@ -29,6 +29,15 @@ public interface ReportDao {
    * @return 課題内容を返します。
    */
   List<Report> getReportFromDate(String date);
+
+  /**
+   * 与えられたIDの講義のレポートを取得します。
+   * 
+   * @param lectureId 講義ID
+   * @return 講義のレポート
+   */
+  List<Report> getReportsFromLectureId(int lectureId);
+
   /**
    * 課題の新規登録を行ないます。
    * 

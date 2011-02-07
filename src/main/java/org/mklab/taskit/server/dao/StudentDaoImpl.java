@@ -3,8 +3,12 @@
  */
 package org.mklab.taskit.server.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import org.mklab.taskit.shared.model.Submission;
 
 
 /**
@@ -32,6 +36,17 @@ public class StudentDaoImpl implements StudentDao {
     Query query = this.entityManager.createQuery("select accountId from STUDENT where accountId = " + accountId); //$NON-NLS-1$
     String studentNo = (String)query.getSingleResult();
     return studentNo;
+  }
+
+  /**
+   * @see org.mklab.taskit.server.dao.StudentDao#getAllStudentsSubmissionFromLectureId(int)
+   */
+  @SuppressWarnings("boxing")
+  @Override
+  public List<Submission> getAllStudentsSubmissionFromLectureId(int lectureId) {
+    Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.lectureId = :lectureId"); //$NON-NLS-1$
+    query.setParameter("lectureId", lectureId); //$NON-NLS-1$
+    return null;
   }
 
 }

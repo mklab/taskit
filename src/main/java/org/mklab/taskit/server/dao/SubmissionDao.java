@@ -14,4 +14,13 @@ import org.mklab.taskit.shared.model.Submission;
  */
 public interface SubmissionDao {
   List<Submission> getAllSubmission(String studentNo);
+
+  int getEvaluation(String useName, int lectureId, int no);
+  
+
+  /**
+   * @param submission
+   * @throws Exception
+   */
+  void registerSubmission(Submission submission) throws Exception;
 }
