@@ -95,7 +95,7 @@
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
-		<finalName>taskit-dev</finalName>
+		<finalName>taskit</finalName>
 
 		<plugins>
 			<plugin>
