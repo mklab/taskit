@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import org.mklab.taskit.server.dao.SubmissionDao;
 import org.mklab.taskit.server.dao.SubmissionDaoImpl;
+import org.mklab.taskit.server.dao.SubmissionRegistrationException;
 import org.mklab.taskit.shared.dto.LectureDto;
 import org.mklab.taskit.shared.dto.StudentwiseScoreTable;
 import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
@@ -89,7 +90,11 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
   public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation) {
     final LectureDto lectureDto = this.lectureQuery.getLecture(lectureIndex);
     final Report report = lectureDto.getReport(reportIndex);
-    this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation);
+    try {
+      this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation,0,"","");
+    } catch (SubmissionRegistrationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
 }

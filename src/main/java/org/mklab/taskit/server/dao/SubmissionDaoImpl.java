@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import org.jboss.cache.RegionEmptyException;
 import org.mklab.taskit.shared.model.Submission;
 
 
@@ -72,7 +71,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
   }
 
   /**
-   * @throws SubmissionRegistrationException 
+   * @throws SubmissionRegistrationException
    * @see org.mklab.taskit.server.dao.SubmissionDao#setEvaluation(String, int,
    *      int, int, String, String)
    */
@@ -81,7 +80,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
   public void setEvaluation(String userName, int reportId, int evaluation, int evaluatorId, String publicComment, String privateComment) throws SubmissionRegistrationException {
     final EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
-    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation s.evaluatorId = :evaluatorId WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation, s.evaluatorId = :evaluatorId WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("evaluation", evaluation); //$NON-NLS-1$
     query.setParameter("evaluatorId", evaluatorId); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
@@ -92,7 +91,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
       t.commit();
     } catch (Throwable e) {
       t.rollback();
-      
+
     }
     if (executedCount == 0) {
       registerSubmission(new Submission(reportId, System.currentTimeMillis(), userName, evaluation, evaluatorId, publicComment, privateComment));
