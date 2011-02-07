@@ -17,11 +17,16 @@ import org.mklab.taskit.shared.model.Report;
  * @author teshima
  * @version $Revision$, Jan 26, 2011
  */
-class ReportDaoImpl implements ReportDao {
+public class ReportDaoImpl implements ReportDao {
 
   private EntityManager entityManager;
 
-  ReportDaoImpl(EntityManager entityManager) {
+  /**
+   * {@link ReportDaoImpl}オブジェクトを構築します。
+   * 
+   * @param entityManager エンティティマネージャ
+   */
+  public ReportDaoImpl(EntityManager entityManager) {
     if (entityManager == null) throw new NullPointerException();
     this.entityManager = entityManager;
   }
