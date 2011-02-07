@@ -110,13 +110,12 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   private void adjustColumnCountToReportCount(int reportCount) {
     if (this.maximumColumnCount >= reportCount) return;
 
-    this.maximumColumnCount = reportCount;
-
     // setup table model
-    final ListGridField[] fields = new ListGridField[this.maximumColumnCount + 1];
+    final ListGridField[] fields = new ListGridField[reportCount + 1];
+    final ListGridField[] originalFields = this.listGrid.getAllFields();
+    System.arraycopy(originalFields, 0, fields, 0, originalFields.length);
 
-    fields[0] = new ListGridField("title", "Title");
-    for (int i = 0; i < this.maximumColumnCount; i++) {
+    for (int i = this.maximumColumnCount; i < reportCount; i++) {
       final ListGridField field = new ListGridField(String.valueOf(i));
       fields[i + 1] = field;
       field.setValueMap("○", "×", "△");
@@ -127,6 +126,7 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
       field.setAlign(Alignment.CENTER);
     }
     this.listGrid.setFields(fields);
+    this.maximumColumnCount = reportCount;
   }
 
   /**
