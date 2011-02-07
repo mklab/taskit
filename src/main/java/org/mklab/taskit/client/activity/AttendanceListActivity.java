@@ -134,7 +134,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
        * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
        */
       @Override
-      public void onSuccess(Void result) {
+      public void onSuccess(@SuppressWarnings("unused") Void result) {
         // do nothing
       }
 
@@ -171,7 +171,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   public void studentNumberClicked(int index) {
-    getClientFactory().getPlaceController().goTo(new StudentScore(index));
+    getClientFactory().getPlaceController().goTo(new StudentScore(this.userNames.get(index)));
   }
 
 }

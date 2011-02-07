@@ -13,24 +13,24 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  */
 public class StudentScore extends Place {
 
-  private int accountId;
+  private String userName;
 
   /**
    * {@link StudentScore}オブジェクトを構築します。
    * 
-   * @param accountId アカウントID
+   * @param userName ユーザー名
    */
-  public StudentScore(int accountId) {
-    this.accountId = accountId;
+  public StudentScore(String userName) {
+    this.userName = userName;
   }
 
   /**
-   * 表示するアカウントのIDを取得します。
+   * ユーザー名を取得します。
    * 
-   * @return accountId 表示するアカウントのID
+   * @return userName
    */
-  public int getAccountId() {
-    return this.accountId;
+  public String getUserName() {
+    return this.userName;
   }
 
   /**
@@ -44,7 +44,7 @@ public class StudentScore extends Place {
      */
     @Override
     public StudentScore getPlace(String token) {
-      return new StudentScore(Integer.parseInt(token));
+      return new StudentScore(token);
     }
 
     /**
@@ -52,7 +52,7 @@ public class StudentScore extends Place {
      */
     @Override
     public String getToken(StudentScore place) {
-      return String.valueOf(place.getAccountId());
+      return String.valueOf(place.getUserName());
     }
 
   }

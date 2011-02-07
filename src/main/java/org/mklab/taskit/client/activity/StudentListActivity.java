@@ -20,6 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public class StudentListActivity extends TaskitActivity implements StudentListView.Presenter {
 
+  private String[] userNames;
+
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
    * 
@@ -40,8 +42,10 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     final AccountServiceAsync service = GWT.create(AccountService.class);
     service.getAllStudentUserNames(new AsyncCallback<String[]>() {
 
+      @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(String[] result) {
+        StudentListActivity.this.userNames = result;
         list.setListData(result);
       }
 
@@ -59,7 +63,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   @Override
   public void listDataClicked(int index) {
-    getClientFactory().getPlaceController().goTo(new StudentScore(index));
+    getClientFactory().getPlaceController().goTo(new StudentScore(this.userNames[index]));
   }
 
 }

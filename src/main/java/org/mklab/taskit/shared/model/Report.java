@@ -61,24 +61,6 @@ public final class Report extends LightEntity {
   }
 
   /**
-   * 課題IDを設定します。
-   * 
-   * @param id 課題ID
-   */
-  public void setId(int id) {
-    this.reportId = id;
-  }
-
-  /**
-   * 課題IDを取得します。
-   * 
-   * @return 課題ID
-   */
-  public int getId() {
-    return this.reportId;
-  }
-
-  /**
    * 課題の名前を設定します。
    * 
    * @param name 課題の名前

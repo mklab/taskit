@@ -3,18 +3,9 @@
  */
 package org.mklab.taskit.server;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
-import org.mklab.taskit.server.dao.LectureDao;
-import org.mklab.taskit.server.dao.LectureDaoImpl;
-import org.mklab.taskit.server.dao.ReportDao;
-import org.mklab.taskit.server.dao.ReportDaoImpl;
 import org.mklab.taskit.shared.dto.LectureDto;
-import org.mklab.taskit.shared.model.Lecture;
-import org.mklab.taskit.shared.model.Report;
 import org.mklab.taskit.shared.service.LectureService;
 
 
@@ -26,16 +17,14 @@ public class LectureServiceImpl extends TaskitRemoteService implements LectureSe
 
   /** for serialization. */
   private static final long serialVersionUID = 3530442985606745638L;
-  private LectureDao lectureDao;
-  private ReportDao reportDao;
+  private LectureQuery query;
 
   /**
    * {@link LectureServiceImpl}オブジェクトを構築します。
    */
   public LectureServiceImpl() {
     final EntityManager entityManager = createEntityManager();
-    this.lectureDao = new LectureDaoImpl(entityManager);
-    this.reportDao = new ReportDaoImpl(entityManager);
+    this.query = new LectureQuery(entityManager);
   }
 
   /**
@@ -43,9 +32,7 @@ public class LectureServiceImpl extends TaskitRemoteService implements LectureSe
    */
   @Override
   public LectureDto getLecture(int index) {
-    final Lecture l = this.lectureDao.getAllLectures().get(index);
-    final List<Report> reportList = this.reportDao.getReportsFromLectureId(l.getLectureId());
-    return new LectureDto(l, reportList);
+    return this.query.getLecture(index);
   }
 
   /**
@@ -53,15 +40,7 @@ public class LectureServiceImpl extends TaskitRemoteService implements LectureSe
    */
   @Override
   public LectureDto[] getAllLectures() {
-    final List<Lecture> lectures = this.lectureDao.getAllLectures();
-    final LectureDto[] lectureDtoList = new LectureDto[lectures.size()];
-    for (int i = 0; i < lectures.size(); i++) {
-      final Lecture lecture = lectures.get(i);
-      final List<Report> reportList = this.reportDao.getReportsFromLectureId(lecture.getLectureId());
-
-      lectureDtoList[i] = new LectureDto(lecture, reportList);
-    }
-    return lectureDtoList;
+    return this.query.getAllLectures();
   }
 
   /**
@@ -69,7 +48,7 @@ public class LectureServiceImpl extends TaskitRemoteService implements LectureSe
    */
   @Override
   public int getLectureCount() {
-    return this.lectureDao.getLectureCount();
+    return this.query.getLectureCount();
   }
 
 }

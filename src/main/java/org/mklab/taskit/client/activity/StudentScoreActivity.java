@@ -3,16 +3,17 @@
  */
 package org.mklab.taskit.client.activity;
 
-import java.util.List;
-
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.StudentScoreView;
 import org.mklab.taskit.client.ui.StudentScoreView.Presenter;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.dto.LectureDto;
+import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
 import org.mklab.taskit.shared.service.LectureService;
 import org.mklab.taskit.shared.service.LectureServiceAsync;
+import org.mklab.taskit.shared.service.SubmissionService;
+import org.mklab.taskit.shared.service.SubmissionServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -27,7 +28,8 @@ import com.smartgwt.client.util.SC;
  */
 public class StudentScoreActivity extends TaskitActivity implements Presenter {
 
-  final LectureServiceAsync lectureService = GWT.create(LectureService.class);
+  final SubmissionServiceAsync submissionService = GWT.create(SubmissionService.class);
+  private String userName;
 
   /**
    * {@link StudentScoreActivity}オブジェクトを構築します。
@@ -46,34 +48,17 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
     final Place place = clientFactory.getPlaceController().getWhere();
     if (place instanceof StudentScore == false) throw new IllegalStateException();
 
+    this.userName = ((StudentScore)place).getUserName();
     final StudentScoreView view = clientFactory.getStudentScoreView();
     view.setPresenter(this);
+
     initialize(view);
 
     return view;
   }
 
   void initialize(final StudentScoreView view) {
-    this.lectureService.getLectureCount(new AsyncCallback<Integer>() {
-
-      @Override
-      public void onSuccess(Integer result) {
-        final int lectureCount = result.intValue();
-        view.setLectureCount(lectureCount);
-        if (lectureCount > 0) {
-          fetchLectureData(view);
-        }
-      }
-
-      @Override
-      public void onFailure(Throwable caught) {
-        showErrorMessage(caught);
-      }
-    });
-  }
-
-  void fetchLectureData(final StudentScoreView view) {
-    this.lectureService.getAllLectures(new AsyncCallback<LectureDto[]>() {
+    this.submissionService.getStudentwiseScores(this.userName, new AsyncCallback<StudentwiseScoresDto>() {
 
       @Override
       public void onFailure(Throwable caught) {
@@ -81,12 +66,17 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
       }
 
       @Override
-      public void onSuccess(LectureDto[] result) {
-        for (int i = 0; i < result.length; i++) {
-          LectureDto lecture = result[i];
-          view.setLectureInfo(i, lecture.getReportCount(), lecture.getLecture().getTitle());
+      public void onSuccess(StudentwiseScoresDto result) {
+        view.setLectureCount(result.getLectureCount());
+        for (int i = 0; i < result.getLectureCount(); i++) {
+          final int reportCount = result.getLecture(i).getReportCount();
+          view.setLectureInfo(i, reportCount, result.getLecture(i).getLecture().getTitle());
+          for (int j = 0; j < reportCount; j++) {
+            view.setEvaluation(i, j, result.getScoreTable().getScore(i, j));
+          }
         }
       }
+
     });
   }
 
@@ -96,7 +86,19 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
    */
   @Override
   public void onEvaluationChange(int index, int no, int evaluation) {
-    SC.say("Evaluation changed : " + String.valueOf(evaluation));
-  }
+    this.submissionService.setEvaluation(this.userName, index, no, evaluation, new AsyncCallback<Void>() {
 
+      @Override
+      public void onFailure(Throwable caught) {
+        showErrorMessage(caught);
+      }
+
+      @SuppressWarnings("unused")
+      @Override
+      public void onSuccess(Void result) {
+        // do nothing
+      }
+
+    });
+  }
 }

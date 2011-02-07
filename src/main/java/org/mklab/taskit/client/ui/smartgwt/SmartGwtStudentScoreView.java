@@ -14,7 +14,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridEditEvent;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.grid.CellEditValueFormatter;
 import com.smartgwt.client.widgets.grid.CellEditValueParser;
 import com.smartgwt.client.widgets.grid.CellFormatter;
@@ -34,6 +33,7 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   private ListGrid listGrid;
   private ScoreValueHandler valueHandler = new ScoreValueHandler();
   private Presenter presenter;
+  private int maximumColumnCount;
 
   /**
    * {@link SmartGwtStudentScoreView}オブジェクトを構築します。
@@ -64,8 +64,15 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
         Map<?, ?> newValues = event.getNewValues();
         for (Entry<?, ?> entry : newValues.entrySet()) {
           final String fieldName = (String)entry.getKey();
+
           final Integer score = (Integer)entry.getValue();
-          final int no = Integer.parseInt(fieldName);
+          final int no;
+          try {
+            no = Integer.parseInt(fieldName);
+          } catch (NumberFormatException ex) {
+            // よくわからないフィールド名、__gwt_ObjectIdが含まれるため、その場合には何もしない
+            continue;
+          }
           presenter.onEvaluationChange(lecture, no, score.intValue());
         }
       }
@@ -92,11 +99,24 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   @SuppressWarnings("nls")
   @Override
   public void setLectureInfo(int index, int reportCount, String title) {
+    adjustColumnCountToReportCount(reportCount);
+
+    // setup row header
+    final ListGridRecord record = this.listGrid.getRecord(index);
+    record.setAttribute("title", title);
+  }
+
+  @SuppressWarnings("nls")
+  private void adjustColumnCountToReportCount(int reportCount) {
+    if (this.maximumColumnCount >= reportCount) return;
+
+    this.maximumColumnCount = reportCount;
+
     // setup table model
-    final ListGridField[] fields = new ListGridField[reportCount + 1];
+    final ListGridField[] fields = new ListGridField[this.maximumColumnCount + 1];
 
     fields[0] = new ListGridField("title", "Title");
-    for (int i = 0; i < reportCount; i++) {
+    for (int i = 0; i < this.maximumColumnCount; i++) {
       final ListGridField field = new ListGridField(String.valueOf(i));
       fields[i + 1] = field;
       field.setValueMap("○", "×", "△");
@@ -107,10 +127,6 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
       field.setAlign(Alignment.CENTER);
     }
     this.listGrid.setFields(fields);
-
-    // setup row header
-    final ListGridRecord record = this.listGrid.getRecord(index);
-    record.setAttribute("title", title);
   }
 
   /**
