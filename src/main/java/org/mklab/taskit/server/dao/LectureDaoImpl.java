@@ -35,7 +35,7 @@ public class LectureDaoImpl implements LectureDao {
    */
   @Override
   public List<Lecture> getAllLectures() {
-    final Query query = this.entityManager.createQuery("SELECT l FROM LECTURE l"); //$NON-NLS-1$
+    final Query query = this.entityManager.createQuery("SELECT l FROM LECTURE l ORDER BY l.time ASC"); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     final List<Lecture> lectures = query.getResultList();
     return lectures;
