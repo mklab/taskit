@@ -21,10 +21,11 @@ public class SubmissionDaoTest extends DaoTest {
   /**
    * 誰々の第何回目の何番目の課題の成績を取得します。
    * 
-   * @throws Exception
+   * @throws ReportRegistrationException 課題登録失敗の際の例外
+   * @throws SubmissionRegistrationException 提出物登録失敗の際の例外
    */
   @Test
-  public void testGetEvaluation() throws Exception {
+  public void testGetEvaluation() throws ReportRegistrationException, SubmissionRegistrationException {
     final ReportDao reportDao = new ReportDaoImpl(createEntityManager());
     reportDao.registerReport(new Report(0, "Hello World.", "detail", 1, 0)); //$NON-NLS-1$//$NON-NLS-2$
     reportDao.registerReport(new Report(1, "Show your name.", "detail", 2, 0)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -43,10 +44,11 @@ public class SubmissionDaoTest extends DaoTest {
   /**
    * 誰々の第何回目の何番目の課題の成績を修正します。
    * 
-   * @throws Exception
+   * @throws ReportRegistrationException 課題登録失敗の例外
+   * @throws SubmissionRegistrationException 提出物登録失敗の例外
    */
   @Test
-  public void testSetEvaluation() throws Exception {
+  public void testSetEvaluation() throws ReportRegistrationException, SubmissionRegistrationException {
     final ReportDao reportDao = new ReportDaoImpl(createEntityManager());
     reportDao.registerReport(new Report(0, "Hello World.", "detail", 1, 0)); //$NON-NLS-1$//$NON-NLS-2$
     reportDao.registerReport(new Report(1, "Show your name.", "detail", 2, 0)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -55,9 +57,9 @@ public class SubmissionDaoTest extends DaoTest {
     submissionDao.registerSubmission(new Submission(1, 123456889, "10236001", 80, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     submissionDao.registerSubmission(new Submission(0, 123456889, "10236002", 60, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     submissionDao.registerSubmission(new Submission(1, 123456800, "10236002", 65, 2, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-    submissionDao.setEvaluation("10236001", 0, 80, 0, null, null); //$NON-NLS-1$
+    submissionDao.setEvaluation("10236001", 0, 80, 1, null, null); //$NON-NLS-1$
     assertEquals(80, submissionDao.getEvaluationFromReportId("10236001", 0)); //$NON-NLS-1$
-    submissionDao.setEvaluation("10236002", 1, 100, 0, null, null); //$NON-NLS-1$
+    submissionDao.setEvaluation("10236002", 1, 100, 3, null, null); //$NON-NLS-1$
     assertEquals(100, submissionDao.getEvaluationFromReportId("10236002", 1)); //$NON-NLS-1$
 
   }
@@ -65,10 +67,10 @@ public class SubmissionDaoTest extends DaoTest {
   /**
    * ある学生の全ての提出物を取得できているかどうかテストします。
    * 
-   * @throws Exception
+   * @throws SubmissionRegistrationException 提出物登録失敗の例外
    */
   @Test
-  public void testGetSubmissionsFromUserName() throws Exception {
+  public void testGetSubmissionsFromUserName() throws SubmissionRegistrationException {
     final SubmissionDao submissionDao = new SubmissionDaoImpl(createEntityManager());
     submissionDao.registerSubmission(new Submission(0, 123456789, "10236001", 70, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     submissionDao.registerSubmission(new Submission(0, 123456889, "10236002", 60, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$

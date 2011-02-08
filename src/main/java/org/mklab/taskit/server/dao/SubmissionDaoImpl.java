@@ -71,9 +71,8 @@ public class SubmissionDaoImpl implements SubmissionDao {
   }
 
   /**
-   * @throws SubmissionRegistrationException
-   * @see org.mklab.taskit.server.dao.SubmissionDao#setEvaluation(String, int,
-   *      int, int, String, String)
+   * @see org.mklab.taskit.server.dao.SubmissionDao#setEvaluation(java.lang.String,
+   *      int, int, int, java.lang.String, java.lang.String)
    */
   @SuppressWarnings("boxing")
   @Override
@@ -87,11 +86,10 @@ public class SubmissionDaoImpl implements SubmissionDao {
     query.setParameter("userName", userName); //$NON-NLS-1$
     int executedCount = 0;
     try {
-      query.executeUpdate();
+      executedCount = query.executeUpdate();
       t.commit();
     } catch (Throwable e) {
       t.rollback();
-
     }
     if (executedCount == 0) {
       registerSubmission(new Submission(reportId, System.currentTimeMillis(), userName, evaluation, evaluatorId, publicComment, privateComment));
