@@ -19,6 +19,7 @@ import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
 import org.mklab.taskit.shared.model.Report;
 import org.mklab.taskit.shared.model.Submission;
 import org.mklab.taskit.shared.model.User;
+import org.mklab.taskit.shared.service.ServiceException;
 import org.mklab.taskit.shared.service.SubmissionService;
 
 
@@ -95,13 +96,13 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
    */
   @SuppressWarnings("boxing")
   @Override
-  public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation, String publicComment, String privateComment) {
+  public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation, String publicComment, String privateComment) throws ServiceException {
     SessionUtil.assertIsTAOrTeacher(getSession());
 
     final LectureDto lectureDto = this.lectureQuery.getLecture(lectureIndex);
     final int reportCount = lectureDto.getReportCount();
     if (reportCount <= reportIndex) {
-      throw new IllegalArgumentException(MessageFormat.format("Lecture:{0} has only {1} reports.{2}>={1}", lectureDto.getLecture(), reportCount, reportIndex)); //$NON-NLS-1$
+      throw new ServiceException(MessageFormat.format("Lecture:{0} has only {1} reports.{2}>={1}", lectureDto.getLecture(), reportCount, reportIndex)); //$NON-NLS-1$
     }
 
     try {

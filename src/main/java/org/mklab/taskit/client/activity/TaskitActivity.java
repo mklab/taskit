@@ -21,6 +21,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
@@ -163,12 +164,6 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   protected final void showErrorMessage(Throwable e) {
-    final Throwable cause = e.getCause();
-    if (cause != null) {
-      showErrorMessage(cause.getMessage());
-      return;
-    }
-
     showErrorMessage(e.toString());
   }
 

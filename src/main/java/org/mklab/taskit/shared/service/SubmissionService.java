@@ -36,5 +36,5 @@ public interface SubmissionService extends RemoteService {
    * @param publicComment 生徒にも公開するコメント
    * @param privateComment 生徒には非公開のコメント
    */
-  void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation, String publicComment, String privateComment);
+  void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation, String publicComment, String privateComment) throws ServiceException;
 }
