@@ -8,18 +8,13 @@ import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.StudentScoreView;
 import org.mklab.taskit.client.ui.StudentScoreView.Presenter;
 import org.mklab.taskit.client.ui.TaskitView;
-import org.mklab.taskit.shared.dto.LectureDto;
 import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
-import org.mklab.taskit.shared.service.LectureService;
-import org.mklab.taskit.shared.service.LectureServiceAsync;
 import org.mklab.taskit.shared.service.SubmissionService;
 import org.mklab.taskit.shared.service.SubmissionServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.util.SC;
 
 
 /**
@@ -86,7 +81,7 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
    */
   @Override
   public void onEvaluationChange(int index, int no, int evaluation) {
-    this.submissionService.setEvaluation(this.userName, index, no, evaluation, new AsyncCallback<Void>() {
+    this.submissionService.setEvaluation(this.userName, index, no, evaluation, "", "", new AsyncCallback<Void>() {
 
       @Override
       public void onFailure(Throwable caught) {

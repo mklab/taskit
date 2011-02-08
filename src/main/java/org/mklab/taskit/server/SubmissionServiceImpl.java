@@ -91,11 +91,11 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
 
   /**
    * @see org.mklab.taskit.shared.service.SubmissionService#setEvaluation(java.lang.String,
-   *      int, int, int)
+   *      int, int, int, String, String)
    */
   @SuppressWarnings("boxing")
   @Override
-  public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation) {
+  public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation, String publicComment, String privateComment) {
     SessionUtil.assertIsTAOrTeacher(getSession());
 
     final LectureDto lectureDto = this.lectureQuery.getLecture(lectureIndex);
@@ -106,7 +106,7 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
 
     try {
       final Report report = lectureDto.getReport(reportIndex);
-      this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation, 0, "", "");
+      this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation, 0, publicComment, privateComment);
     } catch (SubmissionRegistrationException e) {
       throw new RuntimeException(e);
     }

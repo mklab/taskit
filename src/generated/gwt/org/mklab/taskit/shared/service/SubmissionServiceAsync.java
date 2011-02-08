@@ -18,7 +18,7 @@ public interface SubmissionServiceAsync
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.mklab.taskit.shared.service.SubmissionService
      */
-    void setEvaluation( java.lang.String p0, int p1, int p2, int p3, AsyncCallback<Void> callback );
+    void setEvaluation( java.lang.String p0, int p1, int p2, int p3, java.lang.String p4, java.lang.String p5, AsyncCallback<Void> callback );
 
 
     /**
