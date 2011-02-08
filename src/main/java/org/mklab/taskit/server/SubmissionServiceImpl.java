@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.server;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,11 +87,17 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
    * @see org.mklab.taskit.shared.service.SubmissionService#setEvaluation(java.lang.String,
    *      int, int, int)
    */
+  @SuppressWarnings("boxing")
   @Override
   public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation) {
     final LectureDto lectureDto = this.lectureQuery.getLecture(lectureIndex);
-    final Report report = lectureDto.getReport(reportIndex);
+    final int reportCount = lectureDto.getReportCount();
+    if (reportCount <= reportIndex) {
+      throw new IllegalArgumentException(MessageFormat.format("Lecture:{0} has only {1} reports.{2}>={1}", lectureDto.getLecture(), reportCount, reportIndex)); //$NON-NLS-1$
+    }
+
     try {
+      final Report report = lectureDto.getReport(reportIndex);
       this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation, 0, "", "");
     } catch (SubmissionRegistrationException e) {
       throw new RuntimeException(e);
