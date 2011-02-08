@@ -4,16 +4,16 @@
 
 	<ui:style>
 		.right {
-		float: right;
-		text-align: right
+			float: right;
+			text-align: right
 		}
-
+		
 		.box {
-		display: table;
+			display: table;
 		}
-
+		
 		.status {
-		color: gray;
+			color: gray;
 		}
 	</ui:style>
 
@@ -22,6 +22,7 @@
 		<g:Label styleName='{style.status}' ui:field="statusLabel" />
 		<div align="center">
 			<h1>TASKit</h1>
+			<img src="taskit/taskit.png" />
 			<div class="{style.box}">
 				<table>
 					<tr>
