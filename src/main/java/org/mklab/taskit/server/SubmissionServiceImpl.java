@@ -18,6 +18,7 @@ import org.mklab.taskit.shared.dto.StudentwiseScoreTable;
 import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
 import org.mklab.taskit.shared.model.Report;
 import org.mklab.taskit.shared.model.Submission;
+import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.service.SubmissionService;
 
 
@@ -46,6 +47,11 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
    */
   @Override
   public StudentwiseScoresDto getStudentwiseScores(String userName) {
+    if (SessionUtil.isTAOrTeacher(getSession()) == false) {
+      final User user = SessionUtil.getUser(getSession());
+      if (user == null || user.getId().equals(userName) == false) throw new IllegalStateException("Illegal access."); //$NON-NLS-1$
+    }
+
     final List<Submission> submissions = this.submissionDao.getSubmissionsFromUserName(userName);
     final LectureDto[] lecturesDto = this.lectureQuery.getAllLectures();
 
@@ -90,6 +96,8 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
   @SuppressWarnings("boxing")
   @Override
   public void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation) {
+    SessionUtil.assertIsTAOrTeacher(getSession());
+
     final LectureDto lectureDto = this.lectureQuery.getLecture(lectureIndex);
     final int reportCount = lectureDto.getReportCount();
     if (reportCount <= reportIndex) {
