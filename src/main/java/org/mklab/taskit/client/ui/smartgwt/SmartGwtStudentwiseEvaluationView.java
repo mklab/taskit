@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.StudentEvaluationView;
+import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
@@ -27,7 +27,7 @@ import com.smartgwt.client.widgets.grid.events.EditCompleteHandler;
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 6, 2011
  */
-public class SmartGwtStudentEvaluationView extends AbstractTaskitView implements StudentEvaluationView {
+public class SmartGwtStudentwiseEvaluationView extends AbstractTaskitView implements StudentwiseEvaluationView {
 
   /** レコード中の行ヘッダの値の属性値の名前です。 */
   private static final String ROW_HEADER_ATTRIBUTE = "rowHeader"; //$NON-NLS-1$
@@ -41,11 +41,11 @@ public class SmartGwtStudentEvaluationView extends AbstractTaskitView implements
   private Presenter presenter;
 
   /**
-   * {@link SmartGwtStudentEvaluationView}オブジェクトを構築します。
+   * {@link SmartGwtStudentwiseEvaluationView}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public SmartGwtStudentEvaluationView(ClientFactory clientFactory) {
+  public SmartGwtStudentwiseEvaluationView(ClientFactory clientFactory) {
     super(clientFactory);
     init();
   }
@@ -99,7 +99,7 @@ public class SmartGwtStudentEvaluationView extends AbstractTaskitView implements
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.StudentEvaluationView#setEvaluation(int,
+   * @see org.mklab.taskit.client.ui.StudentwiseEvaluationView#setEvaluation(int,
    *      int, int)
    */
   @Override
