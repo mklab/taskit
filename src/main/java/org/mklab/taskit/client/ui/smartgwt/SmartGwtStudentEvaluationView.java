@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.StudentScoreView;
+import org.mklab.taskit.client.ui.StudentEvaluationView;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
@@ -27,7 +27,7 @@ import com.smartgwt.client.widgets.grid.events.EditCompleteHandler;
  * @author Yuhi Ishikura
  * @version $Revision$, Feb 6, 2011
  */
-public class SmartGwtStudentScoreView extends AbstractTaskitView implements StudentScoreView {
+public class SmartGwtStudentEvaluationView extends AbstractTaskitView implements StudentEvaluationView {
 
   /** レコード中の行ヘッダの値の属性値の名前です。 */
   private static final String ROW_HEADER_ATTRIBUTE = "rowHeader"; //$NON-NLS-1$
@@ -41,11 +41,11 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   private Presenter presenter;
 
   /**
-   * {@link SmartGwtStudentScoreView}オブジェクトを構築します。
+   * {@link SmartGwtStudentEvaluationView}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public SmartGwtStudentScoreView(ClientFactory clientFactory) {
+  public SmartGwtStudentEvaluationView(ClientFactory clientFactory) {
     super(clientFactory);
     init();
   }
@@ -92,8 +92,8 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.StudentScoreView#setEvaluation(int, int,
-   *      int)
+   * @see org.mklab.taskit.client.ui.StudentEvaluationView#setEvaluation(int,
+   *      int, int)
    */
   @Override
   public void setEvaluation(int index, int no, int evaluation) {
@@ -102,7 +102,7 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.StudentScoreView#setPresenter(org.mklab.taskit.client.ui.StudentScoreView.Presenter)
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setPresenter(org.mklab.taskit.client.ui.EvaluationTable.Presenter)
    */
   @Override
   public void setPresenter(Presenter presenter) {

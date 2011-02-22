@@ -6,7 +6,7 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.EvaluationTable.Presenter;
-import org.mklab.taskit.client.ui.StudentScoreView;
+import org.mklab.taskit.client.ui.StudentEvaluationView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
 import org.mklab.taskit.shared.service.SubmissionService;
@@ -44,7 +44,7 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
     if (place instanceof StudentScore == false) throw new IllegalStateException();
 
     this.userName = ((StudentScore)place).getUserName();
-    final StudentScoreView view = clientFactory.getStudentScoreView();
+    final StudentEvaluationView view = clientFactory.getStudentEvaluationView();
     view.setPresenter(this);
 
     initialize(view);
@@ -52,7 +52,7 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
     return view;
   }
 
-  void initialize(final StudentScoreView view) {
+  void initialize(final StudentEvaluationView view) {
     this.submissionService.getStudentwiseScores(this.userName, new AsyncCallback<StudentwiseScoresDto>() {
 
       @Override
@@ -84,7 +84,7 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.StudentScoreView.Presenter#onEvaluationChange(int,
+   * @see org.mklab.taskit.client.ui.EvaluationTable.Presenter#onEvaluationChange(int,
    *      int, int)
    */
   @Override

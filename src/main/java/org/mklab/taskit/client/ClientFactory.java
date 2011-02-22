@@ -6,7 +6,7 @@ package org.mklab.taskit.client;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.StudentListView;
-import org.mklab.taskit.client.ui.StudentScoreView;
+import org.mklab.taskit.client.ui.StudentEvaluationView;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
@@ -65,6 +65,6 @@ public interface ClientFactory {
    * 
    * @return 成績ビュー
    */
-  StudentScoreView getStudentScoreView();
+  StudentEvaluationView getStudentEvaluationView();
 
 }

@@ -6,6 +6,6 @@ package org.mklab.taskit.client.ui;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 31, 2011
  */
-public interface StudentScoreView extends TaskitView, EvaluationTable {
-
+public interface StudentEvaluationView extends TaskitView, EvaluationTable {
+  // empty
 }

@@ -10,18 +10,17 @@ import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.client.ui.event.ClickHandler;
 import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.service.LoginService;
 import org.mklab.taskit.shared.service.LoginServiceAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import org.mklab.taskit.client.ui.event.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 
