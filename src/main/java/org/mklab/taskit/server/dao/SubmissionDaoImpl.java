@@ -46,8 +46,17 @@ public class SubmissionDaoImpl implements SubmissionDao {
   /**
    * @see org.mklab.taskit.server.dao.ReportDao#registerReport(org.mklab.taskit.shared.model.Report)
    */
+  @SuppressWarnings("boxing")
   @Override
   public void registerSubmission(Submission submission) throws SubmissionRegistrationException {
+    String userName = submission.getUserName();
+    int reportId = submission.getReportId();
+    final Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    query.setParameter("userName", userName); //$NON-NLS-1$
+    query.setParameter("reportId", reportId); //$NON-NLS-1$
+    if (!query.getResultList().isEmpty()) {
+      throw new SubmissionRegistrationException("This submission has already registered"); //$NON-NLS-1$
+    }
     EntityTransaction t = this.entityManager.getTransaction();
     t.begin();
     try {

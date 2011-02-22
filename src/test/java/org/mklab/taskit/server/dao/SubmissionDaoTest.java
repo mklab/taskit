@@ -86,4 +86,38 @@ public class SubmissionDaoTest extends DaoTest {
     assertEquals(85, submissions.get(3).getEvaluation());
   }
 
+  /**
+   * 提出物の登録用のメソッドのテストです。
+   * 
+   * @throws SubmissionRegistrationException
+   */
+  @Test
+  public void testRegisterSubmission() throws SubmissionRegistrationException {
+    final SubmissionDao submissionDao = new SubmissionDaoImpl(createEntityManager());
+    submissionDao.registerSubmission(new Submission(0, 123456789, "10236001", 70, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    //submissionDao.registerSubmission(new Submission(0, 123456889, "10236001", 60, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    submissionDao.registerSubmission(new Submission(1, 123456889, "10236001", 80, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    submissionDao.registerSubmission(new Submission(2, 123456999, "10236001", 85, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    submissionDao.registerSubmission(new Submission(3, 123456900, "10236001", 90, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+
+    List<Submission> submissions1 = submissionDao.getSubmissionsFromUserName("10236001"); //$NON-NLS-1$
+    assertEquals(4, submissions1.size());
+    assertEquals(70, submissions1.get(0).getEvaluation());
+    assertEquals(80, submissions1.get(1).getEvaluation());
+    assertEquals(85, submissions1.get(2).getEvaluation());
+    assertEquals(90, submissions1.get(3).getEvaluation());
+
+  }
+
+  /**
+   * 提出物登録時に、すでに登録されている提出物の場合に例外がスローされるかどうかテストします。
+   * 
+   * @throws SubmissionRegistrationException 重複した提出物が登録された場合
+   */
+  @Test(expected = SubmissionRegistrationException.class)
+  public void testRegisterDuplicatedSubmission() throws SubmissionRegistrationException {
+    final SubmissionDao submissionDao = new SubmissionDaoImpl(createEntityManager());
+    submissionDao.registerSubmission(new Submission(0, 123456789, "10236001", 70, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+    submissionDao.registerSubmission(new Submission(0, 123456889, "10236001", 60, 1, "public comment", "private comment")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+  }
 }
