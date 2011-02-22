@@ -29,6 +29,13 @@ import com.smartgwt.client.widgets.grid.events.EditCompleteHandler;
  */
 public class SmartGwtStudentScoreView extends AbstractTaskitView implements StudentScoreView {
 
+  /** レコード中の行ヘッダの値の属性値の名前です。 */
+  private static final String ROW_HEADER_ATTRIBUTE = "rowHeader"; //$NON-NLS-1$
+  /** レコード中の列数の値の属性値の名前です。 */
+  private static final String COLUMN_COUNT_ATTRIBUTE = "columnCount"; //$NON-NLS-1$
+  /** 行ヘッダとして利用する列数です。 */
+  private static final int ROW_HEADER_COLUMNS = 1;
+
   private ListGrid listGrid;
   private ScoreValueHandler valueHandler = new ScoreValueHandler();
   private Presenter presenter;
@@ -60,9 +67,10 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
 
     this.listGrid.addEditCompleteHandler(new EditCompleteHandler() {
 
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void onEditComplete(EditCompleteEvent event) {
-        if (isEditable(event.getRowNum(), event.getColNum() - 1) == false) return;
+        if (isEditable(event.getRowNum(), event.getColNum() - ROW_HEADER_COLUMNS) == false) return;
         final int lecture = event.getRowNum();
         Map<?, ?> newValues = event.getNewValues();
         for (Entry<?, ?> entry : newValues.entrySet()) {
@@ -106,12 +114,12 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
    */
   @Override
   public void setColumnCount(int columnCount) {
-    final ListGridField[] fields = new ListGridField[columnCount + 1];
-    fields[0] = new ListGridField("rowHeader", "");
+    final ListGridField[] fields = new ListGridField[columnCount + ROW_HEADER_COLUMNS];
+    fields[0] = new ListGridField(ROW_HEADER_ATTRIBUTE, ""); //$NON-NLS-1$
     for (int i = 0; i < columnCount; i++) {
       final ListGridField field = new ListGridField(String.valueOf(i));
       fields[i + 1] = field;
-      field.setValueMap("○", "×", "△");
+      field.setValueMap(ScoreSignature.GOOD.getLabel(), ScoreSignature.SOSO.getLabel(), ScoreSignature.BAD.getLabel());
       field.setCanEdit(Boolean.TRUE);
       field.setEditValueParser(this.valueHandler);
       field.setEditValueFormatter(this.valueHandler);
@@ -140,7 +148,7 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   @Override
   public void setRowHeader(int rowIndex, String header) {
     final ListGridRecord record = this.listGrid.getRecord(rowIndex);
-    record.setAttribute("rowHeader", header); //$NON-NLS-1$
+    record.setAttribute(ROW_HEADER_ATTRIBUTE, header);
   }
 
   /**
@@ -157,11 +165,11 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
    */
   @Override
   public void setColumnCountAt(int rowIndex, int columnCount) {
-    this.listGrid.getRecord(rowIndex).setAttribute("columnCount", Integer.valueOf(columnCount)); //$NON-NLS-1$
+    this.listGrid.getRecord(rowIndex).setAttribute(COLUMN_COUNT_ATTRIBUTE, Integer.valueOf(columnCount));
   }
 
   boolean isEditable(int rowIndex, int columnIndex) {
-    String columnCount = this.listGrid.getRecord(rowIndex).getAttribute("columnCount");
+    String columnCount = this.listGrid.getRecord(rowIndex).getAttribute(COLUMN_COUNT_ATTRIBUTE);
     if (columnCount == null) return true;
     return columnIndex < Integer.parseInt(columnCount);
   }
@@ -238,8 +246,8 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
      */
     @Override
     public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
-      final Integer columnCount = record.getAttributeAsInt("columnCount"); //$NON-NLS-1$
-      if (isEditable(rowNum, colNum - 1) == false) return ScoreSignature.NOT_EVALUATED.getLabel();
+      final Integer columnCount = record.getAttributeAsInt(COLUMN_COUNT_ATTRIBUTE);
+      if (isEditable(rowNum, colNum - ROW_HEADER_COLUMNS) == false) return ScoreSignature.NOT_EVALUATED.getLabel();
 
       if (value == null) return ScoreSignature.BAD.getLabel();
 
