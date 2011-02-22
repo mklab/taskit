@@ -59,4 +59,27 @@ public interface EvaluationTable {
    */
   void setEditable(int rowIndex, int columnIndex, boolean editable);
 
+  /**
+   * プレゼンターを設定します。
+   * 
+   * @param presenter プレゼンター
+   */
+  void setPresenter(Presenter presenter);
+
+  /**
+   * @author Yuhi Ishikura
+   * @version $Revision$, Jan 31, 2011
+   */
+  public static interface Presenter {
+
+    /**
+     * 成績が変更されたときに呼び出されます。
+     * 
+     * @param index 行インデックス
+     * @param no 問題ナンバー
+     * @param evaluation 評価値
+     */
+    void onEvaluationChange(int index, int no, int evaluation);
+  }
+
 }
