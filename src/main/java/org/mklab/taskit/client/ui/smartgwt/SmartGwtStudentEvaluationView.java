@@ -72,8 +72,14 @@ public class SmartGwtStudentEvaluationView extends AbstractTaskitView implements
       public void onEditComplete(EditCompleteEvent event) {
         if (isEditable(event.getRowNum(), event.getColNum() - ROW_HEADER_COLUMNS) == false) return;
         final int lecture = event.getRowNum();
-        Map<?, ?> newValues = event.getNewValues();
-        for (Entry<?, ?> entry : newValues.entrySet()) {
+
+        /*
+         * Comments not implemented.
+         */
+        final String publicComment = ""; //$NON-NLS-1$
+        final String privateComment = ""; //$NON-NLS-1$
+
+        for (Entry<?, ?> entry : ((Map<?, ?>)event.getNewValues()).entrySet()) {
           final String fieldName = (String)entry.getKey();
 
           final Integer score = (Integer)entry.getValue();
@@ -84,7 +90,8 @@ public class SmartGwtStudentEvaluationView extends AbstractTaskitView implements
             // よくわからないフィールド名、__gwt_ObjectIdが含まれるため、その場合には何もしない
             continue;
           }
-          presenter.onEvaluationChange(lecture, no, score.intValue());
+
+          presenter.onEvaluationChange(lecture, no, score.intValue(), publicComment, privateComment);
         }
       }
     });

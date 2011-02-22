@@ -85,11 +85,11 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
 
   /**
    * @see org.mklab.taskit.client.ui.EvaluationTable.Presenter#onEvaluationChange(int,
-   *      int, int)
+   *      int, int, java.lang.String, java.lang.String)
    */
   @Override
-  public void onEvaluationChange(int index, int no, int evaluation) {
-    this.submissionService.setEvaluation(this.userName, index, no, evaluation, "", "", new AsyncCallback<Void>() {
+  public void onEvaluationChange(int index, int no, int evaluation, String publicComment, String privateComment) {
+    this.submissionService.setEvaluation(this.userName, index, no, evaluation, publicComment, privateComment, new AsyncCallback<Void>() {
 
       @Override
       public void onFailure(Throwable caught) {

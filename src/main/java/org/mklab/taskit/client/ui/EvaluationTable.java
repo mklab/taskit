@@ -77,8 +77,10 @@ public interface EvaluationTable {
      * @param index 行インデックス
      * @param no 問題ナンバー
      * @param evaluation 評価値
+     * @param publicComment 生徒に公開するコメント
+     * @param privateComment 非公開コメント
      */
-    void onEvaluationChange(int index, int no, int evaluation);
+    void onEvaluationChange(int index, int no, int evaluation, String publicComment, String privateComment);
   }
 
 }
