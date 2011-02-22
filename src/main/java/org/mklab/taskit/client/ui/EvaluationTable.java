@@ -16,7 +16,7 @@ public interface EvaluationTable {
    * 
    * @param columnCount 列数
    */
-  void setEvaluationItemCount(int columnCount);
+  void setColumnCount(int columnCount);
 
   /**
    * 行数を設定します。
@@ -51,13 +51,12 @@ public interface EvaluationTable {
   void setEvaluation(int rowIndex, int columnIndex, int evaluation);
 
   /**
-   * セルが変更可能かどうか設定します。
+   * 指定された行の列数を設定します。
    * 
-   * @param rowIndex セルの行インデックス
-   * @param columnIndex セルの列インデックス
-   * @param editable 編集可能かどうか
+   * @param rowIndex 行
+   * @param columnCount 列数
    */
-  void setEditable(int rowIndex, int columnIndex, boolean editable);
+  void setColumnCountAt(int rowIndex, int columnCount);
 
   /**
    * プレゼンターを設定します。

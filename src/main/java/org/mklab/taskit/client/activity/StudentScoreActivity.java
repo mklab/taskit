@@ -68,13 +68,11 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
             maximumReportCount = result.getLecture(i).getReportCount();
           }
         }
-        view.setEvaluationItemCount(maximumReportCount);
+        view.setColumnCount(maximumReportCount);
         view.setRowCount(result.getLectureCount());
         for (int i = 0; i < result.getLectureCount(); i++) {
           final int reportCount = result.getLecture(i).getReportCount();
-          for (int j = 0; j < maximumReportCount; j++) {
-            view.setEditable(i, j, j < reportCount);
-          }
+          view.setColumnCountAt(i, reportCount);
           view.setRowHeader(i, result.getLecture(i).getLecture().getTitle());
           for (int j = 0; j < reportCount; j++) {
             view.setEvaluation(i, j, result.getScoreTable().getScore(i, j));

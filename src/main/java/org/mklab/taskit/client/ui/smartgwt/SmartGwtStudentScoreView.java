@@ -53,11 +53,16 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
     this.listGrid.setFields(titleField);
     this.listGrid.setHeight100();
     this.listGrid.setWidth100();
+
     this.listGrid.setEditEvent(ListGridEditEvent.CLICK);
+    this.listGrid.setEditByCell(Boolean.TRUE); // 行単位編集ではなくセル単位編集
+    this.listGrid.freezeField(0);
+
     this.listGrid.addEditCompleteHandler(new EditCompleteHandler() {
 
       @Override
       public void onEditComplete(EditCompleteEvent event) {
+        if (isEditable(event.getRowNum(), event.getColNum() - 1) == false) return;
         final int lecture = event.getRowNum();
         Map<?, ?> newValues = event.getNewValues();
         for (Entry<?, ?> entry : newValues.entrySet()) {
@@ -96,89 +101,11 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
     this.presenter = presenter;
   }
 
-  @SuppressWarnings("nls")
-  static enum ScoreSignature {
-
-    GOOD(100, "○"), SOSO(50, "△"), BAD(0, "×");
-
-    private int score;
-    private String label;
-
-    /**
-     * {@link ScoreSignature}オブジェクトを構築します。
-     * 
-     * @param score
-     */
-    private ScoreSignature(int score, String label) {
-      this.score = score;
-      this.label = label;
-    }
-
-    /**
-     * scoreを取得します。
-     * 
-     * @return score
-     */
-    public int getScore() {
-      return this.score;
-    }
-
-    /**
-     * labelを取得します。
-     * 
-     * @return label
-     */
-    public String getLabel() {
-      return this.label;
-    }
-
-    static ScoreSignature fromScore(int score) {
-      if (score < 50) return BAD;
-      if (score < 100) return SOSO;
-      if (score >= 100) return GOOD;
-      return null;
-    }
-
-    static ScoreSignature fromLabel(String label) {
-      if (label.equals("○")) return GOOD;
-      if (label.equals("△")) return SOSO;
-      if (label.equals("×")) return BAD;
-      return null;
-    }
-
-  }
-
-  @SuppressWarnings("unused")
-  static class ScoreValueHandler implements CellEditValueFormatter, CellEditValueParser, CellFormatter {
-
-    /**
-     * @see com.smartgwt.client.widgets.grid.CellEditValueParser#parse(java.lang.Object,
-     *      com.smartgwt.client.widgets.grid.ListGridRecord, int, int)
-     */
-    @Override
-    public Object parse(Object value, ListGridRecord record, int rowNum, int colNum) {
-      final ScoreSignature sign = ScoreSignature.fromLabel((String)value);
-      return Integer.valueOf(sign.getScore());
-    }
-
-    /**
-     * @see com.smartgwt.client.widgets.grid.CellEditValueFormatter#format(java.lang.Object,
-     *      com.smartgwt.client.widgets.grid.ListGridRecord, int, int)
-     */
-    @Override
-    public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
-      if (value == null) return ScoreSignature.BAD.getLabel();
-      final ScoreSignature sign = ScoreSignature.fromScore(((Integer)value).intValue());
-      return sign.getLabel();
-    }
-
-  }
-
   /**
-   * @see org.mklab.taskit.client.ui.EvaluationTable#setEvaluationItemCount(int)
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setColumnCount(int)
    */
   @Override
-  public void setEvaluationItemCount(int columnCount) {
+  public void setColumnCount(int columnCount) {
     final ListGridField[] fields = new ListGridField[columnCount + 1];
     fields[0] = new ListGridField("rowHeader", "");
     for (int i = 0; i < columnCount; i++) {
@@ -226,12 +153,99 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.EvaluationTable#setEditable(int, int,
-   *      boolean)
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setColumnCountAt(int, int)
    */
   @Override
-  public void setEditable(int rowIndex, int columnIndex, boolean editable) {
-    // TODO Auto-generated method stub
+  public void setColumnCountAt(int rowIndex, int columnCount) {
+    this.listGrid.getRecord(rowIndex).setAttribute("columnCount", Integer.valueOf(columnCount)); //$NON-NLS-1$
+  }
+
+  boolean isEditable(int rowIndex, int columnIndex) {
+    String columnCount = this.listGrid.getRecord(rowIndex).getAttribute("columnCount");
+    if (columnCount == null) return true;
+    return columnIndex < Integer.parseInt(columnCount);
+  }
+
+  @SuppressWarnings("nls")
+  static enum ScoreSignature {
+
+    GOOD(100, "○"), SOSO(50, "△"), BAD(0, "×"), NOT_EVALUATED(-1, "-");
+
+    private int score;
+    private String label;
+
+    /**
+     * {@link ScoreSignature}オブジェクトを構築します。
+     * 
+     * @param score
+     */
+    private ScoreSignature(int score, String label) {
+      this.score = score;
+      this.label = label;
+    }
+
+    /**
+     * scoreを取得します。
+     * 
+     * @return score
+     */
+    public int getScore() {
+      return this.score;
+    }
+
+    /**
+     * labelを取得します。
+     * 
+     * @return label
+     */
+    public String getLabel() {
+      return this.label;
+    }
+
+    static ScoreSignature fromScore(int score) {
+      if (score < 50) return BAD;
+      if (score < 100) return SOSO;
+      if (score >= 100) return GOOD;
+      return null;
+    }
+
+    static ScoreSignature fromLabel(String label) {
+      if (label.equals("○")) return GOOD;
+      if (label.equals("△")) return SOSO;
+      if (label.equals("×")) return BAD;
+      if (label.equals("-")) return NOT_EVALUATED;
+      return null;
+    }
+
+  }
+
+  @SuppressWarnings("unused")
+  class ScoreValueHandler implements CellEditValueFormatter, CellEditValueParser, CellFormatter {
+
+    /**
+     * @see com.smartgwt.client.widgets.grid.CellEditValueParser#parse(java.lang.Object,
+     *      com.smartgwt.client.widgets.grid.ListGridRecord, int, int)
+     */
+    @Override
+    public Object parse(Object value, ListGridRecord record, int rowNum, int colNum) {
+      final ScoreSignature sign = ScoreSignature.fromLabel((String)value);
+      return Integer.valueOf(sign.getScore());
+    }
+
+    /**
+     * @see com.smartgwt.client.widgets.grid.CellEditValueFormatter#format(java.lang.Object,
+     *      com.smartgwt.client.widgets.grid.ListGridRecord, int, int)
+     */
+    @Override
+    public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
+      final Integer columnCount = record.getAttributeAsInt("columnCount"); //$NON-NLS-1$
+      if (isEditable(rowNum, colNum - 1) == false) return ScoreSignature.NOT_EVALUATED.getLabel();
+
+      if (value == null) return ScoreSignature.BAD.getLabel();
+
+      final ScoreSignature sign = ScoreSignature.fromScore(((Integer)value).intValue());
+      return sign.getLabel();
+    }
 
   }
 }
