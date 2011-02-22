@@ -40,4 +40,10 @@ public interface LectureService extends RemoteService {
    */
   int getLectureCount();
 
+  /**
+   * 講義データを登録します。
+   * @param title タイトル
+   * @param date 日付（ミリ秒）
+   */
+  void createNewLecture(String title, long date);
 }
