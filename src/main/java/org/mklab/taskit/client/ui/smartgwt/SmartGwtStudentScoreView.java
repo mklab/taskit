@@ -10,7 +10,6 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
 import org.mklab.taskit.client.ui.StudentScoreView;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridEditEvent;
@@ -33,7 +32,6 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
   private ListGrid listGrid;
   private ScoreValueHandler valueHandler = new ScoreValueHandler();
   private Presenter presenter;
-  private int maximumColumnCount;
 
   /**
    * {@link SmartGwtStudentScoreView}オブジェクトを構築します。
@@ -78,55 +76,6 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
       }
     });
     return this.listGrid;
-  }
-
-  /**
-   * @see org.mklab.taskit.client.ui.StudentScoreView#setLectureCount(int)
-   */
-  @Override
-  public void setLectureCount(int lectureCount) {
-    final ListGridRecord[] records = new ListGridRecord[lectureCount];
-    for (int i = 0; i < records.length; i++) {
-      records[i] = new ListGridRecord();
-    }
-    this.listGrid.setRecords(records);
-  }
-
-  /**
-   * @see org.mklab.taskit.client.ui.StudentScoreView#setLectureInfo(int, int,
-   *      java.lang.String)
-   */
-  @SuppressWarnings("nls")
-  @Override
-  public void setLectureInfo(int index, int reportCount, String title) {
-    adjustColumnCountToReportCount(reportCount);
-
-    // setup row header
-    final ListGridRecord record = this.listGrid.getRecord(index);
-    record.setAttribute("title", title);
-  }
-
-  @SuppressWarnings("nls")
-  private void adjustColumnCountToReportCount(int reportCount) {
-    if (this.maximumColumnCount >= reportCount) return;
-
-    // setup table model
-    final ListGridField[] fields = new ListGridField[reportCount + 1];
-    final ListGridField[] originalFields = this.listGrid.getAllFields();
-    System.arraycopy(originalFields, 0, fields, 0, originalFields.length);
-
-    for (int i = this.maximumColumnCount; i < reportCount; i++) {
-      final ListGridField field = new ListGridField(String.valueOf(i));
-      fields[i + 1] = field;
-      field.setValueMap("○", "×", "△");
-      field.setCanEdit(Boolean.TRUE);
-      field.setEditValueParser(this.valueHandler);
-      field.setEditValueFormatter(this.valueHandler);
-      field.setCellFormatter(this.valueHandler);
-      field.setAlign(Alignment.CENTER);
-    }
-    this.listGrid.setFields(fields);
-    this.maximumColumnCount = reportCount;
   }
 
   /**
@@ -222,6 +171,67 @@ public class SmartGwtStudentScoreView extends AbstractTaskitView implements Stud
       final ScoreSignature sign = ScoreSignature.fromScore(((Integer)value).intValue());
       return sign.getLabel();
     }
+
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setEvaluationItemCount(int)
+   */
+  @Override
+  public void setEvaluationItemCount(int columnCount) {
+    final ListGridField[] fields = new ListGridField[columnCount + 1];
+    fields[0] = new ListGridField("rowHeader", "");
+    for (int i = 0; i < columnCount; i++) {
+      final ListGridField field = new ListGridField(String.valueOf(i));
+      fields[i + 1] = field;
+      field.setValueMap("○", "×", "△");
+      field.setCanEdit(Boolean.TRUE);
+      field.setEditValueParser(this.valueHandler);
+      field.setEditValueFormatter(this.valueHandler);
+      field.setCellFormatter(this.valueHandler);
+      field.setAlign(Alignment.CENTER);
+    }
+    this.listGrid.setFields(fields);
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setRowCount(int)
+   */
+  @Override
+  public void setRowCount(int rowCount) {
+    final ListGridRecord[] records = new ListGridRecord[rowCount];
+    for (int i = 0; i < records.length; i++) {
+      records[i] = new ListGridRecord();
+    }
+    this.listGrid.setRecords(records);
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setRowHeader(int,
+   *      java.lang.String)
+   */
+  @Override
+  public void setRowHeader(int rowIndex, String header) {
+    final ListGridRecord record = this.listGrid.getRecord(rowIndex);
+    record.setAttribute("rowHeader", header); //$NON-NLS-1$
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setColumnHeader(int,
+   *      java.lang.String)
+   */
+  @Override
+  public void setColumnHeader(int columnIndex, String header) {
+    this.listGrid.getField(columnIndex + 1).setTitle(header);
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setEditable(int, int,
+   *      boolean)
+   */
+  @Override
+  public void setEditable(int rowIndex, int columnIndex, boolean editable) {
+    // TODO Auto-generated method stub
 
   }
 }

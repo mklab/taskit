@@ -5,8 +5,8 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
+import org.mklab.taskit.client.ui.EvaluationTable.Presenter;
 import org.mklab.taskit.client.ui.StudentScoreView;
-import org.mklab.taskit.client.ui.StudentScoreView.Presenter;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
 import org.mklab.taskit.shared.service.SubmissionService;
@@ -62,10 +62,20 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
 
       @Override
       public void onSuccess(StudentwiseScoresDto result) {
-        view.setLectureCount(result.getLectureCount());
+        int maximumReportCount = 0;
+        for (int i = 0; i < result.getLectureCount(); i++) {
+          if (result.getLecture(i).getReportCount() > maximumReportCount) {
+            maximumReportCount = result.getLecture(i).getReportCount();
+          }
+        }
+        view.setEvaluationItemCount(maximumReportCount);
+        view.setRowCount(result.getLectureCount());
         for (int i = 0; i < result.getLectureCount(); i++) {
           final int reportCount = result.getLecture(i).getReportCount();
-          view.setLectureInfo(i, reportCount, result.getLecture(i).getLecture().getTitle());
+          for (int j = 0; j < maximumReportCount; j++) {
+            view.setEditable(i, j, j < reportCount);
+          }
+          view.setRowHeader(i, result.getLecture(i).getLecture().getTitle());
           for (int j = 0; j < reportCount; j++) {
             view.setEvaluation(i, j, result.getScoreTable().getScore(i, j));
           }

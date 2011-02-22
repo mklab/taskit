@@ -25,6 +25,7 @@ public class SmartGwtEvaluationTable extends Composite implements EvaluationTabl
 
   private ListGrid listGrid;
   private ScoreValueHandler valueHandler = new ScoreValueHandler();
+  private Presenter presenter;
 
   /**
    * {@link SmartGwtEvaluationTable}オブジェクトを構築します。
@@ -154,5 +155,13 @@ public class SmartGwtEvaluationTable extends Composite implements EvaluationTabl
 
     final String fieldName = fieldNameOf(columnIndex + 1);
     record.setAttribute(fieldName, Integer.valueOf(editable ? 0 : -1));
+  }
+
+  /**
+   * @see org.mklab.taskit.client.ui.EvaluationTable#setPresenter(org.mklab.taskit.client.ui.EvaluationTable.Presenter)
+   */
+  @Override
+  public void setPresenter(Presenter presenter) {
+    this.presenter = presenter;
   }
 }
