@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.server.dao;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -58,10 +58,11 @@ public class AccountDaoTest extends DaoTest {
     }
     dao.registerAccount(name, Passwords.hashPassword("taskit"), "TA");
   }
-  
+
   /**
    * 生徒のユーザ名一覧を取得できるかテストします。
-   * @throws AccountRegistrationException 
+   * 
+   * @throws AccountRegistrationException テスト失敗の場合
    */
   @Test
   public void testGetAllStudentUserName() throws AccountRegistrationException {

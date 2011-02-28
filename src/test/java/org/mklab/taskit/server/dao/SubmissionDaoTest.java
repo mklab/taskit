@@ -89,7 +89,7 @@ public class SubmissionDaoTest extends DaoTest {
   /**
    * 提出物の登録用のメソッドのテストです。
    * 
-   * @throws SubmissionRegistrationException
+   * @throws SubmissionRegistrationException 提出物の登録に失敗した場合
    */
   @Test
   public void testRegisterSubmission() throws SubmissionRegistrationException {

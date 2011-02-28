@@ -29,7 +29,7 @@ public class LectureReportChooser extends Composite {
   Presenter presenter;
 
   /**
-   * {@link ReportEditorImpl.ReportLectureTree}オブジェクトを構築します。
+   * {@link LectureReportChooser}オブジェクトを構築します。
    */
   public LectureReportChooser() {
     this.tree = new Tree();

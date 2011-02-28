@@ -16,6 +16,7 @@ import org.mklab.taskit.shared.model.Lecture;
  * @author teshima
  * @version $Revision$, Jan 26, 2011
  */
+@SuppressWarnings("all")
 public class DataAccessMain {
 
   public static void main(String[] args) throws ReportRegistrationException {

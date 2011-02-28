@@ -65,11 +65,11 @@ public class AdminActivity extends TaskitActivity {
     lectureEditor.getSubmitTrigger().addClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick(ClickEvent event) {
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
         final String title = lectureEditor.getLectureTitle();
         final long startTime = lectureEditor.getLectureStartTime();
 
-        Window.alert(new Date(startTime) + ":" + title);
+        Window.alert(new Date(startTime) + ":" + title); //$NON-NLS-1$
       }
     });
     return view;

@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 import org.mklab.taskit.shared.model.Attendance;
@@ -24,7 +23,7 @@ public class AttendanceDaoTest extends DaoTest {
   /**
    * 出席状況変更のテストを行ないます。
    * 
-   * @throws AccountRegistrationException
+   * @throws AccountRegistrationException テストに失敗した場合
    */
   @Test
   public void testSetAttendanceType() throws AccountRegistrationException {
@@ -116,11 +115,11 @@ public class AttendanceDaoTest extends DaoTest {
     typeDao.registerAttendanceType(type_attend);
 
     // ユーザー名が必要となったため、上の準備だけでは足りず、アカウントも登録して置かなければテストできない
-/*    Map<String, Integer> attendances_lecture0 = attendanceDao.getAllStudentAttendanceDataFromLectureId(0);
-    assertEquals(6, attendances_lecture0.size());
-    Map<String, Integer> attendances_lecture1 = attendanceDao.getAllStudentAttendanceDataFromLectureId(1);
-    assertEquals(7, attendances_lecture1.size());
-    assertEquals(2, attendances_lecture0.get(5).intValue());*/
+    /*    Map<String, Integer> attendances_lecture0 = attendanceDao.getAllStudentAttendanceDataFromLectureId(0);
+        assertEquals(6, attendances_lecture0.size());
+        Map<String, Integer> attendances_lecture1 = attendanceDao.getAllStudentAttendanceDataFromLectureId(1);
+        assertEquals(7, attendances_lecture1.size());
+        assertEquals(2, attendances_lecture0.get(5).intValue());*/
 
   }
 }

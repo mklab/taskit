@@ -48,6 +48,7 @@ public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
   /**
    * @see org.mklab.taskit.server.dao.AttendanceTypeDao#getAllAttendanceTypes()
    */
+  @SuppressWarnings("unchecked")
   @Override
   public List<String> getAllAttendanceTypes() {
     final Query query = this.entityManager.createQuery("SELECT t.type FROM ATTENDANCE_TYPE t"); //$NON-NLS-1$

@@ -35,7 +35,7 @@ public interface SubmissionDao {
    * 提出物を登録します。
    * 
    * @param submission
-   * @throws ReportRegistrationException
+   * @throws SubmissionRegistrationException 提出物の登録に失敗した場合
    */
   void registerSubmission(Submission submission) throws SubmissionRegistrationException;
 
@@ -48,7 +48,7 @@ public interface SubmissionDao {
    * @param evaluatorId 評価した人のID
    * @param publicComment パブリックコメント
    * @param privateComment プライベートコメント
-   * @throws ReportRegistrationException 
+   * @throws SubmissionRegistrationException 提出物がまだ存在せず、さらに提出物の登録にも失敗した場合
    */
   void setEvaluation(String userName, int reportId, int evaluation, int evaluatorId, String publicComment, String privateComment) throws SubmissionRegistrationException;
 }

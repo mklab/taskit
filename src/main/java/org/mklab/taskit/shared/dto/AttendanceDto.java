@@ -30,7 +30,7 @@ public class AttendanceDto implements Serializable {
   }
 
   /**
-   * {@link AttendanceDto2}オブジェクトを構築します。
+   * {@link AttendanceDto}オブジェクトを構築します。
    * 
    * @param lecture 講義データ
    * @param attendances 出欠データ

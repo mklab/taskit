@@ -35,6 +35,7 @@ public interface SubmissionService extends RemoteService {
    * @param evaluation 評価値
    * @param publicComment 生徒にも公開するコメント
    * @param privateComment 生徒には非公開のコメント
+   * @throws ServiceException 提出物がまだ存在せず、また新たに登録することもできなかった場合
    */
   void setEvaluation(String userName, int lectureIndex, int reportIndex, int evaluation, String publicComment, String privateComment) throws ServiceException;
 }

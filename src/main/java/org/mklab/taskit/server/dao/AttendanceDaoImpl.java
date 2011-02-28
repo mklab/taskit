@@ -128,6 +128,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
 
     Map<String, Integer> userNameToAttendanceType = new HashMap<String, Integer>();
+    @SuppressWarnings("unchecked")
     List<Object[]> list = query.getResultList();
     for (Object[] userNameAttendance : list) {
       userNameToAttendanceType.put((String)userNameAttendance[0], (Integer)userNameAttendance[1]);

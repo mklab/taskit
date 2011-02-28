@@ -38,6 +38,7 @@ public class AccountDaoImpl implements AccountDao {
   @Override
   public Account getAccountIfExists(String userName) {
     final Query q = this.entityManager.createQuery(String.format("select a from ACCOUNT a where userName='%s'", userName)); //$NON-NLS-1$
+    @SuppressWarnings("unchecked")
     final List<Account> accountList = q.getResultList();
     if (accountList.size() == 0) return null;
 
