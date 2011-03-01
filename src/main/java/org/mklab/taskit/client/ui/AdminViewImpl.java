@@ -9,6 +9,8 @@ import org.mklab.taskit.client.ui.admin.LectureEditorImpl;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
 import org.mklab.taskit.client.ui.admin.NewAccountViewImpl;
 import org.mklab.taskit.client.ui.admin.ReportEditor;
+import org.mklab.taskit.client.ui.admin.ReportEditor2;
+import org.mklab.taskit.client.ui.admin.ReportEditor2Impl;
 import org.mklab.taskit.client.ui.admin.ReportEditorImpl;
 
 import com.google.gwt.user.client.ui.TabPanel;
@@ -23,7 +25,7 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
 
   private NewAccountViewImpl accountView;
   private LectureEditor lectureEditor;
-  private ReportEditor reportEditor;
+  private ReportEditor2 reportEditor;
 
   /**
    * {@link AdminViewImpl}オブジェクトを構築します。
@@ -43,7 +45,7 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
     final TabPanel tabPanel = new TabPanel();
     this.accountView = new NewAccountViewImpl(getClientFactory());
     this.lectureEditor = new LectureEditorImpl(getClientFactory());
-    this.reportEditor = new ReportEditorImpl(getClientFactory());
+    this.reportEditor = new ReportEditor2Impl();
 
     tabPanel.add(this.accountView, "Account"); //$NON-NLS-1$
     tabPanel.add(this.lectureEditor, "Lecture"); //$NON-NLS-1$
@@ -73,8 +75,7 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
    * @see org.mklab.taskit.client.ui.AdminView#getReportEditor()
    */
   @Override
-  public ReportEditor getReportEditor() {
-    // TODO Auto-generated method stub
+  public ReportEditor2 getReportEditor() {
     return null;
   }
 

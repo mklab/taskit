@@ -5,7 +5,7 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ui.admin.LectureEditor;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
-import org.mklab.taskit.client.ui.admin.ReportEditor;
+import org.mklab.taskit.client.ui.admin.ReportEditor2;
 
 
 /**
@@ -35,5 +35,5 @@ public interface AdminView extends TaskitView {
    * 
    * @return 課題データを編集するエディタ
    */
-  ReportEditor getReportEditor();
+  ReportEditor2 getReportEditor();
 }
