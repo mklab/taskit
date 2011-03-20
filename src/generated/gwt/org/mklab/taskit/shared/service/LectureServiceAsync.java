@@ -29,6 +29,13 @@ public interface LectureServiceAsync
 
 
     /**
+     * GWT-RPC service  asynchronous (client-side) interface
+     * @see org.mklab.taskit.shared.service.LectureService
+     */
+    void createNewLecture( java.lang.String p0, long p1, AsyncCallback<Void> callback );
+
+
+    /**
      * Utility class to get the RPC Async interface from client-side code
      */
     public static final class Util 
