@@ -11,9 +11,7 @@
 	<name>GWT Maven Archetype</name>
 
 	<properties>
-		<!-- Convenience property to set the GWT version -->
-		<gwtVersion>2.1.0</gwtVersion>
-		<!-- GWT needs at least java 1.5 -->
+		<gwtVersion>2.2.0</gwtVersion>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
@@ -23,13 +21,13 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>2.2.0</version>
+			<version>${gwtVersion}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>2.2.0</version>
+			<version>${gwtVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
