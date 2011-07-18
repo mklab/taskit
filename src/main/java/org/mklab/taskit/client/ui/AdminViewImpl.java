@@ -8,10 +8,8 @@ import org.mklab.taskit.client.ui.admin.LectureEditor;
 import org.mklab.taskit.client.ui.admin.LectureEditorImpl;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
 import org.mklab.taskit.client.ui.admin.NewAccountViewImpl;
-import org.mklab.taskit.client.ui.admin.ReportEditor;
 import org.mklab.taskit.client.ui.admin.ReportEditor2;
 import org.mklab.taskit.client.ui.admin.ReportEditor2Impl;
-import org.mklab.taskit.client.ui.admin.ReportEditorImpl;
 
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;

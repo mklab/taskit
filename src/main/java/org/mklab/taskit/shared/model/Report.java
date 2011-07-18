@@ -3,11 +3,11 @@
  */
 package org.mklab.taskit.shared.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import net.sf.gilead.pojo.gwt.LightEntity;
 
 
 /**
@@ -15,7 +15,7 @@ import net.sf.gilead.pojo.gwt.LightEntity;
  * @version $Revision$, Jan 25, 2011
  */
 @Entity(name = "REPORT")
-public final class Report extends LightEntity {
+public final class Report implements Serializable {
 
   /** */
   private static final long serialVersionUID = 28409820481L;

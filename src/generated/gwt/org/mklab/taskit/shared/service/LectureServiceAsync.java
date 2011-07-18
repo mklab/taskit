@@ -18,14 +18,14 @@ public interface LectureServiceAsync
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.mklab.taskit.shared.service.LectureService
      */
-    void getAllLectures( AsyncCallback<org.mklab.taskit.shared.dto.LectureDto[]> callback );
+    void getLectureCount( AsyncCallback<java.lang.Integer> callback );
 
 
     /**
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.mklab.taskit.shared.service.LectureService
      */
-    void getLectureCount( AsyncCallback<java.lang.Integer> callback );
+    void getAllLectures( AsyncCallback<org.mklab.taskit.shared.dto.LectureDto[]> callback );
 
 
     /**

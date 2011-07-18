@@ -11,6 +11,13 @@ public interface AttendanceServiceAsync
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.mklab.taskit.shared.service.AttendanceService
      */
+    void getBaseData( AsyncCallback<org.mklab.taskit.shared.dto.AttendanceBaseDto> callback );
+
+
+    /**
+     * GWT-RPC service  asynchronous (client-side) interface
+     * @see org.mklab.taskit.shared.service.AttendanceService
+     */
     void setAttendanceType( java.lang.String p0, int p1, java.lang.String p2, AsyncCallback<Void> callback );
 
 
@@ -19,13 +26,6 @@ public interface AttendanceServiceAsync
      * @see org.mklab.taskit.shared.service.AttendanceService
      */
     void getLecturewiseAttendanceData( int p0, AsyncCallback<org.mklab.taskit.shared.dto.AttendanceDto> callback );
-
-
-    /**
-     * GWT-RPC service  asynchronous (client-side) interface
-     * @see org.mklab.taskit.shared.service.AttendanceService
-     */
-    void getBaseData( AsyncCallback<org.mklab.taskit.shared.dto.AttendanceBaseDto> callback );
 
 
     /**

@@ -8,17 +8,14 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpSession;
 
-import net.sf.gilead.core.PersistentBeanManager;
-import net.sf.gilead.core.hibernate.jpa.HibernateJpaUtil;
-import net.sf.gilead.gwt.GwtConfigurationHelper;
-import net.sf.gilead.gwt.PersistentRemoteService;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
 /**
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
-class TaskitRemoteService extends PersistentRemoteService {
+class TaskitRemoteService extends RemoteServiceServlet {
 
   /** */
   private static final long serialVersionUID = -6742863973521111961L;
@@ -27,16 +24,6 @@ class TaskitRemoteService extends PersistentRemoteService {
 
   static {
     entityManagerFactory = Persistence.createEntityManagerFactory("taskit"); //$NON-NLS-1$  
-  }
-
-  /**
-   * {@link TaskitRemoteService}オブジェクトを構築します。
-   */
-  TaskitRemoteService() {
-    final HibernateJpaUtil persistenceUtil = new HibernateJpaUtil(entityManagerFactory);
-    final PersistentBeanManager persistentBeanManager = GwtConfigurationHelper.initGwtStatelessBeanManager(persistenceUtil);
-
-    setBeanManager(persistentBeanManager);
   }
 
   protected final HttpSession getSession() {
