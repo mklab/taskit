@@ -11,7 +11,7 @@
 	<name>GWT Maven Archetype</name>
 
 	<properties>
-		<gwtVersion>2.2.0</gwtVersion>
+		<gwtVersion>2.3.0</gwtVersion>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
