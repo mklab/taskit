@@ -41,7 +41,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     query.setParameter("accountId", Integer.valueOf(accountId)); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<Attendance> attendances = query.getResultList();
-
+    this.entityManager.close();
     return attendances;
   }
 
@@ -54,6 +54,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     query.setParameter("lectureId", Integer.valueOf(lectureId)); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<Attendance> attendances = query.getResultList();
+    this.entityManager.close();
     return attendances;
   }
 
@@ -68,6 +69,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     query.setParameter("lectureId_", lectureId); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<String> attendanceTypes = query.getResultList();
+    this.entityManager.close();
     return attendanceTypes;
   }
 
@@ -96,10 +98,12 @@ public class AttendanceDaoImpl implements AttendanceDao {
       t.commit();
     } catch (Throwable e) {
       t.rollback();
+    } finally {
+      this.entityManager.close();
     }
     if (executedCount == 0) {
       registerAttendance(new Attendance(attendanceTypeId, false, false, lectureId, accountId));
-    }
+    } 
   }
 
   /**
@@ -114,6 +118,8 @@ public class AttendanceDaoImpl implements AttendanceDao {
       t.commit();
     } catch (Throwable e) {
       t.rollback();
+    } finally {
+      this.entityManager.close();
     }
   }
 
@@ -133,6 +139,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
     for (Object[] userNameAttendance : list) {
       userNameToAttendanceType.put((String)userNameAttendance[0], (Integer)userNameAttendance[1]);
     }
+    this.entityManager.close();
     return userNameToAttendanceType;
   }
 }

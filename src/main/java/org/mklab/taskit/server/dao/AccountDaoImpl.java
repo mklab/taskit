@@ -43,7 +43,8 @@ public class AccountDaoImpl implements AccountDao {
     if (accountList.size() == 0) return null;
 
     if (accountList.size() > 1) throw new IllegalStateException("Multiple user was detected!"); //$NON-NLS-1$
-
+    this.entityManager.close();
+    
     return accountList.get(0);
   }
 
@@ -77,6 +78,8 @@ public class AccountDaoImpl implements AccountDao {
       } catch (Throwable e1) {
         throw new AccountRegistrationException(AccountRegistrationException.ErrorCode.UNEXPECTED);
       }
+    } finally {
+      this.entityManager.close();
     }
   }
 
@@ -91,6 +94,7 @@ public class AccountDaoImpl implements AccountDao {
   @Override
   public List<String> getAllStudentUserNames() {
     Query query = this.entityManager.createQuery("SELECT a.userName FROM ACCOUNT a WHERE a.accountType = 'STUDENT'"); //$NON-NLS-1$
+    this.entityManager.close();
     return query.getResultList();
   }
 }
