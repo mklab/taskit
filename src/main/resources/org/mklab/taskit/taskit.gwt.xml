@@ -21,9 +21,6 @@
 	<!-- Locales -->
 	<extend-property name="locale" values="ja_JP" />
 
-	<!-- for persistence -->
-	<inherits name='net.sf.gilead.Gilead4Gwt' />
-
 	<!-- ClientFactory -->
 	<replace-with class="org.mklab.taskit.client.ClientFactoryImpl">
 		<when-type-is class="org.mklab.taskit.client.ClientFactory" />

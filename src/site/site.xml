@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="TASKit">
+	<bannerLeft>
+		<name>TASKit</name>
+	</bannerLeft>
+	<body>
+		<links>
+			<item name="Koga Laboratory" href="http://www.mk.ces.kyutech.ac.jp/" />
+		</links>
+		<menu name="Developer">
+			<item name="Environment" href="./environment.html" />
+		</menu>
+		${reports}
+	</body>
+</project>  
