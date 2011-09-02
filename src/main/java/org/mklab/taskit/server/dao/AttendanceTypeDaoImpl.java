@@ -42,6 +42,8 @@ public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
       t.commit();
     } catch (IllegalStateException e) {
       t.rollback();
+    } finally {
+      this.entityManager.close();
     }
   }
 
@@ -52,6 +54,7 @@ public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
   @Override
   public List<String> getAllAttendanceTypes() {
     final Query query = this.entityManager.createQuery("SELECT t.type FROM ATTENDANCE_TYPE t"); //$NON-NLS-1$
+    this.entityManager.close();
     return query.getResultList();
   }
 

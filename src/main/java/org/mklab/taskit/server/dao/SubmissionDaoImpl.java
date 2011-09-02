@@ -39,7 +39,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
     Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName ORDER BY s.reportId"); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
     List<Submission> submissions = query.getResultList();
-
+    this.entityManager.close();
     return submissions;
   }
 
@@ -76,6 +76,8 @@ public class SubmissionDaoImpl implements SubmissionDao {
       } catch (Throwable e1) {
         throw new SubmissionRegistrationException("failed to submission a report, and rollback failed."); //$NON-NLS-1$
       }
+    } finally {
+      this.entityManager.close();
     }
   }
 
@@ -99,6 +101,8 @@ public class SubmissionDaoImpl implements SubmissionDao {
       t.commit();
     } catch (Throwable e) {
       t.rollback();
+    } finally {
+      this.entityManager.close();
     }
     if (executedCount == 0) {
       registerSubmission(new Submission(reportId, System.currentTimeMillis(), userName, evaluation, evaluatorId, publicComment, privateComment));
@@ -116,6 +120,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
     final Query query = this.entityManager.createQuery("SELECT s.evaluation FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
+    this.entityManager.close();
     return (Integer)query.getSingleResult();
   }
 }

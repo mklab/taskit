@@ -42,6 +42,7 @@ public class ReportDaoImpl implements ReportDao {
     final List<Report> reportList = query.getResultList();
     if (reportList.size() == 0) return null;
     if (reportList.size() > 1) throw new IllegalStateException();
+    this.entityManager.close();
     return reportList;
   }
 
@@ -62,6 +63,7 @@ public class ReportDaoImpl implements ReportDao {
     Query query = this.entityManager.createQuery("SELECT r FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     List<Report> selectedReports = query.getResultList();
+    this.entityManager.close();
     return selectedReports;
   }
 
@@ -72,6 +74,7 @@ public class ReportDaoImpl implements ReportDao {
   @Override
   public List<Report> getAllReports() {
     final Query query = this.entityManager.createQuery("SELECT r FROM REPORT r ORDER BY r.lectureId, r.no"); //$NON-NLS-1$
+    this.entityManager.close();
     return query.getResultList();
   }
 
@@ -99,6 +102,8 @@ public class ReportDaoImpl implements ReportDao {
       } catch (Throwable e1) {
         throw new ReportRegistrationException("failed to register a report, and rollback failed."); //$NON-NLS-1$
       }
+    } finally {
+      this.entityManager.close();
     }
   }
 
@@ -112,6 +117,7 @@ public class ReportDaoImpl implements ReportDao {
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     query.setParameter("no", no); //$NON-NLS-1$
     final String title = (String)query.getSingleResult();
+    this.entityManager.close();
     return title;
   }
 
@@ -124,6 +130,7 @@ public class ReportDaoImpl implements ReportDao {
     final Query query = this.entityManager.createQuery("SELECT r.detail FROM REPORT r WHERE r.lectureId = lectureId AND r.no = :no"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     query.setParameter("no", no); //$NON-NLS-1$
+    this.entityManager.close();
     return null;
   }
 
