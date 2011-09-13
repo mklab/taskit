@@ -114,7 +114,7 @@
 							<sources>
 								<source>src/main/java</source>
 								<!-- for *Async callback interfaces -->
-								<source>src/generated/gwt</source>
+								<source>${project.build.directory}/generated-sources/gwt</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -153,7 +153,6 @@
 					<runTarget>taskit.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
 					<i18nMessagesBundle>org.mklab.taskit.client.Messages</i18nMessagesBundle>
-					<generateDirectory>src/generated/gwt</generateDirectory>
 					<draftCompile>true</draftCompile>
 					<disableClassMetadata>true</disableClassMetadata>
 					<extraJvmArgs>-Xmx256m</extraJvmArgs>
