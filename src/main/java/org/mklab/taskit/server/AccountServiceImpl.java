@@ -6,7 +6,8 @@ package org.mklab.taskit.server;
 import java.util.List;
 
 import org.mklab.taskit.server.dao.AccountDao;
-import org.mklab.taskit.server.dao.AccountDaoImpl;
+import org.mklab.taskit.server.dao.AccountDaoFactory;
+import org.mklab.taskit.server.dao.DaoFactory;
 import org.mklab.taskit.shared.model.UserType;
 import org.mklab.taskit.shared.service.AccountRegistrationException;
 import org.mklab.taskit.shared.service.AccountService;
@@ -21,14 +22,7 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
 
   /** for serialization. */
   private static final long serialVersionUID = -5693377245247949174L;
-  private AccountDao accountDao;
-
-  /**
-   * {@link AccountServiceImpl}オブジェクトを構築します。
-   */
-  public AccountServiceImpl() {
-    this.accountDao = new AccountDaoImpl(createEntityManager());
-  }
+  private DaoFactory<AccountDao> accountDaoFactory = new AccountDaoFactory();
 
   /**
    * @see org.mklab.taskit.shared.service.AccountService#createNewAccount(java.lang.String,
@@ -42,7 +36,9 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
     if (accountIsValidPair == false) throw new IllegalArgumentException("Invalid pair of id and password."); //$NON-NLS-1$
     if (UserType.fromString(accountType) == null) throw new IllegalArgumentException("Invalid account type : " + accountType); //$NON-NLS-1$
 
-    this.accountDao.registerAccount(userId, Passwords.hashPassword(password), accountType);
+    final AccountDao dao = this.accountDaoFactory.create();
+    dao.registerAccount(userId, Passwords.hashPassword(password), accountType);
+    dao.close();
   }
 
   /**
@@ -52,7 +48,10 @@ public class AccountServiceImpl extends TaskitRemoteService implements AccountSe
   public String[] getAllStudentUserNames() {
     SessionUtil.assertIsTAOrTeacher(getSession());
 
-    final List<String> ids = this.accountDao.getAllStudentUserNames();
+    final AccountDao dao = this.accountDaoFactory.create();
+    final List<String> ids = dao.getAllStudentUserNames();
+    dao.close();
+
     return ids.toArray(new String[ids.size()]);
   }
 

@@ -15,7 +15,7 @@ import org.mklab.taskit.shared.service.AccountRegistrationException;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
-public interface AccountDao {
+public interface AccountDao extends Dao {
 
   /**
    * 与えられたユーザー名に対応するアカウントデータを取得します。

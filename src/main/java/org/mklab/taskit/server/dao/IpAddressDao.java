@@ -10,7 +10,7 @@ import java.util.List;
  * @author teshima
  * @version $Revision$, Mar 14, 2011
  */
-public interface IpAddressDao {
+public interface IpAddressDao extends Dao {
 
   /**
    * 全てのIPアドレスを取得します。

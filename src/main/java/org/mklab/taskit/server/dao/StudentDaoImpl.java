@@ -15,9 +15,7 @@ import org.mklab.taskit.shared.model.Submission;
  * @author teshima
  * @version $Revision$, Jan 28, 2011
  */
-public class StudentDaoImpl implements StudentDao {
-
-  private EntityManager entityManager;
+public class StudentDaoImpl extends AbstractDao implements StudentDao {
 
   /**
    * {@link StudentDaoImpl}オブジェクトを構築します。
@@ -25,7 +23,7 @@ public class StudentDaoImpl implements StudentDao {
    * @param entityManager
    */
   StudentDaoImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -33,9 +31,9 @@ public class StudentDaoImpl implements StudentDao {
    */
   @Override
   public String getStudentNo(String accountId) {
-    Query query = this.entityManager.createQuery("select accountId from STUDENT where accountId = " + accountId); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("select accountId from STUDENT where accountId = " + accountId); //$NON-NLS-1$
     String studentNo = (String)query.getSingleResult();
-    this.entityManager.close();
     return studentNo;
   }
 
@@ -45,9 +43,9 @@ public class StudentDaoImpl implements StudentDao {
   @SuppressWarnings("boxing")
   @Override
   public List<Submission> getAllStudentsSubmissionFromLectureId(int lectureId) {
-    Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.lectureId = :lectureId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
-    this.entityManager.close();
     return null;
   }
 

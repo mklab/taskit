@@ -18,10 +18,7 @@ import org.mklab.taskit.shared.model.Attendance;
  * @author teshima
  * @version $Revision$, Jan 29, 2011
  */
-public class AttendanceDaoImpl implements AttendanceDao {
-
-  /** エンティティマネージャ */
-  private EntityManager entityManager;
+public class AttendanceDaoImpl extends AbstractDao implements AttendanceDao {
 
   /**
    * {@link AttendanceDaoImpl}オブジェクトを構築します。
@@ -29,7 +26,7 @@ public class AttendanceDaoImpl implements AttendanceDao {
    * @param entityManager エンティティマネージャ
    */
   public AttendanceDaoImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -37,11 +34,11 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @Override
   public List<Attendance> getAttendanceStateFromAccountId(int accountId) {
-    Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.accountId = :accountId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.accountId = :accountId"); //$NON-NLS-1$
     query.setParameter("accountId", Integer.valueOf(accountId)); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<Attendance> attendances = query.getResultList();
-    this.entityManager.close();
     return attendances;
   }
 
@@ -50,11 +47,11 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @Override
   public List<Attendance> getAttendanceStateFromLessonId(int lectureId) {
-    Query query = this.entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("SELECT a FROM ATTENDANCE a WHERE a.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("lectureId", Integer.valueOf(lectureId)); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<Attendance> attendances = query.getResultList();
-    this.entityManager.close();
     return attendances;
   }
 
@@ -64,12 +61,11 @@ public class AttendanceDaoImpl implements AttendanceDao {
   @SuppressWarnings("boxing")
   @Override
   public List<String> getAttendanceTypes(int lectureId) {
-    Query query = this.entityManager
-        .createQuery("SELECT t.type FROM ATTENDANCE a, ATTENDANCE_TYPE t WHERE a.lectureId = :lectureId_ AND a.attendanceTypeId=t.attendanceTypeId ORDER BY a.accountId ASC"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("SELECT t.type FROM ATTENDANCE a, ATTENDANCE_TYPE t WHERE a.lectureId = :lectureId_ AND a.attendanceTypeId=t.attendanceTypeId ORDER BY a.accountId ASC"); //$NON-NLS-1$
     query.setParameter("lectureId_", lectureId); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     List<String> attendanceTypes = query.getResultList();
-    this.entityManager.close();
     return attendanceTypes;
   }
 
@@ -80,15 +76,16 @@ public class AttendanceDaoImpl implements AttendanceDao {
   @SuppressWarnings("boxing")
   @Override
   public void setAttendanceType(int lectureId, String userName, String attendanceType) {
-    final EntityTransaction t = this.entityManager.getTransaction();
+    final EntityManager entityManager = entityManager();
+    final EntityTransaction t = entityManager.getTransaction();
     t.begin();
-    Query q1 = this.entityManager.createQuery("SELECT type.attendanceTypeId FROM ATTENDANCE_TYPE type WHERE type.type = :attendanceType"); //$NON-NLS-1$
+    Query q1 = entityManager.createQuery("SELECT type.attendanceTypeId FROM ATTENDANCE_TYPE type WHERE type.type = :attendanceType"); //$NON-NLS-1$
     q1.setParameter("attendanceType", attendanceType); //$NON-NLS-1$
     int attendanceTypeId = (Integer)q1.getSingleResult();
-    Query q2 = this.entityManager.createQuery("SELECT account.accountId FROM ACCOUNT account WHERE account.userName = :userName"); //$NON-NLS-1$
+    Query q2 = entityManager.createQuery("SELECT account.accountId FROM ACCOUNT account WHERE account.userName = :userName"); //$NON-NLS-1$
     q2.setParameter("userName", userName); //$NON-NLS-1$
     int accountId = (Integer)q2.getSingleResult();
-    Query query = this.entityManager.createQuery("UPDATE ATTENDANCE a SET a.attendanceTypeId = :attendanceTypeId WHERE a.accountId = :accountId AND a.lectureId = :lectureId"); //$NON-NLS-1$
+    Query query = entityManager.createQuery("UPDATE ATTENDANCE a SET a.attendanceTypeId = :attendanceTypeId WHERE a.accountId = :accountId AND a.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("attendanceTypeId", attendanceTypeId); //$NON-NLS-1$
     query.setParameter("accountId", accountId); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
@@ -98,12 +95,10 @@ public class AttendanceDaoImpl implements AttendanceDao {
       t.commit();
     } catch (Throwable e) {
       t.rollback();
-    } finally {
-      this.entityManager.close();
     }
     if (executedCount == 0) {
       registerAttendance(new Attendance(attendanceTypeId, false, false, lectureId, accountId));
-    } 
+    }
   }
 
   /**
@@ -111,15 +106,14 @@ public class AttendanceDaoImpl implements AttendanceDao {
    */
   @Override
   public void registerAttendance(Attendance attendance) {
-    final EntityTransaction t = this.entityManager.getTransaction();
+    final EntityManager entityManager = entityManager();
+    final EntityTransaction t = entityManager.getTransaction();
     t.begin();
     try {
-      this.entityManager.persist(attendance);
+      entityManager.persist(attendance);
       t.commit();
     } catch (Throwable e) {
       t.rollback();
-    } finally {
-      this.entityManager.close();
     }
   }
 
@@ -129,7 +123,8 @@ public class AttendanceDaoImpl implements AttendanceDao {
   @SuppressWarnings("boxing")
   @Override
   public Map<String, Integer> getAllStudentAttendanceDataFromLectureId(int lectureId) {
-    Query query = this.entityManager
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager
         .createQuery("SELECT account.userName,attendance.attendanceTypeId FROM ATTENDANCE attendance, ACCOUNT account WHERE attendance.lectureId = :lectureId AND attendance.accountId = account.accountId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
 
@@ -139,7 +134,6 @@ public class AttendanceDaoImpl implements AttendanceDao {
     for (Object[] userNameAttendance : list) {
       userNameToAttendanceType.put((String)userNameAttendance[0], (Integer)userNameAttendance[1]);
     }
-    this.entityManager.close();
     return userNameToAttendanceType;
   }
 }

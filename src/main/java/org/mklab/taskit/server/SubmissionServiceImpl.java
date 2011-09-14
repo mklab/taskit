@@ -8,10 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
+import org.mklab.taskit.server.dao.DaoFactory;
 import org.mklab.taskit.server.dao.SubmissionDao;
-import org.mklab.taskit.server.dao.SubmissionDaoImpl;
+import org.mklab.taskit.server.dao.SubmissionDaoFactory;
 import org.mklab.taskit.server.dao.SubmissionRegistrationException;
 import org.mklab.taskit.shared.dto.LectureDto;
 import org.mklab.taskit.shared.dto.StudentwiseScoreTable;
@@ -31,17 +30,8 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
 
   /** for serialization. */
   private static final long serialVersionUID = -3245369053714279353L;
-  private SubmissionDao submissionDao;
-  private LectureQuery lectureQuery;
-
-  /**
-   * {@link SubmissionServiceImpl}オブジェクトを構築します。
-   */
-  public SubmissionServiceImpl() {
-    final EntityManager entityManager = createEntityManager();
-    this.submissionDao = new SubmissionDaoImpl(entityManager);
-    this.lectureQuery = new LectureQuery(entityManager);
-  }
+  private DaoFactory<SubmissionDao> submissionDaoFactory = new SubmissionDaoFactory();
+  private LectureQuery lectureQuery = new LectureQuery();
 
   /**
    * @see org.mklab.taskit.shared.service.SubmissionService#getStudentwiseScores(java.lang.String)
@@ -53,7 +43,10 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
       if (user == null || user.getId().equals(userName) == false) throw new IllegalStateException("Illegal access."); //$NON-NLS-1$
     }
 
-    final List<Submission> submissions = this.submissionDao.getSubmissionsFromUserName(userName);
+    final SubmissionDao submissionDao = this.submissionDaoFactory.create();
+    final List<Submission> submissions = submissionDao.getSubmissionsFromUserName(userName);
+    submissionDao.close();
+
     final LectureDto[] lecturesDto = this.lectureQuery.getAllLectures();
 
     // reportIdからレポートの実体、講義IDから講義実体へのマッピングを準備
@@ -107,7 +100,9 @@ public class SubmissionServiceImpl extends TaskitRemoteService implements Submis
 
     try {
       final Report report = lectureDto.getReport(reportIndex);
-      this.submissionDao.setEvaluation(userName, report.getReportId(), evaluation, 0, publicComment, privateComment);
+      final SubmissionDao submissionDao = this.submissionDaoFactory.create();
+      submissionDao.setEvaluation(userName, report.getReportId(), evaluation, 0, publicComment, privateComment);
+      submissionDao.close();
     } catch (SubmissionRegistrationException e) {
       throw new RuntimeException(e);
     }

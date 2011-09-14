@@ -17,9 +17,7 @@ import org.mklab.taskit.shared.model.Submission;
  * @author teshima
  * @version $Revision$, Jan 29, 2011
  */
-public class SubmissionDaoImpl implements SubmissionDao {
-
-  private EntityManager entityManager;
+public class SubmissionDaoImpl extends AbstractDao implements SubmissionDao {
 
   /**
    * {@link SubmissionDaoImpl}オブジェクトを構築します。
@@ -27,7 +25,7 @@ public class SubmissionDaoImpl implements SubmissionDao {
    * @param entityManager エンティティマネージャー
    */
   public SubmissionDaoImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -36,10 +34,10 @@ public class SubmissionDaoImpl implements SubmissionDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Submission> getSubmissionsFromUserName(String userName) {
-    Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName ORDER BY s.reportId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName ORDER BY s.reportId"); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
     List<Submission> submissions = query.getResultList();
-    this.entityManager.close();
     return submissions;
   }
 
@@ -51,16 +49,17 @@ public class SubmissionDaoImpl implements SubmissionDao {
   public void registerSubmission(Submission submission) throws SubmissionRegistrationException {
     String userName = submission.getUserName();
     int reportId = submission.getReportId();
-    final Query query = this.entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT s FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
     if (!query.getResultList().isEmpty()) {
       throw new SubmissionRegistrationException("This submission has already registered"); //$NON-NLS-1$
     }
-    EntityTransaction t = this.entityManager.getTransaction();
+    EntityTransaction t = entityManager.getTransaction();
     t.begin();
     try {
-      this.entityManager.persist(submission);
+      entityManager.persist(submission);
       t.commit();
     } catch (EntityExistsException e) {
       if (t.isActive()) {
@@ -76,8 +75,6 @@ public class SubmissionDaoImpl implements SubmissionDao {
       } catch (Throwable e1) {
         throw new SubmissionRegistrationException("failed to submission a report, and rollback failed."); //$NON-NLS-1$
       }
-    } finally {
-      this.entityManager.close();
     }
   }
 
@@ -88,9 +85,10 @@ public class SubmissionDaoImpl implements SubmissionDao {
   @SuppressWarnings("boxing")
   @Override
   public void setEvaluation(String userName, int reportId, int evaluation, int evaluatorId, String publicComment, String privateComment) throws SubmissionRegistrationException {
-    final EntityTransaction t = this.entityManager.getTransaction();
+    final EntityManager entityManager = entityManager();
+    final EntityTransaction t = entityManager.getTransaction();
     t.begin();
-    final Query query = this.entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation, s.evaluatorId = :evaluatorId WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    final Query query = entityManager.createQuery("UPDATE SUBMISSION s SET s.evaluation = :evaluation, s.evaluatorId = :evaluatorId WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("evaluation", evaluation); //$NON-NLS-1$
     query.setParameter("evaluatorId", evaluatorId); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
@@ -101,13 +99,10 @@ public class SubmissionDaoImpl implements SubmissionDao {
       t.commit();
     } catch (Throwable e) {
       t.rollback();
-    } finally {
-      this.entityManager.close();
     }
     if (executedCount == 0) {
       registerSubmission(new Submission(reportId, System.currentTimeMillis(), userName, evaluation, evaluatorId, publicComment, privateComment));
     }
-
   }
 
   /**
@@ -117,10 +112,10 @@ public class SubmissionDaoImpl implements SubmissionDao {
   @SuppressWarnings("boxing")
   @Override
   public int getEvaluationFromReportId(String userName, int reportId) {
-    final Query query = this.entityManager.createQuery("SELECT s.evaluation FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT s.evaluation FROM SUBMISSION s WHERE s.userName = :userName AND s.reportId = :reportId"); //$NON-NLS-1$
     query.setParameter("userName", userName); //$NON-NLS-1$
     query.setParameter("reportId", reportId); //$NON-NLS-1$
-    this.entityManager.close();
     return (Integer)query.getSingleResult();
   }
 }

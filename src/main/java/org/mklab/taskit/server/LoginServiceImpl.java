@@ -7,7 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.mklab.taskit.server.dao.AccountDao;
-import org.mklab.taskit.server.dao.AccountDaoImpl;
+import org.mklab.taskit.server.dao.AccountDaoFactory;
+import org.mklab.taskit.server.dao.DaoFactory;
 import org.mklab.taskit.shared.model.Account;
 import org.mklab.taskit.shared.model.User;
 import org.mklab.taskit.shared.model.UserType;
@@ -24,14 +25,7 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
 
   /** */
   private static final long serialVersionUID = 4825121917291115924L;
-  private AccountDao accountDao;
-
-  /**
-   * {@link LoginServiceImpl}オブジェクトを構築します。
-   */
-  public LoginServiceImpl() {
-    this.accountDao = new AccountDaoImpl(createEntityManager());
-  }
+  private DaoFactory<AccountDao> accountDaoFactory = new AccountDaoFactory();
 
   /**
    * @see org.mklab.taskit.shared.service.LoginService#getLoginUser()
@@ -54,7 +48,10 @@ public class LoginServiceImpl extends TaskitRemoteService implements LoginServic
     if (id.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_ID);
     if (password.length() == 0) throw new LoginFailureException(ErrorCode.INVALID_PASSWORD);
 
-    final Account account = this.accountDao.getAccountIfExists(id);
+    final AccountDao accountDao = this.accountDaoFactory.create();
+    final Account account = accountDao.getAccountIfExists(id);
+    accountDao.close();
+
     if (account == null) throw new LoginFailureException(ErrorCode.ID_NOT_EXISTS);
     final String hashedPassword = account.getPassword();
 

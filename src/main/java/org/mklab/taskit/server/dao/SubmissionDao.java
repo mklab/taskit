@@ -12,7 +12,7 @@ import org.mklab.taskit.shared.model.Submission;
  * @author teshima
  * @version $Revision$, Jan 29, 2011
  */
-public interface SubmissionDao {
+public interface SubmissionDao extends Dao {
 
   /**
    * "useName"の"lectureId"回の講義の"no"番目の課題の成績を取得します。

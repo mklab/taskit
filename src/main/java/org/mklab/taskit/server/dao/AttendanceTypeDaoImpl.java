@@ -16,10 +16,7 @@ import org.mklab.taskit.shared.model.AttendanceType;
  * @author teshima
  * @version $Revision$, Feb 1, 2011
  */
-public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
-
-  /** エンティティマネージャ */
-  private EntityManager entityManager;
+public class AttendanceTypeDaoImpl extends AbstractDao implements AttendanceTypeDao {
 
   /**
    * {@link AttendanceTypeDaoImpl}オブジェクトを構築します。
@@ -27,7 +24,7 @@ public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
    * @param entityManager エンティティマネージャ
    */
   public AttendanceTypeDaoImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -35,15 +32,14 @@ public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
    */
   @Override
   public void registerAttendanceType(AttendanceType attendanceType) {
-    final EntityTransaction t = this.entityManager.getTransaction();
+    final EntityManager entityManager = entityManager();
+    final EntityTransaction t = entityManager.getTransaction();
     t.begin();
     try {
-      this.entityManager.persist(attendanceType);
+      entityManager.persist(attendanceType);
       t.commit();
     } catch (IllegalStateException e) {
       t.rollback();
-    } finally {
-      this.entityManager.close();
     }
   }
 
@@ -53,8 +49,7 @@ public class AttendanceTypeDaoImpl implements AttendanceTypeDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<String> getAllAttendanceTypes() {
-    final Query query = this.entityManager.createQuery("SELECT t.type FROM ATTENDANCE_TYPE t"); //$NON-NLS-1$
-    this.entityManager.close();
+    final Query query = entityManager().createQuery("SELECT t.type FROM ATTENDANCE_TYPE t"); //$NON-NLS-1$
     return query.getResultList();
   }
 

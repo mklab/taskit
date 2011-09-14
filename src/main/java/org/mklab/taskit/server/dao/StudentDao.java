@@ -14,7 +14,7 @@ import org.mklab.taskit.shared.model.Submission;
  * @author teshima
  * @version $Revision$, Jan 28, 2011
  */
-public interface StudentDao {
+public interface StudentDao extends Dao {
 
   /**
    * アカウントのIDから学籍番号を取得します。

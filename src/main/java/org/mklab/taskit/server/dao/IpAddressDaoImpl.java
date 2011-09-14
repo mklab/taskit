@@ -17,10 +17,7 @@ import org.mklab.taskit.shared.model.IpAddress;
  * @author teshima
  * @version $Revision$, Mar 14, 2011
  */
-public class IpAddressDaoImpl implements IpAddressDao {
-
-  /** エンティティマネージャ */
-  private EntityManager entityManager;
+public class IpAddressDaoImpl extends AbstractDao implements IpAddressDao {
 
   /**
    * {@link IpAddressDaoImpl}オブジェクトを構築します。
@@ -28,8 +25,7 @@ public class IpAddressDaoImpl implements IpAddressDao {
    * @param entityManager エンティティマネージャ
    */
   public IpAddressDaoImpl(EntityManager entityManager) {
-    if (entityManager == null) throw new NullPointerException();
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -38,7 +34,8 @@ public class IpAddressDaoImpl implements IpAddressDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<String> getAllIpAddress() {
-    final Query query = this.entityManager.createQuery("SELECT ip.ipAddress FROM IP_ADDRESS ip ORDER BY ip.ipAddressId ASC"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT ip.ipAddress FROM IP_ADDRESS ip ORDER BY ip.ipAddressId ASC"); //$NON-NLS-1$
     return query.getResultList();
   }
 
@@ -47,12 +44,13 @@ public class IpAddressDaoImpl implements IpAddressDao {
    */
   @Override
   public void registerIpAddress(String ipAddress) throws IpAddressRegistrationException {
+    final EntityManager entityManager = entityManager();
     final IpAddress ipAddressInstance = new IpAddress(ipAddress);
-    final EntityTransaction t = this.entityManager.getTransaction();
+    final EntityTransaction t = entityManager.getTransaction();
     t.begin();
 
     try {
-      this.entityManager.persist(ipAddressInstance);
+      entityManager.persist(ipAddressInstance);
       t.commit();
     } catch (EntityExistsException e) {
       if (t.isActive()) {

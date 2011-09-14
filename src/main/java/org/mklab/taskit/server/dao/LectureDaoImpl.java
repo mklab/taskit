@@ -16,10 +16,7 @@ import org.mklab.taskit.shared.model.Lecture;
  * @author teshima
  * @version $Revision$, Jan 31, 2011
  */
-public class LectureDaoImpl implements LectureDao {
-
-  /** エンティティマネージャです。 */
-  private EntityManager entityManager;
+public class LectureDaoImpl extends AbstractDao implements LectureDao {
 
   /**
    * {@link LectureDaoImpl}オブジェクトを構築します。
@@ -27,7 +24,7 @@ public class LectureDaoImpl implements LectureDao {
    * @param entityManager エンティティマネージャ
    */
   public LectureDaoImpl(EntityManager entityManager) {
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -35,10 +32,10 @@ public class LectureDaoImpl implements LectureDao {
    */
   @Override
   public List<Lecture> getAllLectures() {
-    final Query query = this.entityManager.createQuery("SELECT l FROM LECTURE l ORDER BY l.time ASC"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT l FROM LECTURE l ORDER BY l.time ASC"); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     final List<Lecture> lectures = query.getResultList();
-    this.entityManager.close();
     return lectures;
   }
 
@@ -47,15 +44,14 @@ public class LectureDaoImpl implements LectureDao {
    */
   @Override
   public void registerLecture(Lecture lecture) {
-    final EntityTransaction t = this.entityManager.getTransaction();
+    final EntityManager entityManager = entityManager();
+    final EntityTransaction t = entityManager.getTransaction();
     t.begin();
     try {
-      this.entityManager.persist(lecture);
+      entityManager.persist(lecture);
       t.commit();
     } catch (Throwable e) {
       t.rollback();
-    } finally {
-      this.entityManager.close();
     }
   }
 
@@ -64,10 +60,10 @@ public class LectureDaoImpl implements LectureDao {
    */
   @Override
   public int getLectureCount() {
-    final Query query = this.entityManager.createQuery("SELECT count(l) FROM LECTURE l"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT count(l) FROM LECTURE l"); //$NON-NLS-1$
 
     final Long result = (Long)query.getSingleResult();
-    this.entityManager.close();
     return result.intValue();
   }
 

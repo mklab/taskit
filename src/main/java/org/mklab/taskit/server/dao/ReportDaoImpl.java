@@ -17,9 +17,7 @@ import org.mklab.taskit.shared.model.Report;
  * @author teshima
  * @version $Revision$, Jan 26, 2011
  */
-public class ReportDaoImpl implements ReportDao {
-
-  private EntityManager entityManager;
+public class ReportDaoImpl extends AbstractDao implements ReportDao {
 
   /**
    * {@link ReportDaoImpl}オブジェクトを構築します。
@@ -27,8 +25,7 @@ public class ReportDaoImpl implements ReportDao {
    * @param entityManager エンティティマネージャ
    */
   public ReportDaoImpl(EntityManager entityManager) {
-    if (entityManager == null) throw new NullPointerException();
-    this.entityManager = entityManager;
+    super(entityManager);
   }
 
   /**
@@ -36,13 +33,13 @@ public class ReportDaoImpl implements ReportDao {
    */
   @Override
   public List<Report> getReportFromDate(String date) {
-    final Query query = this.entityManager.createQuery("SELECT r FROM Report r WHERE r.date = :date"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT r FROM Report r WHERE r.date = :date"); //$NON-NLS-1$
     query.setParameter("date", date); //$NON-NLS-1$
     @SuppressWarnings("unchecked")
     final List<Report> reportList = query.getResultList();
     if (reportList.size() == 0) return null;
     if (reportList.size() > 1) throw new IllegalStateException();
-    this.entityManager.close();
     return reportList;
   }
 
@@ -51,7 +48,8 @@ public class ReportDaoImpl implements ReportDao {
    */
   @Override
   public Report getReportFromID(int id) {
-    return this.entityManager.find(Report.class, Integer.valueOf(id));
+    final EntityManager entityManager = entityManager();
+    return entityManager.find(Report.class, Integer.valueOf(id));
   }
 
   /**
@@ -60,10 +58,10 @@ public class ReportDaoImpl implements ReportDao {
   @SuppressWarnings({"boxing", "unchecked"})
   @Override
   public List<Report> getReportsFromLectureId(int lectureId) {
-    Query query = this.entityManager.createQuery("SELECT r FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    Query query = entityManager.createQuery("SELECT r FROM REPORT r WHERE r.lectureId = :lectureId"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     List<Report> selectedReports = query.getResultList();
-    this.entityManager.close();
     return selectedReports;
   }
 
@@ -73,8 +71,8 @@ public class ReportDaoImpl implements ReportDao {
   @SuppressWarnings("unchecked")
   @Override
   public List<Report> getAllReports() {
-    final Query query = this.entityManager.createQuery("SELECT r FROM REPORT r ORDER BY r.lectureId, r.no"); //$NON-NLS-1$
-    this.entityManager.close();
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT r FROM REPORT r ORDER BY r.lectureId, r.no"); //$NON-NLS-1$
     return query.getResultList();
   }
 
@@ -83,10 +81,11 @@ public class ReportDaoImpl implements ReportDao {
    */
   @Override
   public void registerReport(Report report) throws ReportRegistrationException {
-    EntityTransaction t = this.entityManager.getTransaction();
+    final EntityManager entityManager = entityManager();
+    EntityTransaction t = entityManager.getTransaction();
     t.begin();
     try {
-      this.entityManager.persist(report);
+      entityManager.persist(report);
       t.commit();
     } catch (EntityExistsException e) {
       if (t.isActive()) {
@@ -102,8 +101,6 @@ public class ReportDaoImpl implements ReportDao {
       } catch (Throwable e1) {
         throw new ReportRegistrationException("failed to register a report, and rollback failed."); //$NON-NLS-1$
       }
-    } finally {
-      this.entityManager.close();
     }
   }
 
@@ -113,11 +110,11 @@ public class ReportDaoImpl implements ReportDao {
   @SuppressWarnings("boxing")
   @Override
   public String getTitle(int lectureId, int no) {
-    final Query query = this.entityManager.createQuery("SELECT r.title FROM REPORT r WHERE r.lectureId = :lectureId AND r.no = :no"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT r.title FROM REPORT r WHERE r.lectureId = :lectureId AND r.no = :no"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     query.setParameter("no", no); //$NON-NLS-1$
     final String title = (String)query.getSingleResult();
-    this.entityManager.close();
     return title;
   }
 
@@ -127,10 +124,10 @@ public class ReportDaoImpl implements ReportDao {
   @SuppressWarnings("boxing")
   @Override
   public String getDetail(int lectureId, int no) {
-    final Query query = this.entityManager.createQuery("SELECT r.detail FROM REPORT r WHERE r.lectureId = lectureId AND r.no = :no"); //$NON-NLS-1$
+    final EntityManager entityManager = entityManager();
+    final Query query = entityManager.createQuery("SELECT r.detail FROM REPORT r WHERE r.lectureId = lectureId AND r.no = :no"); //$NON-NLS-1$
     query.setParameter("lectureId", lectureId); //$NON-NLS-1$
     query.setParameter("no", no); //$NON-NLS-1$
-    this.entityManager.close();
     return null;
   }
 

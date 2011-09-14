@@ -12,7 +12,7 @@ import org.mklab.taskit.shared.model.Report;
  * @author teshima
  * @version $Revision$, Jan 25, 2011
  */
-public interface ReportDao {
+public interface ReportDao extends Dao {
 
   /**
    * 課題IDを利用して課題内容を取得します。

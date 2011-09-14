@@ -13,7 +13,7 @@ import org.mklab.taskit.shared.model.Attendance;
  * @author teshima
  * @version $Revision$, Jan 29, 2011
  */
-public interface AttendanceDao {
+public interface AttendanceDao extends Dao {
 
   /**
    * 指定のアカウントIDの学生の出席状況を返します。
