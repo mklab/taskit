@@ -42,7 +42,6 @@ final class SessionUtil {
   /**
    * セッションに保存されたユーザーオブジェクトを取得します。
    * 
-   * @param request リクエスト
    * @return ユーザー
    */
   static User getUser(final HttpSession session) {
@@ -74,13 +73,15 @@ final class SessionUtil {
 
     throw new IllegalStateException("You are not TA or teacher, or your session was timeout."); //$NON-NLS-1$
   }
+
   /**
    * 先生であるかどうかチェックします。
+   * 
    * @param session セッション
    */
   static void assertIsTeacher(HttpSession session) {
     if (isTeacher(session)) return;
-    
+
     throw new IllegalStateException("You are not Teacher, or your session was timeout"); //$NON-NLS-1$
   }
 

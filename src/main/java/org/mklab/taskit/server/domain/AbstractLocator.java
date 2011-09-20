@@ -8,8 +8,8 @@ import com.google.web.bindery.requestfactory.shared.Locator;
 /**
  * @author ishikura
  * @version $Revision$, 2011/09/19
- * @param <T>
- * @param <I>
+ * @param <T> 配置するエンティティの型
+ * @param <I> 配置するエンティティのキーの型
  */
 public abstract class AbstractLocator<T extends AbstractEntity<I>, I> extends Locator<T, I> {
 
@@ -35,11 +35,6 @@ public abstract class AbstractLocator<T extends AbstractEntity<I>, I> extends Lo
     return findEntity(clazz, id);
   }
 
-  /**
-   * @param clazz
-   * @param id
-   * @return
-   */
   static <T, I> T findEntity(Class<? extends T> clazz, I id) {
     final EntityManager em = EMF.get().createEntityManager();
     try {

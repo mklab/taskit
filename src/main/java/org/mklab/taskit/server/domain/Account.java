@@ -1,19 +1,15 @@
 package org.mklab.taskit.server.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Id;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.mklab.taskit.server.Passwords;
 import org.mklab.taskit.server.auth.AuthenticationEntryPoint;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.model.UserType;
 
-import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Id;
 
 
 /**
@@ -131,16 +127,12 @@ public class Account extends AbstractEntity<String> {
       throw new IllegalArgumentException("Password invalid."); //$NON-NLS-1$
     }
 
-    final HttpServletRequest request = RequestFactoryServlet.getThreadLocalRequest();
-    final HttpSession session = request.getSession(true);
-
     final User user = AbstractLocator.findEntity(User.class, id);
     if (user == null) {
       throw new IllegalArgumentException("Internal error: user data not exists."); //$NON-NLS-1$
     }
 
-    session.setAttribute("isLoggedIn", Boolean.TRUE);
-    session.setAttribute("user", user);
+    ServiceUtil.markAsLoggedIn(user);
   }
 
   private static boolean isAlreadyRegistered(String id) {
