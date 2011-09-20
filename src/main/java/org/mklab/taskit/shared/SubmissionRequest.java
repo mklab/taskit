@@ -1,5 +1,7 @@
 package org.mklab.taskit.shared;
 
+import java.util.List;
+
 import org.mklab.taskit.server.domain.Submission;
 
 import com.google.web.bindery.requestfactory.shared.Request;
@@ -23,5 +25,14 @@ public interface SubmissionRequest extends RequestContext {
    * @param comment コメント
    * @return リクエスト
    */
-  Request<Void> submit(String accountId, Integer reportId, int point);
+  Request<SubmissionProxy> submit(String accountId, Integer reportId, int point);
+
+  /**
+   * 提出者を指定してすべての提出情報を取得します。
+   * 
+   * @param accountId 提出者
+   * @return 提出情報
+   */
+  Request<List<SubmissionProxy>> getAllSubmissionsByAccountId(String accountId);
+
 }

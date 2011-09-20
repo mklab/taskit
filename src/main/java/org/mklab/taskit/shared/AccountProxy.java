@@ -7,20 +7,10 @@ import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
 
-/**
- * アカウントを表すインターフェースです。
- * 
- * @author ishikura
- * @version $Revision$, 2011/09/18
- */
 @ProxyFor(value = Account.class, locator = AccountLocator.class)
+@SuppressWarnings("javadoc")
 public interface AccountProxy extends EntityProxy {
 
-  /**
-   * ログインIDを取得します。
-   * 
-   * @return ログインID
-   */
   String getId();
 
 }

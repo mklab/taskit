@@ -26,8 +26,13 @@ public class Account extends AbstractEntity<String> {
   private String id;
   private String hashedPassword;
 
+  /**
+   * ハッシュ化したパスワードを取得します。
+   * 
+   * @return ハッシュ化したパスワード
+   */
   @Column(name = "password")
-  String getHashedPassword() {
+  public String getHashedPassword() {
     return this.hashedPassword;
   }
 
