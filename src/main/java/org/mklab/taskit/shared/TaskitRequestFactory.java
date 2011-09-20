@@ -14,4 +14,6 @@ public interface TaskitRequestFactory extends RequestFactory {
 
   SubmissionRequest submissionRequest();
 
+  AttendanceRequest attendanceRequest();
+
 }
