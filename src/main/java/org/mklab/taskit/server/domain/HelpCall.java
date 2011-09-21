@@ -7,11 +7,13 @@ import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.model.UserType;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Id;
+import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
 
@@ -118,6 +120,21 @@ public class HelpCall extends AbstractEntity<Integer> {
     } finally {
       em.close();
     }
+  }
+
+  /**
+   * すべてのヘルプコールを取得します。
+   * 
+   * @return すべてのヘルプコール
+   */
+  @Invoker(UserType.STUDENT)
+  public static List<HelpCall> getAllHelpCalls() {
+    final EntityManager em = EMF.get().createEntityManager();
+    Query q = em.createQuery("select o from HelpCall o"); //$NON-NLS-1$
+
+    @SuppressWarnings("unchecked")
+    List<HelpCall> list = q.getResultList();
+    return list;
   }
 
 }
