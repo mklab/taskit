@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.shared;
 
-import org.apache.catalina.User;
+import org.mklab.taskit.server.domain.User;
 
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
