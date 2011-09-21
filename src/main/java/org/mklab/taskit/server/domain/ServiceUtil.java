@@ -4,6 +4,7 @@
 package org.mklab.taskit.server.domain;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
@@ -78,7 +79,7 @@ class ServiceUtil {
    * @return セッション
    */
   static final HttpSession getSessionOrCreate() {
-    return RequestFactoryServlet.getThreadLocalRequest().getSession(true);
+    return getThreadLocalRequest().getSession(true);
   }
 
   /**
@@ -89,6 +90,12 @@ class ServiceUtil {
    * @return セッション
    */
   static final HttpSession getSession() {
-    return RequestFactoryServlet.getThreadLocalRequest().getSession();
+    return getThreadLocalRequest().getSession();
+  }
+
+  private static HttpServletRequest getThreadLocalRequest() {
+    HttpServletRequest req = RequestFactoryServlet.getThreadLocalRequest();
+    if (req == null) throw new NullPointerException("Thread local request was null."); //$NON-NLS-1$
+    return req;
   }
 }

@@ -21,6 +21,7 @@ import com.google.web.bindery.requestfactory.vm.RequestFactorySource;
 public final class RequestFactoryUtil {
 
   private static TaskitRequestFactory requestFactory;
+  private static UserType userType = UserType.TEACHER;
 
   static {
     EMF.setPersistenceUnitName("taskit-test"); //$NON-NLS-1$
@@ -38,9 +39,10 @@ public final class RequestFactoryUtil {
         /**
          * {@inheritDoc}
          */
+        @SuppressWarnings("synthetic-access")
         @Override
         public UserType getType() {
-          return UserType.TEACHER;
+          return RequestFactoryUtil.userType;
         }
 
         @Override
@@ -59,6 +61,24 @@ public final class RequestFactoryUtil {
       requestFactory.initialize(eventBus, new InProcessRequestTransport(processor));
     }
     return requestFactory;
+  }
+
+  /**
+   * 利用者のユーザー種別を設定します。
+   * 
+   * @param userType userType
+   */
+  public static void setUserType(UserType userType) {
+    RequestFactoryUtil.userType = userType;
+  }
+
+  /**
+   * 利用者のユーザー種別を取得します。
+   * 
+   * @return 利用者のユーザー種別
+   */
+  public static UserType getUserType() {
+    return userType;
   }
 
 }
