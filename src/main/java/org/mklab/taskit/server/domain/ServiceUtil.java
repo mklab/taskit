@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.server.domain;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
@@ -15,6 +16,22 @@ class ServiceUtil {
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
   static final String USER_KEY = "user"; //$NON-NLS-1$
+
+  /**
+   * 与えられたエンティティのクラスのテーブルを参照し、IDが一致するエンティティを取得します。
+   * 
+   * @param clazz エンティティのクラス
+   * @param id エンティティのID
+   * @return エンティティ
+   */
+  static <T, I> T findEntity(Class<? extends T> clazz, I id) {
+    final EntityManager em = EMF.get().createEntityManager();
+    try {
+      return em.find(clazz, id);
+    } finally {
+      em.close();
+    }
+  }
 
   /**
    * 与えられたユーザーがログイン状態であることをセッションに対しマークします。

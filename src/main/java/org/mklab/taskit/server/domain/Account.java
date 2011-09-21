@@ -127,7 +127,7 @@ public class Account extends AbstractEntity<String> {
       throw new IllegalArgumentException("Password invalid."); //$NON-NLS-1$
     }
 
-    final User user = AbstractLocator.findEntity(User.class, id);
+    final User user = ServiceUtil.findEntity(User.class, id);
     if (user == null) {
       throw new IllegalArgumentException("Internal error: user data not exists."); //$NON-NLS-1$
     }

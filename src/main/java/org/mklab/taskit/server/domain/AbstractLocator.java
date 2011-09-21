@@ -1,7 +1,5 @@
 package org.mklab.taskit.server.domain;
 
-import javax.persistence.EntityManager;
-
 import com.google.web.bindery.requestfactory.shared.Locator;
 
 
@@ -32,16 +30,7 @@ public abstract class AbstractLocator<T extends AbstractEntity<I>, I> extends Lo
    */
   @Override
   public T find(Class<? extends T> clazz, I id) {
-    return findEntity(clazz, id);
-  }
-
-  static <T, I> T findEntity(Class<? extends T> clazz, I id) {
-    final EntityManager em = EMF.get().createEntityManager();
-    try {
-      return em.find(clazz, id);
-    } finally {
-      em.close();
-    }
+    return ServiceUtil.findEntity(clazz, id);
   }
 
   /**

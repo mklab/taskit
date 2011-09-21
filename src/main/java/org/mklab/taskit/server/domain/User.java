@@ -1,9 +1,9 @@
 package org.mklab.taskit.server.domain;
 
+import org.mklab.taskit.shared.model.UserType;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import org.mklab.taskit.shared.model.UserType;
 
 
 /**
@@ -48,6 +48,19 @@ public class User extends AbstractEntity<String> {
   @Override
   void setId(String id) {
     this.id = id;
+  }
+
+  // service methods
+
+  /**
+   * アカウントIDからユーザーオブジェクトを取得します。
+   * 
+   * @param accountId アカウントID
+   * @return ユーザーオブジェクト
+   */
+  public static User getUserByAccountId(String accountId) {
+    User user = ServiceUtil.findEntity(User.class, accountId);
+    return user;
   }
 
 }
