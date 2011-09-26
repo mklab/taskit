@@ -11,17 +11,15 @@ import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.client.ui.event.ClickHandler;
-import org.mklab.taskit.shared.model.User;
-import org.mklab.taskit.shared.service.LoginService;
-import org.mklab.taskit.shared.service.LoginServiceAsync;
+import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
@@ -96,41 +94,16 @@ public abstract class TaskitActivity extends AbstractActivity {
     });
   }
 
-  protected void logout() {
-    final LoginServiceAsync service = GWT.create(LoginService.class);
-    service.logout(new AsyncCallback<Void>() {
-
-      @Override
-      public void onSuccess(@SuppressWarnings("unused") Void result) {
-        logout();
-      }
-
-      @Override
-      public void onFailure(@SuppressWarnings("unused") Throwable caught) {
-        logout();
-      }
-
-      private void logout() {
-        Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
-        getClientFactory().getPlaceController().goTo(Login.INSTANCE);
-      }
-    });
-  }
-
   private void setupLoginUserView(final HeaderView header) {
     setupLoginUserViewAsync(header);
   }
 
   private void setupLoginUserViewAsync(final HeaderView header) {
-    final LoginServiceAsync service = GWT.create(LoginService.class);
-    service.getLoginUser(new AsyncCallback<User>() {
+    getClientFactory().getRequestFactory().userRequest().getLoginUser().fire(new Receiver<UserProxy>() {
 
-      /**
-       * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
-       */
       @SuppressWarnings("synthetic-access")
       @Override
-      public void onSuccess(User arg0) {
+      public void onSuccess(UserProxy arg0) {
         if (arg0 == null) {
           logout();
           return;
@@ -139,17 +112,26 @@ public abstract class TaskitActivity extends AbstractActivity {
       }
 
       /**
-       * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
+       * {@inheritDoc}
        */
       @Override
-      public void onFailure(Throwable arg0) {
-        showErrorMessage(arg0.toString());
+      public void onFailure(ServerFailure error) {
+        showErrorMessage(error.getMessage());
         return;
       }
     });
   }
 
-  private void setupLoginUserView(final HeaderView header, User loginUser) {
+  protected void logout() {
+    try {
+      getClientFactory().getRequestFactory().accountRequest().logout().fire();
+    } finally {
+      Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
+      getClientFactory().getPlaceController().goTo(Login.INSTANCE);
+    }
+  }
+
+  private void setupLoginUserView(final HeaderView header, UserProxy loginUser) {
     header.setUserId(loginUser.getId());
     header.setUserType(loginUser.getType().name());
   }

@@ -3,8 +3,12 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.model.UserType;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.Id;
+import javax.persistence.Query;
 
 
 /**
@@ -92,7 +96,7 @@ public class User extends AbstractEntity<String> {
    * @param accountId アカウントID
    * @return ユーザーオブジェクト
    */
-  @Invoker({UserType.TA, UserType.STUDENT, UserType.TEACHER})
+  @Invoker({UserType.TA, UserType.TEACHER})
   public static User getUserByAccountId(String accountId) {
     User user = ServiceUtil.findEntity(User.class, accountId);
     return user;
@@ -103,9 +107,26 @@ public class User extends AbstractEntity<String> {
    * 
    * @return ログインユーザー情報。ログインしていなければnull
    */
+  @Invoker({UserType.TA, UserType.STUDENT, UserType.TEACHER})
   public static User getLoginUser() {
     User loginUser = ServiceUtil.getLoginUser();
     return loginUser;
+  }
+
+  /**
+   * 全生徒情報を取得します。
+   * 
+   * @return　全生徒情報
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static List<User> getAllStudents() {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select u from User u where u.type=:type order by u.id"); //$NON-NLS-1$
+    q.setParameter("type", UserType.STUDENT); //$NON-NLS-1$
+
+    @SuppressWarnings("unchecked")
+    final List<User> studentList = q.getResultList();
+    return studentList;
   }
 
 }

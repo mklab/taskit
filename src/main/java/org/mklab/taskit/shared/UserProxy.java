@@ -16,6 +16,13 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 public interface UserProxy extends EntityProxy {
 
   /**
+   * アカウントIDを取得します。
+   * 
+   * @return アカウントID
+   */
+  String getId();
+
+  /**
    * ユーザー種別を取得します。
    * 
    * @return ユーザー種別

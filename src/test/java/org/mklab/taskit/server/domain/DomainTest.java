@@ -64,13 +64,17 @@ public abstract class DomainTest {
     logout();
   }
 
-  private static User registerUser(String accountId, String name, UserType type) {
+  static User registerUser(String accountId, String name, UserType type) {
     Account.registerNewAccount(accountId, "password", type); //$NON-NLS-1$
     User user = User.getUserByAccountId(accountId);
     user.setName(name);
     user.update();
 
     return user;
+  }
+
+  static void unregisterUser(User user) {
+    Account.unregisterAccount(user.getId());
   }
 
   /**

@@ -97,6 +97,29 @@ public class Account extends AbstractEntity<String> {
   }
 
   /**
+   * 与えられたIDのアカウントの登録を抹消します。
+   * 
+   * @param id ID
+   */
+  @Invoker({UserType.TEACHER})
+  public static void unregisterAccount(String id) {
+    final Account account = getAccountById(id);
+    if (account == null) throw new IllegalArgumentException("Not registered: " + id); //$NON-NLS-1$
+
+    final EntityManager em = EMF.get().createEntityManager();
+    final EntityTransaction t = em.getTransaction();
+    t.begin();
+    try {
+      em.remove(account);
+      t.commit();
+    } catch (Throwable ex) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
+  }
+
+  /**
    * ログインします。
    * 
    * @param id ID
@@ -116,6 +139,15 @@ public class Account extends AbstractEntity<String> {
     }
 
     ServiceUtil.login(user);
+  }
+
+  /**
+   * ログアウトします。
+   */
+  @Invoker({UserType.STUDENT, UserType.TA, UserType.TEACHER})
+  public static void logout() {
+    if (ServiceUtil.isLoggedIn() == false) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+    ServiceUtil.logout();
   }
 
   private static boolean isAlreadyRegistered(String id) {

@@ -27,6 +27,14 @@ public interface AccountRequest extends RequestContext {
   Request<Void> registerNewAccount(String id, String password, UserType userType);
 
   /**
+   * 与えられたIDのアカウントの登録を抹消します。
+   * 
+   * @param id アカウントID
+   * @return リクエスト
+   */
+  Request<Void> unregisterAccount(String id);
+
+  /**
    * IDからアカウントを取得します。
    * 
    * @param id アカウントID
@@ -42,6 +50,13 @@ public interface AccountRequest extends RequestContext {
    * @return リクエスト
    */
   Request<Void> login(String id, String password);
+
+  /**
+   * ログアウトを行います。
+   * 
+   * @return リクエスト
+   */
+  Request<Void> logout();
 
   /**
    * パスワードを変更します。

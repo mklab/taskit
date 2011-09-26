@@ -7,11 +7,11 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.TaskitView;
-import org.mklab.taskit.shared.service.AccountService;
-import org.mklab.taskit.shared.service.AccountServiceAsync;
+import org.mklab.taskit.shared.UserProxy;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import java.util.List;
+
+import com.google.web.bindery.requestfactory.shared.Receiver;
 
 
 /**
@@ -39,21 +39,19 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     final StudentListView list = clientFactory.getStudentListView();
     list.setPresenter(this);
 
-    final AccountServiceAsync service = GWT.create(AccountService.class);
-    service.getAllStudentUserNames(new AsyncCallback<String[]>() {
+    getClientFactory().getRequestFactory().userRequest().getAllStudents().fire(new Receiver<List<UserProxy>>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public void onSuccess(String[] result) {
-        StudentListActivity.this.userNames = result;
-        list.setListData(result);
+      public void onSuccess(List<UserProxy> arg0) {
+        final String[] names = new String[arg0.size()];
+        for (int i = 0; i < names.length; i++) {
+          names[i] = arg0.get(i).getId();
+        }
+        StudentListActivity.this.userNames = names;
+        list.setListData(names);
       }
 
-      @Override
-      public void onFailure(Throwable caught) {
-        logout();
-        showErrorMessage(caught);
-      }
     });
     return list;
   }
