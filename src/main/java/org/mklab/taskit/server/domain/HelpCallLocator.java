@@ -6,7 +6,7 @@ package org.mklab.taskit.server.domain;
 /**
  * @author ishikura
  */
-public class HelpCallLocator extends AbstractLocator<HelpCall, Integer> {
+public class HelpCallLocator extends AbstractLocator<HelpCall, String> {
 
   /**
    * {@inheritDoc}
@@ -20,8 +20,8 @@ public class HelpCallLocator extends AbstractLocator<HelpCall, Integer> {
    * {@inheritDoc}
    */
   @Override
-  public Class<Integer> getIdType() {
-    return Integer.class;
+  public Class<String> getIdType() {
+    return String.class;
   }
 
 }

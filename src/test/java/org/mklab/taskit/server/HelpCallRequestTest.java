@@ -18,6 +18,9 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public class HelpCallRequestTest {
 
+  /**
+   * 呼び出し情報が記録されるかどうかのテストを行います。
+   */
   @Test
   public void testCall() {
     final HelpCallRequest req = RequestFactoryUtil.requestFactory().helpCallRequest();
@@ -27,7 +30,7 @@ public class HelpCallRequestTest {
     req.call(null).fire(new Receiver<Void>() {
 
       @Override
-      public void onSuccess(Void arg0) {
+      public void onSuccess(@SuppressWarnings("unused") Void arg0) {
         // do nothing
       }
 

@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Id;
 import javax.persistence.Query;
-import javax.validation.constraints.NotNull;
 
 
 /**
@@ -23,12 +22,10 @@ import javax.validation.constraints.NotNull;
  * @author ishikura
  */
 @Entity
-public class HelpCall extends AbstractEntity<Integer> {
+public class HelpCall extends AbstractEntity<String> {
 
-  /** IDです。 */
-  private Integer id;
   /** 呼んでいる人のアカウントIDです。 */
-  private String accountId;
+  private String id;
   /** 呼び出し日時です。 */
   private Date date;
   /** メッセージです。 */
@@ -39,7 +36,7 @@ public class HelpCall extends AbstractEntity<Integer> {
    */
   @Override
   @Id
-  public Integer getId() {
+  public String getId() {
     return this.id;
   }
 
@@ -47,22 +44,8 @@ public class HelpCall extends AbstractEntity<Integer> {
    * {@inheritDoc}
    */
   @Override
-  void setId(Integer id) {
+  public void setId(String id) {
     this.id = id;
-  }
-
-  /**
-   * 呼んでいる人のアカウントIDを取得します。
-   * 
-   * @return 呼んでいる人のアカウントID
-   */
-  @NotNull
-  public String getAccountId() {
-    return this.accountId;
-  }
-
-  void setAccountId(String accountId) {
-    this.accountId = accountId;
   }
 
   /**
@@ -106,7 +89,7 @@ public class HelpCall extends AbstractEntity<Integer> {
 
     final User loginUser = ServiceUtil.getLoginUser();
     if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
-    call.setAccountId(loginUser.getId());
+    call.setId(loginUser.getId());
 
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
@@ -114,6 +97,36 @@ public class HelpCall extends AbstractEntity<Integer> {
     try {
       t.begin();
       em.persist(call);
+      t.commit();
+    } catch (Throwable e) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
+  }
+
+  /**
+   * 呼び出しをキャンセルします。
+   */
+  @Invoker(UserType.STUDENT)
+  public static void uncall() {
+    final User loginUser = ServiceUtil.getLoginUser();
+    uncall(loginUser.getId());
+  }
+
+  /**
+   * 呼び出しをキャンセルします。
+   * 
+   * @param accountId キャンセルする生徒のアカウントID
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static void uncall(String accountId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final EntityTransaction t = em.getTransaction();
+
+    try {
+      t.begin();
+      em.remove(accountId);
       t.commit();
     } catch (Throwable e) {
       t.rollback();

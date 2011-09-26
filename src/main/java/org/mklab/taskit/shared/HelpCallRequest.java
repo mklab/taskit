@@ -16,7 +16,14 @@ import com.google.web.bindery.requestfactory.shared.Service;
 @Service(HelpCall.class)
 public interface HelpCallRequest extends RequestContext {
 
+  // for students
   Request<Void> call(String message);
+
+  // for students
+  Request<Void> uncall();
+
+  // for TAs and teachers
+  Request<Void> uncall(String accountId);
 
   Request<List<HelpCallProxy>> getAllHelpCalls();
 
