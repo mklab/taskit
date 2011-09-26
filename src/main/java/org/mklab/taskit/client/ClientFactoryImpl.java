@@ -11,6 +11,7 @@ import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
 import org.mklab.taskit.client.ui.smartgwt.SmartGwtHeaderView;
 import org.mklab.taskit.client.ui.smartgwt.SmartGwtStudentListView;
 import org.mklab.taskit.client.ui.smartgwt.SmartGwtStudentwiseEvaluationView;
+import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -29,6 +30,7 @@ public class ClientFactoryImpl implements ClientFactory {
   private EventBus eventBus = new SimpleEventBus();
   private PlaceController placeController;
   private Messages messages;
+  private TaskitRequestFactory requestFactory;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -37,6 +39,17 @@ public class ClientFactoryImpl implements ClientFactory {
     this.eventBus = new SimpleEventBus();
     this.placeController = new PlaceController(this.eventBus);
     this.messages = GWT.create(Messages.class);
+
+    this.requestFactory = GWT.create(TaskitRequestFactory.class);
+    this.requestFactory.initialize(this.eventBus);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public TaskitRequestFactory getRequestFactory() {
+    return this.requestFactory;
   }
 
   /**

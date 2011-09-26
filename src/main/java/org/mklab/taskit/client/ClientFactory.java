@@ -7,6 +7,7 @@ import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
+import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
@@ -17,6 +18,13 @@ import com.google.gwt.place.shared.PlaceController;
  * @version $Revision$, Jan 22, 2011
  */
 public interface ClientFactory {
+
+  /**
+   * RequestFactoryを取得します。
+   * 
+   * @return RequestFactory
+   */
+  TaskitRequestFactory getRequestFactory();
 
   /**
    * {@link EventBus}を取得します。

@@ -3,7 +3,6 @@ package org.mklab.taskit.client;
 import org.mklab.taskit.client.activity.TaskitActivityMapper;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.TaskitPlaceHistoryMapper;
-import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -46,8 +45,5 @@ public class Taskit implements EntryPoint {
     final RootPanel rootPanel = RootPanel.get();
     rootPanel.add(this.appWidget);
     historyHandler.handleCurrentHistory();
-
-    TaskitRequestFactory factory = GWT.create(TaskitRequestFactory.class);
-    factory.initialize(eventBus);
   }
 }
