@@ -1,5 +1,7 @@
 package org.mklab.taskit.server.domain;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Version;
 
 
@@ -45,4 +47,22 @@ public abstract class AbstractEntity<I> {
     return (Class<I>)getId().getClass();
   }
 
+  /**
+   * データベースに変更を反映します。
+   * <p>
+   * IDを変更してこのメソッドを呼び出すと、新たなエンティティとして登録されてしまうため注意してください。
+   */
+  protected void update() {
+    final EntityManager em = EMF.get().createEntityManager();
+    final EntityTransaction t = em.getTransaction();
+    t.begin();
+    try {
+      em.merge(this);
+      t.commit();
+    } catch (Throwable ex) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
+  }
 }

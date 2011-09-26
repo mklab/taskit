@@ -1,4 +1,4 @@
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.domain;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -21,7 +21,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author ishikura
  * @version $Revision$, 2011/09/19
  */
-public class AttendanceRequestTest {
+public class AttendanceRequestTest extends DomainTest {
 
   /**
    * 提出が正常に行われるかどうかテストします。
@@ -29,7 +29,9 @@ public class AttendanceRequestTest {
   @Test
   @SuppressWarnings("unused")
   public void testSubmit() {
-    AttendanceRequest req = RequestFactoryUtil.requestFactory().attendanceRequest();
+    loginAsTA();
+
+    AttendanceRequest req = getRequestFactory().attendanceRequest();
     final String id = "qeqrjzklf"; //$NON-NLS-1$
     final Integer lectureId = Integer.valueOf(1);
 
@@ -50,7 +52,7 @@ public class AttendanceRequestTest {
 
     });
 
-    req = RequestFactoryUtil.requestFactory().attendanceRequest();
+    req = getRequestFactory().attendanceRequest();
     req.getAllAttendancesByAccountId(id).fire(new Receiver<List<AttendanceProxy>>() {
 
       @Override
@@ -70,7 +72,9 @@ public class AttendanceRequestTest {
   @Test
   @SuppressWarnings({"unused", "nls"})
   public void testSubmitDuplicatePair() {
-    AttendanceRequest req = RequestFactoryUtil.requestFactory().attendanceRequest();
+    loginAsTA();
+
+    AttendanceRequest req = getRequestFactory().attendanceRequest();
     final String id = "asdfasfdasdf";
     final Integer lectureId = Integer.valueOf(1);
     req.mark(id, lectureId, AttendanceType.LATE).fire(new Receiver<AttendanceProxy>() {
@@ -89,7 +93,7 @@ public class AttendanceRequestTest {
       }
 
     });
-    req = RequestFactoryUtil.requestFactory().attendanceRequest();
+    req = getRequestFactory().attendanceRequest();
     req.mark(id, lectureId, AttendanceType.LATE).fire(new Receiver<AttendanceProxy>() {
 
       @Override

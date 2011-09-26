@@ -23,7 +23,7 @@ public interface HelpCallRequest extends RequestContext {
   Request<Void> uncall();
 
   // for TAs and teachers
-  Request<Void> uncall(String accountId);
+  Request<Void> cancelCall(String accountId);
 
   Request<List<HelpCallProxy>> getAllHelpCalls();
 

@@ -19,9 +19,11 @@ import org.mklab.taskit.server.dao.LectureDaoImpl;
 import org.mklab.taskit.server.dao.ReportDao;
 import org.mklab.taskit.server.dao.ReportDaoImpl;
 import org.mklab.taskit.server.dao.ReportRegistrationException;
+import org.mklab.taskit.server.domain.Account;
 import org.mklab.taskit.shared.model.AttendanceType;
 import org.mklab.taskit.shared.model.Lecture;
 import org.mklab.taskit.shared.model.Report;
+import org.mklab.taskit.shared.model.UserType;
 import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
@@ -38,32 +40,19 @@ public class _SampleDataInitializer {
     final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     createAccounts(new AccountDaoImpl(entityManager));
-    createAttendanceTypes(new AttendanceTypeDaoImpl(entityManager));
     createLectures(new LectureDaoImpl(entityManager));
     createReports(new ReportDaoImpl(entityManager));
     entityManagerFactory.close();
   }
 
   private static void createAccounts(final AccountDao dao) {
-    try {
-      dao.registerAccount("koga", Passwords.hashPassword("taskit"), "TEACHER");
-
-      for (int i = 0; i < 5; i++) {
-        dao.registerAccount(String.valueOf(10675001 + i), Passwords.hashPassword("taskit"), "TA");
-      }
-      for (int i = 0; i < 10; i++) {
-        dao.registerAccount(String.valueOf(10236001 + i), Passwords.hashPassword("taskit"), "STUDENT");
-      }
-    } catch (AccountRegistrationException e) {
-      throw new RuntimeException(e);
+    Account.registerNewAccount("koga", Passwords.hashPassword("taskit"), UserType.TEACHER);
+    for (int i = 0; i < 5; i++) {
+      Account.registerNewAccount(String.valueOf(10675001 + i), "taskit", UserType.TA);
     }
-  }
-
-  private static void createAttendanceTypes(final AttendanceTypeDao dao) {
-    dao.registerAttendanceType(new AttendanceType("ATTENDED"));
-    dao.registerAttendanceType(new AttendanceType("ABSENT"));
-    dao.registerAttendanceType(new AttendanceType("ILLNESS"));
-    dao.registerAttendanceType(new AttendanceType("AUTHORIZED_ABSENT"));
+    for (int i = 0; i < 10; i++) {
+      Account.registerNewAccount(String.valueOf(10236001 + i), "taskit", UserType.STUDENT);
+    }
   }
 
   private static void createLectures(final LectureDao dao) {

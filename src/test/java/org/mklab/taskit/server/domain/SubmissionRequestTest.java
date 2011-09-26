@@ -1,12 +1,14 @@
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import org.mklab.taskit.shared.SubmissionProxy;
+import org.mklab.taskit.shared.SubmissionRequest;
 
 import java.util.List;
 
 import org.junit.Test;
-import org.mklab.taskit.shared.SubmissionProxy;
-import org.mklab.taskit.shared.SubmissionRequest;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
@@ -18,7 +20,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author ishikura
  * @version $Revision$, 2011/09/19
  */
-public class SubmissionRequestTest {
+public class SubmissionRequestTest extends DomainTest {
 
   /**
    * 提出が正常に行われるかどうかテストします。
@@ -26,7 +28,8 @@ public class SubmissionRequestTest {
   @Test
   @SuppressWarnings("unused")
   public void testSubmit() {
-    SubmissionRequest req = RequestFactoryUtil.requestFactory().submissionRequest();
+    loginAsTA();
+    SubmissionRequest req = getRequestFactory().submissionRequest();
     final String id = "qeqrjzklf"; //$NON-NLS-1$
     final Integer reportId = Integer.valueOf(1);
 
@@ -47,7 +50,7 @@ public class SubmissionRequestTest {
 
     });
 
-    req = RequestFactoryUtil.requestFactory().submissionRequest();
+    req = getRequestFactory().submissionRequest();
     req.getAllSubmissionsByAccountId(id).fire(new Receiver<List<SubmissionProxy>>() {
 
       @Override
@@ -67,7 +70,9 @@ public class SubmissionRequestTest {
   @Test
   @SuppressWarnings({"unused", "nls"})
   public void testSubmitDuplicatePair() {
-    SubmissionRequest req = RequestFactoryUtil.requestFactory().submissionRequest();
+    loginAsTA();
+
+    SubmissionRequest req = getRequestFactory().submissionRequest();
     final String id = "asdfasfdasdf";
     final Integer reportId = Integer.valueOf(1);
     req.submit(id, reportId, 100).fire(new Receiver<SubmissionProxy>() {
@@ -86,7 +91,7 @@ public class SubmissionRequestTest {
       }
 
     });
-    req = RequestFactoryUtil.requestFactory().submissionRequest();
+    req = getRequestFactory().submissionRequest();
     req.submit(id, reportId, 100).fire(new Receiver<SubmissionProxy>() {
 
       @Override

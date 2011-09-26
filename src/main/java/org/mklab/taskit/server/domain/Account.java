@@ -65,23 +65,6 @@ public class Account extends AbstractEntity<String> {
   }
 
   /**
-   * データベースに変更を反映します。
-   */
-  private void update() {
-    final EntityManager em = EMF.get().createEntityManager();
-    final EntityTransaction t = em.getTransaction();
-    t.begin();
-    try {
-      em.merge(this);
-      t.commit();
-    } catch (Throwable ex) {
-      t.rollback();
-    } finally {
-      em.close();
-    }
-  }
-
-  /**
    * アカウントを新規登録します。
    * 
    * @param id ID
@@ -132,7 +115,7 @@ public class Account extends AbstractEntity<String> {
       throw new IllegalArgumentException("Internal error: user data not exists."); //$NON-NLS-1$
     }
 
-    ServiceUtil.markAsLoggedIn(user);
+    ServiceUtil.login(user);
   }
 
   private static boolean isAlreadyRegistered(String id) {

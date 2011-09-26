@@ -1,11 +1,14 @@
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
-import org.junit.Test;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AccountRequest;
 import org.mklab.taskit.shared.model.UserType;
+
+import org.junit.Test;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
@@ -17,21 +20,29 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author ishikura
  * @version $Revision$, 2011/09/19
  */
-public class AccountRequestTest {
+public class AccountRequestTest extends DomainTest {
 
   /**
    * 登録を行い、そのユーザーが本当に登録できているかどうかテストします。
    */
   @Test
   public void testRegisterNewAccount() {
+    loginAsTeacher();
     // register
     {
-      AccountRequest req = RequestFactoryUtil.requestFactory().accountRequest();
-      req.registerNewAccount("10675003", "hoge", UserType.TEACHER).fire(); //$NON-NLS-1$ //$NON-NLS-2$
+      AccountRequest req = getRequestFactory().accountRequest();
+      req.registerNewAccount("10675003", "hoge", UserType.TEACHER).fire(new Receiver<Void>() { //$NON-NLS-1$ //$NON-NLS-2$
+
+            @Override
+            public void onSuccess(@SuppressWarnings("unused") Void arg0) {
+              // do nothing
+            }
+
+          });
     }
     // get unregistered user
     {
-      AccountRequest req = RequestFactoryUtil.requestFactory().accountRequest();
+      AccountRequest req = getRequestFactory().accountRequest();
       req.getAccountById("aaaa").fire(new Receiver<AccountProxy>() { //$NON-NLS-1$
 
             @Override
@@ -43,7 +54,7 @@ public class AccountRequestTest {
     }
     // get registered user
     {
-      AccountRequest req = RequestFactoryUtil.requestFactory().accountRequest();
+      AccountRequest req = getRequestFactory().accountRequest();
       req.getAccountById("10675003").fire(new Receiver<AccountProxy>() { //$NON-NLS-1$
 
             @Override
@@ -61,7 +72,9 @@ public class AccountRequestTest {
   @SuppressWarnings("nls")
   @Test
   public void testRegisterDuplicatedAccount() {
-    AccountRequest req = RequestFactoryUtil.requestFactory().accountRequest();
+    loginAsTA();
+
+    AccountRequest req = getRequestFactory().accountRequest();
     req.registerNewAccount("10675003", "hoge", UserType.TEACHER).fire(new Receiver<Void>() {
 
       @Override
@@ -75,20 +88,6 @@ public class AccountRequestTest {
       @Override
       public void onFailure(@SuppressWarnings("unused") ServerFailure error) {
         // do nothing
-      }
-
-    });
-  }
-
-  @Test
-  public void testLogin() {
-    AccountRequest req = RequestFactoryUtil.requestFactory().accountRequest();
-    req.login("10675003", "hoge").fire(new Receiver<Void>() {
-
-      @Override
-      public void onSuccess(Void response) {
-        // TODO 自動生成されたメソッド・スタブ
-
       }
 
     });

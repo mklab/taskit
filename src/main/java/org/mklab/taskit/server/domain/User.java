@@ -18,7 +18,35 @@ public class User extends AbstractEntity<String> {
   private UserType type;
   private String name;
 
-  UserType getType() {
+  /**
+   * {@link User}オブジェクトを構築します。
+   */
+  public User() {
+    // do nothing
+  }
+
+  /**
+   * {@link User}オブジェクトを構築します。
+   * 
+   * @param id アカウントID
+   * @param name 名前
+   * @param type ユーザー種別
+   */
+  public User(String id, String name, UserType type) {
+    if (id == null) throw new NullPointerException();
+    if (name == null) throw new NullPointerException();
+    if (type == null) throw new NullPointerException();
+    this.id = id;
+    this.name = name;
+    this.type = type;
+  }
+
+  /**
+   * ユーザー種別を取得します。
+   * 
+   * @return ユーザー種別
+   */
+  public UserType getType() {
     return this.type;
   }
 
@@ -26,7 +54,12 @@ public class User extends AbstractEntity<String> {
     this.type = type;
   }
 
-  String getName() {
+  /**
+   * ユーザー名を取得します。
+   * 
+   * @return ユーザー名
+   */
+  public String getName() {
     return this.name;
   }
 

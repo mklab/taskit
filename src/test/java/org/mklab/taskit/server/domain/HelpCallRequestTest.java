@@ -1,13 +1,17 @@
 /**
  * 
  */
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.domain;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.HelpCallRequest;
-import org.mklab.taskit.shared.model.UserType;
+
+import java.util.List;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
@@ -16,17 +20,16 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 /**
  * @author ishikura
  */
-public class HelpCallRequestTest {
+public class HelpCallRequestTest extends DomainTest {
 
   /**
    * 呼び出し情報が記録されるかどうかのテストを行います。
    */
   @Test
   public void testCall() {
-    final HelpCallRequest req = RequestFactoryUtil.requestFactory().helpCallRequest();
-    final UserType bak = RequestFactoryUtil.getUserType();
+    HelpCallRequest req = getRequestFactory().helpCallRequest();
+    final User caller = loginAsStudent();
 
-    RequestFactoryUtil.setUserType(UserType.STUDENT);
     req.call(null).fire(new Receiver<Void>() {
 
       @Override
@@ -43,7 +46,17 @@ public class HelpCallRequestTest {
       }
 
     });
-    RequestFactoryUtil.setUserType(bak);
-  }
 
+    loginAsTeacher();
+    req = getRequestFactory().helpCallRequest();
+    req.getAllHelpCalls().fire(new Receiver<List<HelpCallProxy>>() {
+
+      @Override
+      public void onSuccess(List<HelpCallProxy> calls) {
+        assertEquals(1, calls.size());
+        assertEquals(caller.getId(), calls.get(0).getId());
+      }
+
+    });
+  }
 }

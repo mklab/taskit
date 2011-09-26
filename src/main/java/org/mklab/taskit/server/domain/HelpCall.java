@@ -111,7 +111,7 @@ public class HelpCall extends AbstractEntity<String> {
   @Invoker(UserType.STUDENT)
   public static void uncall() {
     final User loginUser = ServiceUtil.getLoginUser();
-    uncall(loginUser.getId());
+    cancelCall(loginUser.getId());
   }
 
   /**
@@ -120,7 +120,7 @@ public class HelpCall extends AbstractEntity<String> {
    * @param accountId キャンセルする生徒のアカウントID
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static void uncall(String accountId) {
+  public static void cancelCall(String accountId) {
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
 
@@ -140,7 +140,7 @@ public class HelpCall extends AbstractEntity<String> {
    * 
    * @return すべてのヘルプコール
    */
-  @Invoker(UserType.STUDENT)
+  @Invoker({UserType.TEACHER, UserType.TA})
   public static List<HelpCall> getAllHelpCalls() {
     final EntityManager em = EMF.get().createEntityManager();
     Query q = em.createQuery("select o from HelpCall o"); //$NON-NLS-1$

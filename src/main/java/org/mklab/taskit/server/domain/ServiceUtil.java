@@ -11,12 +11,25 @@ import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
 
 /**
- * @author yuhi
+ * サービスで共通に利用する処理を定義したユーティリティクラスです。
+ * <p>
+ * テストのために、実装を切り替えられるようにしています。
+ * 
+ * @author ishikura
  */
-class ServiceUtil {
+public class ServiceUtil {
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
   static final String USER_KEY = "user"; //$NON-NLS-1$
+  private static ServiceUtilImplementation impl = new DefaultServiceUtilImplementation();
+
+  static ServiceUtilImplementation getImplementation() {
+    return impl;
+  }
+
+  static void setImplementation(ServiceUtilImplementation implementation) {
+    ServiceUtil.impl = implementation;
+  }
 
   /**
    * 与えられたエンティティのクラスのテーブルを参照し、IDが一致するエンティティを取得します。
@@ -25,7 +38,7 @@ class ServiceUtil {
    * @param id エンティティのID
    * @return エンティティ
    */
-  static <T, I> T findEntity(Class<? extends T> clazz, I id) {
+  public static <T, I> T findEntity(Class<? extends T> clazz, I id) {
     final EntityManager em = EMF.get().createEntityManager();
     try {
       return em.find(clazz, id);
@@ -35,14 +48,26 @@ class ServiceUtil {
   }
 
   /**
-   * 与えられたユーザーがログイン状態であることをセッションに対しマークします。
+   * 与えられたユーザーでログインします。
+   * <p>
+   * すでにログインしていた場合は一旦ログアウトしてから改めてログインします。
    * 
    * @param user ログインさせるユーザー
    */
-  static void markAsLoggedIn(User user) {
-    final HttpSession session = getSession();
-    session.setAttribute(IS_LOGGED_IN_KEY, Boolean.TRUE);
-    session.setAttribute(USER_KEY, user);
+  public static void login(User user) {
+    if (isLoggedIn()) {
+      logout();
+    }
+    impl.login(user);
+  }
+
+  /**
+   * ログアウトします。
+   * <p>
+   * ログインしていない状態であれば何も行いません。
+   */
+  public static void logout() {
+    impl.logout();
   }
 
   /**
@@ -50,12 +75,8 @@ class ServiceUtil {
    * 
    * @return ログインユーザー。ログインしていない場合はnull
    */
-  static User getLoginUser() {
-    final HttpSession session = getSession();
-    if (session == null) return null;
-
-    final User user = (User)session.getAttribute(USER_KEY);
-    return user;
+  public static User getLoginUser() {
+    return impl.getLoginUser();
   }
 
   /**
@@ -63,39 +84,68 @@ class ServiceUtil {
    * 
    * @return ログインしているかどうか
    */
-  static boolean isLoggedIn() {
-    final HttpSession session = getSession();
-    if (session == null) return false;
-
-    final Boolean loggedIn = (Boolean)session.getAttribute(IS_LOGGED_IN_KEY);
-    return loggedIn == null ? false : loggedIn.booleanValue();
+  public static boolean isLoggedIn() {
+    return impl.isLoggedIn();
   }
 
-  /**
-   * セッションを取得します。
-   * <p>
-   * まだセッションが生成されていない場合は新規に作成します。
-   * 
-   * @return セッション
-   */
-  static final HttpSession getSessionOrCreate() {
-    return getThreadLocalRequest().getSession(true);
+  static interface ServiceUtilImplementation {
+
+    boolean isLoggedIn();
+
+    User getLoginUser();
+
+    void login(User user);
+
+    void logout();
+
   }
 
-  /**
-   * セッションを取得します。
-   * <p>
-   * セッションが存在しない場合はnullを返します。
-   * 
-   * @return セッション
-   */
-  static final HttpSession getSession() {
-    return getThreadLocalRequest().getSession();
-  }
+  static class DefaultServiceUtilImplementation implements ServiceUtilImplementation {
 
-  private static HttpServletRequest getThreadLocalRequest() {
-    HttpServletRequest req = RequestFactoryServlet.getThreadLocalRequest();
-    if (req == null) throw new NullPointerException("Thread local request was null."); //$NON-NLS-1$
-    return req;
+    @Override
+    public void login(User user) {
+      final HttpSession session = getSession();
+      session.setAttribute(IS_LOGGED_IN_KEY, Boolean.TRUE);
+      session.setAttribute(USER_KEY, user);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void logout() {
+      HttpSession session = getSession();
+      if (session != null) {
+        session.invalidate();
+      }
+    }
+
+    @Override
+    public User getLoginUser() {
+      final HttpSession session = getSession();
+      if (session == null) return null;
+
+      final User user = (User)session.getAttribute(USER_KEY);
+      return user;
+    }
+
+    @Override
+    public boolean isLoggedIn() {
+      final HttpSession session = getSession();
+      if (session == null) return false;
+
+      final Boolean loggedIn = (Boolean)session.getAttribute(IS_LOGGED_IN_KEY);
+      return loggedIn == null ? false : loggedIn.booleanValue();
+    }
+
+    private static final HttpSession getSession() {
+      return getThreadLocalRequest().getSession();
+    }
+
+    private static HttpServletRequest getThreadLocalRequest() {
+      HttpServletRequest req = RequestFactoryServlet.getThreadLocalRequest();
+      if (req == null) throw new NullPointerException("Thread local request was null."); //$NON-NLS-1$
+      return req;
+    }
   }
 }
