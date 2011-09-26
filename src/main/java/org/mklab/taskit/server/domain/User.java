@@ -1,5 +1,6 @@
 package org.mklab.taskit.server.domain;
 
+import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.model.UserType;
 
 import javax.persistence.Entity;
@@ -58,9 +59,20 @@ public class User extends AbstractEntity<String> {
    * @param accountId アカウントID
    * @return ユーザーオブジェクト
    */
+  @Invoker({UserType.TA, UserType.STUDENT, UserType.TEACHER})
   public static User getUserByAccountId(String accountId) {
     User user = ServiceUtil.findEntity(User.class, accountId);
     return user;
+  }
+
+  /**
+   * ログインユーザー情報を取得します。
+   * 
+   * @return ログインユーザー情報。ログインしていなければnull
+   */
+  public static User getLoginUser() {
+    User loginUser = ServiceUtil.getLoginUser();
+    return loginUser;
   }
 
 }

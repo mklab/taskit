@@ -3,24 +3,21 @@
  */
 package org.mklab.taskit.client.activity;
 
-import java.util.Date;
-
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.LoginView;
-import org.mklab.taskit.shared.model.User;
-import org.mklab.taskit.shared.service.LoginFailureException;
-import org.mklab.taskit.shared.service.LoginService;
-import org.mklab.taskit.shared.service.LoginServiceAsync;
+import org.mklab.taskit.shared.UserProxy;
+
+import java.util.Date;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
@@ -32,7 +29,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 public final class LoginActivity extends AbstractActivity {
 
   static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
-  final LoginServiceAsync loginServiceAsync = GWT.create(LoginService.class);
   private ClientFactory clientFactory;
 
   /**
@@ -64,7 +60,7 @@ public final class LoginActivity extends AbstractActivity {
     view.requestFocus();
   }
 
-  private boolean isAutoLoginEnabledClient() {
+  private static boolean isAutoLoginEnabledClient() {
     String enabled = Cookies.getCookie(COOKIE_AUTO_LOGIN_KEY);
     if (enabled == null) return false;
     return enabled.toUpperCase().equals("TRUE"); //$NON-NLS-1$
@@ -87,17 +83,11 @@ public final class LoginActivity extends AbstractActivity {
   }
 
   void tryAutoLoginAsync() {
-    this.loginServiceAsync.getLoginUser(new AsyncCallback<User>() {
-
-      @SuppressWarnings("unused")
-      @Override
-      public void onFailure(Throwable caught) {
-        // do nothing
-      }
+    this.clientFactory.getRequestFactory().userRequest().getLoginUser().fire(new Receiver<UserProxy>() {
 
       @Override
-      public void onSuccess(final User result) {
-        if (result == null) return;
+      public void onSuccess(UserProxy response) {
+        if (response == null) return;
         goToTopPage();
       }
 
@@ -105,11 +95,10 @@ public final class LoginActivity extends AbstractActivity {
   }
 
   void tryLoginAsync(final LoginView view, final String id, final String password) {
-    this.loginServiceAsync.login(id, password, new AsyncCallback<User>() {
+    this.clientFactory.getRequestFactory().accountRequest().login(id, password).fire(new Receiver<Void>() {
 
-      @SuppressWarnings("unused")
       @Override
-      public void onSuccess(User result) {
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
         view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
 
         final boolean autoLoginEnabled = view.isAutoLoginEnabled();
@@ -124,14 +113,12 @@ public final class LoginActivity extends AbstractActivity {
         Cookies.setCookie(COOKIE_AUTO_LOGIN_KEY, String.valueOf(autoLoginEnabled), expire);
       }
 
+      /**
+       * {@inheritDoc}
+       */
       @Override
-      public void onFailure(Throwable caught) {
-        if (caught instanceof LoginFailureException) {
-          view.setStatusText(String.valueOf(((LoginFailureException)caught).getErrorCode()));
-          return;
-        }
-
-        view.setStatusText("Invalid state." + caught.toString()); //$NON-NLS-1$
+      public void onFailure(ServerFailure error) {
+        view.setStatusText("Login failure. " + error.getMessage()); //$NON-NLS-1$
       }
     });
   }

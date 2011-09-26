@@ -19,4 +19,6 @@ public interface UserRequest extends RequestContext {
 
   Request<UserProxy> getUserByAccountId(String accountId);
 
+  Request<UserProxy> getLoginUser();
+
 }
