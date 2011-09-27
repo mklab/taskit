@@ -51,7 +51,7 @@ public class SubmissionRequestTest extends DomainTest {
     });
 
     req = getRequestFactory().submissionRequest();
-    req.getAllSubmissionsByAccountId(id).fire(new Receiver<List<SubmissionProxy>>() {
+    req.getSubmissionsByAccountId(id).fire(new Receiver<List<SubmissionProxy>>() {
 
       @Override
       public void onSuccess(List<SubmissionProxy> response) {

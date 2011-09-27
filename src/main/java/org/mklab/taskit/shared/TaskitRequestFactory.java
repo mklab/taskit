@@ -20,4 +20,6 @@ public interface TaskitRequestFactory extends RequestFactory {
 
   HelpCallRequest helpCallRequest();
 
+  LectureRequest lectureRequest();
+
 }

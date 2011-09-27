@@ -132,9 +132,9 @@ public class Submission extends AbstractEntity<Integer> {
    */
   @SuppressWarnings({"nls", "unchecked"})
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static List<Submission> getAllSubmissionsByAccountId(String accountId) {
+  public static List<Submission> getSubmissionsByAccountId(String accountId) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Submission s where s.accountId=:accountId");
+    final Query q = em.createQuery("select s from Submission s where s.accountId=:accountId order by s.reportId");
     q.setParameter("accountId", accountId);
     return q.getResultList();
   }

@@ -22,7 +22,6 @@ public interface SubmissionRequest extends RequestContext {
    * @param accountId 提出者ID
    * @param reportId レポートID
    * @param point 得点
-   * @param comment コメント
    * @return リクエスト
    */
   Request<SubmissionProxy> submit(String accountId, Integer reportId, int point);
@@ -33,6 +32,6 @@ public interface SubmissionRequest extends RequestContext {
    * @param accountId 提出者
    * @return 提出情報
    */
-  Request<List<SubmissionProxy>> getAllSubmissionsByAccountId(String accountId);
+  Request<List<SubmissionProxy>> getSubmissionsByAccountId(String accountId);
 
 }
