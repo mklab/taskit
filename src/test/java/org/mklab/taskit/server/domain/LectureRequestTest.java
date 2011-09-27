@@ -38,6 +38,9 @@ public class LectureRequestTest extends DomainTest {
       @Override
       public void onSuccess(List<LectureProxy> response) {
         assertEquals(3, response.size());
+        assertEquals("title1", response.get(0).getTitle()); //$NON-NLS-1$
+        assertEquals("title2", response.get(1).getTitle()); //$NON-NLS-1$
+        assertEquals("title3", response.get(2).getTitle()); //$NON-NLS-1$
       }
 
     });

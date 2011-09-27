@@ -7,6 +7,9 @@ import org.mklab.taskit.server.auth.AuthenticationServiceLayer;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 import org.mklab.taskit.shared.model.UserType;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 
@@ -34,18 +37,52 @@ public abstract class DomainTest {
   private static TaskitRequestFactory requestFactory;
 
   static {
-    EMF.setPersistenceUnitName("taskit-test"); //$NON-NLS-1$
-
     final ServiceLayer serviceLayer = ServiceLayer.create(new AuthenticationServiceLayer());
     final SimpleRequestProcessor processor = new SimpleRequestProcessor(serviceLayer);
     requestFactory = RequestFactorySource.create(TaskitRequestFactory.class);
     final EventBus eventBus = new SimpleEventBus();
     requestFactory.initialize(eventBus, new InProcessRequestTransport(processor));
+  }
 
+  /**
+   * テスト準備を行います。
+   */
+  @Before
+  public void setup() {
+    EMF.resetEntityManagerFactory();
+    EMF.setPersistenceUnitName("taskit-test"); //$NON-NLS-1$
     ServiceUtil.setImplementation(new ServiceUtilImplementationForTest());
+
+    registerTestUsers();
+  }
+
+  /**
+   * テストで利用するユーザーを登録します。
+   */
+  private static void registerTestUsers() {
     STUDENT = registerUser("10236005", "student1", UserType.STUDENT); //$NON-NLS-1$ //$NON-NLS-2$
     TA = registerUser("10675005", "ta1", UserType.TA); //$NON-NLS-1$//$NON-NLS-2$
     TEACHER = registerUser("teacher", "teacher1", UserType.TEACHER); //$NON-NLS-1$ //$NON-NLS-2$
+  }
+
+  /**
+   * テストの後処理を行います。
+   */
+  @After
+  public void tearDown() {
+    logout();
+  }
+
+  /**
+   * データベースを再生成します。
+   * <p>
+   * このメソッドでは {@link EntityManagerFactory#close()}
+   * を呼び出すだけであるため、その挙動はpersistence.xmlの hibernate.hbm2ddl.autoに依存します。
+   * テスト用なのでcreate-dropを指定しているため、データベースを再生成することになります。
+   */
+  public static void resetDatabase() {
+    EMF.resetEntityManagerFactory();
+    registerTestUsers();
   }
 
   /**
@@ -58,13 +95,14 @@ public abstract class DomainTest {
   }
 
   /**
-   * サーバーサイドテストの初期化を行います。
+   * 新たなユーザーを登録します。
+   * 
+   * @param accountId アカウントID
+   * @param name 名前
+   * @param type ユーザー種別
+   * @return 生成したユーザー
    */
-  public static void initialize() {
-    logout();
-  }
-
-  static User registerUser(String accountId, String name, UserType type) {
+  public static User registerUser(String accountId, String name, UserType type) {
     Account.registerNewAccount(accountId, "password", type); //$NON-NLS-1$
     User user = User.getUserByAccountId(accountId);
     user.setName(name);
@@ -73,7 +111,12 @@ public abstract class DomainTest {
     return user;
   }
 
-  static void unregisterUser(User user) {
+  /**
+   * ユーザーアカウントを抹消します。
+   * 
+   * @param user ユーザーアカウント
+   */
+  public static void unregisterUser(User user) {
     Account.unregisterAccount(user.getId());
   }
 
@@ -121,14 +164,6 @@ public abstract class DomainTest {
    */
   public static void logout() {
     ServiceUtil.logout();
-  }
-
-  /**
-   * テスト準備を行います。
-   */
-  @Before
-  public void setup() {
-    initialize();
   }
 
 }

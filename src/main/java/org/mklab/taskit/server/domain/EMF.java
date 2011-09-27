@@ -55,6 +55,15 @@ public final class EMF {
     emfInstance = null;
   }
 
+  /**
+   * {@link EntityManagerFactory}で利用していたリソースを開放し、再生成することを要求します。
+   */
+  public static void resetEntityManagerFactory() {
+    if (emfInstance == null) return;
+    emfInstance.close();
+    emfInstance = null;
+  }
+
   private EMF() {
     // nothing 
   }
