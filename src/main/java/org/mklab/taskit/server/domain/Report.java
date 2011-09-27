@@ -8,9 +8,11 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
@@ -23,8 +25,6 @@ import javax.validation.constraints.NotNull;
 public class Report extends AbstractEntity<Integer> {
 
   private Integer id;
-  /** このレポートの属する講義のIDです。 */
-  private Integer lectureId;
   /** 提出期限です。 */
   private Date period;
   /** レポートのタイトルです。 */
@@ -34,6 +34,27 @@ public class Report extends AbstractEntity<Integer> {
   private String description;
   /** レポートの最大点数です。 */
   private int point;
+
+  private Lecture lecture;
+
+  /**
+   * lectureを設定します。
+   * 
+   * @param lecture lecture
+   */
+  public void setLecture(Lecture lecture) {
+    this.lecture = lecture;
+  }
+
+  /**
+   * lectureを取得します。
+   * 
+   * @return lecture
+   */
+  @ManyToOne(fetch = FetchType.EAGER)
+  public Lecture getLecture() {
+    return this.lecture;
+  }
 
   /**
    * {@inheritDoc}
@@ -51,24 +72,6 @@ public class Report extends AbstractEntity<Integer> {
   @Override
   void setId(Integer id) {
     this.id = id;
-  }
-
-  /**
-   * 講義IDを取得します。
-   * 
-   * @return 講義ID
-   */
-  public Integer getLectureId() {
-    return this.lectureId;
-  }
-
-  /**
-   * 講義IDを設定します。
-   * 
-   * @param lectureId 講義ID
-   */
-  public void setLectureId(Integer lectureId) {
-    this.lectureId = lectureId;
   }
 
   /**
@@ -158,6 +161,24 @@ public class Report extends AbstractEntity<Integer> {
     } finally {
       em.close();
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker(UserType.TEACHER)
+  public void update() {
+    super.update();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker(UserType.TEACHER)
+  public void persist() {
+    super.persist();
   }
 
 }

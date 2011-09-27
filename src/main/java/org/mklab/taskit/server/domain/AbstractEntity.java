@@ -52,12 +52,29 @@ public abstract class AbstractEntity<I> {
    * <p>
    * IDを変更してこのメソッドを呼び出すと、新たなエンティティとして登録されてしまうため注意してください。
    */
-  protected void update() {
+  public void update() {
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
     t.begin();
     try {
       em.merge(this);
+      t.commit();
+    } catch (Throwable ex) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
+  }
+
+  /**
+   * データベースにエンティティを登録します。
+   */
+  public void persist() {
+    final EntityManager em = EMF.get().createEntityManager();
+    final EntityTransaction t = em.getTransaction();
+    t.begin();
+    try {
+      em.persist(this);
       t.commit();
     } catch (Throwable ex) {
       t.rollback();

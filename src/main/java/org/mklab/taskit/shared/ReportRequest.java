@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.shared;
 
-import org.mklab.taskit.server.domain.Lecture;
+import org.mklab.taskit.server.domain.Report;
 
 import java.util.List;
 
@@ -16,14 +16,14 @@ import com.google.web.bindery.requestfactory.shared.Service;
 /**
  * @author ishikura
  */
-@Service(value = Lecture.class)
+@Service(Report.class)
 @SuppressWarnings("javadoc")
-public interface LectureRequest extends RequestContext {
+public interface ReportRequest extends RequestContext {
 
-  Request<List<LectureProxy>> getAllLectures();
+  Request<List<ReportProxy>> getAllReports();
 
-  InstanceRequest<LectureProxy, Void> persist();
+  InstanceRequest<ReportProxy, Void> persist();
 
-  InstanceRequest<LectureProxy, Void> update();
+  InstanceRequest<ReportProxy, Void> update();
 
 }

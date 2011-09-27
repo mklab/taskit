@@ -22,4 +22,6 @@ public interface TaskitRequestFactory extends RequestFactory {
 
   LectureRequest lectureRequest();
 
+  ReportRequest reportRequest();
+
 }

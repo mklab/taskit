@@ -6,12 +6,13 @@ import org.mklab.taskit.shared.model.UserType;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
@@ -28,6 +29,7 @@ public class Lecture extends AbstractEntity<Integer> {
   private Date date;
   private String title;
   private String description;
+  private List<Report> reports;
 
   /**
    * {@inheritDoc}
@@ -48,6 +50,25 @@ public class Lecture extends AbstractEntity<Integer> {
   }
 
   /**
+   * 課題を取得します。
+   * 
+   * @return 課題
+   */
+  @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "lecture")
+  public List<Report> getReports() {
+    return this.reports;
+  }
+
+  /**
+   * 課題を設定します。
+   * 
+   * @param reports 課題
+   */
+  public void setReports(List<Report> reports) {
+    this.reports = reports;
+  }
+
+  /**
    * 講義日を取得します。
    * 
    * @return 講義日
@@ -61,7 +82,7 @@ public class Lecture extends AbstractEntity<Integer> {
    * 
    * @param date 講義日
    */
-  void setDate(Date date) {
+  public void setDate(Date date) {
     this.date = date;
   }
 
@@ -119,28 +140,20 @@ public class Lecture extends AbstractEntity<Integer> {
   }
 
   /**
-   * 講義を登録します。
-   * 
-   * @param title 講義のタイトル
-   * @param description 講義の説明。nullも可
-   * @param date 講義日
+   * {@inheritDoc}
    */
-  @Invoker(UserType.TEACHER)
-  public static void register(String title, String description, Date date) {
-    final Lecture l = new Lecture();
-    l.setTitle(title);
-    l.setDate(date);
-    l.setDescription(description);
+  @Override
+  @Invoker({UserType.TEACHER})
+  public void persist() {
+    super.persist();
+  }
 
-    final EntityManager em = EMF.get().createEntityManager();
-    final EntityTransaction t = em.getTransaction();
-    try {
-      t.begin();
-      em.persist(l);
-    } catch (Throwable e) {
-      t.rollback();
-    } finally {
-      em.clear();
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker({UserType.TEACHER})
+  public void update() {
+    super.update();
   }
 }
