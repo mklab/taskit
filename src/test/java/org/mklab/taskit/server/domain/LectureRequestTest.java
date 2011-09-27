@@ -38,7 +38,7 @@ public class LectureRequestTest extends DomainTest {
     req.fire();
 
     req = getRequestFactory().lectureRequest();
-    req.getAllLectures().fire(new Receiver<List<LectureProxy>>() {
+    req.getAllLectures().with("reports").fire(new Receiver<List<LectureProxy>>() {
 
       @Override
       public void onSuccess(List<LectureProxy> response) {

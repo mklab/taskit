@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,7 +55,7 @@ public class Lecture extends AbstractEntity<Integer> {
    * 
    * @return 課題
    */
-  @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "lecture")
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture", fetch = FetchType.EAGER)
   public List<Report> getReports() {
     return this.reports;
   }

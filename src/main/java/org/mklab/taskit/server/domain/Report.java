@@ -6,6 +6,7 @@ import org.mklab.taskit.shared.model.UserType;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
@@ -28,7 +29,6 @@ public class Report extends AbstractEntity<Integer> {
   /** 提出期限です。 */
   private Date period;
   /** レポートのタイトルです。 */
-  @NotNull
   private String title;
   /** レポートの詳細な説明です。 */
   private String description;
@@ -38,22 +38,23 @@ public class Report extends AbstractEntity<Integer> {
   private Lecture lecture;
 
   /**
-   * lectureを設定します。
+   * 講義を取得します。
    * 
-   * @param lecture lecture
+   * @return 講義
    */
-  public void setLecture(Lecture lecture) {
-    this.lecture = lecture;
+  @NotNull
+  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  public Lecture getLecture() {
+    return this.lecture;
   }
 
   /**
-   * lectureを取得します。
+   * 講義を設定します。
    * 
-   * @return lecture
+   * @param lecture 講義
    */
-  @ManyToOne(fetch = FetchType.EAGER)
-  public Lecture getLecture() {
-    return this.lecture;
+  public void setLecture(Lecture lecture) {
+    this.lecture = lecture;
   }
 
   /**

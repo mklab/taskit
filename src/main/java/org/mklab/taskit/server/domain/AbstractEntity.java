@@ -72,8 +72,9 @@ public abstract class AbstractEntity<I> {
   public void persist() {
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
-    t.begin();
+
     try {
+      t.begin();
       em.persist(this);
       t.commit();
     } catch (Throwable ex) {
