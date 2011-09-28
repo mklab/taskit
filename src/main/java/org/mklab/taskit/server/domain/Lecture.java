@@ -26,7 +26,6 @@ import javax.validation.constraints.NotNull;
 public class Lecture extends AbstractEntity<Integer> {
 
   private Integer id;
-  @NotNull
   private Date date;
   private String title;
   private String description;
@@ -74,6 +73,7 @@ public class Lecture extends AbstractEntity<Integer> {
    * 
    * @return 講義日
    */
+  @NotNull
   public Date getDate() {
     return this.date;
   }
