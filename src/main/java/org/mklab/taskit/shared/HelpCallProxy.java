@@ -14,7 +14,7 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 @ProxyFor(value = HelpCall.class, locator = HelpCallLocator.class)
 public interface HelpCallProxy extends EntityProxy {
 
-  String getId();
+  AccountProxy getCaller();
 
   String getMessage();
 

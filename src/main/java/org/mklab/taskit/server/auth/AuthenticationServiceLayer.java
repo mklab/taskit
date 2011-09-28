@@ -49,7 +49,7 @@ public class AuthenticationServiceLayer extends ServiceLayerDecorator {
       return super.invoke(domainMethod, args);
     }
 
-    report("\"%s\" has no permission to \"%s\".", loginUser.getId(), domainMethod); //$NON-NLS-1$
+    report("\"%s\" has no permission to \"%s\".", loginUser, domainMethod); //$NON-NLS-1$
     return null;
   }
 

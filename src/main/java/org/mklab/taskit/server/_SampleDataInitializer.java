@@ -40,8 +40,8 @@ public class _SampleDataInitializer {
     final EntityManager entityManager = entityManagerFactory.createEntityManager();
 
     createAccounts(new AccountDaoImpl(entityManager));
-    createLectures(new LectureDaoImpl(entityManager));
-    createReports(new ReportDaoImpl(entityManager));
+//    createLectures(new LectureDaoImpl(entityManager));
+//    createReports(new ReportDaoImpl(entityManager));
     entityManagerFactory.close();
   }
 

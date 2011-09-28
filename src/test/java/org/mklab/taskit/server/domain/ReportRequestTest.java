@@ -92,6 +92,7 @@ public class ReportRequestTest extends DomainTest {
       public void onSuccess(List<ReportProxy> response) {
         ReportRequest requestForUpdate = getRequestFactory().reportRequest();
         ReportProxy editableReport = requestForUpdate.edit(response.get(0));
+        editableReport.setDescription("hoge");
         requestForUpdate.update().using(editableReport).fire();
       }
 

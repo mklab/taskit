@@ -12,8 +12,12 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Query;
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -22,10 +26,11 @@ import javax.persistence.Query;
  * @author ishikura
  */
 @Entity
-public class HelpCall extends AbstractEntity<String> {
+public class HelpCall extends AbstractEntity<Integer> {
 
-  /** 呼んでいる人のアカウントIDです。 */
-  private String id;
+  private Integer id;
+  /** 呼び出した人のアカウントです。 */
+  private Account caller;
   /** 呼び出し日時です。 */
   private Date date;
   /** メッセージです。 */
@@ -36,7 +41,8 @@ public class HelpCall extends AbstractEntity<String> {
    */
   @Override
   @Id
-  public String getId() {
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Integer getId() {
     return this.id;
   }
 
@@ -44,8 +50,28 @@ public class HelpCall extends AbstractEntity<String> {
    * {@inheritDoc}
    */
   @Override
-  public void setId(String id) {
+  public void setId(Integer id) {
     this.id = id;
+  }
+
+  /**
+   * 呼び出した人を取得します。
+   * 
+   * @return account
+   */
+  @OneToOne
+  @NotNull
+  public Account getCaller() {
+    return this.caller;
+  }
+
+  /**
+   * 呼び出した人を設定します。
+   * 
+   * @param account 呼び出した人のアカウント
+   */
+  public void setCaller(Account account) {
+    this.caller = account;
   }
 
   /**
@@ -89,7 +115,7 @@ public class HelpCall extends AbstractEntity<String> {
 
     final User loginUser = ServiceUtil.getLoginUser();
     if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
-    call.setId(loginUser.getId());
+    call.setCaller(loginUser.getAccount());
 
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
@@ -111,7 +137,7 @@ public class HelpCall extends AbstractEntity<String> {
   @Invoker(UserType.STUDENT)
   public static void uncall() {
     final User loginUser = ServiceUtil.getLoginUser();
-    cancelCall(loginUser.getId());
+    cancelCall(loginUser.getAccount().getId());
   }
 
   /**

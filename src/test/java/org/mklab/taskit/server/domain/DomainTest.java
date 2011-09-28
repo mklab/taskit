@@ -5,6 +5,7 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.AuthenticationServiceLayer;
 import org.mklab.taskit.shared.TaskitRequestFactory;
+import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.model.UserType;
 
 import javax.persistence.EntityManagerFactory;
@@ -18,6 +19,7 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.web.bindery.requestfactory.server.ServiceLayer;
 import com.google.web.bindery.requestfactory.server.SimpleRequestProcessor;
 import com.google.web.bindery.requestfactory.server.testing.InProcessRequestTransport;
+import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.vm.RequestFactorySource;
 
 
@@ -29,6 +31,8 @@ public abstract class DomainTest {
 
   /** テスト用学生アカウントです。 */
   public static User STUDENT;
+  /** テスト用学生アカウントです。 */
+  public static UserProxy STUDENT_PROXY;
   /** テスト用TAアカウントです。 */
   public static User TA;
   /** テスト用先生アカウントです。 */
@@ -63,6 +67,23 @@ public abstract class DomainTest {
     STUDENT = registerUser("10236005", "student1", UserType.STUDENT); //$NON-NLS-1$ //$NON-NLS-2$
     TA = registerUser("10675005", "ta1", UserType.TA); //$NON-NLS-1$//$NON-NLS-2$
     TEACHER = registerUser("teacher", "teacher1", UserType.TEACHER); //$NON-NLS-1$ //$NON-NLS-2$
+
+    loginAsTeacher();
+    STUDENT_PROXY = proxyOf(STUDENT);
+    logout();
+  }
+
+  private static UserProxy proxyOf(User user) {
+    final UserProxy[] proxy = new UserProxy[1];
+    getRequestFactory().userRequest().getUserByAccountId(user.getAccount().getId()).with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
+
+          @Override
+          public void onSuccess(UserProxy response) {
+            proxy[0] = response;
+          }
+        });
+
+    return proxy[0];
   }
 
   /**
@@ -117,7 +138,7 @@ public abstract class DomainTest {
    * @param user ユーザーアカウント
    */
   public static void unregisterUser(User user) {
-    Account.unregisterAccount(user.getId());
+    Account.unregisterAccount(user.getAccount().getId());
   }
 
   /**

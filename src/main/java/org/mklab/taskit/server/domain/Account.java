@@ -79,7 +79,7 @@ public class Account extends AbstractEntity<String> {
     account.setId(id);
     account.setHashedPassword(hashedPassword);
     final User user = new User();
-    user.setId(id);
+    user.setAccount(account);
     user.setType(userType);
 
     final EntityManager em = EMF.get().createEntityManager();
@@ -133,7 +133,7 @@ public class Account extends AbstractEntity<String> {
       throw new IllegalArgumentException("Password invalid."); //$NON-NLS-1$
     }
 
-    final User user = ServiceUtil.findEntity(User.class, id);
+    final User user = User.getUserByAccountId(id);
     if (user == null) {
       throw new IllegalArgumentException("Internal error: user data not exists."); //$NON-NLS-1$
     }

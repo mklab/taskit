@@ -49,14 +49,14 @@ public class HelpCallRequestTest extends DomainTest {
 
     loginAsTeacher();
     req = getRequestFactory().helpCallRequest();
-    req.getAllHelpCalls().fire(new Receiver<List<HelpCallProxy>>() {
+    req.getAllHelpCalls().with("caller").fire(new Receiver<List<HelpCallProxy>>() { //$NON-NLS-1$
 
-      @Override
-      public void onSuccess(List<HelpCallProxy> calls) {
-        assertEquals(1, calls.size());
-        assertEquals(caller.getId(), calls.get(0).getId());
-      }
+          @Override
+          public void onSuccess(List<HelpCallProxy> calls) {
+            assertEquals(1, calls.size());
+            assertEquals(caller.getAccount().getId(), calls.get(0).getCaller().getId());
+          }
 
-    });
+        });
   }
 }

@@ -54,7 +54,7 @@ public class Lecture extends AbstractEntity<Integer> {
    * 
    * @return 課題
    */
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture", fetch = FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture", fetch = FetchType.EAGER,targetEntity=Report.class)
   public List<Report> getReports() {
     return this.reports;
   }

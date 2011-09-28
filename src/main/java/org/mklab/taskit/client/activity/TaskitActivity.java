@@ -99,27 +99,27 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   private void setupLoginUserViewAsync(final HeaderView header) {
-    getClientFactory().getRequestFactory().userRequest().getLoginUser().fire(new Receiver<UserProxy>() {
+    getClientFactory().getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
 
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void onSuccess(UserProxy arg0) {
-        if (arg0 == null) {
-          logout();
-          return;
-        }
-        setupLoginUserView(header, arg0);
-      }
+          @SuppressWarnings("synthetic-access")
+          @Override
+          public void onSuccess(UserProxy arg0) {
+            if (arg0 == null) {
+              logout();
+              return;
+            }
+            setupLoginUserView(header, arg0);
+          }
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
-        return;
-      }
-    });
+          /**
+           * {@inheritDoc}
+           */
+          @Override
+          public void onFailure(ServerFailure error) {
+            showErrorMessage(error.getMessage());
+            return;
+          }
+        });
   }
 
   protected void logout() {
@@ -132,7 +132,7 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   private void setupLoginUserView(final HeaderView header, UserProxy loginUser) {
-    header.setUserId(loginUser.getId());
+    header.setUserId(loginUser.getAccount().getId());
     header.setUserType(loginUser.getType().name());
   }
 

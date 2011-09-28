@@ -44,14 +44,14 @@ public class UserRequestTest extends DomainTest {
     });
 
     final User loginUser = loginAsStudent();
-    getRequestFactory().userRequest().getLoginUser().fire(new Receiver<UserProxy>() {
+    getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
 
-      @Override
-      public void onSuccess(UserProxy arg0) {
-        assertNotNull(arg0);
-        assertEquals(loginUser.getId(), arg0.getId());
-      }
-    });
+          @Override
+          public void onSuccess(UserProxy arg0) {
+            assertNotNull(arg0);
+            assertEquals(loginUser.getAccount().getId(), arg0.getAccount().getId());
+          }
+        });
   }
 
   /**
@@ -66,21 +66,21 @@ public class UserRequestTest extends DomainTest {
 
     loginAsTA();
 
-    getRequestFactory().userRequest().getAllStudents().fire(new Receiver<List<UserProxy>>() {
+    getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
 
-      @Override
-      public void onSuccess(List<UserProxy> arg0) {
-        String prev = null;
-        for (UserProxy user : arg0) {
-          if (prev != null) {
-            assertTrue(prev.compareTo(user.getId()) < 0);
+          @Override
+          public void onSuccess(List<UserProxy> arg0) {
+            String prev = null;
+            for (UserProxy user : arg0) {
+              if (prev != null) {
+                assertTrue(prev.compareTo(user.getAccount().getId()) < 0);
+              }
+              assertEquals(UserType.STUDENT, user.getType());
+              prev = user.getAccount().getId();
+            }
           }
-          assertEquals(UserType.STUDENT, user.getType());
-          prev = user.getId();
-        }
-      }
 
-    });
+        });
   }
 
 }

@@ -20,7 +20,7 @@ public interface UserProxy extends EntityProxy {
    * 
    * @return アカウントID
    */
-  String getId();
+  AccountProxy getAccount();
 
   /**
    * ユーザー種別を取得します。

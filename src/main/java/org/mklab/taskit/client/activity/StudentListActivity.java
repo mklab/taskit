@@ -39,20 +39,20 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     final StudentListView list = clientFactory.getStudentListView();
     list.setPresenter(this);
 
-    getClientFactory().getRequestFactory().userRequest().getAllStudents().fire(new Receiver<List<UserProxy>>() {
+    getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
 
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void onSuccess(List<UserProxy> arg0) {
-        final String[] names = new String[arg0.size()];
-        for (int i = 0; i < names.length; i++) {
-          names[i] = arg0.get(i).getId();
-        }
-        StudentListActivity.this.userNames = names;
-        list.setListData(names);
-      }
+          @SuppressWarnings("synthetic-access")
+          @Override
+          public void onSuccess(List<UserProxy> arg0) {
+            final String[] names = new String[arg0.size()];
+            for (int i = 0; i < names.length; i++) {
+              names[i] = arg0.get(i).getAccount().getId();
+            }
+            StudentListActivity.this.userNames = names;
+            list.setListData(names);
+          }
 
-    });
+        });
     return list;
   }
 

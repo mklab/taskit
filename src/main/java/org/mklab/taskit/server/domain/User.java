@@ -3,11 +3,15 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.model.UserType;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Query;
 
 
@@ -16,9 +20,10 @@ import javax.persistence.Query;
  * @version $Revision$, 2011/09/19
  */
 @Entity
-public class User extends AbstractEntity<String> {
+public class User extends AbstractEntity<Integer> {
 
-  private String id;
+  private Integer id;
+  private Account account;
   private UserType type;
   private String name;
 
@@ -32,17 +37,35 @@ public class User extends AbstractEntity<String> {
   /**
    * {@link User}オブジェクトを構築します。
    * 
-   * @param id アカウントID
+   * @param account アカウント
    * @param name 名前
    * @param type ユーザー種別
    */
-  public User(String id, String name, UserType type) {
-    if (id == null) throw new NullPointerException();
+  public User(Account account, String name, UserType type) {
+    if (account == null) throw new NullPointerException();
     if (name == null) throw new NullPointerException();
     if (type == null) throw new NullPointerException();
-    this.id = id;
+    this.account = account;
     this.name = name;
     this.type = type;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Integer getId() {
+    return this.id;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  void setId(Integer id) {
+    this.id = id;
   }
 
   /**
@@ -72,23 +95,33 @@ public class User extends AbstractEntity<String> {
   }
 
   /**
-   * {@inheritDoc}
+   * アカウントを取得します。
+   * 
+   * @return アカウント
    */
-  @Override
-  @Id
-  public String getId() {
-    return this.id;
+  @OneToOne
+  public Account getAccount() {
+    return this.account;
   }
+
+  /**
+   * アカウントを設定します。
+   * 
+   * @param account アカウント
+   */
+  public void setAccount(Account account) {
+    this.account = account;
+  }
+
+  // service methods
 
   /**
    * {@inheritDoc}
    */
   @Override
-  void setId(String id) {
-    this.id = id;
+  public String toString() {
+    return MessageFormat.format("User [id={0}, name={1}, type={2}, account={3}]", this.id, this.name, this.type, this.account); //$NON-NLS-1$
   }
-
-  // service methods
 
   /**
    * アカウントIDからユーザーオブジェクトを取得します。
@@ -98,8 +131,10 @@ public class User extends AbstractEntity<String> {
    */
   @Invoker({UserType.TA, UserType.TEACHER})
   public static User getUserByAccountId(String accountId) {
-    User user = ServiceUtil.findEntity(User.class, accountId);
-    return user;
+    EntityManager em = EMF.get().createEntityManager();
+    Query q = em.createQuery("select s from User s where s.account.id=:accountId"); //$NON-NLS-1$
+    q.setParameter("accountId", accountId); //$NON-NLS-1$
+    return (User)q.getSingleResult();
   }
 
   /**
@@ -121,7 +156,7 @@ public class User extends AbstractEntity<String> {
   @Invoker({UserType.TA, UserType.TEACHER})
   public static List<User> getAllStudents() {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select u from User u where u.type=:type order by u.id"); //$NON-NLS-1$
+    final Query q = em.createQuery("select u from User u where u.type=:type order by u.account.id"); //$NON-NLS-1$
     q.setParameter("type", UserType.STUDENT); //$NON-NLS-1$
 
     @SuppressWarnings("unchecked")

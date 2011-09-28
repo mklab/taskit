@@ -1,20 +1,20 @@
 package org.mklab.taskit.server.domain;
 
+import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.model.UserType;
+
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
-
-import org.mklab.taskit.server.auth.Invoker;
-import org.mklab.taskit.shared.AttendanceType;
-import org.mklab.taskit.shared.model.UserType;
 
 
 /**
@@ -28,10 +28,10 @@ public class Attendance extends AbstractEntity<Integer> {
 
   /** IDです。 */
   private Integer id;
-  /** 出席者のIDです。 */
-  private String accountId;
-  /** 講義IDです。 */
-  private Integer lectureId;
+  /** 出席者のアカウントです。 */
+  private Account attender;
+  /** 講義です。 */
+  private Lecture lecture;
   /** 出席種別です。 */
   private AttendanceType type;
   /** 出席チェックを行った時間です。 */
@@ -56,29 +56,41 @@ public class Attendance extends AbstractEntity<Integer> {
   }
 
   /**
-   * 出席者のアカウントIDを取得します。
+   * 出席者のアカウントを取得します。
    * 
-   * @return 出席者のアカウントID
+   * @return 出席者のアカウント
    */
-  public String getAccountId() {
-    return this.accountId;
-  }
-
-  void setAccountId(String accountId) {
-    this.accountId = accountId;
+  @OneToOne
+  public Account getAttender() {
+    return this.attender;
   }
 
   /**
-   * 出席対象講義のIDを取得します。
+   * 出席者のアカウントを設定します。
    * 
-   * @return 出席対象講義のID
+   * @param account 出席者のアカウント
    */
-  public Integer getLectureId() {
-    return this.lectureId;
+  public void setAttender(Account account) {
+    this.attender = account;
   }
 
-  void setLectureId(Integer lectureId) {
-    this.lectureId = lectureId;
+  /**
+   * 出席した講義を取得します。
+   * 
+   * @return 出席した講義
+   */
+  @OneToOne
+  public Lecture getLecture() {
+    return this.lecture;
+  }
+
+  /**
+   * 出席した講義を設定します。
+   * 
+   * @param lecture 出席した講義
+   */
+  public void setLecture(Lecture lecture) {
+    this.lecture = lecture;
   }
 
   /**
@@ -86,7 +98,6 @@ public class Attendance extends AbstractEntity<Integer> {
    * 
    * @return 出席チェックを行った時間
    */
-  @NotNull
   public Date getDate() {
     return this.date;
   }
@@ -105,7 +116,12 @@ public class Attendance extends AbstractEntity<Integer> {
     return this.type;
   }
 
-  void setType(AttendanceType type) {
+  /**
+   * 出席種別を設定します。
+   * 
+   * @param type 出席種別
+   */
+  public void setType(AttendanceType type) {
     this.type = type;
   }
 
@@ -121,50 +137,28 @@ public class Attendance extends AbstractEntity<Integer> {
   @Invoker({UserType.TA, UserType.TEACHER})
   public static List<Attendance> getAllAttendancesByAccountId(String accountId) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Attendance s where s.accountId=:accountId");
+    final Query q = em.createQuery("select s from Attendance s where s.attender.id=:accountId");
     q.setParameter("accountId", accountId);
     return q.getResultList();
   }
 
   /**
-   * 出席チェックを行います。
-   * 
-   * @param accountId 出席者のアカウントID
-   * @param lectureId 出席対象の講義ID
-   * @param type 出席種別
-   * @return 出席情報
+   * 出席情報を保存します。
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static Attendance mark(String accountId, Integer lectureId, AttendanceType type) {
-    if (isAlreadyMarked(accountId, lectureId)) throw new IllegalArgumentException("Already marked."); //$NON-NLS-1$
-
-    final Attendance attendance = new Attendance();
-    attendance.setAccountId(accountId);
-    attendance.setLectureId(lectureId);
-    attendance.setType(type);
-    attendance.setDate(new Date());
-
-    final EntityManager em = EMF.get().createEntityManager();
-    final EntityTransaction t = em.getTransaction();
-    try {
-      t.begin();
-      em.persist(attendance);
-      t.commit();
-    } catch (Throwable e) {
-      t.rollback();
-    } finally {
-      em.close();
-    }
-
-    return attendance;
+  @Override
+  public void persist() {
+    if (isAlreadyMarked(this)) throw new IllegalArgumentException("Already marked."); //$NON-NLS-1$
+    setDate(new Date());
+    super.persist();
   }
 
   @SuppressWarnings("nls")
-  private static boolean isAlreadyMarked(String accountId, Integer lectureId) {
+  private static boolean isAlreadyMarked(Attendance attendance) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Attendance s where s.accountId=:accountId and s.lectureId=:lectureId");
-    q.setParameter("accountId", accountId);
-    q.setParameter("lectureId", lectureId);
+    final Query q = em.createQuery("select s from Attendance s where s.attender=:account and s.lecture=:lecture");
+    q.setParameter("account", attendance.attender);
+    q.setParameter("lecture", attendance.lecture);
     return q.getResultList().size() > 0;
   }
 

@@ -6,14 +6,14 @@ package org.mklab.taskit.server.domain;
 /**
  * @author ishikura
  */
-public class HelpCallLocator extends AbstractLocator<HelpCall, String> {
+public class HelpCallLocator extends AbstractLocator<Account, String> {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public Class<HelpCall> getDomainType() {
-    return HelpCall.class;
+  public Class<Account> getDomainType() {
+    return Account.class;
   }
 
   /**

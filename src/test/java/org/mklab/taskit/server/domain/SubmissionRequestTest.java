@@ -1,17 +1,14 @@
 package org.mklab.taskit.server.domain;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 
 import java.util.List;
 
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
@@ -26,87 +23,63 @@ public class SubmissionRequestTest extends DomainTest {
    * 提出が正常に行われるかどうかテストします。
    */
   @Test
-  @SuppressWarnings("unused")
   public void testSubmit() {
-    loginAsTA();
-    SubmissionRequest req = getRequestFactory().submissionRequest();
-    final String id = "qeqrjzklf"; //$NON-NLS-1$
-    final Integer reportId = Integer.valueOf(1);
+    loginAsTeacher();
+    final Lectures lectures = new Lectures();
+    lectures.initialize(getRequestFactory());
 
-    req.submit(id, reportId, 100).fire(new Receiver<SubmissionProxy>() {
+    registerSingleSubmission(lectures);
+    {
+      SubmissionRequest req = getRequestFactory().submissionRequest();
+      req.getSubmissionsByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<SubmissionProxy>>() {
 
-      @Override
-      public void onSuccess(SubmissionProxy response) {
-        // do nothing
-      }
+        @Override
+        public void onSuccess(List<SubmissionProxy> response) {
+          assertEquals(1, response.size());
+        }
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onFailure(ServerFailure error) {
-        fail(error.getMessage());
-      }
-
-    });
-
-    req = getRequestFactory().submissionRequest();
-    req.getSubmissionsByAccountId(id).fire(new Receiver<List<SubmissionProxy>>() {
-
-      @Override
-      public void onSuccess(List<SubmissionProxy> response) {
-        assertEquals(1, response.size());
-        final SubmissionProxy s = response.get(0);
-        assertEquals(id, s.getAccountId());
-        assertEquals(reportId, s.getReportId());
-      }
-
-    });
+      });
+    }
   }
 
   /**
    * アカウントとレポートのIDの組み合わせが重複する提出がなされた場合に例外が発生するかどうかテストします。
    */
   @Test
-  @SuppressWarnings({"unused", "nls"})
   public void testSubmitDuplicatePair() {
-    loginAsTA();
+    loginAsTeacher();
+    final Lectures lectures = new Lectures();
+    lectures.initialize(getRequestFactory());
 
-    SubmissionRequest req = getRequestFactory().submissionRequest();
-    final String id = "asdfasfdasdf";
-    final Integer reportId = Integer.valueOf(1);
-    req.submit(id, reportId, 100).fire(new Receiver<SubmissionProxy>() {
+    registerSingleSubmission(lectures);
+    boolean thrown = false;
+    try {
+      registerSingleSubmission(lectures);
+    } catch (RuntimeException ex) {
+      assertEquals("Server Error: already submitted.", ex.getCause().getMessage()); //$NON-NLS-1$
+      thrown = true;
+    }
 
-      @Override
-      public void onSuccess(SubmissionProxy response) {
-        // do nothing
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onFailure(ServerFailure error) {
-        fail();
-      }
-
-    });
-    req = getRequestFactory().submissionRequest();
-    req.submit(id, reportId, 100).fire(new Receiver<SubmissionProxy>() {
-
-      @Override
-      public void onSuccess(SubmissionProxy response) {
-        fail();
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onFailure(ServerFailure error) {
-        // do nothing
-      }
-
-    });
+    assertTrue(thrown);
   }
+
+  private static void registerSingleSubmission(final Lectures lectures) {
+    loginAsTA();
+    {
+      SubmissionRequest req = getRequestFactory().submissionRequest();
+      final SubmissionProxy submission = req.create(SubmissionProxy.class);
+      submission.setPoint(100);
+      submission.setSubmitter(STUDENT_PROXY.getAccount());
+      submission.setReport(lectures.lecture1_report1);
+      req.persist().using(submission).fire(new Receiver<Void>() {
+
+        @Override
+        public void onSuccess(@SuppressWarnings("unused") Void response) {
+          // do nothing
+        }
+
+      });
+    }
+  }
+
 }

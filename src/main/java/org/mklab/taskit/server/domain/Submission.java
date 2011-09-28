@@ -1,20 +1,20 @@
 package org.mklab.taskit.server.domain;
 
+import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.model.UserType;
+
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
-
-import org.mklab.taskit.server.auth.Invoker;
-import org.mklab.taskit.shared.model.UserType;
 
 
 /**
@@ -25,10 +25,10 @@ import org.mklab.taskit.shared.model.UserType;
 public class Submission extends AbstractEntity<Integer> {
 
   private Integer id;
-  /** 提出者のIDです。 */
-  private String accountId;
+  /** 提出者のアカウントです。 */
+  private Account submitter;
   /** この提出に関する課題のIDです。 */
-  private Integer reportId;
+  private Report report;
   /** 提出日です。 */
   private Date date;
   /** 提出結果の得点です。 */
@@ -54,32 +54,44 @@ public class Submission extends AbstractEntity<Integer> {
     this.id = id;
   }
 
-  void setAccountId(String accountId) {
-    this.accountId = accountId;
+  /**
+   * 提出者のアカウントを取得します。
+   * 
+   * @return 提出者のアカウント
+   */
+  @OneToOne
+  @NotNull
+  public Account getSubmitter() {
+    return this.submitter;
   }
 
   /**
-   * 提出者のアカウントIDを取得します。
+   * 提出者のアカウントを設定します。
    * 
-   * @return 提出者のアカウントID
+   * @param account 提出者のアカウント
    */
-  @NotNull
-  public String getAccountId() {
-    return this.accountId;
+  public void setSubmitter(Account account) {
+    this.submitter = account;
   }
 
   /**
-   * レポートIDを取得します。
+   * 課題を取得します。
    * 
-   * @return レポートID
+   * @return 課題
    */
   @NotNull
-  public Integer getReportId() {
-    return this.reportId;
+  @OneToOne
+  public Report getReport() {
+    return this.report;
   }
 
-  void setReportId(Integer reportId) {
-    this.reportId = reportId;
+  /**
+   * 課題を設定します。
+   * 
+   * @param report 課題
+   */
+  public void setReport(Report report) {
+    this.report = report;
   }
 
   /**
@@ -104,7 +116,12 @@ public class Submission extends AbstractEntity<Integer> {
     return this.point;
   }
 
-  void setPoint(int point) {
+  /**
+   * 得点を設定します。
+   * 
+   * @param point 得点
+   */
+  public void setPoint(int point) {
     this.point = point;
   }
 
@@ -134,51 +151,30 @@ public class Submission extends AbstractEntity<Integer> {
   @Invoker({UserType.TA, UserType.TEACHER})
   public static List<Submission> getSubmissionsByAccountId(String accountId) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Submission s where s.accountId=:accountId order by s.reportId");
+    final Query q = em.createQuery("select s from Submission s where s.submitter.id=:accountId order by s.report.id");
     q.setParameter("accountId", accountId);
     return q.getResultList();
   }
 
   /**
-   * 提出を行います。
+   * 提出物を保存します。
    * 
-   * @param accountId 提出者
-   * @param reportId 課題
-   * @param point 得点
-   * @return 提出物
    * @throws IllegalArgumentException すでに提出されていた場合
    */
+  @Override
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static Submission submit(String accountId, Integer reportId, int point) {
-    if (isAlreadySubmit(accountId, reportId)) throw new IllegalArgumentException("already submitted."); //$NON-NLS-1$
-
-    final Submission submission = new Submission();
-    submission.setAccountId(accountId);
-    submission.setReportId(reportId);
-    submission.setPoint(point);
-    submission.setDate(new Date());
-
-    final EntityManager em = EMF.get().createEntityManager();
-    final EntityTransaction t = em.getTransaction();
-    try {
-      t.begin();
-      em.persist(submission);
-      t.commit();
-    } catch (Throwable e) {
-      t.rollback();
-    } finally {
-      em.close();
-    }
-
-    return submission;
+  public void persist() {
+    if (isAlreadySubmit(this)) throw new IllegalArgumentException("already submitted."); //$NON-NLS-1$
+    setDate(new Date());
+    super.persist();
   }
 
   @SuppressWarnings("nls")
-  private static boolean isAlreadySubmit(String accountId, Integer reportId) {
+  private static boolean isAlreadySubmit(Submission submission) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Submission s where s.accountId=:accountId and s.reportId=:reportId");
-    q.setParameter("accountId", accountId);
-    q.setParameter("reportId", reportId);
+    final Query q = em.createQuery("select s from Submission s where s.submitter.id=:accountId and s.report.id=:reportId");
+    q.setParameter("accountId", submission.getSubmitter().getId());
+    q.setParameter("reportId", submission.getReport().getId());
     return q.getResultList().size() > 0;
   }
 

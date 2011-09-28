@@ -1,10 +1,10 @@
 package org.mklab.taskit.shared;
 
+import org.mklab.taskit.server.domain.Attendance;
+
 import java.util.List;
 
-import org.mklab.taskit.server.domain.Attendance;
-import org.mklab.taskit.shared.AttendanceType;
-
+import com.google.web.bindery.requestfactory.shared.InstanceRequest;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
@@ -14,7 +14,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 @SuppressWarnings("javadoc")
 public interface AttendanceRequest extends RequestContext {
 
-  Request<AttendanceProxy> mark(String accountId, Integer lectureId, AttendanceType type);
+  InstanceRequest<AttendanceProxy, Void> persist();
 
   Request<List<AttendanceProxy>> getAllAttendancesByAccountId(String accountId);
 

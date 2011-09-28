@@ -1,10 +1,9 @@
 package org.mklab.taskit.shared;
 
-import java.util.Date;
-
 import org.mklab.taskit.server.domain.Attendance;
 import org.mklab.taskit.server.domain.AttendanceLocator;
-import org.mklab.taskit.shared.AttendanceType;
+
+import java.util.Date;
 
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
@@ -14,11 +13,17 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 @SuppressWarnings("javadoc")
 public interface AttendanceProxy extends EntityProxy {
 
-  String getAccountId();
+  AccountProxy getAttender();
 
-  Integer getLectureId();
+  void setAttender(AccountProxy account);
+
+  LectureProxy getLecture();
+
+  void setLecture(LectureProxy lecture);
 
   AttendanceType getType();
+
+  void setType(AttendanceType type);
 
   Date getDate();
 
