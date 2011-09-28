@@ -5,9 +5,13 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 24, 2011
  */
-public abstract class AbstractTaskitView extends Composite implements TaskitView {
+public abstract class AbstractTaskitView extends LayoutPanel implements TaskitView {
 
   private HeaderView header;
   private ClientFactory clientFactory;
@@ -48,9 +52,9 @@ public abstract class AbstractTaskitView extends Composite implements TaskitView
     vPanel.setWidth("100%"); //$NON-NLS-1$
 
     vPanel.add(this.header);
-    vPanel.add(createCenteringWidget(content));
-
-    initWidget(vPanel);
+   // vPanel.add(createCenteringWidget(content));
+    add(content);
+    //initWidget(content);
   }
 
   private Widget createCenteringWidget(Widget w) {

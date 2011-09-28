@@ -13,8 +13,10 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 
 /**
@@ -23,7 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class Taskit implements EntryPoint {
 
   private Place defaultPlace = Login.INSTANCE;
-  private SimplePanel appWidget = new SimplePanel();
+  private Root appWidget = new Root();
 
   /**
    * This is the entry point method.
@@ -42,8 +44,21 @@ public class Taskit implements EntryPoint {
     final PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
     historyHandler.register(placeController, eventBus, this.defaultPlace);
 
-    final RootPanel rootPanel = RootPanel.get();
+    final RootLayoutPanel rootPanel = RootLayoutPanel.get();
     rootPanel.add(this.appWidget);
     historyHandler.handleCurrentHistory();
+  }
+
+  static class Root extends LayoutPanel implements AcceptsOneWidget {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setWidget(IsWidget w) {
+      if (w == null) return;
+      add(w);
+    }
+
   }
 }

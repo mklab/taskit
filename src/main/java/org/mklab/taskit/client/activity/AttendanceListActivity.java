@@ -18,6 +18,7 @@ import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 
 /**
@@ -45,7 +46,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
    */
   @Override
-  protected TaskitView createTaskitView(ClientFactory clientFactory) {
+  protected Widget createTaskitView(ClientFactory clientFactory) {
     this.view = new AttendanceListViewImpl(clientFactory);
     this.view.setPresenter(this);
 
@@ -60,7 +61,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     };
     this.updateTimer.scheduleRepeating(10 * 1000);
 
-    return this.view;
+    return this.view.asWidget();
   }
 
   /**

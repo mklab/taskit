@@ -7,7 +7,6 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.EvaluationTable.Presenter;
 import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
-import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.dto.StudentwiseScoresDto;
 import org.mklab.taskit.shared.service.SubmissionService;
 import org.mklab.taskit.shared.service.SubmissionServiceAsync;
@@ -15,6 +14,7 @@ import org.mklab.taskit.shared.service.SubmissionServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 
 /**
@@ -39,7 +39,7 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
    * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
    */
   @Override
-  protected TaskitView createTaskitView(ClientFactory clientFactory) {
+  protected Widget createTaskitView(ClientFactory clientFactory) {
     final Place place = clientFactory.getPlaceController().getWhere();
     if (place instanceof StudentScore == false) throw new IllegalStateException();
 
@@ -49,7 +49,7 @@ public class StudentScoreActivity extends TaskitActivity implements Presenter {
 
     initialize(view);
 
-    return view;
+    return view.asWidget();
   }
 
   void initialize(final StudentwiseEvaluationView view) {

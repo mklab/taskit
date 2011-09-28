@@ -30,12 +30,7 @@
 
 	<g:HTMLPanel>
 		<div class='{style.base}'>
-			<span class="{style.title}">TASKit</span>
-			<span style='padding-left:50px' />
-			<g:Button ui:field='studentListLink'>Student List</g:Button>
-			<g:Button ui:field='scoreLink'>Score</g:Button>
-			<g:Button ui:field='attendanceLink'>Attendance</g:Button>
-			<g:Button ui:field='adminLink'>Admin</g:Button>
+			<g:HorizontalPanel ui:field='buttonPanel'></g:HorizontalPanel>
 
 			<div class='{style.rightAlignment}'>
 				<g:InlineLabel ui:field="userIdLabel" />

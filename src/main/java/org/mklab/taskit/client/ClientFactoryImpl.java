@@ -8,8 +8,8 @@ import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
-import org.mklab.taskit.client.ui.smartgwt.SmartGwtHeaderView;
-import org.mklab.taskit.client.ui.smartgwt.SmartGwtStudentListView;
+import org.mklab.taskit.client.ui.cw.CwHeaderView;
+import org.mklab.taskit.client.ui.cw.CwStudentListView;
 import org.mklab.taskit.client.ui.smartgwt.SmartGwtStudentwiseEvaluationView;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
@@ -89,7 +89,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public HeaderView getHeaderView() {
-    return new SmartGwtHeaderView();
+    return new CwHeaderView();
   }
 
   /**
@@ -97,7 +97,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public StudentListView getStudentListView() {
-    return new SmartGwtStudentListView(this);
+    return new CwStudentListView(this);
   }
 
   /**

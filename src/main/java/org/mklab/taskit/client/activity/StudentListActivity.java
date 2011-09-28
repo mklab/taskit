@@ -11,6 +11,7 @@ import org.mklab.taskit.shared.UserProxy;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 
 
@@ -35,7 +36,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
    */
   @Override
-  protected TaskitView createTaskitView(ClientFactory clientFactory) {
+  protected Widget createTaskitView(ClientFactory clientFactory) {
     final StudentListView list = clientFactory.getStudentListView();
     list.setPresenter(this);
 
@@ -53,7 +54,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
           }
 
         });
-    return list;
+    return list.asWidget();
   }
 
   /**

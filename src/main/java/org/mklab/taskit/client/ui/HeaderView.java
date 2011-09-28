@@ -31,6 +31,20 @@ public interface HeaderView extends IsWidget {
   void setUserType(String type);
 
   /**
+   * ボタンを追加します。
+   * 
+   * @param button ボタン
+   */
+  void addButton(ToolBarButton button);
+
+  /**
+   * 高さをpxで取得します。
+   * 
+   * @return 高さ
+   */
+  int getHeight();
+
+  /**
    * 学生一覧ビューのリンクを監視します。
    * 
    * @param h リスナ

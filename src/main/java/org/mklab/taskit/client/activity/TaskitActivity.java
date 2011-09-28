@@ -10,14 +10,18 @@ import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.client.ui.cw.StudentScorePanel;
 import org.mklab.taskit.client.ui.event.ClickHandler;
 import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -46,9 +50,11 @@ public abstract class TaskitActivity extends AbstractActivity {
    */
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
-    final TaskitView taskitView = createTaskitView(this.clientFactory);
-    setupHeader(taskitView);
-    panel.setWidget(taskitView);
+    HeaderView header = this.clientFactory.getHeaderView();
+    final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
+    pn.addNorth(header, header.getHeight());
+    pn.add(createTaskitView(this.clientFactory));
+    panel.setWidget(pn);
   }
 
   /**
@@ -57,7 +63,7 @@ public abstract class TaskitActivity extends AbstractActivity {
    * @param clientFactory クライアントファクトリ
    * @return ビュー
    */
-  protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+  protected abstract Widget createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
 
   private void setupHeader(final TaskitView taskitView) {
     final HeaderView header = taskitView.getHeader();

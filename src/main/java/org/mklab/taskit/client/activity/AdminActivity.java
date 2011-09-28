@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Widget;
 
 
 /**
@@ -44,7 +45,7 @@ public class AdminActivity extends TaskitActivity {
    * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
    */
   @Override
-  protected TaskitView createTaskitView(final ClientFactory clientFactory) {
+  protected Widget createTaskitView(final ClientFactory clientFactory) {
     final AdminView view = new AdminViewImpl(clientFactory);
     final NewAccountView newAccountView = view.getNewAccountView();
     final LectureEditor lectureEditor = view.getLectureEditor();
@@ -72,7 +73,7 @@ public class AdminActivity extends TaskitActivity {
         Window.alert(new Date(startTime) + ":" + title); //$NON-NLS-1$
       }
     });
-    return view;
+    return view.asWidget();
   }
 
   void handleNewAccount(final NewAccountView newAccountView, final UserType[] choosableAccountTypes) {
