@@ -1,12 +1,14 @@
 package org.mklab.taskit.server.domain;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 
 import java.util.List;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 
@@ -23,7 +25,7 @@ public class SubmissionRequestTest extends DomainTest {
    * 提出が正常に行われるかどうかテストします。
    */
   @Test
-  public void testSubmit() {
+  public void testPersist() {
     loginAsTeacher();
     final Lectures lectures = new Lectures();
     lectures.initialize(getRequestFactory());
@@ -46,7 +48,7 @@ public class SubmissionRequestTest extends DomainTest {
    * アカウントとレポートのIDの組み合わせが重複する提出がなされた場合に例外が発生するかどうかテストします。
    */
   @Test
-  public void testSubmitDuplicatePair() {
+  public void testPersistDuplicatePair() {
     loginAsTeacher();
     final Lectures lectures = new Lectures();
     lectures.initialize(getRequestFactory());

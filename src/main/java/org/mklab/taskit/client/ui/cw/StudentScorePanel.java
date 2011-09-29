@@ -5,20 +5,20 @@ package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ui.EvaluationTableModel;
 import org.mklab.taskit.client.ui.EvaluationTableModel.LectureScore;
+import org.mklab.taskit.client.ui.StudentListView.Presenter;
 import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
 import org.mklab.taskit.shared.SubmissionProxy;
+import org.mklab.taskit.shared.UserProxy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SelectionCell;
-import com.google.gwt.cell.client.ValueUpdater;
-import com.google.gwt.cell.client.Cell.Context;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -31,7 +31,9 @@ import com.google.gwt.user.client.ui.Composite;
 public class StudentScorePanel extends Composite {
 
   private CellTable<LectureScore> table;
+  private UserProxy user;
   private EvaluationTableModel model;
+  private Presenter presenter;
 
   /**
    * {@link StudentScorePanel}オブジェクトを構築します。
@@ -41,23 +43,54 @@ public class StudentScorePanel extends Composite {
 
     initColumns();
     initWidget(this.table);
+
+    this.table.setLoadingIndicator(null);
+  }
+
+  /**
+   * presenterを設定します。
+   * 
+   * @param presenter presenter
+   */
+  public void setPresenter(Presenter presenter) {
+    this.presenter = presenter;
+  }
+
+  /**
+   * presenterを取得します。
+   * 
+   * @return presenter
+   */
+  public Presenter getPresenter() {
+    return this.presenter;
   }
 
   /**
    * 成績データをクリアします。
    */
   public void clearScoreData() {
-    this.table.setRowCount(0);
+    this.table.setRowData(new ArrayList<LectureScore>());
   }
 
   /**
    * モデルを設定します。
    * 
-   * @param model モデル
+   * @param user 表示するユーザー
+   * @param model ユーザーの成績情報
    */
-  public void setModel(EvaluationTableModel model) {
+  @SuppressWarnings("hiding")
+  public void showUserPage(UserProxy user, EvaluationTableModel model) {
     this.model = model;
-    this.table.setRowData(model.asList());
+    this.user = user;
+    this.table.setRowData(this.model.asList());
+    initColumns();
+  }
+
+  /**
+   * テーブルデータを更新します。
+   */
+  public void updateTable() {
+    this.table.setRowData(this.model.asList());
     initColumns();
   }
 
@@ -84,7 +117,8 @@ public class StudentScorePanel extends Composite {
   @SuppressWarnings("nls")
   private void addReportColumn(final int reportIndex) {
     final List<String> options = Arrays.asList("○", "△", "×", "-", "");
-    final Column<LectureScore, String> submissionColumn = new Column<EvaluationTableModel.LectureScore, String>(new SelectionCell(options)) {
+    final SelectionCell submissionCell = new SelectionCell(options);
+    final Column<LectureScore, String> submissionColumn = new Column<EvaluationTableModel.LectureScore, String>(submissionCell) {
 
       @Override
       public String getValue(LectureScore object) {
@@ -106,15 +140,37 @@ public class StudentScorePanel extends Composite {
       }
 
     };
+    submissionColumn.setFieldUpdater(new FieldUpdater<EvaluationTableModel.LectureScore, String>() {
+
+      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
+      @Override
+      public void update(@SuppressWarnings("unused") int index, LectureScore object, String value) {
+        if (object.getReportCount() <= reportIndex) {
+          presenter.reloadUserPage();
+          return;
+        }
+        final ReportProxy report = object.getReport(reportIndex);
+        int n;
+        if (value.equals(options.get(0))) {
+          n = 100;
+        } else if (value.equals(options.get(1))) {
+          n = 50;
+        } else if (value.equals(options.get(2))) {
+          n = 0;
+        } else {
+          presenter.reloadUserPage();
+          return;
+        }
+
+        presenter.submit(report, n);
+      }
+
+    });
     this.table.addColumn(submissionColumn, String.valueOf(reportIndex + 1));
   }
 
   private void initCommonColumns() {
     final Column<LectureScore, Void> lectureNumberColumn = new Column<EvaluationTableModel.LectureScore, Void>(new AbstractCell<Void>() {
-
-      public void onBrowserEvent(Context context, Element parent, Void value, NativeEvent event, ValueUpdater<Void> valueUpdater) {
-        System.out.println(event);
-      }
 
       @Override
       public void render(com.google.gwt.cell.client.Cell.Context context, @SuppressWarnings("unused") Void value, SafeHtmlBuilder sb) {
@@ -122,15 +178,6 @@ public class StudentScorePanel extends Composite {
       }
 
     }) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void onBrowserEvent(Context context, Element elem, LectureScore object, NativeEvent event) {
-        System.out.println(event);
-        super.onBrowserEvent(context, elem, object, event);
-      }
 
       @Override
       public Void getValue(@SuppressWarnings("unused") LectureScore object) {
@@ -151,6 +198,17 @@ public class StudentScorePanel extends Composite {
       }
 
     };
+    attendanceColumn.setFieldUpdater(new FieldUpdater<EvaluationTableModel.LectureScore, String>() {
+
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access", "unused"})
+      @Override
+      public void update(int index, LectureScore object, String value) {
+        final LectureProxy lecture = object.getLecture();
+        final AttendanceType type = AttendanceType.valueOf(value);
+        presenter.attend(lecture, type);
+      }
+
+    });
 
     this.table.addColumn(lectureNumberColumn, "No."); //$NON-NLS-1$
     this.table.addColumn(attendanceColumn, "Attendance"); //$NON-NLS-1$

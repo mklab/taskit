@@ -190,13 +190,39 @@ public class Submission extends AbstractEntity<Integer> {
     super.persist();
   }
 
-  @SuppressWarnings("nls")
-  private static boolean isAlreadySubmit(Submission submission) {
+  /**
+   * 提出を行います。
+   * 
+   * @param submitter 提出する学生のアカウント
+   * @param report 提出課題
+   * @param point 得点
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static void submit(Account submitter, Report report, int point) {
+    Submission submission = getSubmissionIfExists(submitter, report);
+    if (submission == null) {
+      submission = new Submission(point, submitter, report);
+      submission.persist();
+      return;
+    }
+    submission.setPoint(point);
+    submission.setDate(new Date());
+    submission.update();
+  }
+
+  @SuppressWarnings({"nls", "unchecked"})
+  private static Submission getSubmissionIfExists(Account submitter, Report report) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Submission s where s.submitter.id=:accountId and s.report.id=:reportId");
-    q.setParameter("accountId", submission.getSubmitter().getId());
-    q.setParameter("reportId", submission.getReport().getId());
-    return q.getResultList().size() > 0;
+    final Query q = em.createQuery("select s from Submission s where s.submitter=:submitter and s.report=:report");
+    q.setParameter("submitter", submitter);
+    q.setParameter("report", report);
+    List<Submission> submission = q.getResultList();
+    if (submission.size() > 1) throw new IllegalStateException("Internal Error.");
+    return submission.size() == 0 ? null : submission.get(0);
+  }
+
+  private static boolean isAlreadySubmit(Submission submission) {
+    return getSubmissionIfExists(submission.getSubmitter(), submission.getReport()) != null;
   }
 
 }

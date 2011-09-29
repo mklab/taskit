@@ -15,21 +15,13 @@ import com.google.web.bindery.requestfactory.shared.Service;
  * @version $Revision$, 2011/09/19
  */
 @Service(value = Submission.class)
+@SuppressWarnings("javadoc")
 public interface SubmissionRequest extends RequestContext {
 
-  /**
-   * レポートを提出します。
-   * 
-   * @return リクエスト
-   */
   InstanceRequest<SubmissionProxy, Void> persist();
 
-  /**
-   * 提出者を指定してすべての提出情報を取得します。
-   * 
-   * @param accountId 提出者
-   * @return 提出情報
-   */
   Request<List<SubmissionProxy>> getSubmissionsByAccountId(String accountId);
+
+  Request<Void> submit(AccountProxy submitter, ReportProxy report, int point);
 
 }

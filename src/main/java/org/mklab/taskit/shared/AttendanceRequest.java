@@ -18,4 +18,6 @@ public interface AttendanceRequest extends RequestContext {
 
   Request<List<AttendanceProxy>> getAllAttendancesByAccountId(String accountId);
 
+  Request<Void> attend(AccountProxy attender, LectureProxy lecture, AttendanceType type);
+
 }

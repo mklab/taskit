@@ -149,6 +149,37 @@ public class Attendance extends AbstractEntity<Integer> {
   // service methods
 
   /**
+   * 出席情報を保存します。
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  @Override
+  public void persist() {
+    if (isAlreadyMarked(this)) throw new IllegalArgumentException("Already marked."); //$NON-NLS-1$
+    setDate(new Date());
+    super.persist();
+  }
+
+  /**
+   * 講義の出席状況を記録します。
+   * 
+   * @param attender 出席者
+   * @param lecture 出席対象講義
+   * @param type 出席種別
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static void attend(Account attender, Lecture lecture, AttendanceType type) {
+    Attendance attendance = getAttendanceIfExists(attender, lecture);
+    if (attendance == null) {
+      attendance = new Attendance(type, attender, lecture);
+      attendance.persist();
+      return;
+    }
+    attendance.setType(type);
+    attendance.setDate(new Date());
+    attendance.update();
+  }
+
+  /**
    * 特定のユーザーのすべての出席状況を取得します。
    * 
    * @param accountId ユーザーのアカウントID
@@ -163,24 +194,20 @@ public class Attendance extends AbstractEntity<Integer> {
     return q.getResultList();
   }
 
-  /**
-   * 出席情報を保存します。
-   */
-  @Invoker({UserType.TA, UserType.TEACHER})
-  @Override
-  public void persist() {
-    if (isAlreadyMarked(this)) throw new IllegalArgumentException("Already marked."); //$NON-NLS-1$
-    setDate(new Date());
-    super.persist();
+  private static boolean isAlreadyMarked(Attendance attendance) {
+    return getAttendanceIfExists(attendance.getAttender(), attendance.getLecture()) != null;
   }
 
-  @SuppressWarnings("nls")
-  private static boolean isAlreadyMarked(Attendance attendance) {
+  @SuppressWarnings({"nls", "unchecked"})
+  private static Attendance getAttendanceIfExists(Account attender, Lecture lecture) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from Attendance s where s.attender=:account and s.lecture=:lecture");
-    q.setParameter("account", attendance.attender);
-    q.setParameter("lecture", attendance.lecture);
-    return q.getResultList().size() > 0;
+    final Query q = em.createQuery("select s from Attendance s where s.attender=:attender and s.lecture=:lecture");
+    q.setParameter("attender", attender);
+    q.setParameter("lecture", lecture);
+    final List<Attendance> result = q.getResultList();
+    if (result.size() > 1) throw new IllegalStateException("Internal Error.");
+
+    return result.size() == 0 ? null : result.get(0);
   }
 
 }
