@@ -3,8 +3,6 @@
  */
 package org.mklab.taskit.client.ui;
 
-import org.mklab.taskit.client.ui.event.ClickHandler;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 
@@ -33,9 +31,15 @@ public interface HeaderView extends IsWidget {
   /**
    * ボタンを追加します。
    * 
-   * @param button ボタン
+   * @param name ボタン名
+   * @return 生成したボタン
    */
-  void addButton(ToolBarButton button);
+  ToolBarButton addButton(String name);
+
+  /**
+   * ボタンの間にセパレータを追加します。
+   */
+  void addSeparator();
 
   /**
    * 高さをpxで取得します。
@@ -43,33 +47,5 @@ public interface HeaderView extends IsWidget {
    * @return 高さ
    */
   int getHeight();
-
-  /**
-   * 学生一覧ビューのリンクを監視します。
-   * 
-   * @param h リスナ
-   */
-  void addStudentListLinkClickHandler(ClickHandler h);
-
-  /**
-   * 出席一覧ビューのリンクを監視します。
-   * 
-   * @param h リスナ
-   */
-  void addAttendanceListLinkClickHandler(ClickHandler h);
-
-  /**
-   * 管理者ビューのリンクを監視します。
-   * 
-   * @param h リスナ
-   */
-  void addAdminLinkClickHandler(ClickHandler h);
-
-  /**
-   * ログアウトボタンの監視をします。
-   * 
-   * @param h リスナ
-   */
-  void addLogoutLinkClickHandler(ClickHandler h);
 
 }

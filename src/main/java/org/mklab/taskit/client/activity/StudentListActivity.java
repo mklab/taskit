@@ -6,7 +6,6 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.StudentListView;
-import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.util.List;
@@ -50,7 +49,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
               names[i] = arg0.get(i).getAccount().getId();
             }
             StudentListActivity.this.userNames = names;
-            list.setListData(names);
+            list.setListData(arg0);
           }
 
         });

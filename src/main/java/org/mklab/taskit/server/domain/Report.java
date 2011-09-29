@@ -38,6 +38,27 @@ public class Report extends AbstractEntity<Integer> {
   private Lecture lecture;
 
   /**
+   * {@link Report}オブジェクトを構築します。
+   */
+  public Report() {
+    // for JPA
+  }
+
+  /**
+   * {@link Report}オブジェクトを構築します。
+   * 
+   * @param title タイトル
+   * @param point 得点
+   * @param lecture 講義
+   */
+  public Report(String title, int point, Lecture lecture) {
+    super();
+    this.title = title;
+    this.point = point;
+    this.lecture = lecture;
+  }
+
+  /**
    * 講義を取得します。
    * 
    * @return 講義

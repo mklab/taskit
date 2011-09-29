@@ -5,13 +5,10 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -27,7 +24,6 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class AbstractTaskitView extends LayoutPanel implements TaskitView {
 
-  private HeaderView header;
   private ClientFactory clientFactory;
 
   /**
@@ -38,26 +34,19 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
   public AbstractTaskitView(ClientFactory clientFactory) {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
+    init();
   }
 
   /**
    * ビューの初期化を行ないます。
    */
-  public final void init() {
-    this.header = this.clientFactory.getHeaderView();
+  private final void init() {
     final Widget content = initContent();
     if (content == null) throw new NullPointerException();
-
-    final VerticalPanel vPanel = new VerticalPanel();
-    vPanel.setWidth("100%"); //$NON-NLS-1$
-
-    vPanel.add(this.header);
-   // vPanel.add(createCenteringWidget(content));
     add(content);
-    //initWidget(content);
   }
 
-  private Widget createCenteringWidget(Widget w) {
+  private static Widget createCenteringWidget(Widget w) {
     final FlowPanel flowPanel = new FlowPanel();
     flowPanel.add(w);
     DOM.setElementAttribute(flowPanel.getElement(), "align", "center"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -71,16 +60,21 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
    */
   protected abstract Widget initContent();
 
+  /**
+   * クライアントファクトリを取得します。
+   * 
+   * @return クライアントファクトリ
+   */
   protected final ClientFactory getClientFactory() {
     return this.clientFactory;
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.TaskitView#getHeader()
+   * {@inheritDoc}
    */
   @Override
-  public final HeaderView getHeader() {
-    return this.header;
+  public void showMessage(String message) {
+    Window.alert(message);
   }
 
 }

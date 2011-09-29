@@ -14,11 +14,6 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface TaskitView extends IsWidget {
 
-  /**
-   * ヘッダービューを取得します。
-   * 
-   * @return ヘッダービュー
-   */
-  HeaderView getHeader();
+  void showMessage(String message);
 
 }

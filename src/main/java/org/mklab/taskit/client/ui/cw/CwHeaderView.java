@@ -5,21 +5,20 @@ package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.ToolBarButton;
-import org.mklab.taskit.client.ui.event.ClickHandler;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment.VerticalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -36,19 +35,62 @@ public class CwHeaderView extends Composite implements HeaderView {
 
   @UiField
   HorizontalPanel buttonPanel;
+  @UiField
+  InlineLabel userIdLabel;
+  @UiField
+  InlineLabel userTypeLabel;
 
   /**
    * {@link CwHeaderView}オブジェクトを構築します。
    */
   public CwHeaderView() {
     initWidget(binder.createAndBindUi(this));
-    this.buttonPanel.add(new Button("A"));
-    this.buttonPanel.add(new Button("B"));
-    this.buttonPanel.add(new Button("C"));
-    for (Widget w : this.buttonPanel) {
-      this.buttonPanel.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
-    }
+  }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ToolBarButton addButton(String name) {
+    final PushButton button = new PushButton(name);
+    addImpl(button);
+    return new ToolBarButton() {
+
+      HandlerRegistration lastClickHandler;
+
+      @Override
+      public void setName(@SuppressWarnings("hiding") String name) {
+        button.setText(name);
+      }
+
+      @Override
+      public void setIcon(String icon) {
+        final Image image = new Image(icon);
+        image.setSize("32px", "32px"); //$NON-NLS-1$ //$NON-NLS-2$
+        button.getUpFace().setImage(image);
+      }
+
+      @Override
+      public void setClickHandler(ClickHandler h) {
+        if (this.lastClickHandler != null) {
+          this.lastClickHandler.removeHandler();
+        }
+        this.lastClickHandler = button.addClickHandler(h);
+      }
+    };
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addSeparator() {
+    addImpl(new Label("|")); //$NON-NLS-1$
+  }
+
+  private void addImpl(Widget w) {
+    this.buttonPanel.add(w);
+    this.buttonPanel.setCellVerticalAlignment(w, HasVerticalAlignment.ALIGN_MIDDLE);
   }
 
   /**
@@ -56,7 +98,7 @@ public class CwHeaderView extends Composite implements HeaderView {
    */
   @Override
   public int getHeight() {
-    return 32;
+    return 40;
   }
 
   /**
@@ -64,8 +106,7 @@ public class CwHeaderView extends Composite implements HeaderView {
    */
   @Override
   public void setUserId(String id) {
-    // TODO Auto-generated method stub
-
+    this.userIdLabel.setText(id);
   }
 
   /**
@@ -73,53 +114,7 @@ public class CwHeaderView extends Composite implements HeaderView {
    */
   @Override
   public void setUserType(String type) {
-    // TODO Auto-generated method stub
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addButton(ToolBarButton button) {
-    // TODO Auto-generated method stub
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addStudentListLinkClickHandler(ClickHandler h) {
-    // TODO Auto-generated method stub
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addAttendanceListLinkClickHandler(ClickHandler h) {
-    // TODO Auto-generated method stub
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addAdminLinkClickHandler(ClickHandler h) {
-    // TODO Auto-generated method stub
-
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addLogoutLinkClickHandler(ClickHandler h) {
-    // TODO Auto-generated method stub
-
+    this.userTypeLabel.setText(type);
   }
 
 }

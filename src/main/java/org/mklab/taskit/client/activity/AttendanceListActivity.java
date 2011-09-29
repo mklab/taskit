@@ -3,17 +3,16 @@
  */
 package org.mklab.taskit.client.activity;
 
-import java.util.List;
-
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentScore;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
-import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 import org.mklab.taskit.shared.dto.AttendanceDto;
 import org.mklab.taskit.shared.service.AttendanceService;
 import org.mklab.taskit.shared.service.AttendanceServiceAsync;
+
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;

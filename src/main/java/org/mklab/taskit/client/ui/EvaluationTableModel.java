@@ -36,8 +36,9 @@ public class EvaluationTableModel {
     final Map<LectureProxy, LectureScore> lectureToSubmissions = new HashMap<LectureProxy, LectureScore>();
 
     // initialize entries
+    int n = 1;
     for (LectureProxy lecture : lectures) {
-      lectureToSubmissions.put(lecture, new LectureScore(lecture));
+      lectureToSubmissions.put(lecture, new LectureScore(lecture, n++));
     }
 
     // inject submissions and attendances
@@ -84,20 +85,40 @@ public class EvaluationTableModel {
   }
 
   /**
+   * リストとして成績データを取得します。
+   * 
+   * @return 成績データ
+   */
+  public List<LectureScore> asList() {
+    return this.lectureScores;
+  }
+
+  /**
    * 講義情報と成績情報のペアを表すクラスです。
    * 
    * @author ishikura
    */
   public static class LectureScore implements Comparable<LectureScore> {
 
+    int no;
     LectureProxy lecture;
     AttendanceProxy attendance;
     List<SubmissionProxy> submissions;
 
-    LectureScore(LectureProxy lecture) {
+    LectureScore(LectureProxy lecture, int no) {
       super();
       this.lecture = lecture;
+      this.no = no;
       this.submissions = new ArrayList<SubmissionProxy>();
+    }
+
+    /**
+     * noを取得します。
+     * 
+     * @return no
+     */
+    public int getNo() {
+      return this.no;
     }
 
     void setAttendance(AttendanceProxy attendance) {
@@ -106,6 +127,15 @@ public class EvaluationTableModel {
 
     void addSubmission(SubmissionProxy submission) {
       this.submissions.add(submission);
+    }
+
+    /**
+     * attendanceを取得します。
+     * 
+     * @return attendance
+     */
+    public AttendanceProxy getAttendance() {
+      return this.attendance;
     }
 
     /**

@@ -6,9 +6,9 @@
 		.base {
 		-moz-border-radius: 6px;
 		-webkit-border-radius: 6px;
-        border-radius: 6px;
-		background: literal("-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6C85A4), color-stop(50%, #556C89), color-stop(51%, #4B5F79), color-stop(100%, #415369))");
-        border: solid 1px
+		border-radius: 6px;
+		background: literal("-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6C85A4), color-stop(50%, #556C89),color-stop(51%, #4B5F79), color-stop(100%, #415369))");
+		border: solid 1px
 		black;
 		}
 
@@ -16,22 +16,22 @@
 		padding-left:10px;
 		height:32px;
 		}
-		
+
 		.label{
 		color:white;
 		}
 	</ui:style>
 
-	<g:DockLayoutPanel unit='EM' styleName='{style.base}'>
+	<g:DockLayoutPanel unit='PX' styleName='{style.base}'>
 		<g:center>
 			<g:HorizontalPanel ui:field='buttonPanel'
 				styleName='{style.toolbar}'>
 			</g:HorizontalPanel>
 		</g:center>
-		<g:east size='10'>
+		<g:east size='100'>
 			<g:VerticalPanel>
 				<g:InlineLabel ui:field="userIdLabel" styleName='{style.label}'>aaa</g:InlineLabel>
-				<g:InlineLabel ui:field="userId" styleName='{style.label}'>bbb</g:InlineLabel>
+				<g:InlineLabel ui:field="userTypeLabel" styleName='{style.label}'>bbb</g:InlineLabel>
 			</g:VerticalPanel>
 		</g:east>
 	</g:DockLayoutPanel>

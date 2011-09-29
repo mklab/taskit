@@ -3,6 +3,11 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.shared.UserProxy;
+
+import java.util.List;
+
+
 /**
  * 学生一覧ビューを表すインターフェースです。
  * 
@@ -16,7 +21,7 @@ public interface StudentListView extends TaskitView {
    * 
    * @param listData リストデータ
    */
-  void setListData(String[] listData);
+  void setListData(List<UserProxy> listData);
 
   /**
    * プレゼンターを設定します。

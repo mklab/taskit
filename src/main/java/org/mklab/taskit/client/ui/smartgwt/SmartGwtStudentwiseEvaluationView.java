@@ -47,7 +47,6 @@ public class SmartGwtStudentwiseEvaluationView extends AbstractTaskitView implem
    */
   public SmartGwtStudentwiseEvaluationView(ClientFactory clientFactory) {
     super(clientFactory);
-    init();
   }
 
   /**

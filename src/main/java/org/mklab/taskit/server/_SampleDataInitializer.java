@@ -3,6 +3,11 @@
  */
 package org.mklab.taskit.server;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.persistence.EntityManager;
@@ -14,15 +19,10 @@ import org.mklab.taskit.server.dao.AccountDaoImpl;
 import org.mklab.taskit.server.dao.AttendanceDao;
 import org.mklab.taskit.server.dao.AttendanceTypeDao;
 import org.mklab.taskit.server.dao.AttendanceTypeDaoImpl;
-import org.mklab.taskit.server.dao.LectureDao;
-import org.mklab.taskit.server.dao.LectureDaoImpl;
-import org.mklab.taskit.server.dao.ReportDao;
-import org.mklab.taskit.server.dao.ReportDaoImpl;
-import org.mklab.taskit.server.dao.ReportRegistrationException;
 import org.mklab.taskit.server.domain.Account;
+import org.mklab.taskit.server.domain.Lecture;
+import org.mklab.taskit.server.domain.Report;
 import org.mklab.taskit.shared.model.AttendanceType;
-import org.mklab.taskit.shared.model.Lecture;
-import org.mklab.taskit.shared.model.Report;
 import org.mklab.taskit.shared.model.UserType;
 import org.mklab.taskit.shared.service.AccountRegistrationException;
 
@@ -36,16 +36,13 @@ import org.mklab.taskit.shared.service.AccountRegistrationException;
 public class _SampleDataInitializer {
 
   public static void main(String[] args) {
-    final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("taskit"); //$NON-NLS-1$
-    final EntityManager entityManager = entityManagerFactory.createEntityManager();
-
-    createAccounts(new AccountDaoImpl(entityManager));
-//    createLectures(new LectureDaoImpl(entityManager));
-//    createReports(new ReportDaoImpl(entityManager));
-    entityManagerFactory.close();
+    createAccounts();
+    createLectures();
+    //    createLectures(new LectureDaoImpl(entityManager));
+    //    createReports(new ReportDaoImpl(entityManager));
   }
 
-  private static void createAccounts(final AccountDao dao) {
+  private static void createAccounts() {
     Account.registerNewAccount("koga", Passwords.hashPassword("taskit"), UserType.TEACHER);
     for (int i = 0; i < 5; i++) {
       Account.registerNewAccount(String.valueOf(10675001 + i), "taskit", UserType.TA);
@@ -55,21 +52,27 @@ public class _SampleDataInitializer {
     }
   }
 
-  private static void createLectures(final LectureDao dao) {
-    dao.registerLecture(new Lecture("Hello world1", System.currentTimeMillis()));
-    dao.registerLecture(new Lecture("Hello world2", System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7)));
-    dao.registerLecture(new Lecture("Hello world3", System.currentTimeMillis() + TimeUnit.DAYS.toMillis(14)));
+  private static void createLectures() {
+    for (int i = 0; i < 15; i++) {
+      Lecture lecture = createLecture(i + 1, (int)(Math.random() * 5));
+      lecture.persist();
+    }
   }
 
-  private static void createReports(final ReportDao dao) {
-    try {
-      dao.registerReport(new Report(1, "report1-1", "asdfasf", 1, 1));
-      dao.registerReport(new Report(2, "report1-2", "asdfasf", 2, 1));
-      dao.registerReport(new Report(1, "report2-1", "asdfasf", 1, 2));
-      dao.registerReport(new Report(2, "report2-1", "asdfasf", 2, 2));
-    } catch (ReportRegistrationException e) {
-      throw new RuntimeException(e);
+  private static Lecture createLecture(int lectureNumber, int reportCount) {
+    Lecture lecture = new Lecture();
+    lecture.setTitle("lecture" + lectureNumber);
+    lecture.setDescription("This is lecture" + lectureNumber + ".");
+    lecture.setDate(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7 * lectureNumber)));
+
+    List<Report> reports = new ArrayList<Report>();
+    for (int i = 0; i < reportCount; i++) {
+      Report report = new Report(MessageFormat.format("report{0}-{1}", lectureNumber, reportCount), 10 * (i + 1), lecture);
+      report.setDescription("This is report" + (i + 1) + ".");
+      reports.add(report);
     }
+    lecture.setReports(reports);
+    return lecture;
   }
 
 }

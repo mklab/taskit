@@ -9,13 +9,13 @@ import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
-import org.mklab.taskit.client.ui.TaskitView;
-import org.mklab.taskit.client.ui.cw.StudentScorePanel;
-import org.mklab.taskit.client.ui.event.ClickHandler;
+import org.mklab.taskit.client.ui.ToolBarButton;
 import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
@@ -51,6 +51,7 @@ public abstract class TaskitActivity extends AbstractActivity {
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
     HeaderView header = this.clientFactory.getHeaderView();
+    setupHeader(header);
     final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
     pn.addNorth(header, header.getHeight());
     pn.add(createTaskitView(this.clientFactory));
@@ -65,56 +66,65 @@ public abstract class TaskitActivity extends AbstractActivity {
    */
   protected abstract Widget createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
 
-  private void setupHeader(final TaskitView taskitView) {
-    final HeaderView header = taskitView.getHeader();
-    setupLoginUserView(header);
+  @SuppressWarnings({"nls", "unused"})
+  private void setupHeader(final HeaderView header) {
+    updateLoginUserViewAsync();
 
-    header.addAdminLinkClickHandler(new ClickHandler() {
-
-      @Override
-      public void onClick() {
-        getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
-      }
-
-    });
-    header.addStudentListLinkClickHandler(new ClickHandler() {
+    final ToolBarButton studentListButton = header.addButton("student_list");
+    studentListButton.setIcon("taskit/students64.png");
+    studentListButton.setClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick() {
+      public void onClick(ClickEvent event) {
         getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
       }
     });
-    header.addAttendanceListLinkClickHandler(new ClickHandler() {
+
+    final ToolBarButton attendanceListButton = header.addButton("attendance_list");
+    attendanceListButton.setIcon("taskit/attendance64.png");
+    attendanceListButton.setClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick() {
+      public void onClick(ClickEvent event) {
         getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
       }
     });
-    header.addLogoutLinkClickHandler(new ClickHandler() {
+
+    final ToolBarButton adminButton = header.addButton("admin");
+    adminButton.setIcon("taskit/admin64.png");
+    adminButton.setClickHandler(new ClickHandler() {
 
       @Override
-      public void onClick() {
+      public void onClick(ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+      }
+    });
+
+    header.addSeparator();
+
+    final ToolBarButton logoutButton = header.addButton("logout");
+    logoutButton.setIcon("taskit/logout64.png");
+    logoutButton.setClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(ClickEvent event) {
         logout();
       }
     });
   }
 
-  private void setupLoginUserView(final HeaderView header) {
-    setupLoginUserViewAsync(header);
-  }
-
-  private void setupLoginUserViewAsync(final HeaderView header) {
+  private void updateLoginUserViewAsync() {
+    final HeaderView header = getClientFactory().getHeaderView();
     getClientFactory().getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
 
-          @SuppressWarnings("synthetic-access")
           @Override
           public void onSuccess(UserProxy arg0) {
             if (arg0 == null) {
               logout();
               return;
             }
-            setupLoginUserView(header, arg0);
+            header.setUserId(arg0.getAccount().getId());
+            header.setUserType(arg0.getType().name());
           }
 
           /**
@@ -128,6 +138,9 @@ public abstract class TaskitActivity extends AbstractActivity {
         });
   }
 
+  /**
+   * ログアウトします。
+   */
   protected void logout() {
     try {
       getClientFactory().getRequestFactory().accountRequest().logout().fire();
@@ -137,23 +150,40 @@ public abstract class TaskitActivity extends AbstractActivity {
     }
   }
 
-  private void setupLoginUserView(final HeaderView header, UserProxy loginUser) {
-    header.setUserId(loginUser.getAccount().getId());
-    header.setUserType(loginUser.getType().name());
-  }
-
+  /**
+   * {@link ClientFactory}を取得します。
+   * 
+   * @return クライアントファクトリ
+   */
   protected final ClientFactory getClientFactory() {
     return this.clientFactory;
   }
 
+  /**
+   * エラーメッセージを表示します。
+   * 
+   * @param errorMessage エラーメッセージ
+   */
+  @SuppressWarnings("static-method")
   protected final void showErrorMessage(String errorMessage) {
     Window.alert(errorMessage);
   }
 
+  /**
+   * エラーメッセージを表示します。
+   * 
+   * @param e 例外
+   */
   protected final void showErrorMessage(Throwable e) {
     showErrorMessage(e.toString());
   }
 
+  /**
+   * 情報メッセージを表示します。
+   * 
+   * @param message メッセージ
+   */
+  @SuppressWarnings("static-method")
   protected final void showInformationMessage(String message) {
     Window.alert(message);
   }

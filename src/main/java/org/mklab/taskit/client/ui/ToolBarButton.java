@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
-import com.smartgwt.client.widgets.events.ClickHandler;
+import com.google.gwt.event.dom.client.ClickHandler;
 
 
 /**
@@ -12,17 +12,24 @@ import com.smartgwt.client.widgets.events.ClickHandler;
 public interface ToolBarButton {
 
   /**
-   * クリック処理を行うハンドラを設定します。
+   * クリック処理を設定します。
    * 
-   * @param clickHandler クリック処理を行うハンドラ
+   * @param h クリック処理
    */
-  void setClickHandler(ClickHandler clickHandler);
+  void setClickHandler(ClickHandler h);
 
   /**
-   * ボタンアイコンを取得します。
+   * ボタン名を設定します。
    * 
-   * @return ボタンアイコン
+   * @param name ボタン名
    */
-  String getIcon();
+  void setName(String name);
+
+  /**
+   * アイコンを設定します。
+   * 
+   * @param icon アイコン
+   */
+  void setIcon(String icon);
 
 }

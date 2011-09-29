@@ -104,7 +104,6 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   @Override
   public void setPresenter(Presenter presenter) {
     this.presenter = presenter;
-    init();
   }
 
   /**

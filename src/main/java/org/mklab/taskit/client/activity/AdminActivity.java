@@ -3,13 +3,10 @@
  */
 package org.mklab.taskit.client.activity;
 
-import java.util.Date;
-
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.AdminViewImpl;
-import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.client.ui.admin.LectureEditor;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
 import org.mklab.taskit.shared.model.UserType;
@@ -17,6 +14,8 @@ import org.mklab.taskit.shared.service.AccountRegistrationException;
 import org.mklab.taskit.shared.service.AccountService;
 import org.mklab.taskit.shared.service.AccountServiceAsync;
 import org.mklab.taskit.shared.validation.AccountValidator;
+
+import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

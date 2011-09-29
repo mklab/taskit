@@ -57,6 +57,7 @@ public class Taskit implements EntryPoint {
     @Override
     public void setWidget(IsWidget w) {
       if (w == null) return;
+      clear();
       add(w);
     }
 
