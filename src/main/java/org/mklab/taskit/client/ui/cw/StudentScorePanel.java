@@ -3,8 +3,8 @@
  */
 package org.mklab.taskit.client.ui.cw;
 
-import org.mklab.taskit.client.ui.EvaluationTableModel;
-import org.mklab.taskit.client.ui.EvaluationTableModel.LectureScore;
+import org.mklab.taskit.client.ui.StudentScoreModel;
+import org.mklab.taskit.client.ui.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.StudentListView.Presenter;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
@@ -32,14 +32,14 @@ public class StudentScorePanel extends Composite {
 
   private CellTable<LectureScore> table;
   private UserProxy user;
-  private EvaluationTableModel model;
+  private StudentScoreModel model;
   private Presenter presenter;
 
   /**
    * {@link StudentScorePanel}オブジェクトを構築します。
    */
   public StudentScorePanel() {
-    this.table = new CellTable<EvaluationTableModel.LectureScore>();
+    this.table = new CellTable<StudentScoreModel.LectureScore>();
 
     initColumns();
     initWidget(this.table);
@@ -79,7 +79,7 @@ public class StudentScorePanel extends Composite {
    * @param model ユーザーの成績情報
    */
   @SuppressWarnings("hiding")
-  public void showUserPage(UserProxy user, EvaluationTableModel model) {
+  public void showUserPage(UserProxy user, StudentScoreModel model) {
     this.model = model;
     this.user = user;
     this.table.setRowData(this.model.asList());
@@ -118,7 +118,7 @@ public class StudentScorePanel extends Composite {
   private void addReportColumn(final int reportIndex) {
     final List<String> options = Arrays.asList("○", "△", "×", "-", "");
     final SelectionCell submissionCell = new SelectionCell(options);
-    final Column<LectureScore, String> submissionColumn = new Column<EvaluationTableModel.LectureScore, String>(submissionCell) {
+    final Column<LectureScore, String> submissionColumn = new Column<StudentScoreModel.LectureScore, String>(submissionCell) {
 
       @Override
       public String getValue(LectureScore object) {
@@ -140,7 +140,7 @@ public class StudentScorePanel extends Composite {
       }
 
     };
-    submissionColumn.setFieldUpdater(new FieldUpdater<EvaluationTableModel.LectureScore, String>() {
+    submissionColumn.setFieldUpdater(new FieldUpdater<StudentScoreModel.LectureScore, String>() {
 
       @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
       @Override
@@ -170,7 +170,7 @@ public class StudentScorePanel extends Composite {
   }
 
   private void initCommonColumns() {
-    final Column<LectureScore, Void> lectureNumberColumn = new Column<EvaluationTableModel.LectureScore, Void>(new AbstractCell<Void>() {
+    final Column<LectureScore, Void> lectureNumberColumn = new Column<StudentScoreModel.LectureScore, Void>(new AbstractCell<Void>() {
 
       @Override
       public void render(com.google.gwt.cell.client.Cell.Context context, @SuppressWarnings("unused") Void value, SafeHtmlBuilder sb) {
@@ -189,7 +189,7 @@ public class StudentScorePanel extends Composite {
     for (AttendanceType type : AttendanceType.values()) {
       attendanceTypes.add(type.name());
     }
-    final Column<LectureScore, String> attendanceColumn = new Column<EvaluationTableModel.LectureScore, String>(new SelectionCell(attendanceTypes)) {
+    final Column<LectureScore, String> attendanceColumn = new Column<StudentScoreModel.LectureScore, String>(new SelectionCell(attendanceTypes)) {
 
       @Override
       public String getValue(LectureScore object) {
@@ -198,7 +198,7 @@ public class StudentScorePanel extends Composite {
       }
 
     };
-    attendanceColumn.setFieldUpdater(new FieldUpdater<EvaluationTableModel.LectureScore, String>() {
+    attendanceColumn.setFieldUpdater(new FieldUpdater<StudentScoreModel.LectureScore, String>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access", "unused"})
       @Override

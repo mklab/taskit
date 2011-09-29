@@ -4,7 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.EvaluationTableModel;
+import org.mklab.taskit.client.ui.StudentScoreModel;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
@@ -33,7 +33,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   private List<LectureProxy> lectures;
   private List<SubmissionProxy> submissions;
   private List<AttendanceProxy> attendances;
-  private EvaluationTableModel model;
+  private StudentScoreModel model;
 
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
@@ -186,7 +186,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     if (this.lectures == null || this.attendances == null || this.submissions == null) {
       return;
     }
-    this.model = new EvaluationTableModel(this.lectures, this.attendances, this.submissions);
+    this.model = new StudentScoreModel(this.lectures, this.attendances, this.submissions);
     this.view.showUserPage(user, this.model);
   }
 

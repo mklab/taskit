@@ -5,7 +5,7 @@ package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.EvaluationTableModel;
+import org.mklab.taskit.client.ui.StudentScoreModel;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.UserProxy;
 
@@ -109,7 +109,7 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
    * {@inheritDoc}
    */
   @Override
-  public void showUserPage(UserProxy user, EvaluationTableModel model) {
+  public void showUserPage(UserProxy user, StudentScoreModel model) {
     this.panel.showUserPage(user, model);
   }
 

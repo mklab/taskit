@@ -21,18 +21,18 @@ import java.util.TreeSet;
  * 
  * @author ishikura
  */
-public class EvaluationTableModel {
+public class StudentScoreModel {
 
   private List<LectureScore> lectureScores;
 
   /**
-   * {@link EvaluationTableModel}オブジェクトを構築します。
+   * {@link StudentScoreModel}オブジェクトを構築します。
    * 
    * @param lectures すべての講義
    * @param attendances すべての出席情報
    * @param submissions すべての提出物
    */
-  public EvaluationTableModel(List<LectureProxy> lectures, List<AttendanceProxy> attendances, List<SubmissionProxy> submissions) {
+  public StudentScoreModel(List<LectureProxy> lectures, List<AttendanceProxy> attendances, List<SubmissionProxy> submissions) {
     final Map<LectureProxy, LectureScore> lectureToSubmissions = new HashMap<LectureProxy, LectureScore>();
 
     // initialize entries
@@ -58,11 +58,11 @@ public class EvaluationTableModel {
     }
 
     // sort and set
-    final TreeSet<LectureScore> scores = new TreeSet<EvaluationTableModel.LectureScore>();
+    final TreeSet<LectureScore> scores = new TreeSet<StudentScoreModel.LectureScore>();
     for (Entry<LectureProxy, LectureScore> entry : lectureToSubmissions.entrySet()) {
       scores.add(entry.getValue());
     }
-    this.lectureScores = new ArrayList<EvaluationTableModel.LectureScore>(scores);
+    this.lectureScores = new ArrayList<StudentScoreModel.LectureScore>(scores);
   }
 
   /**
@@ -163,14 +163,31 @@ public class EvaluationTableModel {
       return this.lecture;
     }
 
+    /**
+     * 課題数を取得します。
+     * 
+     * @return 課題数
+     */
     public int getReportCount() {
       return this.lecture.getReports().size();
     }
 
+    /**
+     * 課題を取得します。
+     * 
+     * @param index 課題のインデックス
+     * @return 課題
+     */
     public ReportProxy getReport(int index) {
       return this.lecture.getReports().get(index);
     }
 
+    /**
+     * 提出物を取得します。
+     * 
+     * @param report 課題
+     * @return 提出物
+     */
     public SubmissionProxy getSubmission(ReportProxy report) {
       if (report == null) throw new IllegalArgumentException();
       for (int i = 0; i < this.submissions.size(); i++) {

@@ -32,7 +32,7 @@ public interface StudentListView extends TaskitView {
    * @param user ユーザー
    * @param model 成績データ
    */
-  void showUserPage(UserProxy user, EvaluationTableModel model);
+  void showUserPage(UserProxy user, StudentScoreModel model);
 
   /**
    * ユーザーの成績の表示をクリアします。
