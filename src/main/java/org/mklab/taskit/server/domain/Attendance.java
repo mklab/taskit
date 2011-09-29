@@ -38,6 +38,27 @@ public class Attendance extends AbstractEntity<Integer> {
   private Date date;
 
   /**
+   * {@link Attendance}オブジェクトを構築します。
+   */
+  public Attendance() {
+    // for JPA
+  }
+
+  /**
+   * {@link Attendance}オブジェクトを構築します。
+   * 
+   * @param type 出席種別
+   * @param attender 出席者
+   * @param lecture 対象講義
+   */
+  public Attendance(AttendanceType type, Account attender, Lecture lecture) {
+    super();
+    this.type = type;
+    this.attender = attender;
+    this.lecture = lecture;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

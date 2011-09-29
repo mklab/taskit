@@ -25,7 +25,7 @@ import javax.persistence.Persistence;
 public final class EMF {
 
   private static EntityManagerFactory emfInstance;
-  private static String persistenceUnitName;
+  private static String persistenceUnitName = "taskit-local"; //$NON-NLS-1$
 
   /**
    * {@link EntityManagerFactory}インスタンスを必要に応じて生成し取得します。

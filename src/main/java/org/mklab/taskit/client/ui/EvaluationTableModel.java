@@ -75,6 +75,22 @@ public class EvaluationTableModel {
   }
 
   /**
+   * すべての講義中で最も課題数が多い講義の課題数を取得します。
+   * 
+   * @return 最大課題数
+   */
+  public int getMaximumReportCount() {
+    int max = 0;
+    for (LectureScore score : this.lectureScores) {
+      int cnt = score.getReportCount();
+      if (cnt > max) {
+        max = cnt;
+      }
+    }
+    return max;
+  }
+
+  /**
    * 講義情報と成績情報のペアを取得します。
    * 
    * @param lectureIndex 講義のインデックス
@@ -156,9 +172,11 @@ public class EvaluationTableModel {
     }
 
     public SubmissionProxy getSubmission(ReportProxy report) {
-      for (int i = 0; i <= 0; i++) {
+      if (report == null) throw new IllegalArgumentException();
+      for (int i = 0; i < this.submissions.size(); i++) {
         final SubmissionProxy submission = this.submissions.get(i);
-        if (report == submission.getReport()) {
+        final ReportProxy r = submission.getReport();
+        if (report.equals(r)) {
           return submission;
         }
       }

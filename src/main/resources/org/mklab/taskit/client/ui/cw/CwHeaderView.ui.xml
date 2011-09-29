@@ -30,8 +30,8 @@
 		</g:center>
 		<g:east size='100'>
 			<g:VerticalPanel>
-				<g:InlineLabel ui:field="userIdLabel" styleName='{style.label}'>aaa</g:InlineLabel>
-				<g:InlineLabel ui:field="userTypeLabel" styleName='{style.label}'>bbb</g:InlineLabel>
+				<g:InlineLabel ui:field="userIdLabel" styleName='{style.label}'>unknown</g:InlineLabel>
+				<g:InlineLabel ui:field="userTypeLabel" styleName='{style.label}'>unknown</g:InlineLabel>
 			</g:VerticalPanel>
 		</g:east>
 	</g:DockLayoutPanel>

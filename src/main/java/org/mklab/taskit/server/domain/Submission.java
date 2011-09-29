@@ -37,6 +37,27 @@ public class Submission extends AbstractEntity<Integer> {
   private Comment comment;
 
   /**
+   * {@link Submission}オブジェクトを構築します。
+   */
+  public Submission() {
+    // for JPA
+  }
+
+  /**
+   * {@link Submission}オブジェクトを構築します。
+   * 
+   * @param point 得点
+   * @param submitter 提出者
+   * @param report 提出課題
+   */
+  public Submission(int point, Account submitter, Report report) {
+    super();
+    this.point = point;
+    this.submitter = submitter;
+    this.report = report;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

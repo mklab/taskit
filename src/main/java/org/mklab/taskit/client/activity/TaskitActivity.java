@@ -68,7 +68,7 @@ public abstract class TaskitActivity extends AbstractActivity {
 
   @SuppressWarnings({"nls", "unused"})
   private void setupHeader(final HeaderView header) {
-    updateLoginUserViewAsync();
+    updateLoginUserViewAsync(header);
 
     final ToolBarButton studentListButton = header.addButton("student_list");
     studentListButton.setIcon("taskit/students64.png");
@@ -113,8 +113,7 @@ public abstract class TaskitActivity extends AbstractActivity {
     });
   }
 
-  private void updateLoginUserViewAsync() {
-    final HeaderView header = getClientFactory().getHeaderView();
+  private void updateLoginUserViewAsync(final HeaderView header) {
     getClientFactory().getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
 
           @Override
@@ -123,7 +122,8 @@ public abstract class TaskitActivity extends AbstractActivity {
               logout();
               return;
             }
-            header.setUserId(arg0.getAccount().getId());
+            final String name = arg0.getName() == null ? arg0.getAccount().getId() : arg0.getName();
+            header.setUserId(name);
             header.setUserType(arg0.getType().name());
           }
 

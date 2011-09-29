@@ -115,6 +115,8 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
   }
 
   void selectionChanged(UserProxy selectedUser) {
+    this.panel.clearScoreData();
+
     final String selectedAccountId = selectedUser.getAccount().getId();
     this.submissions = null;
     this.attendances = null;
@@ -139,28 +141,28 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
 
   private void fetchAttendances(final String selectedAccountId) {
     final AttendanceRequest attendanceRequest = getClientFactory().getRequestFactory().attendanceRequest();
-    attendanceRequest.getAllAttendancesByAccountId(selectedAccountId).fire(new Receiver<List<AttendanceProxy>>() {
+    attendanceRequest.getAllAttendancesByAccountId(selectedAccountId).with("lecture").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$
 
-      @Override
-      public void onSuccess(List<AttendanceProxy> response) {
-        attendances = response;
-        updateScorePanel();
-      }
+          @Override
+          public void onSuccess(List<AttendanceProxy> response) {
+            attendances = response;
+            updateScorePanel();
+          }
 
-    });
+        });
   }
 
   private void fetchSubmissions(final String selectedAccountId) {
     final SubmissionRequest submissionRequest = getClientFactory().getRequestFactory().submissionRequest();
-    submissionRequest.getSubmissionsByAccountId(selectedAccountId).fire(new Receiver<List<SubmissionProxy>>() {
+    submissionRequest.getSubmissionsByAccountId(selectedAccountId).with("report.lecture").fire(new Receiver<List<SubmissionProxy>>() { //$NON-NLS-1$
 
-      @Override
-      public void onSuccess(List<SubmissionProxy> response) {
-        submissions = response;
-        updateScorePanel();
-      }
+          @Override
+          public void onSuccess(List<SubmissionProxy> response) {
+            submissions = response;
+            updateScorePanel();
+          }
 
-    });
+        });
   }
 
   private void updateScorePanel() {

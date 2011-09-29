@@ -3,28 +3,20 @@
  */
 package org.mklab.taskit.server;
 
+import org.mklab.taskit.server.domain.Account;
+import org.mklab.taskit.server.domain.Attendance;
+import org.mklab.taskit.server.domain.Lecture;
+import org.mklab.taskit.server.domain.Report;
+import org.mklab.taskit.server.domain.Submission;
+import org.mklab.taskit.server.domain.User;
+import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.model.UserType;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import org.mklab.taskit.server.dao.AccountDao;
-import org.mklab.taskit.server.dao.AccountDaoImpl;
-import org.mklab.taskit.server.dao.AttendanceDao;
-import org.mklab.taskit.server.dao.AttendanceTypeDao;
-import org.mklab.taskit.server.dao.AttendanceTypeDaoImpl;
-import org.mklab.taskit.server.domain.Account;
-import org.mklab.taskit.server.domain.Lecture;
-import org.mklab.taskit.server.domain.Report;
-import org.mklab.taskit.shared.model.AttendanceType;
-import org.mklab.taskit.shared.model.UserType;
-import org.mklab.taskit.shared.service.AccountRegistrationException;
 
 
 /**
@@ -38,8 +30,8 @@ public class _SampleDataInitializer {
   public static void main(String[] args) {
     createAccounts();
     createLectures();
-    //    createLectures(new LectureDaoImpl(entityManager));
-    //    createReports(new ReportDaoImpl(entityManager));
+    createAttendances();
+    createSubmissions();
   }
 
   private static void createAccounts() {
@@ -47,7 +39,7 @@ public class _SampleDataInitializer {
     for (int i = 0; i < 5; i++) {
       Account.registerNewAccount(String.valueOf(10675001 + i), "taskit", UserType.TA);
     }
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 80; i++) {
       Account.registerNewAccount(String.valueOf(10236001 + i), "taskit", UserType.STUDENT);
     }
   }
@@ -73,6 +65,33 @@ public class _SampleDataInitializer {
     }
     lecture.setReports(reports);
     return lecture;
+  }
+
+  private static void createAttendances() {
+    final List<User> students = User.getAllStudents();
+    final List<Lecture> lectures = Lecture.getAllLectures();
+
+    for (User student : students) {
+      for (Lecture lecture : lectures) {
+        Attendance a = new Attendance(AttendanceType.values()[(int)(Math.random() * AttendanceType.values().length)], student.getAccount(), lecture);
+        a.persist();
+      }
+    }
+  }
+
+  private static void createSubmissions() {
+    final List<User> students = User.getAllStudents();
+    final List<Lecture> lectures = Lecture.getAllLectures();
+
+    for (User student : students) {
+      for (Lecture lecture : lectures) {
+        for (Report report : lecture.getReports()) {
+          if (Math.random() < 0.3) continue;
+          Submission submission = new Submission((int)(Math.random() * 100), student.getAccount(), report);
+          submission.persist();
+        }
+      }
+    }
   }
 
 }
