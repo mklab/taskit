@@ -3,7 +3,12 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.shared.AccountProxy;
+import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.LectureProxy;
+
 import java.util.List;
+
 
 /**
  * @author Yuhi Ishikura
@@ -12,55 +17,39 @@ import java.util.List;
 public interface AttendanceListView extends TaskitView {
 
   /**
-   * 選択可能な講義数を設定します。
+   * 講義データを設定します。
    * 
-   * @param lectureCount 選択可能な講義数
+   * @param lectures 講義データ
    */
-  void setLectures(int lectureCount);
+  void setLectures(List<LectureProxy> lectures);
 
   /**
-   * 選択可能な出席種別の値を設定します。
+   * 出席データを設定します。
    * 
-   * @param attendanceTypes 選択可能な出席種別の値
+   * @param attendances 出席データ
    */
-  void setAttendanceTypes(List<String> attendanceTypes);
+  void setAttendances(List<AttendanceListItem> attendances);
 
   /**
-   * 選択されている講義を設定します。
+   * 選択中の講義データを取得します。
    * 
-   * @param index 選択する講義のインデックス
+   * @return 選択中の講義データ
    */
-  void setSelectedLecture(int index);
+  LectureProxy getSelectedLecture();
 
   /**
-   * 選択されている講義のインデックスを取得します。
+   * 選択中の講義データを設定します。
    * 
-   * @return 選択されている講義のインデックス
+   * @param lecture 講義データ
    */
-  int getSelectedLecture();
+  void setSelectedLecture(LectureProxy lecture);
 
   /**
    * プレゼンターを設定します。
    * 
-   * @param presenter
+   * @param presenter プレゼンター
    */
   void setPresenter(Presenter presenter);
-
-  /**
-   * 与えられたインデックスの学生番号を設定します。
-   * 
-   * @param index インデックス
-   * @param studentNo 学籍番号
-   */
-  void setStudentNumber(int index, String studentNo);
-
-  /**
-   * 与えられたインデックスの出席種別の値を設定します。
-   * 
-   * @param index インデックス
-   * @param attendanceTypeIndex 出席す別のインデックス
-   */
-  void setAttendanceType(int index, int attendanceTypeIndex);
 
   /**
    * 出席一覧ビューのプレゼンターを表すインターフェースです。
@@ -71,26 +60,19 @@ public interface AttendanceListView extends TaskitView {
   public static interface Presenter {
 
     /**
-     * index番目の学生の出席種別を変更します。
-     * 
-     * @param userName ユーザー名
-     * @param attendanceTypeIndex 表中の出席種別のインデックス
-     */
-    void attendanceTypeEditted(String userName, int attendanceTypeIndex);
-
-    /**
      * 選択されている講義が変更されたときに呼び出されます。
      * 
-     * @param selectedLectureIndex 選択されている講義のインデックス
+     * @param selectedLectureIndex 選択されている講義
      */
-    void lectureSelectionChanged(int selectedLectureIndex);
+    void lectureSelectionChanged(LectureProxy selectedLectureIndex);
 
     /**
-     * 学生番号がクリックされたときに呼び出されます。
+     * 出席状況を記録します。
      * 
-     * @param index クリックされた行インデックス
+     * @param user ユーザー
+     * @param type 出席種別
      */
-    void studentNumberClicked(int index);
+    void attend(AccountProxy user, AttendanceType type);
 
   }
 

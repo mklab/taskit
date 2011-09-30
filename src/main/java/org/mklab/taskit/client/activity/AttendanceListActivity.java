@@ -4,20 +4,30 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.place.StudentScore;
+import org.mklab.taskit.client.ui.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
+import org.mklab.taskit.shared.AccountProxy;
+import org.mklab.taskit.shared.AttendanceProxy;
+import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.LectureProxy;
+import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.dto.AttendanceBaseDto;
 import org.mklab.taskit.shared.dto.AttendanceDto;
 import org.mklab.taskit.shared.service.AttendanceService;
 import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
@@ -28,8 +38,9 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
   private AttendanceListView view;
   private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
-  private List<String> attendanceTypes;
-  private List<String> userNames;
+  private List<AttendanceProxy> attendances;
+  private List<UserProxy> students;
+  private List<LectureProxy> lectures;
   private Timer updateTimer;
 
   /**
@@ -49,14 +60,10 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     this.view = new AttendanceListViewImpl(clientFactory);
     this.view.setPresenter(this);
 
-    fetchInitialData();
-
     this.updateTimer = new Timer() {
 
       @Override
-      public void run() {
-        fetchAttendanceDtoFromLecture();
-      }
+      public void run() {}
     };
     this.updateTimer.scheduleRepeating(10 * 1000);
 
@@ -73,105 +80,82 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     }
   }
 
-  void fetchInitialData() {
-    this.service.getBaseData(new AsyncCallback<AttendanceBaseDto>() {
-
-      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
-      @Override
-      public void onSuccess(AttendanceBaseDto result) {
-        userNames = result.getUserNames();
-        final int lectureCount = result.getLectureCount();
-        attendanceTypes = result.getAttendanceTypes();
-        view.setLectures(lectureCount);
-
-        view.setAttendanceTypes(attendanceTypes);
-        for (int i = 0; i < userNames.size(); i++) {
-          view.setStudentNumber(i, userNames.get(i));
-        }
-        if (lectureCount > 0) fetchAttendanceDtoFromLecture(0);
-      }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void attend(AccountProxy user, AttendanceType type) {
+    final LectureProxy lecture = this.view.getSelectedLecture();
+    getClientFactory().getRequestFactory().attendanceRequest().attend(user, lecture, type).fire(new Receiver<Void>() {
 
       @Override
-      public void onFailure(Throwable caught) {
-        showErrorMessage(caught.toString());
-      }
-
-    });
-  }
-
-  void fetchAttendanceDtoFromLecture() {
-    fetchAttendanceDtoFromLecture(this.view.getSelectedLecture());
-  }
-
-  void fetchAttendanceDtoFromLecture(int lectureIndex) {
-    if (this.attendanceTypes == null || this.userNames == null) return;
-
-    this.service.getLecturewiseAttendanceData(lectureIndex, new AsyncCallback<AttendanceDto>() {
-
-      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
-      @Override
-      public void onSuccess(AttendanceDto result) {
-        for (int i = 0; i < userNames.size(); i++) {
-          final String userName = userNames.get(i);
-          final int index = result.getAttendanceTypeIndex(userName);
-          view.setAttendanceType(i, index == -1 ? 1 : index);
-        }
-      }
-
-      @Override
-      public void onFailure(Throwable caught) {
-        logout();
-        showErrorMessage(caught);
-      }
-
-    });
-  }
-
-  void updateAttendanceState(String userName, int lectureIndex, int attendanceTypeIndex) {
-    this.service.setAttendanceType(userName, lectureIndex, this.attendanceTypes.get(attendanceTypeIndex), new AsyncCallback<Void>() {
-
-      /**
-       * @see com.google.gwt.user.client.rpc.AsyncCallback#onSuccess(java.lang.Object)
-       */
-      @Override
-      public void onSuccess(@SuppressWarnings("unused") Void result) {
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
         // do nothing
       }
 
       /**
-       * @see com.google.gwt.user.client.rpc.AsyncCallback#onFailure(java.lang.Throwable)
+       * {@inheritDoc}
        */
       @Override
-      public void onFailure(Throwable caught) {
-        showErrorMessage(caught.toString());
+      public void onFailure(ServerFailure error) {
+        showErrorMessage(error.getMessage());
       }
+
     });
+
   }
 
   /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#attendanceTypeEditted(java.lang.String,
-   *      int)
+   * {@inheritDoc}
    */
   @Override
-  public void attendanceTypeEditted(String userName, int attendanceTypeIndex) {
-    final int lectureIndex = this.view.getSelectedLecture();
-    updateAttendanceState(userName, lectureIndex, attendanceTypeIndex);
+  public void lectureSelectionChanged(LectureProxy selectedLecture) {
+    updateListAsync(selectedLecture);
   }
 
-  /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#lectureSelectionChanged(int)
-   */
-  @Override
-  public void lectureSelectionChanged(int selectedLectureIndex) {
-    fetchAttendanceDtoFromLecture(selectedLectureIndex);
+  private void updateListAsync(LectureProxy selectedLecture) {
+    if (this.students == null) fetchStudentsAsync();
+    fetchAttendancesByLectureAsync(selectedLecture);
   }
 
-  /**
-   * @see org.mklab.taskit.client.ui.AttendanceListView.Presenter#studentNumberClicked(int)
-   */
-  @Override
-  public void studentNumberClicked(int index) {
-    getClientFactory().getPlaceController().goTo(new StudentScore(this.userNames.get(index)));
+  private void fetchStudentsAsync() {
+    getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
+
+          @SuppressWarnings("synthetic-access")
+          @Override
+          public void onSuccess(List<UserProxy> response) {
+            AttendanceListActivity.this.students = response;
+            updateListData();
+          }
+
+        });
   }
 
+  private void fetchAttendancesByLectureAsync(LectureProxy lecture) {
+    getClientFactory().getRequestFactory().attendanceRequest().getAttendancesByLecture(lecture).with("attender").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$
+
+          @SuppressWarnings("synthetic-access")
+          @Override
+          public void onSuccess(List<AttendanceProxy> response) {
+            AttendanceListActivity.this.attendances = response;
+            updateListData();
+          }
+        });
+  }
+
+  private void updateListData() {
+    if (this.attendances == null || this.students == null) return;
+
+    final Map<String, AttendanceProxy> idToAttendance = new HashMap<String, AttendanceProxy>();
+    for (AttendanceProxy a : this.attendances) {
+      idToAttendance.put(a.getAttender().getId(), a);
+    }
+
+    final List<AttendanceListItem> listItems = new ArrayList<AttendanceListItem>();
+    for (UserProxy user : this.students) {
+      AttendanceListItem listItem = new AttendanceListItem(user, idToAttendance.get(user.getAccount().getId()));
+      listItems.add(listItem);
+    }
+    this.view.setAttendances(listItems);
+  }
 }
