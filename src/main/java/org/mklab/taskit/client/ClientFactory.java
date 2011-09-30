@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.StudentListView;
@@ -67,6 +68,13 @@ public interface ClientFactory {
    * @return 学生一覧ビュー
    */
   StudentListView getStudentListView();
+
+  /**
+   * 出席状況ビューを取得します。
+   * 
+   * @return 出席状況ビュー
+   */
+  AttendanceListView getAttendanceListView();
 
   /**
    * 学生成績ビューを取得します。

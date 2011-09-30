@@ -6,7 +6,6 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
-import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceType;
@@ -50,7 +49,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    */
   @Override
   protected Widget createTaskitView(ClientFactory clientFactory) {
-    this.view = new CwAttendanceListView(clientFactory);
+    this.view = clientFactory.getAttendanceListView();
     this.view.setPresenter(this);
 
     fetchLecturesAsync();

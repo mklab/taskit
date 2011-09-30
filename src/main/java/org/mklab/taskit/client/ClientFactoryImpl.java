@@ -3,11 +3,13 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
+import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
 import org.mklab.taskit.client.ui.cw.CwHeaderView;
 import org.mklab.taskit.client.ui.cw.CwStudentListView;
 import org.mklab.taskit.client.ui.smartgwt.SmartGwtStudentwiseEvaluationView;
@@ -98,6 +100,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public StudentListView getStudentListView() {
     return new CwStudentListView(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AttendanceListView getAttendanceListView() {
+    return new CwAttendanceListView(this);
   }
 
   /**
