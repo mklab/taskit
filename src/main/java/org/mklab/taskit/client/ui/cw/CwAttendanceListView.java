@@ -19,7 +19,6 @@ import java.util.Map;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.AbstractInputCell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -127,37 +126,42 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
         }
 
       };
-      attendanceCell.setFieldUpdater(new FieldUpdater<AttendanceListItem, AttendanceListItem>() {
-
-        @Override
-        public void update(int index, AttendanceListItem object, AttendanceListItem value) {
-          System.out.println(object);
-        }
-      });
-      this.table.addColumn(attendanceCell);
+      this.table.addColumn(attendanceCell, type.name());
     }
 
     return binder.createAndBindUi(this);
   }
 
-  static class AttendanceCell extends AbstractInputCell<AttendanceListItem, AttendanceListItem> {
+  /**
+   * 出席種別の選択を行うラジオボタンのセルです。
+   * <p>
+   * 直接サーバーと通信を行わず、セルの段階ではValueUpdaterの呼び出しにとどめたい・・・。
+   * 
+   * @author ishikura
+   */
+  class AttendanceCell extends AbstractInputCell<AttendanceListItem, AttendanceListItem> {
 
     private AttendanceType attendanceType;
 
     AttendanceCell(AttendanceType type) {
+      super("change"); //$NON-NLS-1$
       this.attendanceType = type;
     }
 
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings({"synthetic-access", "unused"})
     @Override
     public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, AttendanceListItem value, NativeEvent event, ValueUpdater<AttendanceListItem> valueUpdater) {
-      if ("change".equals(event.getType())) { //$NON-NLS-1$
-        InputElement input = parent.getFirstChild().cast();
-        Boolean isChecked = input.isChecked();
-        System.out.println(isChecked);
-      }
+      if ("change".equals(event.getType()) == false) return; //$NON-NLS-1$
+
+      final InputElement input = parent.getFirstChild().cast();
+      final boolean isChecked = input.isChecked();
+
+      if (isChecked == false) return;
+
+      CwAttendanceListView.this.presenter.attend(value.getUser().getAccount(), this.attendanceType);
     }
 
     /**

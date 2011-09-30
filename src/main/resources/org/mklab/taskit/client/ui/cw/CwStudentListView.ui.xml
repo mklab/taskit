@@ -3,20 +3,16 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:mk="urn:import:org.mklab.taskit.client.ui.cw">
 
-	<ui:style>
-		.list {
-		border:solid 1px gray;
-		}
-	</ui:style>
-
 	<g:DockLayoutPanel unit='EM'>
 		<g:west size='10'>
-			<g:ScrollPanel styleName='{style.list}'>
+			<g:ScrollPanel>
 				<ce:CellList ui:field='list'></ce:CellList>
 			</g:ScrollPanel>
 		</g:west>
 		<g:center>
-			<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
+			<g:ScrollPanel>
+				<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
+			</g:ScrollPanel>
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 
