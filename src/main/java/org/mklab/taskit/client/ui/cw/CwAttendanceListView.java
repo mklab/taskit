@@ -7,6 +7,7 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
 import org.mklab.taskit.client.ui.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
+import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.UserProxy;
 
@@ -17,7 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.AbstractInputCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -111,8 +118,59 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
       }
     };
     this.table.addColumn(userColumn, "User"); //$NON-NLS-1$
+    for (AttendanceType type : AttendanceType.values()) {
+      final Column<AttendanceListItem, AttendanceListItem> attendanceCell = new Column<AttendanceListItem, AttendanceListItem>(new AttendanceCell(type)) {
+
+        @Override
+        public AttendanceListItem getValue(AttendanceListItem object) {
+          return object;
+        }
+
+      };
+      attendanceCell.setFieldUpdater(new FieldUpdater<AttendanceListItem, AttendanceListItem>() {
+
+        @Override
+        public void update(int index, AttendanceListItem object, AttendanceListItem value) {
+          System.out.println(object);
+        }
+      });
+      this.table.addColumn(attendanceCell);
+    }
 
     return binder.createAndBindUi(this);
+  }
+
+  static class AttendanceCell extends AbstractInputCell<AttendanceListItem, AttendanceListItem> {
+
+    private AttendanceType attendanceType;
+
+    AttendanceCell(AttendanceType type) {
+      this.attendanceType = type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, AttendanceListItem value, NativeEvent event, ValueUpdater<AttendanceListItem> valueUpdater) {
+      if ("change".equals(event.getType())) { //$NON-NLS-1$
+        InputElement input = parent.getFirstChild().cast();
+        Boolean isChecked = input.isChecked();
+        System.out.println(isChecked);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings({"nls", "unused"})
+    @Override
+    public void render(com.google.gwt.cell.client.Cell.Context context, AttendanceListItem value, SafeHtmlBuilder sb) {
+      final String id = value.getUser().getAccount().getId();
+      final boolean checked = value.getAttendance() != null && value.getAttendance().getType() == this.attendanceType;
+      sb.appendHtmlConstant("<input type='radio' name='" + id + "'" + (checked ? " checked" : "") + "/>");
+    }
+
   }
 
   /**
