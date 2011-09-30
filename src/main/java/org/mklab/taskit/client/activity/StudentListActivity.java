@@ -4,7 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;

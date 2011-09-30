@@ -3,8 +3,8 @@
  */
 package org.mklab.taskit.client.ui.cw;
 
-import org.mklab.taskit.client.ui.StudentScoreModel;
-import org.mklab.taskit.client.ui.StudentScoreModel.LectureScore;
+import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.StudentListView.Presenter;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;

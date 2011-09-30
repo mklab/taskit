@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.model;
 
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.LectureProxy;

@@ -14,6 +14,11 @@ import com.google.gwt.user.client.ui.IsWidget;
  */
 public interface TaskitView extends IsWidget {
 
+  /**
+   * メッセージを表示します。
+   * 
+   * @param message メッセージ
+   */
   void showMessage(String message);
 
 }

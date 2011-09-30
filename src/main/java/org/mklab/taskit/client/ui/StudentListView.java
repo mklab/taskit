@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;

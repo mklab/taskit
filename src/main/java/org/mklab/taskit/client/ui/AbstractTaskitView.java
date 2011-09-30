@@ -5,11 +5,8 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -44,13 +41,6 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
     final Widget content = initContent();
     if (content == null) throw new NullPointerException();
     add(content);
-  }
-
-  private static Widget createCenteringWidget(Widget w) {
-    final FlowPanel flowPanel = new FlowPanel();
-    flowPanel.add(w);
-    DOM.setElementAttribute(flowPanel.getElement(), "align", "center"); //$NON-NLS-1$ //$NON-NLS-2$
-    return flowPanel;
   }
 
   /**

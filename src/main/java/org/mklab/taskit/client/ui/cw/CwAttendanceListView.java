@@ -4,8 +4,8 @@
 package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.model.AttendanceListItem;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;

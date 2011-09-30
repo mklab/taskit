@@ -4,8 +4,8 @@
 package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.StudentScoreModel;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.UserProxy;
 
