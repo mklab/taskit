@@ -9,7 +9,6 @@ import org.mklab.taskit.client.ui.admin.LectureEditorImpl;
 import org.mklab.taskit.client.ui.admin.NewAccountView;
 import org.mklab.taskit.client.ui.admin.NewAccountViewImpl;
 import org.mklab.taskit.client.ui.admin.ReportEditor2;
-import org.mklab.taskit.client.ui.admin.ReportEditor2Impl;
 
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -23,7 +22,6 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
 
   private NewAccountViewImpl accountView;
   private LectureEditor lectureEditor;
-  private ReportEditor2 reportEditor;
 
   /**
    * {@link AdminViewImpl}オブジェクトを構築します。
@@ -42,11 +40,9 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
     final TabPanel tabPanel = new TabPanel();
     this.accountView = new NewAccountViewImpl(getClientFactory());
     this.lectureEditor = new LectureEditorImpl(getClientFactory());
-    this.reportEditor = new ReportEditor2Impl();
 
     tabPanel.add(this.accountView, "Account"); //$NON-NLS-1$
     tabPanel.add(this.lectureEditor, "Lecture"); //$NON-NLS-1$
-    tabPanel.add(this.reportEditor, "Report"); //$NON-NLS-1$
     tabPanel.selectTab(0);
 
     return tabPanel;

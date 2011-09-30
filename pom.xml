@@ -86,11 +86,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.smartgwt</groupId>
-			<artifactId>smartgwt</artifactId>
-			<version>2.4</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.dozer</groupId>
 			<artifactId>dozer</artifactId>
 			<version>5.3.2</version>
@@ -316,18 +311,6 @@
 		</plugins>
 	</reporting>
 
-	<repositories>
-		<repository>
-			<id>GILEAD</id>
-			<name>GILEAD Repository</name>
-			<url>https://gilead.svn.sourceforge.net/svnroot/gilead/gilead/maven-repo/</url>
-		</repository>
-		<repository>
-			<id>smartclient</id>
-			<name>smartclient.com</name>
-			<url>http://www.smartclient.com/maven2</url>
-		</repository>
-	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>gwt</id>

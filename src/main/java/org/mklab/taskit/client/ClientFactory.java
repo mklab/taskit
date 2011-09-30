@@ -7,7 +7,6 @@ import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.StudentListView;
-import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.event.shared.EventBus;
@@ -75,12 +74,5 @@ public interface ClientFactory {
    * @return 出席状況ビュー
    */
   AttendanceListView getAttendanceListView();
-
-  /**
-   * 学生成績ビューを取得します。
-   * 
-   * @return 成績ビュー
-   */
-  StudentwiseEvaluationView getStudentEvaluationView();
 
 }

@@ -8,11 +8,9 @@ import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
 import org.mklab.taskit.client.ui.StudentListView;
-import org.mklab.taskit.client.ui.StudentwiseEvaluationView;
 import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
 import org.mklab.taskit.client.ui.cw.CwHeaderView;
 import org.mklab.taskit.client.ui.cw.CwStudentListView;
-import org.mklab.taskit.client.ui.smartgwt.SmartGwtStudentwiseEvaluationView;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.core.client.GWT;
@@ -108,14 +106,6 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public AttendanceListView getAttendanceListView() {
     return new CwAttendanceListView(this);
-  }
-
-  /**
-   * @see org.mklab.taskit.client.ClientFactory#getStudentEvaluationView()
-   */
-  @Override
-  public StudentwiseEvaluationView getStudentEvaluationView() {
-    return new SmartGwtStudentwiseEvaluationView(this);
   }
 
 }
