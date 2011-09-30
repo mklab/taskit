@@ -5,14 +5,12 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentScoreQuery;
 import org.mklab.taskit.client.ui.StudentListView;
-import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
-import org.mklab.taskit.shared.LectureRequest;
 import org.mklab.taskit.shared.ReportProxy;
-import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 import org.mklab.taskit.shared.UserProxy;
 
@@ -30,10 +28,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 public class StudentListActivity extends TaskitActivity implements StudentListView.Presenter {
 
   private StudentListView view;
-  private List<LectureProxy> lectures;
-  private List<SubmissionProxy> submissions;
-  private List<AttendanceProxy> attendances;
-  private StudentScoreModel model;
+  private StudentScoreQuery query;
 
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
@@ -42,6 +37,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   public StudentListActivity(ClientFactory clientFactory) {
     super(clientFactory);
+    this.query = new StudentScoreQuery(clientFactory.getRequestFactory());
   }
 
   /**
@@ -123,71 +119,19 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   @Override
   public void listSelectionChanged(UserProxy selectedUser) {
-    this.submissions = null;
-    this.attendances = null;
-    this.model = null;
-
     this.view.clearUserPage();
     fetchAndShowAsync(selectedUser);
   }
 
-  private void fetchAndShowAsync(UserProxy selectedUser) {
-    if (this.lectures == null) fetchLectures(selectedUser);
+  private void fetchAndShowAsync(final UserProxy selectedUser) {
+    this.query.query(selectedUser.getAccount().getId(), new StudentScoreQuery.Handler() {
 
-    fetchAttendances(selectedUser);
-    fetchSubmissions(selectedUser);
-  }
-
-  private void fetchLectures(final UserProxy user) {
-    final LectureRequest lectureRequest = getClientFactory().getRequestFactory().lectureRequest();
-    lectureRequest.getAllLectures().with("reports").fire(new Receiver<List<LectureProxy>>() { //$NON-NLS-1$
-
-          @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
-          @Override
-          public void onSuccess(List<LectureProxy> response) {
-            lectures = response;
-            showUserPageIfPossible(user);
-          }
-
-        });
-  }
-
-  private void fetchAttendances(final UserProxy user) {
-    final String accountId = user.getAccount().getId();
-    final AttendanceRequest attendanceRequest = getClientFactory().getRequestFactory().attendanceRequest();
-    attendanceRequest.getAttendancesByAccountId(accountId).with("lecture").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$
-
-          @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
-          @Override
-          public void onSuccess(List<AttendanceProxy> response) {
-            attendances = response;
-            showUserPageIfPossible(user);
-          }
-
-        });
-  }
-
-  private void fetchSubmissions(final UserProxy user) {
-    final String accountId = user.getAccount().getId();
-    final SubmissionRequest submissionRequest = getClientFactory().getRequestFactory().submissionRequest();
-    submissionRequest.getSubmissionsByAccountId(accountId).with("report.lecture").fire(new Receiver<List<SubmissionProxy>>() { //$NON-NLS-1$
-
-          @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
-          @Override
-          public void onSuccess(List<SubmissionProxy> response) {
-            submissions = response;
-            showUserPageIfPossible(user);
-          }
-
-        });
-  }
-
-  private void showUserPageIfPossible(UserProxy user) {
-    if (this.lectures == null || this.attendances == null || this.submissions == null) {
-      return;
-    }
-    this.model = new StudentScoreModel(this.lectures, this.attendances, this.submissions);
-    this.view.showUserPage(user, this.model);
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
+      @Override
+      public void handleResult(StudentScoreModel model) {
+        view.showUserPage(selectedUser, model);
+      }
+    });
   }
 
   /**

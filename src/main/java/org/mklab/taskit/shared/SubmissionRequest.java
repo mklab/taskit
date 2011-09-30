@@ -20,6 +20,8 @@ public interface SubmissionRequest extends RequestContext {
 
   InstanceRequest<SubmissionProxy, Void> persist();
 
+  Request<List<SubmissionProxy>> getMySubmissions();
+
   Request<List<SubmissionProxy>> getSubmissionsByAccountId(String accountId);
 
   Request<Void> submit(AccountProxy submitter, ReportProxy report, int point);

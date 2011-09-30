@@ -163,6 +163,19 @@ public class Submission extends AbstractEntity<Integer> {
   // Service methods
 
   /**
+   * ログインユーザーのすべての提出物を取得します。
+   * 
+   * @return ログインユーザーのすべての提出物
+   */
+  @Invoker(UserType.STUDENT)
+  public static List<Submission> getMySubmissions() {
+    final User user = ServiceUtil.getLoginUser();
+    if (user == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+
+    return getSubmissionsByAccountId(user.getAccount().getId());
+  }
+
+  /**
    * 特定のユーザーによるすべての提出物を取得します。
    * 
    * @param accountId ユーザーのアカウントID

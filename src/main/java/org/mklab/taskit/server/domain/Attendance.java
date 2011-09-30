@@ -180,6 +180,19 @@ public class Attendance extends AbstractEntity<Integer> {
   }
 
   /**
+   * ログインユーザーのすべての出席状況を取得します。
+   * 
+   * @return ログインユーザーの出席状況
+   */
+  @Invoker(UserType.STUDENT)
+  public static List<Attendance> getMyAttendances() {
+    final User user = ServiceUtil.getLoginUser();
+    if (user == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+
+    return getAttendancesByAccountId(user.getAccount().getId());
+  }
+
+  /**
    * 特定のユーザーのすべての出席状況を取得します。
    * 
    * @param accountId ユーザーのアカウントID

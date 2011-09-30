@@ -11,6 +11,7 @@ import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.ToolBarButton;
 import org.mklab.taskit.shared.UserProxy;
+import org.mklab.taskit.shared.model.UserType;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.dom.client.Style.Unit;
@@ -32,7 +33,10 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public abstract class TaskitActivity extends AbstractActivity {
 
+  private static UserProxy loginUserCache;
   private ClientFactory clientFactory;
+  private AcceptsOneWidget container;
+  private HeaderView header;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -45,64 +49,119 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   /**
-   * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
-   *      com.google.gwt.event.shared.EventBus)
+   * {@inheritDoc}
    */
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
-    HeaderView header = this.clientFactory.getHeaderView();
-    setupHeader(header);
-    final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
-    pn.addNorth(header, header.getHeight());
-    pn.add(createTaskitView(this.clientFactory));
-    panel.setWidget(pn);
+    /*
+     * すぐにビューを表示せずに、ユーザー情報の取得が完了してから行います。
+     */
+    this.header = this.clientFactory.getHeaderView();
+    this.container = panel;
+
+    fetchLoginUserAndShowLater();
   }
 
   /**
-   * ビューを作成します。
-   * 
-   * @param clientFactory クライアントファクトリ
-   * @return ビュー
+   * ログインユーザー情報を取得し、取得が完了し次第ユーザーに応じたビューを表示します。
+   * <p>
+   * ユーザー情報はキャッシュされ、アプリケーション実行中はログアウトするまでその情報を利用します。<br>
+   * アプリケーション実行中にユーザー種別やユーザー名が変わったりしても反映されないのでその時はブラウザをリロードしてください。
+   * <p>
+   * この仕様はプロフィール変更があることを考えると問題ありすぎなので、変更予定。
    */
-  protected abstract Widget createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+  private void fetchLoginUserAndShowLater() {
+    if (loginUserCache != null) {
+      initViewWith(loginUserCache);
+      return;
+    }
 
+    getClientFactory().getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
+
+          @SuppressWarnings("synthetic-access")
+          @Override
+          public void onSuccess(UserProxy user) {
+            if (user == null) {
+              logout();
+              return;
+            }
+
+            initViewWith(user);
+          }
+
+          /**
+           * {@inheritDoc}
+           */
+          @Override
+          public void onFailure(ServerFailure error) {
+            showErrorMessage(error.getMessage());
+            logout();
+            return;
+          }
+        });
+  }
+
+  /**
+   * 与えられたユーザー情報を元に、ビューを構築します。
+   * 
+   * @param user ログインユーザー情報
+   */
+  private void initViewWith(UserProxy user) {
+    initToolBarButtons(user);
+    final String name = user.getName() == null ? user.getAccount().getId() : user.getName();
+    this.header.setUserId(name);
+    this.header.setUserType(user.getType().name());
+
+    final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
+    pn.addNorth(this.header, this.header.getHeight());
+    pn.add(createTaskitView(this.clientFactory));
+    this.container.setWidget(pn);
+  }
+
+  /**
+   * 上部のツールバーに表示するボタン、及びそのアクションを設定します。
+   * 
+   * @param user ログインユーザー情報
+   */
   @SuppressWarnings({"nls", "unused"})
-  private void setupHeader(final HeaderView header) {
-    updateLoginUserViewAsync(header);
+  private void initToolBarButtons(UserProxy user) {
+    final UserType userType = user.getType();
 
-    final ToolBarButton studentListButton = header.addButton("student_list");
-    studentListButton.setIcon("taskit/students64.png");
-    studentListButton.setClickHandler(new ClickHandler() {
+    if (userType == UserType.TA || userType == UserType.TEACHER) {
+      final ToolBarButton studentListButton = this.header.addButton("student_list");
+      studentListButton.setIcon("taskit/students64.png");
+      studentListButton.setClickHandler(new ClickHandler() {
 
-      @Override
-      public void onClick(ClickEvent event) {
-        getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
-      }
-    });
+        @Override
+        public void onClick(ClickEvent event) {
+          getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
+        }
+      });
 
-    final ToolBarButton attendanceListButton = header.addButton("attendance_list");
-    attendanceListButton.setIcon("taskit/attendance64.png");
-    attendanceListButton.setClickHandler(new ClickHandler() {
+      final ToolBarButton attendanceListButton = this.header.addButton("attendance_list");
+      attendanceListButton.setIcon("taskit/attendance64.png");
+      attendanceListButton.setClickHandler(new ClickHandler() {
 
-      @Override
-      public void onClick(ClickEvent event) {
-        getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
-      }
-    });
+        @Override
+        public void onClick(ClickEvent event) {
+          getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
+        }
+      });
 
-    final ToolBarButton adminButton = header.addButton("admin");
-    adminButton.setIcon("taskit/admin64.png");
-    adminButton.setClickHandler(new ClickHandler() {
+      final ToolBarButton adminButton = this.header.addButton("admin");
+      adminButton.setIcon("taskit/admin64.png");
+      adminButton.setClickHandler(new ClickHandler() {
 
-      @Override
-      public void onClick(ClickEvent event) {
-        getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
-      }
-    });
+        @Override
+        public void onClick(ClickEvent event) {
+          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+        }
+      });
+    }
 
-    header.addSeparator();
+    this.header.addSeparator();
 
-    final ToolBarButton logoutButton = header.addButton("logout");
+    final ToolBarButton logoutButton = this.header.addButton("logout");
     logoutButton.setIcon("taskit/logout64.png");
     logoutButton.setClickHandler(new ClickHandler() {
 
@@ -113,35 +172,19 @@ public abstract class TaskitActivity extends AbstractActivity {
     });
   }
 
-  private void updateLoginUserViewAsync(final HeaderView header) {
-    getClientFactory().getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
-
-          @Override
-          public void onSuccess(UserProxy arg0) {
-            if (arg0 == null) {
-              logout();
-              return;
-            }
-            final String name = arg0.getName() == null ? arg0.getAccount().getId() : arg0.getName();
-            header.setUserId(name);
-            header.setUserType(arg0.getType().name());
-          }
-
-          /**
-           * {@inheritDoc}
-           */
-          @Override
-          public void onFailure(ServerFailure error) {
-            showErrorMessage(error.getMessage());
-            return;
-          }
-        });
-  }
+  /**
+   * ビューを作成します。
+   * 
+   * @param clientFactory クライアントファクトリ
+   * @return ビュー
+   */
+  protected abstract Widget createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
 
   /**
    * ログアウトします。
    */
   protected void logout() {
+    loginUserCache = null;
     try {
       getClientFactory().getRequestFactory().accountRequest().logout().fire();
     } finally {
