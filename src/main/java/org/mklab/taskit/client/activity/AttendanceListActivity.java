@@ -6,25 +6,19 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
-import org.mklab.taskit.client.ui.AttendanceListViewImpl;
+import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.dto.AttendanceBaseDto;
-import org.mklab.taskit.shared.dto.AttendanceDto;
-import org.mklab.taskit.shared.service.AttendanceService;
-import org.mklab.taskit.shared.service.AttendanceServiceAsync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
@@ -37,7 +31,6 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 public class AttendanceListActivity extends TaskitActivity implements AttendanceListView.Presenter {
 
   private AttendanceListView view;
-  private AttendanceServiceAsync service = GWT.create(AttendanceService.class);
   private List<AttendanceProxy> attendances;
   private List<UserProxy> students;
   private List<LectureProxy> lectures;
@@ -53,25 +46,30 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   /**
-   * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
+   * {@inheritDoc}
    */
   @Override
   protected Widget createTaskitView(ClientFactory clientFactory) {
-    this.view = new AttendanceListViewImpl(clientFactory);
+    this.view = new CwAttendanceListView(clientFactory);
     this.view.setPresenter(this);
+
+    fetchLecturesAsync();
 
     this.updateTimer = new Timer() {
 
+      @SuppressWarnings("synthetic-access")
       @Override
-      public void run() {}
+      public void run() {
+        updateListAsync();
+      }
     };
-    this.updateTimer.scheduleRepeating(10 * 1000);
+    this.updateTimer.scheduleRepeating(30 * 1000);
 
     return this.view.asWidget();
   }
 
   /**
-   * @see com.google.gwt.activity.shared.AbstractActivity#onStop()
+   * {@inheritDoc}
    */
   @Override
   public void onStop() {
@@ -102,7 +100,11 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
       }
 
     });
+  }
 
+  private void updateListAsync() {
+    final LectureProxy currentSelection = this.view.getSelectedLecture();
+    updateListAsync(currentSelection);
   }
 
   /**
@@ -118,6 +120,38 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     fetchAttendancesByLectureAsync(selectedLecture);
   }
 
+  private void fetchLecturesAsync() {
+    getClientFactory().getRequestFactory().lectureRequest().getAllLectures().fire(new Receiver<List<LectureProxy>>() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(List<LectureProxy> arg0) {
+        AttendanceListActivity.this.lectures = arg0;
+        updateLectures();
+        selectLatestLecture();
+      }
+
+    });
+  }
+
+  private void selectLatestLecture() {
+    if (this.lectures == null) return;
+
+    final long now = System.currentTimeMillis();
+    long minimumMillisToNow = Long.MAX_VALUE;
+    LectureProxy latest = null;
+    for (final LectureProxy lecture : this.lectures) {
+      final long millisToNow = Math.abs(lecture.getDate().getTime() - now);
+      if (millisToNow < minimumMillisToNow) {
+        minimumMillisToNow = millisToNow;
+        latest = lecture;
+      }
+    }
+    if (latest == null) return;
+
+    this.view.setSelectedLecture(latest);
+  }
+
   private void fetchStudentsAsync() {
     getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
 
@@ -125,7 +159,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
           @Override
           public void onSuccess(List<UserProxy> response) {
             AttendanceListActivity.this.students = response;
-            updateListData();
+            updateAttendanceList();
           }
 
         });
@@ -138,12 +172,16 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
           @Override
           public void onSuccess(List<AttendanceProxy> response) {
             AttendanceListActivity.this.attendances = response;
-            updateListData();
+            updateAttendanceList();
           }
         });
   }
 
-  private void updateListData() {
+  private void updateLectures() {
+    this.view.setLectures(this.lectures);
+  }
+
+  private void updateAttendanceList() {
     if (this.attendances == null || this.students == null) return;
 
     final Map<String, AttendanceProxy> idToAttendance = new HashMap<String, AttendanceProxy>();

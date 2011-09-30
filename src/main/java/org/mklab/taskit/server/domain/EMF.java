@@ -15,6 +15,8 @@
  */
 package org.mklab.taskit.server.domain;
 
+import java.io.File;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -26,6 +28,19 @@ public final class EMF {
 
   private static EntityManagerFactory emfInstance;
   private static String persistenceUnitName = "taskit-local"; //$NON-NLS-1$
+
+  static {
+    if (isDevelopmentMode()) {
+      persistenceUnitName = "taskit-local"; //$NON-NLS-1$
+    } else {
+      persistenceUnitName = "taskit"; //$NON-NLS-1$
+    }
+  }
+
+  @SuppressWarnings("nls")
+  private static boolean isDevelopmentMode() {
+    return new File("src").exists() && new File("pom.xml").exists();
+  }
 
   /**
    * {@link EntityManagerFactory}インスタンスを必要に応じて生成し取得します。
