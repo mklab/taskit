@@ -187,10 +187,24 @@ public class Attendance extends AbstractEntity<Integer> {
    */
   @SuppressWarnings({"nls", "unchecked"})
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static List<Attendance> getAllAttendancesByAccountId(String accountId) {
+  public static List<Attendance> getAttendancesByAccountId(String accountId) {
     final EntityManager em = EMF.get().createEntityManager();
     final Query q = em.createQuery("select s from Attendance s where s.attender.id=:accountId");
     q.setParameter("accountId", accountId);
+    return q.getResultList();
+  }
+
+  /**
+   * 講義を指定して出席状況を取得します。
+   * 
+   * @param lecture 講義
+   * @return 出席状況
+   */
+  @SuppressWarnings({"nls", "unchecked"})
+  public static List<Attendance> getAttendancesByLecture(Lecture lecture) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select s from Attendance s where s.lecture=:lecture order by s.attender.id");
+    q.setParameter("lecture", lecture);
     return q.getResultList();
   }
 

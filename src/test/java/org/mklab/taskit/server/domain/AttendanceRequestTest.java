@@ -76,7 +76,7 @@ public class AttendanceRequestTest extends DomainTest {
       loginAsTA();
       final AttendanceRequest req = getRequestFactory().attendanceRequest();
 
-      req.getAllAttendancesByAccountId(STUDENT.getAccount().getId()).with("lecture.reports", "attender").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$ //$NON-NLS-2$
+      req.getAttendancesByAccountId(STUDENT.getAccount().getId()).with("lecture.reports", "attender").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$ //$NON-NLS-2$
 
             @Override
             public void onSuccess(List<AttendanceProxy> response) {

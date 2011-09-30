@@ -16,7 +16,9 @@ public interface AttendanceRequest extends RequestContext {
 
   InstanceRequest<AttendanceProxy, Void> persist();
 
-  Request<List<AttendanceProxy>> getAllAttendancesByAccountId(String accountId);
+  Request<List<AttendanceProxy>> getAttendancesByAccountId(String accountId);
+
+  Request<List<AttendanceProxy>> getAttendancesByLecture(LectureProxy lecture);
 
   Request<Void> attend(AccountProxy attender, LectureProxy lecture, AttendanceType type);
 

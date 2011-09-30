@@ -39,7 +39,7 @@ public class _SampleDataInitializer {
     for (int i = 0; i < 5; i++) {
       Account.registerNewAccount(String.valueOf(10675001 + i), "taskit", UserType.TA);
     }
-    for (int i = 0; i < 80; i++) {
+    for (int i = 0; i < 10; i++) {
       Account.registerNewAccount(String.valueOf(10236001 + i), "taskit", UserType.STUDENT);
     }
   }

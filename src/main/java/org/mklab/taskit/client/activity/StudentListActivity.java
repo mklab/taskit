@@ -155,7 +155,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   private void fetchAttendances(final UserProxy user) {
     final String accountId = user.getAccount().getId();
     final AttendanceRequest attendanceRequest = getClientFactory().getRequestFactory().attendanceRequest();
-    attendanceRequest.getAllAttendancesByAccountId(accountId).with("lecture").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$
+    attendanceRequest.getAttendancesByAccountId(accountId).with("lecture").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$
 
           @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
           @Override
