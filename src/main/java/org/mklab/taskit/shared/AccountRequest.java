@@ -47,9 +47,9 @@ public interface AccountRequest extends RequestContext {
    * 
    * @param id アカウントID
    * @param password パスワード
-   * @return リクエスト
+   * @return ログインユーザーデータ
    */
-  Request<Void> login(String id, String password);
+  Request<UserProxy> login(String id, String password);
 
   /**
    * ログアウトを行います。

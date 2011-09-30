@@ -7,6 +7,7 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.Login;
+import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 
 import com.google.gwt.activity.shared.Activity;
@@ -43,6 +44,7 @@ public class TaskitActivityMapper implements ActivityMapper {
     if (place instanceof StudentList) return new StudentListActivity(this.clientFactory);
     if (place instanceof AttendanceList) return new AttendanceListActivity(this.clientFactory);
     if (place instanceof Admin) return new AdminActivity(this.clientFactory);
+    if (place instanceof Student) return new StudentActivity(this.clientFactory);
 
     return null;
   }

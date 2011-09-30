@@ -124,9 +124,10 @@ public class Account extends AbstractEntity<String> {
    * 
    * @param id ID
    * @param password パスワード
+   * @return ログインユーザー情報
    */
   @AuthenticationEntryPoint
-  public static void login(String id, String password) {
+  public static User login(String id, String password) {
     if (isAlreadyRegistered(id) == false) throw new IllegalArgumentException("ID not exists."); //$NON-NLS-1$
     final Account account = getAccountById(id);
     if (Passwords.checkPassword(password, account.getHashedPassword()) == false) {
@@ -139,6 +140,7 @@ public class Account extends AbstractEntity<String> {
     }
 
     ServiceUtil.login(user);
+    return user;
   }
 
   /**

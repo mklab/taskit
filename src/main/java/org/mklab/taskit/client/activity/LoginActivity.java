@@ -4,9 +4,11 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.shared.UserProxy;
+import org.mklab.taskit.shared.model.UserType;
 
 import java.util.Date;
 
@@ -88,23 +90,23 @@ public final class LoginActivity extends AbstractActivity {
       @Override
       public void onSuccess(UserProxy response) {
         if (response == null) return;
-        goToTopPage();
+        goToTopPage(response);
       }
 
     });
   }
 
   void tryLoginAsync(final LoginView view, final String id, final String password) {
-    this.clientFactory.getRequestFactory().accountRequest().login(id, password).fire(new Receiver<Void>() {
+    this.clientFactory.getRequestFactory().accountRequest().login(id, password).fire(new Receiver<UserProxy>() {
 
       @Override
-      public void onSuccess(@SuppressWarnings("unused") Void response) {
+      public void onSuccess(@SuppressWarnings("unused") UserProxy response) {
         view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
 
         final boolean autoLoginEnabled = view.isAutoLoginEnabled();
         storeAutoLoginState(autoLoginEnabled);
 
-        goToTopPage();
+        goToTopPage(response);
       }
 
       private void storeAutoLoginState(final boolean autoLoginEnabled) {
@@ -123,8 +125,15 @@ public final class LoginActivity extends AbstractActivity {
     });
   }
 
-  void goToTopPage() {
-    getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
+  void goToTopPage(UserProxy user) {
+    switch (user.getType()) {
+      case TA:
+      case TEACHER:
+        getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
+        break;
+      case STUDENT:
+        getClientFactory().getPlaceController().goTo(Student.INSTANCE);
+    }
   }
 
 }
