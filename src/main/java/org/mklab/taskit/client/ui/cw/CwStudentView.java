@@ -33,8 +33,8 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
    * {@inheritDoc}
    */
   @Override
-  public void setModel(UserProxy user, StudentScoreModel model) {
-    this.scorePanel.showUserPage(user, model);
+  public void setModel(StudentScoreModel model) {
+    this.scorePanel.showUserPage(model);
   }
 
   /**

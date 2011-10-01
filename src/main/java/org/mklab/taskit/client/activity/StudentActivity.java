@@ -6,7 +6,6 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreQuery;
-import org.mklab.taskit.client.model.StudentScoreQuery.Handler;
 import org.mklab.taskit.client.ui.StudentView;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -37,7 +36,7 @@ public class StudentActivity extends TaskitActivity {
 
       @Override
       public void handleResult(StudentScoreModel model) {
-        studentView.setModel(null, model);
+        studentView.setModel(model);
       }
     });
     return studentView.asWidget();

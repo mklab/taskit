@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.shared.UserProxy;
 
 
 /**
@@ -17,10 +16,9 @@ public interface StudentView extends TaskitView {
   /**
    * 学生の成績データを設定します。
    * 
-   * @param user 学生情報
    * @param model 成績データ
    */
-  void setModel(UserProxy user, StudentScoreModel model);
+  void setModel(StudentScoreModel model);
 
   /**
    * プレゼンターを設定します。

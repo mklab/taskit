@@ -10,15 +10,19 @@ import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
 import org.mklab.taskit.shared.SubmissionProxy;
-import org.mklab.taskit.shared.UserProxy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.AbstractInputCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SelectionCell;
+import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -31,7 +35,6 @@ import com.google.gwt.user.client.ui.Composite;
 public class StudentScorePanel extends Composite {
 
   private CellTable<LectureScore> table;
-  private UserProxy user;
   private StudentScoreModel model;
   private Presenter presenter;
 
@@ -75,13 +78,11 @@ public class StudentScorePanel extends Composite {
   /**
    * モデルを設定します。
    * 
-   * @param user 表示するユーザー
    * @param model ユーザーの成績情報
    */
   @SuppressWarnings("hiding")
-  public void showUserPage(UserProxy user, StudentScoreModel model) {
+  public void showUserPage(StudentScoreModel model) {
     this.model = model;
-    this.user = user;
     this.table.setRowData(this.model.asList());
     initColumns();
   }
@@ -105,7 +106,7 @@ public class StudentScorePanel extends Composite {
 
     if (newReportCount > currentReportColumnCount) {
       for (int i = currentReportColumnCount; i < newReportCount; i++) {
-        addReportColumn(i - currentReportColumnCount);
+        addSubmissionColumn(i - currentReportColumnCount);
       }
     } else {
       for (int i = newReportCount; i < currentReportColumnCount; i++) {
@@ -115,15 +116,15 @@ public class StudentScorePanel extends Composite {
   }
 
   @SuppressWarnings("nls")
-  private void addReportColumn(final int reportIndex) {
-    final List<String> options = Arrays.asList("○", "△", "×", "-", "");
-    final SelectionCell submissionCell = new SelectionCell(options);
+  private void addSubmissionColumn(final int reportIndex) {
+    final List<String> options = Arrays.asList("○", "△", "×", "");
+    final SubmissionCell submissionCell = new SubmissionCell(options);
     final Column<LectureScore, String> submissionColumn = new Column<StudentScoreModel.LectureScore, String>(submissionCell) {
 
       @Override
       public String getValue(LectureScore object) {
         if (object.getReportCount() <= reportIndex) {// そもそもそんな課題ない場合
-          return options.get(4);
+          return null;
         }
         final ReportProxy report = object.getReport(reportIndex);
         final SubmissionProxy submission = object.getSubmission(report);
@@ -167,6 +168,61 @@ public class StudentScorePanel extends Composite {
 
     });
     this.table.addColumn(submissionColumn, String.valueOf(reportIndex + 1));
+  }
+
+  /**
+   * 提出物の状態を編集するセルです。
+   * <p>
+   * コンボボックスにより編集を行います。列にそもそも課題がない場合には、編集ができないようにしています。
+   * 
+   * @author ishikura
+   */
+  static class SubmissionCell extends AbstractInputCell<String, StudentScoreModel.LectureScore> {
+
+    private List<String> options;
+
+    /**
+     * {@link StudentScorePanel.SubmissionCell}オブジェクトを構築します。
+     * 
+     * @param options 選択可能なオプションのリスト
+     */
+    public SubmissionCell(List<String> options) {
+      super("change"); //$NON-NLS-1$
+      this.options = options;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+      if ("change".equals(event.getType()) == false) return; //$NON-NLS-1$
+
+      final SelectElement select = parent.getFirstChild().cast();
+      final String selectedValue = select.getValue();
+
+      finishEditing(parent, value, context.getKey(), valueUpdater);
+      if (valueUpdater != null) {
+        valueUpdater.update(selectedValue);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("nls")
+    @Override
+    public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
+      if (value == null) return;
+
+      sb.appendHtmlConstant("<select>");
+      for (String option : this.options) {
+        final boolean selected = option.equals(value);
+        sb.appendHtmlConstant("<option value='" + option + "'" + (selected ? " selected" : "") + ">" + option + "</option>");
+      }
+      sb.appendHtmlConstant("</select>");
+    }
+
   }
 
   private void initCommonColumns() {

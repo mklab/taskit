@@ -110,7 +110,7 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
    */
   @Override
   public void showUserPage(UserProxy user, StudentScoreModel model) {
-    this.panel.showUserPage(user, model);
+    this.panel.showUserPage(model);
   }
 
   /**
