@@ -8,6 +8,7 @@ import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.Profile;
+import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.ToolBarButton;
@@ -178,6 +179,18 @@ public abstract class TaskitActivity extends AbstractActivity {
         @Override
         public void onClick(ClickEvent event) {
           getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+        }
+      });
+    }
+
+    if (userType == UserType.STUDENT) {
+      final ToolBarButton studentButton = this.header.addButton("admin");
+      studentButton.setIcon("taskit/student64.png");
+      studentButton.setClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+          getClientFactory().getPlaceController().goTo(Student.INSTANCE);
         }
       });
     }
