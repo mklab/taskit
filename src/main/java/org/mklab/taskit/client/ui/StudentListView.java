@@ -41,6 +41,13 @@ public interface StudentListView extends TaskitView {
   void clearUserPage();
 
   /**
+   * 与えられた行をハイライトします。
+   * 
+   * @param rowData ハイライトする行
+   */
+  void highlightRow(StudentScoreModel.LectureScore rowData);
+
+  /**
    * プレゼンターを設定します。
    * 
    * @param presenter プレゼンター

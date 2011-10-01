@@ -23,6 +23,7 @@ import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.SelectElement;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -37,13 +38,13 @@ public class StudentScorePanel extends Composite {
   private CellTable<LectureScore> table;
   private StudentScoreModel model;
   private Presenter presenter;
+  private TableRowElement lastHighlightElement;
 
   /**
    * {@link StudentScorePanel}オブジェクトを構築します。
    */
   public StudentScorePanel() {
     this.table = new CellTable<StudentScoreModel.LectureScore>();
-
     initColumns();
     initWidget(this.table);
 
@@ -93,6 +94,23 @@ public class StudentScorePanel extends Composite {
   public void updateTable() {
     this.table.setRowData(this.model.asList());
     initColumns();
+  }
+
+  /**
+   * 与えられた行をハイライトします。
+   * 
+   * @param rowData 行データ
+   */
+  public void highlightRow(StudentScoreModel.LectureScore rowData) {
+    if (this.lastHighlightElement != null) {
+      this.lastHighlightElement.getStyle().clearBackgroundColor();
+    }
+
+    if (rowData == null) return;
+
+    final TableRowElement rowElement = this.table.getRowElement(rowData.getIndex());
+    rowElement.getStyle().setBackgroundColor("#FFFFAA"); //$NON-NLS-1$
+    this.lastHighlightElement = rowElement;
   }
 
   private void initColumns() {

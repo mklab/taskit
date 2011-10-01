@@ -37,6 +37,8 @@ public class StudentActivity extends TaskitActivity {
       @Override
       public void handleResult(StudentScoreModel model) {
         studentView.setModel(model);
+        StudentScoreModel.LectureScore latestScore = Util.getLatestScore(model);
+        studentView.highlightRow(latestScore);
       }
     });
     return studentView.asWidget();

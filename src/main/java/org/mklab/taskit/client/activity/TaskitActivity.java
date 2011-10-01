@@ -147,7 +147,9 @@ public abstract class TaskitActivity extends AbstractActivity {
           getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
         }
       });
+    }
 
+    if (userType == UserType.TEACHER) {
       final ToolBarButton adminButton = this.header.addButton("admin");
       adminButton.setIcon("taskit/admin64.png");
       adminButton.setClickHandler(new ClickHandler() {

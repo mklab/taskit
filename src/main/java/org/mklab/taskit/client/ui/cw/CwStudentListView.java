@@ -5,6 +5,7 @@ package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.UserProxy;
@@ -72,6 +73,14 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
   @Override
   public void clearUserPage() {
     this.panel.clearScoreData();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void highlightRow(LectureScore rowData) {
+    this.panel.highlightRow(rowData);
   }
 
   /**

@@ -28,6 +28,13 @@ public interface StudentView extends TaskitView {
   void setPresenter(Presenter presenter);
 
   /**
+   * 与えられた行をハイライトします。
+   * 
+   * @param rowData ハイライトする行
+   */
+  void highlightRow(StudentScoreModel.LectureScore rowData);
+
+  /**
    * {@link StudentView}で利用するプレゼンターです。
    * 
    * @author ishikura

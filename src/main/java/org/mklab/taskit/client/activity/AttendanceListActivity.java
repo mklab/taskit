@@ -136,16 +136,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   private void selectLatestLecture() {
     if (this.lectures == null) return;
 
-    final long now = System.currentTimeMillis();
-    long minimumMillisToNow = Long.MAX_VALUE;
-    LectureProxy latest = null;
-    for (final LectureProxy lecture : this.lectures) {
-      final long millisToNow = Math.abs(lecture.getDate().getTime() - now);
-      if (millisToNow < minimumMillisToNow) {
-        minimumMillisToNow = millisToNow;
-        latest = lecture;
-      }
-    }
+    final LectureProxy latest = Util.getLatestLecture(this.lectures);
     if (latest == null) return;
 
     this.view.setSelectedLecture(latest);

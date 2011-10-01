@@ -5,9 +5,9 @@ package org.mklab.taskit.client.ui.cw;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
 import org.mklab.taskit.client.ui.StudentView;
-import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -52,6 +52,14 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
   protected Widget initContent() {
     this.scorePanel = new StudentScorePanel();
     return this.scorePanel;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void highlightRow(LectureScore rowData) {
+    this.scorePanel.highlightRow(rowData);
   }
 
 }

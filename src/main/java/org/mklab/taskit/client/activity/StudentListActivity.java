@@ -130,6 +130,9 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
       @Override
       public void handleResult(StudentScoreModel model) {
         view.showUserPage(selectedUser, model);
+
+        final StudentScoreModel.LectureScore latestRow = Util.getLatestScore(model);
+        view.highlightRow(latestRow);
       }
     });
   }

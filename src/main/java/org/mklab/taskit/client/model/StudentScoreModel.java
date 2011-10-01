@@ -36,7 +36,7 @@ public class StudentScoreModel {
     final Map<LectureProxy, LectureScore> lectureToSubmissions = new HashMap<LectureProxy, LectureScore>();
 
     // initialize entries
-    int n = 1;
+    int n = 0;
     for (LectureProxy lecture : lectures) {
       lectureToSubmissions.put(lecture, new LectureScore(lecture, n++));
     }
@@ -116,25 +116,25 @@ public class StudentScoreModel {
    */
   public static class LectureScore implements Comparable<LectureScore> {
 
-    int no;
+    int index;
     LectureProxy lecture;
     AttendanceProxy attendance;
     List<SubmissionProxy> submissions;
 
-    LectureScore(LectureProxy lecture, int no) {
+    LectureScore(LectureProxy lecture, int index) {
       super();
       this.lecture = lecture;
-      this.no = no;
+      this.index = index;
       this.submissions = new ArrayList<SubmissionProxy>();
     }
 
     /**
-     * noを取得します。
+     * 講義のインデックスを取得します。
      * 
-     * @return no
+     * @return 講義のインデックス
      */
-    public int getNo() {
-      return this.no;
+    public int getIndex() {
+      return this.index;
     }
 
     void setAttendance(AttendanceProxy attendance) {
