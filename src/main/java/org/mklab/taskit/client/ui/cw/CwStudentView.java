@@ -9,6 +9,13 @@ import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.AbstractTaskitView;
 import org.mklab.taskit.client.ui.StudentView;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -17,8 +24,17 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class CwStudentView extends AbstractTaskitView implements StudentView {
 
+  private static final Binder binder = GWT.create(Binder.class);
+
+  static interface Binder extends UiBinder<Widget, CwStudentView> {
+    // do nothing
+  }
+
   private Presenter presenter;
-  private StudentScorePanel scorePanel;
+  @UiField
+  StudentScorePanel scorePanel;
+  @UiField
+  ToggleButton helpCallButton;
 
   /**
    * {@link CwStudentView}オブジェクトを構築します。
@@ -50,8 +66,18 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
    */
   @Override
   protected Widget initContent() {
-    this.scorePanel = new StudentScorePanel();
-    return this.scorePanel;
+    final Widget widget = binder.createAndBindUi(this);
+    final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$
+    final Image waitImage = new Image("taskit/wait128.png"); //$NON-NLS-1$
+    this.helpCallButton.getUpFace().setImage(helpImage);
+    this.helpCallButton.getDownFace().setImage(waitImage);
+    this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
+    return widget;
+  }
+
+  @UiHandler("helpCallButton")
+  void callButtonClicked(ClickEvent evt) {
+    System.out.println(evt);
   }
 
   /**

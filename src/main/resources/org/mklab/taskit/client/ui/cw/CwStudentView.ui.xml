@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:mk="urn:import:org.mklab.taskit.client.ui.cw">
+	
+	<ui:style>
+		.padding {
+			width:10px;
+		}
+	</ui:style>
+
+	<g:HorizontalPanel>
+		<mk:StudentScorePanel ui:field='scorePanel'></mk:StudentScorePanel>
+		<g:HTMLPanel styleName='{style.padding}'></g:HTMLPanel>
+		<g:FlowPanel>
+			<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
+		</g:FlowPanel>
+	</g:HorizontalPanel>
+
+</ui:UiBinder> 
