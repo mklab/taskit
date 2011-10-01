@@ -1,6 +1,7 @@
 package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.Validator;
 import org.mklab.taskit.shared.model.UserType;
 
 import java.text.MessageFormat;
@@ -113,14 +114,30 @@ public class User extends AbstractEntity<Integer> {
     this.account = account;
   }
 
-  // service methods
-
   /**
    * {@inheritDoc}
    */
   @Override
   public String toString() {
     return MessageFormat.format("User [id={0}, name={1}, type={2}, account={3}]", this.id, this.name, this.type, this.account); //$NON-NLS-1$
+  }
+
+  // service methods
+
+  /**
+   * ユーザー名を変更します。
+   * 
+   * @param userName ユーザー名
+   */
+  @Invoker({UserType.TA, UserType.TEACHER, UserType.STUDENT})
+  public static void changeUserName(String userName) {
+    final User loginUser = ServiceUtil.getLoginUser();
+    if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+
+    Validator.validateUserName(userName);
+
+    loginUser.setName(userName);
+    loginUser.update();
   }
 
   /**

@@ -7,6 +7,8 @@ import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
+import org.mklab.taskit.client.ui.ProfileView;
+import org.mklab.taskit.client.ui.ProfileViewImpl;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
@@ -116,6 +118,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public AttendanceListView getAttendanceListView() {
     return new CwAttendanceListView(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ProfileView getProfileView() {
+    return new ProfileViewImpl(this);
   }
 
 }

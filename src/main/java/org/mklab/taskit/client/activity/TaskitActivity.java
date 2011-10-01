@@ -7,6 +7,7 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.Login;
+import org.mklab.taskit.client.place.Profile;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.ToolBarButton;
@@ -37,6 +38,7 @@ public abstract class TaskitActivity extends AbstractActivity {
   private ClientFactory clientFactory;
   private AcceptsOneWidget container;
   private HeaderView header;
+  private UserProxy loginUser;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -63,6 +65,22 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   /**
+   * ログインユーザーを取得します。
+   * 
+   * @return ログインユーザー
+   */
+  protected UserProxy getLoginUser() {
+    return this.loginUser;
+  }
+
+  /**
+   * ログインユーザーのキャッシュをクリアします。
+   */
+  protected static void clearLoginUserCache() {
+    loginUserCache = null;
+  }
+
+  /**
    * ログインユーザー情報を取得し、取得が完了し次第ユーザーに応じたビューを表示します。
    * <p>
    * ユーザー情報はキャッシュされ、アプリケーション実行中はログアウトするまでその情報を利用します。<br>
@@ -85,7 +103,7 @@ public abstract class TaskitActivity extends AbstractActivity {
               logout();
               return;
             }
-
+            loginUserCache = user;
             initViewWith(user);
           }
 
@@ -107,6 +125,9 @@ public abstract class TaskitActivity extends AbstractActivity {
    * @param user ログインユーザー情報
    */
   private void initViewWith(UserProxy user) {
+    if (user == null) throw new NullPointerException();
+    this.loginUser = user;
+
     initToolBarButtons(user);
     final String name = user.getName() == null ? user.getAccount().getId() : user.getName();
     this.header.setUserId(name);
@@ -160,6 +181,16 @@ public abstract class TaskitActivity extends AbstractActivity {
         }
       });
     }
+
+    final ToolBarButton profileButton = this.header.addButton("profile");
+    profileButton.setIcon("taskit/profile64.png");
+    profileButton.setClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(Profile.INSTANCE);
+      }
+    });
 
     this.header.addSeparator();
 

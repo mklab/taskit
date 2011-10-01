@@ -19,6 +19,8 @@ import com.google.web.bindery.requestfactory.shared.Service;
 @SuppressWarnings("javadoc")
 public interface UserRequest extends RequestContext {
 
+  Request<Void> changeUserName(String userName);
+
   Request<UserProxy> getUserByAccountId(String accountId);
 
   Request<UserProxy> getLoginUser();

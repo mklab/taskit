@@ -3,7 +3,6 @@ package org.mklab.taskit.shared;
 import org.mklab.taskit.server.domain.Account;
 import org.mklab.taskit.shared.model.UserType;
 
-import com.google.web.bindery.requestfactory.shared.InstanceRequest;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
@@ -59,11 +58,21 @@ public interface AccountRequest extends RequestContext {
   Request<Void> logout();
 
   /**
-   * パスワードを変更します。
+   * パスワードを変更します(管理者用)。
    * 
+   * @param account 変更するアカウント
    * @param newPassword 新しいパスワード
    * @return リクエスト
    */
-  InstanceRequest<AccountProxy, Void> changePassword(String newPassword);
+  Request<Void> changePassword(AccountProxy account, String newPassword);
+
+  /**
+   * 自分のパスワードを変更します。
+   * 
+   * @param oldPassword 古いパスワード
+   * @param newPassword 新しいパスワード
+   * @return リクエスト
+   */
+  Request<Void> changeMyPassword(String oldPassword, String newPassword);
 
 }

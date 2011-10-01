@@ -1,0 +1,40 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<ui:style>
+		.container{
+			margin-left : auto;
+			margin-right : auto;
+			width : 300px;
+		}
+		.passwordArea{
+			border:solid 1px gray;
+		}
+	</ui:style>
+
+	<g:HTMLPanel styleName='{style.container}'>
+		<g:VerticalPanel>
+			<g:FlowPanel>
+				<g:Label>User Name:</g:Label>
+				<g:TextBox ui:field='userName'></g:TextBox>
+				<g:Button ui:field='userNameChangeButton'>Change</g:Button>
+			</g:FlowPanel>
+			<g:VerticalPanel styleName='{style.passwordArea}'>
+				<g:FlowPanel>
+					<g:Label>Current Password:</g:Label>
+					<g:PasswordTextBox ui:field='currentPassword'></g:PasswordTextBox>
+				</g:FlowPanel>
+				<g:FlowPanel>
+					<g:Label>Password:</g:Label>
+					<g:PasswordTextBox ui:field='password1'></g:PasswordTextBox>
+				</g:FlowPanel>
+				<g:FlowPanel>
+					<g:Label>Password (Confirmation):</g:Label>
+					<g:PasswordTextBox ui:field='password2'></g:PasswordTextBox>
+					<g:Button ui:field='passwordChangeButton'>Change</g:Button>
+				</g:FlowPanel>
+			</g:VerticalPanel>
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

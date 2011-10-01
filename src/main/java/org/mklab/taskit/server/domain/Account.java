@@ -3,6 +3,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.Passwords;
 import org.mklab.taskit.server.auth.AuthenticationEntryPoint;
 import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.Validator;
 import org.mklab.taskit.shared.model.UserType;
 
 import javax.persistence.Column;
@@ -54,14 +55,35 @@ public class Account extends AbstractEntity<String> {
   }
 
   /**
-   * パスワードを設定します。
+   * ログインユーザーのパスワードを変更します。
    * 
-   * @param password パスワード
+   * @param oldPassword 古いパスワード
+   * @param newPassword 新しいパスワード
    */
   @Invoker({UserType.TEACHER, UserType.TA, UserType.STUDENT})
-  public void changePassword(String password) {
-    this.hashedPassword = Passwords.hashPassword(password);
-    update();
+  public static void changeMyPassword(String oldPassword, String newPassword) {
+    final User loginUser = ServiceUtil.getLoginUser();
+    if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+
+    if (Passwords.checkPassword(oldPassword, loginUser.getAccount().getHashedPassword()) == false) {
+      throw new IllegalArgumentException("Current password was wrong."); //$NON-NLS-1$
+    }
+
+    changePassword(loginUser.getAccount(), newPassword);
+  }
+
+  /**
+   * 指定されたユーザーのパスワードを変更します。
+   * 
+   * @param account アカウント
+   * @param newPassword パスワード
+   */
+  @Invoker({UserType.TEACHER})
+  public static void changePassword(Account account, String newPassword) {
+    Validator.validatePassword(newPassword);
+
+    account.setHashedPassword(Passwords.hashPassword(newPassword));
+    account.update();
   }
 
   /**
