@@ -109,7 +109,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public StudentView getStudentView() {
-    return new CwStudentView(this);
+    return new CwStudentView(this,false);
   }
 
   /**

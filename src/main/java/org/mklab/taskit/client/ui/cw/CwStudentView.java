@@ -34,7 +34,7 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
   }
 
   private Presenter presenter;
-  @UiField
+  @UiField(provided = true)
   StudentScorePanel scorePanel;
   @UiField
   ToggleButton helpCallButton;
@@ -42,14 +42,17 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
   TextBox helpCallMessage;
   @UiField
   VerticalPanel helpCallArea;
+  private boolean editable;
 
   /**
    * {@link CwStudentView}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
+   * @param editable 提出状況、出席状況を編集可能かどうか
    */
-  public CwStudentView(ClientFactory clientFactory) {
+  public CwStudentView(ClientFactory clientFactory, boolean editable) {
     super(clientFactory);
+    this.editable = editable;
   }
 
   /**
@@ -74,7 +77,7 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
   @Override
   public void setCalling(boolean calling) {
     this.helpCallButton.setDown(calling);
-    if (calling) {     
+    if (calling) {
       this.helpCallMessage.setText(null);
       this.helpCallMessage.setEnabled(false);
     } else {
@@ -87,6 +90,8 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
    */
   @Override
   protected Widget initContent() {
+    this.scorePanel = new StudentScorePanel(this.editable);
+
     final Widget widget = binder.createAndBindUi(this);
     final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$
     final Image waitImage = new Image("taskit/wait128.png"); //$NON-NLS-1$

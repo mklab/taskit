@@ -32,7 +32,7 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
 
   @UiField(provided = true)
   CellList<UserProxy> list;
-  @UiField
+  @UiField(provided = true)
   StudentScorePanel panel;
   private Presenter presenter;
   private static final Binder binder = GWT.create(Binder.class);
@@ -88,6 +88,8 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
    */
   @Override
   protected Widget initContent() {
+    this.panel = new StudentScorePanel(true);
+
     final Cell<UserProxy> userCell = new AbstractCell<UserProxy>() {
 
       @Override
