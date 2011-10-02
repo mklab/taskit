@@ -12,7 +12,9 @@ import java.util.List;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -21,17 +23,18 @@ import com.google.gwt.view.client.SingleSelectionModel;
 /**
  * @author ishikura
  */
-public class HelpCallListViewimpl extends AbstractTaskitView implements HelpCallListView {
+public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCallListView {
 
   private Presenter presenter;
   private CellList<HelpCallProxy> list;
+  private Label messageLabel;
 
   /**
-   * {@link HelpCallListViewimpl}オブジェクトを構築します。
+   * {@link HelpCallListViewImpl}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public HelpCallListViewimpl(ClientFactory clientFactory) {
+  public HelpCallListViewImpl(ClientFactory clientFactory) {
     super(clientFactory);
   }
 
@@ -40,6 +43,12 @@ public class HelpCallListViewimpl extends AbstractTaskitView implements HelpCall
    */
   @Override
   public void setHelpCalls(List<HelpCallProxy> helpCalls) {
+    if (helpCalls.isEmpty()) {
+      this.messageLabel.setText("No one is calling."); //$NON-NLS-1$
+    } else {
+      this.messageLabel.setText(helpCalls.size() + " people are calling."); //$NON-NLS-1$
+    }
+
     this.list.setRowData(helpCalls);
   }
 
@@ -67,7 +76,7 @@ public class HelpCallListViewimpl extends AbstractTaskitView implements HelpCall
 
         sb.appendHtmlConstant(date.toLocaleString());
         sb.appendHtmlConstant("<br>"); //$NON-NLS-1$
-        sb.appendHtmlConstant("<b>"+callerId+"</b>"); //$NON-NLS-1$ //$NON-NLS-2$
+        sb.appendHtmlConstant("<b>" + callerId + "</b>"); //$NON-NLS-1$ //$NON-NLS-2$
         if (message != null && message.length() > 0) {
           sb.appendHtmlConstant("<font color='red'> '" + message + "'</font>"); //$NON-NLS-1$ //$NON-NLS-2$
         }
@@ -82,12 +91,17 @@ public class HelpCallListViewimpl extends AbstractTaskitView implements HelpCall
       @Override
       public void onSelectionChange(@SuppressWarnings("unused") SelectionChangeEvent event) {
         final HelpCallProxy selectedCall = selectionModel.getSelectedObject();
-        HelpCallListViewimpl.this.presenter.helpCallSelected(selectedCall);
+        HelpCallListViewImpl.this.presenter.helpCallSelected(selectedCall);
       }
     });
     this.list.setSelectionModel(selectionModel);
+    this.messageLabel = new Label();
 
-    return new ScrollPanel(this.list);
+    final VerticalPanel pn = new VerticalPanel();
+    pn.add(new ScrollPanel(this.list));
+    pn.add(this.messageLabel);
+
+    return pn;
   }
 
 }
