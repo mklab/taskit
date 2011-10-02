@@ -10,9 +10,16 @@
 			</g:ScrollPanel>
 		</g:west>
 		<g:center>
-			<g:ScrollPanel>
-				<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
-			</g:ScrollPanel>
+			<g:VerticalPanel>
+				<g:HorizontalPanel>
+					<g:Label>User Name:</g:Label>
+					<g:Label ui:field='userName'></g:Label>
+				</g:HorizontalPanel>
+				<g:ScrollPanel>
+					<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
+				</g:ScrollPanel>
+				<g:Button ui:field='uncallButton'>Uncall</g:Button>
+			</g:VerticalPanel>
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

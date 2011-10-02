@@ -15,10 +15,13 @@ import java.util.List;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -34,6 +37,8 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
   CellList<UserProxy> list;
   @UiField(provided = true)
   StudentScorePanel panel;
+  @UiField
+  Label userName;
   private Presenter presenter;
   private static final Binder binder = GWT.create(Binder.class);
 
@@ -129,7 +134,13 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
    */
   @Override
   public void showUserPage(UserProxy user, StudentScoreModel model) {
+    this.userName.setText(user.getName() != null ? user.getName() : "<< Not set >>"); //$NON-NLS-1$
     this.panel.showUserPage(model);
+  }
+
+  @UiHandler("uncallButton")
+  void uncallButtonPressed(@SuppressWarnings("unused") ClickEvent evt) {
+    this.presenter.uncall(getSelectedUser().getAccount());
   }
 
   /**

@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
@@ -97,6 +98,13 @@ public interface StudentListView extends TaskitView {
      * @param type 出席種別
      */
     void attend(LectureProxy lecture, AttendanceType type);
+
+    /**
+     * 与えられたユーザーのコールを削除します。
+     * 
+     * @param user ユーザー
+     */
+    void uncall(AccountProxy user);
 
     /**
      * 再読込を行います。

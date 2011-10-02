@@ -8,6 +8,7 @@ import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreQuery;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.StudentListView;
+import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
@@ -124,6 +125,28 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
         showErrorMessage(error.getMessage());
       }
 
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void uncall(AccountProxy user) {
+    getClientFactory().getRequestFactory().helpCallRequest().cancelCall(user.getId()).fire(new Receiver<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
+        showInformationMessage("Successfully canceled the call."); //$NON-NLS-1$
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onFailure(ServerFailure error) {
+        showErrorMessage("Failed to cancel the call. : " + error.getMessage()); //$NON-NLS-1$
+      }
     });
   }
 
