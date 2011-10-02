@@ -22,6 +22,9 @@ public interface HelpCallRequest extends RequestContext {
   // for students
   Request<Void> uncall();
 
+  // for students
+  Request<Boolean> isCalling();
+
   // for TAs and teachers
   Request<Void> cancelCall(String accountId);
 

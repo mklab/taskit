@@ -109,6 +109,8 @@ public class HelpCall extends AbstractEntity<Integer> {
    */
   @Invoker(UserType.STUDENT)
   public static void call(String message) {
+    if (isCalling()) throw new IllegalStateException("Already been calling."); //$NON-NLS-1$
+
     final HelpCall call = new HelpCall();
     call.setDate(new Date());
     call.setMessage(message);
@@ -141,12 +143,46 @@ public class HelpCall extends AbstractEntity<Integer> {
   }
 
   /**
+   * 現在呼び出し中であるかどうか調べます。
+   * 
+   * @return 呼び出し中かどうか
+   */
+  @Invoker(UserType.STUDENT)
+  public static boolean isCalling() {
+    final User loginUser = ServiceUtil.getLoginUser();
+    if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+
+    final String callerAccountId = loginUser.getAccount().getId();
+    return isCalling(callerAccountId);
+  }
+
+  /**
+   * 指定されたアカウントIDのユーザーが呼び出し中であるかどうか調べます。
+   * 
+   * @param callerAccountId 呼び出し中か調べるユーザー
+   * @return 呼び出し中ならばtrue,そうでなければfalse
+   */
+  private static boolean isCalling(final String callerAccountId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select s from HelpCall s where s.caller.id=:callerId"); //$NON-NLS-1$
+    q.setParameter("callerId", callerAccountId); //$NON-NLS-1$
+
+    @SuppressWarnings("unchecked")
+    final List<HelpCall> result = q.getResultList();
+    if (result.size() > 1) throw new IllegalStateException();
+
+    return result.size() > 0;
+  }
+
+  /**
    * 呼び出しをキャンセルします。
    * 
    * @param accountId キャンセルする生徒のアカウントID
    */
   @Invoker({UserType.TA, UserType.TEACHER})
   public static void cancelCall(String accountId) {
+    if (isCalling(accountId) == false) throw new IllegalStateException("Not be calling now."); //$NON-NLS-1$
+
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
 
