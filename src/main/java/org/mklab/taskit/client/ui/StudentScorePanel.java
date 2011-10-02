@@ -208,6 +208,7 @@ public class StudentScorePanel extends Composite {
     for (AttendanceType type : AttendanceType.values()) {
       attendanceTypes.add(type.name());
     }
+    attendanceTypes.add(""); //$NON-NLS-1$
     final SelectCell selectionCell = new SelectCell(attendanceTypes);
     selectionCell.setEditable(this.editable);
 
@@ -215,7 +216,7 @@ public class StudentScorePanel extends Composite {
 
       @Override
       public String getValue(LectureScore object) {
-        if (object.getAttendance() == null) return null;
+        if (object.getAttendance() == null) return ""; //$NON-NLS-1$
         return object.getAttendance().getType().name();
       }
 
@@ -226,7 +227,13 @@ public class StudentScorePanel extends Composite {
       @Override
       public void update(int index, LectureScore object, String value) {
         final LectureProxy lecture = object.getLecture();
-        final AttendanceType type = AttendanceType.valueOf(value);
+        final AttendanceType type;
+        try {
+          type = AttendanceType.valueOf(value);
+        } catch (Throwable e) {
+          presenter.reloadUserPage();
+          return;
+        }
         presenter.attend(lecture, type);
       }
 
