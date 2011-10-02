@@ -83,7 +83,12 @@ public class HelpCall extends AbstractEntity<Integer> {
     return this.date;
   }
 
-  void setDate(Date date) {
+  /**
+   * 呼び出し日時を設定します。
+   * 
+   * @param date 呼び出し日時
+   */
+  public void setDate(Date date) {
     this.date = date;
   }
 

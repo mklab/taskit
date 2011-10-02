@@ -6,6 +6,7 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
+import org.mklab.taskit.client.place.HelpCallList;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.Profile;
 import org.mklab.taskit.client.place.Student;
@@ -170,6 +171,16 @@ public abstract class TaskitActivity extends AbstractActivity {
         @Override
         public void onClick(ClickEvent event) {
           getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
+        }
+      });
+
+      final ToolBarButton helpCallListButton = this.header.addButton("call_list");
+      helpCallListButton.setIcon("taskit/helplist64.png");
+      helpCallListButton.setClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+          getClientFactory().getPlaceController().goTo(HelpCallList.INSTANCE);
         }
       });
     }

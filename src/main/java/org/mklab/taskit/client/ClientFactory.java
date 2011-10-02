@@ -5,6 +5,7 @@ package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
+import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.ProfileView;
 import org.mklab.taskit.client.ui.StudentListView;
@@ -91,4 +92,10 @@ public interface ClientFactory {
    */
   ProfileView getProfileView();
 
+  /**
+   * 呼び出し中の学生一覧表示ビューを取得します。
+   * 
+   * @return 呼び出し中の学生一覧表示ビューを取得します。
+   */
+  HelpCallListView getHelpCallListView();
 }

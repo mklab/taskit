@@ -5,6 +5,7 @@ package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
+import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
 import org.mklab.taskit.client.ui.ProfileView;
@@ -13,6 +14,7 @@ import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
 import org.mklab.taskit.client.ui.cw.CwHeaderView;
+import org.mklab.taskit.client.ui.cw.CwHelpCallListView;
 import org.mklab.taskit.client.ui.cw.CwStudentListView;
 import org.mklab.taskit.client.ui.cw.CwStudentView;
 import org.mklab.taskit.shared.TaskitRequestFactory;
@@ -109,7 +111,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public StudentView getStudentView() {
-    return new CwStudentView(this,false);
+    return new CwStudentView(this, false);
   }
 
   /**
@@ -126,6 +128,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public ProfileView getProfileView() {
     return new ProfileViewImpl(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public HelpCallListView getHelpCallListView() {
+    return new CwHelpCallListView(this);
   }
 
 }
