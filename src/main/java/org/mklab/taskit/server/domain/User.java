@@ -1,8 +1,8 @@
 package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.Validator;
-import org.mklab.taskit.shared.model.UserType;
 
 import java.text.MessageFormat;
 import java.util.List;

@@ -3,8 +3,8 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.Passwords;
 import org.mklab.taskit.server.auth.AuthenticationEntryPoint;
 import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.Validator;
-import org.mklab.taskit.shared.model.UserType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

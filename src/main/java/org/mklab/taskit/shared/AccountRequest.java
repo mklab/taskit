@@ -1,7 +1,6 @@
 package org.mklab.taskit.shared;
 
 import org.mklab.taskit.server.domain.Account;
-import org.mklab.taskit.shared.model.UserType;
 
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;

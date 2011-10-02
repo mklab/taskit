@@ -2,7 +2,6 @@ package org.mklab.taskit.shared;
 
 import org.mklab.taskit.server.domain.User;
 import org.mklab.taskit.server.domain.UserLocator;
-import org.mklab.taskit.shared.model.UserType;
 
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;

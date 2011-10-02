@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AccountRequest;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import org.junit.Test;
 

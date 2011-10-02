@@ -2,7 +2,7 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.AttendanceType;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import java.util.Date;
 import java.util.List;

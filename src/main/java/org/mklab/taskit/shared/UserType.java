@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.shared.model;
+package org.mklab.taskit.shared;
 
 /**
  * ユーザー種別を表す列挙型です。

@@ -8,7 +8,7 @@ import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import java.util.Date;
 

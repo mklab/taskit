@@ -6,7 +6,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.AuthenticationServiceLayer;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import javax.persistence.EntityManagerFactory;
 

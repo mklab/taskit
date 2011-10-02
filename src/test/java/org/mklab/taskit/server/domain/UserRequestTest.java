@@ -5,7 +5,7 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.UserRequest;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import java.util.List;
 

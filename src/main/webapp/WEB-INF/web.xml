@@ -15,50 +15,10 @@
 			<param-value>WEB-INF/classes/symbolMaps/</param-value>
 		</init-param>
 	</servlet>
-	<servlet>
-		<servlet-name>login</servlet-name>
-		<servlet-class>org.mklab.taskit.server.LoginServiceImpl</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>account</servlet-name>
-		<servlet-class>org.mklab.taskit.server.AccountServiceImpl</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>attendance</servlet-name>
-		<servlet-class>org.mklab.taskit.server.AttendanceServiceImpl</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>lecture</servlet-name>
-		<servlet-class>org.mklab.taskit.server.LectureServiceImpl</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>submission</servlet-name>
-		<servlet-class>org.mklab.taskit.server.SubmissionServiceImpl</servlet-class>
-	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>requestFactoryServlet</servlet-name>
 		<url-pattern>/gwtRequest</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>login</servlet-name>
-		<url-pattern>/taskit/login</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>account</servlet-name>
-		<url-pattern>/taskit/account</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>attendance</servlet-name>
-		<url-pattern>/taskit/attendance</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>lecture</servlet-name>
-		<url-pattern>/taskit/lecture</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>submission</servlet-name>
-		<url-pattern>/taskit/submission</url-pattern>
 	</servlet-mapping>
 
 	<!-- Default page to serve -->

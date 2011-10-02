@@ -2,7 +2,7 @@ package org.mklab.taskit.server.auth;
 
 import java.lang.reflect.Method;
 
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.server.domain.ServiceUtil;
 import org.mklab.taskit.server.domain.User;
 

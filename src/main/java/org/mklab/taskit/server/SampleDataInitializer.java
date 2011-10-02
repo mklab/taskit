@@ -10,7 +10,7 @@ import org.mklab.taskit.server.domain.Report;
 import org.mklab.taskit.server.domain.Submission;
 import org.mklab.taskit.server.domain.User;
 import org.mklab.taskit.shared.AttendanceType;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @SuppressWarnings("all")
-public class _SampleDataInitializer {
+public class SampleDataInitializer {
 
   public static void main(String[] args) {
     createAccounts();

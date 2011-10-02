@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.HelpCallList;
 import org.mklab.taskit.client.place.Login;
@@ -14,7 +13,7 @@ import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.ToolBarButton;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.model.UserType;
+import org.mklab.taskit.shared.UserType;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.dom.client.Style.Unit;
@@ -186,15 +185,15 @@ public abstract class TaskitActivity extends AbstractActivity {
     }
 
     if (userType == UserType.TEACHER) {
-      final ToolBarButton adminButton = this.header.addButton("admin");
-      adminButton.setIcon("taskit/admin64.png");
-      adminButton.setClickHandler(new ClickHandler() {
-
-        @Override
-        public void onClick(ClickEvent event) {
-          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
-        }
-      });
+//      final ToolBarButton adminButton = this.header.addButton("admin");
+//      adminButton.setIcon("taskit/admin64.png");
+//      adminButton.setClickHandler(new ClickHandler() {
+//
+//        @Override
+//        public void onClick(ClickEvent event) {
+//          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+//        }
+//      });
     }
 
     if (userType == UserType.STUDENT) {
