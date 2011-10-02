@@ -2,10 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:mk="urn:import:org.mklab.taskit.client.ui.cw">
-	
+
 	<ui:style>
 		.padding {
 			width:10px;
+		}
+		.helpCallArea {
+			border : solid 2px gray;
 		}
 	</ui:style>
 
@@ -13,7 +16,11 @@
 		<mk:StudentScorePanel ui:field='scorePanel'></mk:StudentScorePanel>
 		<g:HTMLPanel styleName='{style.padding}'></g:HTMLPanel>
 		<g:FlowPanel>
-			<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
+			<g:VerticalPanel styleName='{style.helpCallArea}' ui:field='helpCallArea'>
+				<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
+				<g:Label>Message:</g:Label>
+				<g:TextBox ui:field='helpCallMessage'></g:TextBox>
+			</g:VerticalPanel>
 		</g:FlowPanel>
 	</g:HorizontalPanel>
 

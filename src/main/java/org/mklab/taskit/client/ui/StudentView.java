@@ -35,6 +35,13 @@ public interface StudentView extends TaskitView {
   void highlightRow(StudentScoreModel.LectureScore rowData);
 
   /**
+   * 呼び出し中かどうか設定します。
+   * 
+   * @param calling 呼び出し中かどうか
+   */
+  void setCalling(boolean calling);
+
+  /**
    * {@link StudentView}で利用するプレゼンターです。
    * 
    * @author ishikura
@@ -47,6 +54,11 @@ public interface StudentView extends TaskitView {
      * @param message メッセージ
      */
     void call(String message);
+
+    /**
+     * 呼び出しをキャンセルします。
+     */
+    void uncall();
   }
 
 }

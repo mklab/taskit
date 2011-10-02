@@ -14,8 +14,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -35,6 +38,10 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
   StudentScorePanel scorePanel;
   @UiField
   ToggleButton helpCallButton;
+  @UiField
+  TextBox helpCallMessage;
+  @UiField
+  VerticalPanel helpCallArea;
 
   /**
    * {@link CwStudentView}オブジェクトを構築します。
@@ -65,6 +72,20 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
    * {@inheritDoc}
    */
   @Override
+  public void setCalling(boolean calling) {
+    this.helpCallButton.setDown(calling);
+    if (calling) {     
+      this.helpCallMessage.setText(null);
+      this.helpCallMessage.setEnabled(false);
+    } else {
+      this.helpCallMessage.setEnabled(true);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected Widget initContent() {
     final Widget widget = binder.createAndBindUi(this);
     final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$
@@ -72,12 +93,19 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
     this.helpCallButton.getUpFace().setImage(helpImage);
     this.helpCallButton.getDownFace().setImage(waitImage);
     this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
+    this.helpCallArea.setCellHorizontalAlignment(this.helpCallButton, HasHorizontalAlignment.ALIGN_CENTER);
     return widget;
   }
 
   @UiHandler("helpCallButton")
-  void callButtonClicked(ClickEvent evt) {
-    System.out.println(evt);
+  void callButtonClicked(@SuppressWarnings("unused") ClickEvent evt) {
+    final boolean called = this.helpCallButton.isDown();
+    if (called) {
+      this.presenter.call(this.helpCallMessage.getText());
+    } else {
+      this.presenter.uncall();
+    }
+    setCalling(called);
   }
 
   /**

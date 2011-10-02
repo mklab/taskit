@@ -153,7 +153,7 @@ public class HelpCall extends AbstractEntity<Integer> {
     if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
 
     final String callerAccountId = loginUser.getAccount().getId();
-    return isCalling(callerAccountId);
+    return isCallingByAccountId(callerAccountId);
   }
 
   /**
@@ -162,7 +162,7 @@ public class HelpCall extends AbstractEntity<Integer> {
    * @param callerAccountId 呼び出し中か調べるユーザー
    * @return 呼び出し中ならばtrue,そうでなければfalse
    */
-  private static boolean isCalling(final String callerAccountId) {
+  private static boolean isCallingByAccountId(final String callerAccountId) {
     final EntityManager em = EMF.get().createEntityManager();
     final Query q = em.createQuery("select s from HelpCall s where s.caller.id=:callerId"); //$NON-NLS-1$
     q.setParameter("callerId", callerAccountId); //$NON-NLS-1$
@@ -181,14 +181,16 @@ public class HelpCall extends AbstractEntity<Integer> {
    */
   @Invoker({UserType.TA, UserType.TEACHER})
   public static void cancelCall(String accountId) {
-    if (isCalling(accountId) == false) throw new IllegalStateException("Not be calling now."); //$NON-NLS-1$
+    if (isCallingByAccountId(accountId) == false) throw new IllegalStateException("Not be calling now."); //$NON-NLS-1$
 
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
 
     try {
+      final Query q = em.createQuery("delete from HelpCall s where s.caller.id=:accountId"); //$NON-NLS-1$
+      q.setParameter("accountId", accountId); //$NON-NLS-1$
       t.begin();
-      em.remove(accountId);
+      q.executeUpdate();
       t.commit();
     } catch (Throwable e) {
       t.rollback();
