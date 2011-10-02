@@ -6,6 +6,7 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreQuery;
+import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
@@ -16,6 +17,7 @@ import org.mklab.taskit.shared.UserProxy;
 
 import java.util.List;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
@@ -53,11 +55,22 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
 
           @Override
           public void onSuccess(List<UserProxy> arg0) {
-            final String[] names = new String[arg0.size()];
-            for (int i = 0; i < names.length; i++) {
-              names[i] = arg0.get(i).getAccount().getId();
-            }
             list.setListData(arg0);
+
+            final String initialSelection = getAccountIdInPlaceToken();
+            if (initialSelection != null && initialSelection.length() > 0) {
+              for (final UserProxy user : arg0) {
+                if (initialSelection.equals(user.getAccount().getId())) {
+                  list.setSelectedListData(user);
+                  break;
+                }
+              }
+            }
+          }
+
+          private String getAccountIdInPlaceToken() {
+            final Place place = getClientFactory().getPlaceController().getWhere();
+            return ((StudentList)place).getStudentId();
           }
 
         });

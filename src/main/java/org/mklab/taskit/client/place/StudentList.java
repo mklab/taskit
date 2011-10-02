@@ -14,7 +14,28 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 public class StudentList extends Place {
 
   /** このアクティビティの場所を表すオブジェクトです。 */
-  public static final Place INSTANCE = new StudentList();
+  public static final Place INSTANCE = new StudentList(""); //$NON-NLS-1$
+
+  /** 初期表示学生IDです。 */
+  private String studentId;
+
+  /**
+   * {@link StudentList}オブジェクトを構築します。
+   * 
+   * @param studentId 初期表示学生ID
+   */
+  public StudentList(String studentId) {
+    this.studentId = studentId;
+  }
+
+  /**
+   * 初期表示学生IDを取得します。
+   * 
+   * @return studentId
+   */
+  public String getStudentId() {
+    return this.studentId;
+  }
 
   /**
    * @author Yuhi Ishikura
@@ -23,19 +44,19 @@ public class StudentList extends Place {
   public static class Tokenizer implements PlaceTokenizer<StudentList> {
 
     /**
-     * @see com.google.gwt.place.shared.PlaceTokenizer#getPlace(java.lang.String)
+     * {@inheritDoc}
      */
     @Override
-    public StudentList getPlace(@SuppressWarnings("unused") String token) {
-      return new StudentList();
+    public StudentList getPlace(String token) {
+      return new StudentList(token);
     }
 
     /**
-     * @see com.google.gwt.place.shared.PlaceTokenizer#getToken(com.google.gwt.place.shared.Place)
+     * {@inheritDoc}
      */
     @Override
-    public String getToken(@SuppressWarnings("unused") StudentList place) {
-      return ""; //$NON-NLS-1$
+    public String getToken(StudentList place) {
+      return place.getStudentId();
     }
 
   }

@@ -63,6 +63,14 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
    * {@inheritDoc}
    */
   @Override
+  public void setSelectedListData(UserProxy user) {
+    this.list.getSelectionModel().setSelected(user, true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void setListData(List<UserProxy> listData) {
     this.list.setRowData(listData);
   }

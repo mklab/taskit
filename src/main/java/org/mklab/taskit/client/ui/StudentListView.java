@@ -28,6 +28,13 @@ public interface StudentListView extends TaskitView {
   void setListData(List<UserProxy> listData);
 
   /**
+   * 選択中のリストデータを設定します。
+   * 
+   * @param user 選択するリストデータ
+   */
+  void setSelectedListData(UserProxy user);
+
+  /**
    * ユーザーの成績を表示します。
    * 
    * @param user ユーザー
