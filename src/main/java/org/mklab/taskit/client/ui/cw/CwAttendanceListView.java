@@ -77,7 +77,7 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
   protected Widget initContent() {
     this.lectureList = new ValueListBox<LectureListItem>(new Renderer<LectureListItem>() {
 
-      @SuppressWarnings("nls")
+      @SuppressWarnings({"nls", "deprecation"})
       @Override
       public String render(LectureListItem object) {
         if (object == null) return null;
@@ -106,7 +106,7 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
       public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, UserProxy value, SafeHtmlBuilder sb) {
         String name = value.getName();
         if (name == null) name = value.getAccount().getId();
-        sb.appendHtmlConstant(name);
+        sb.appendHtmlConstant(value.getAccount().getId());
       }
 
     }) {
