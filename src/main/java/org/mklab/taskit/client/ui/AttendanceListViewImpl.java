@@ -102,8 +102,6 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
 
       @Override
       public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, UserProxy value, SafeHtmlBuilder sb) {
-        String name = value.getName();
-        if (name == null) name = value.getAccount().getId();
         sb.appendHtmlConstant(value.getAccount().getId());
       }
 
