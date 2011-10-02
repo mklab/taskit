@@ -3,6 +3,10 @@
  */
 package org.mklab.taskit.server;
 
+import org.mklab.taskit.shared.Validator;
+
+import java.util.Set;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 
@@ -37,6 +41,23 @@ public class Passwords {
    */
   public static String hashPassword(String rawPassword) {
     return BCrypt.hashpw(rawPassword, BCrypt.gensalt());
+  }
+
+  /**
+   * パスワードを生成します。
+   * 
+   * @param length パスワードの長さ
+   * @return パスワード
+   */
+  public static String generatePassword(int length) {
+    final Set<Character> passwordCharacterSet = Validator.getValidPasswordCharacters();
+    Character[] c = passwordCharacterSet.toArray(new Character[passwordCharacterSet.size()]);
+
+    final StringBuilder password = new StringBuilder();
+    for (int i = 0; i < length; i++) {
+      password.append(c[(int)(Math.random() * c.length)]);
+    }
+    return password.toString();
   }
 
 }
