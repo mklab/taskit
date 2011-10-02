@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client"
-	xmlns:mk="urn:import:org.mklab.taskit.client.ui.cw">
+	xmlns:mk="urn:import:org.mklab.taskit.client.ui">
 
 	<ui:style>
 		.padding {

@@ -1,13 +1,11 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
+package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
-import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.util.List;
@@ -31,7 +29,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 /**
  * @author ishikura
  */
-public class CwStudentListView extends AbstractTaskitView implements StudentListView {
+public class StudentListViewImpl extends AbstractTaskitView implements StudentListView {
 
   @UiField(provided = true)
   CellList<UserProxy> list;
@@ -42,16 +40,16 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
   private Presenter presenter;
   private static final Binder binder = GWT.create(Binder.class);
 
-  interface Binder extends UiBinder<Widget, CwStudentListView> {
+  interface Binder extends UiBinder<Widget, StudentListViewImpl> {
     // empty
   }
 
   /**
-   * {@link CwStudentListView}オブジェクトを構築します。
+   * {@link StudentListViewImpl}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public CwStudentListView(ClientFactory clientFactory) {
+  public StudentListViewImpl(ClientFactory clientFactory) {
     super(clientFactory);
   }
 
@@ -122,7 +120,7 @@ public class CwStudentListView extends AbstractTaskitView implements StudentList
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
         final UserProxy selected = selectionModel.getSelectedObject();
-        CwStudentListView.this.presenter.listSelectionChanged(selected);
+        StudentListViewImpl.this.presenter.listSelectionChanged(selected);
       }
     });
 

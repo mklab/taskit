@@ -1,12 +1,10 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
+package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.AttendanceListItem;
-import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.UserProxy;
@@ -39,26 +37,26 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * @author ishikura
  */
-public class CwAttendanceListView extends AbstractTaskitView implements AttendanceListView {
+public class AttendanceListViewImpl extends AbstractTaskitView implements AttendanceListView {
 
   private static final Binder binder = GWT.create(Binder.class);
   private Presenter presenter;
-  private Map<LectureProxy, LectureListItem> lectureToListItem = new HashMap<LectureProxy, CwAttendanceListView.LectureListItem>();
+  private Map<LectureProxy, LectureListItem> lectureToListItem = new HashMap<LectureProxy, AttendanceListViewImpl.LectureListItem>();
   @UiField(provided = true)
   ValueListBox<LectureListItem> lectureList;
   @UiField(provided = true)
   CellTable<AttendanceListItem> table;
 
-  interface Binder extends UiBinder<Widget, CwAttendanceListView> {
+  interface Binder extends UiBinder<Widget, AttendanceListViewImpl> {
     // empty
   }
 
   /**
-   * {@link CwAttendanceListView}オブジェクトを構築します。
+   * {@link AttendanceListViewImpl}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public CwAttendanceListView(ClientFactory clientFactory) {
+  public AttendanceListViewImpl(ClientFactory clientFactory) {
     super(clientFactory);
   }
 
@@ -90,12 +88,12 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
       }
 
     });
-    this.lectureList.addValueChangeHandler(new ValueChangeHandler<CwAttendanceListView.LectureListItem>() {
+    this.lectureList.addValueChangeHandler(new ValueChangeHandler<AttendanceListViewImpl.LectureListItem>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
       public void onValueChange(ValueChangeEvent<LectureListItem> event) {
-        CwAttendanceListView.this.presenter.lectureSelectionChanged(event.getValue().getLecture());
+        AttendanceListViewImpl.this.presenter.lectureSelectionChanged(event.getValue().getLecture());
       }
     });
 
@@ -161,7 +159,7 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
 
       if (isChecked == false) return;
 
-      CwAttendanceListView.this.presenter.attend(value.getUser().getAccount(), this.attendanceType);
+      AttendanceListViewImpl.this.presenter.attend(value.getUser().getAccount(), this.attendanceType);
     }
 
     /**
@@ -182,7 +180,7 @@ public class CwAttendanceListView extends AbstractTaskitView implements Attendan
    */
   @Override
   public void setLectures(List<LectureProxy> lectures) {
-    final List<LectureListItem> listItems = new ArrayList<CwAttendanceListView.LectureListItem>();
+    final List<LectureListItem> listItems = new ArrayList<AttendanceListViewImpl.LectureListItem>();
     this.lectureToListItem.clear();
     int i = 0;
     for (LectureProxy lecture : lectures) {

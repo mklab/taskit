@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
+package org.mklab.taskit.client.ui;
 
 import java.util.List;
 

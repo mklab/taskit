@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
+package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;

@@ -4,19 +4,19 @@
 package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.ui.AttendanceListView;
+import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.HeaderView;
+import org.mklab.taskit.client.ui.HeaderViewImpl;
 import org.mklab.taskit.client.ui.HelpCallListView;
+import org.mklab.taskit.client.ui.HelpCallListViewimpl;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
 import org.mklab.taskit.client.ui.ProfileView;
 import org.mklab.taskit.client.ui.ProfileViewImpl;
 import org.mklab.taskit.client.ui.StudentListView;
+import org.mklab.taskit.client.ui.StudentListViewImpl;
 import org.mklab.taskit.client.ui.StudentView;
-import org.mklab.taskit.client.ui.cw.CwAttendanceListView;
-import org.mklab.taskit.client.ui.cw.CwHeaderView;
-import org.mklab.taskit.client.ui.cw.CwHelpCallListView;
-import org.mklab.taskit.client.ui.cw.CwStudentListView;
-import org.mklab.taskit.client.ui.cw.CwStudentView;
+import org.mklab.taskit.client.ui.StudentViewImpl;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.core.client.GWT;
@@ -95,7 +95,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public HeaderView getHeaderView() {
-    return new CwHeaderView();
+    return new HeaderViewImpl();
   }
 
   /**
@@ -103,7 +103,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public StudentListView getStudentListView() {
-    return new CwStudentListView(this);
+    return new StudentListViewImpl(this);
   }
 
   /**
@@ -111,7 +111,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public StudentView getStudentView() {
-    return new CwStudentView(this, false);
+    return new StudentViewImpl(this, false);
   }
 
   /**
@@ -119,7 +119,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public AttendanceListView getAttendanceListView() {
-    return new CwAttendanceListView(this);
+    return new AttendanceListViewImpl(this);
   }
 
   /**
@@ -135,7 +135,7 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public HelpCallListView getHelpCallListView() {
-    return new CwHelpCallListView(this);
+    return new HelpCallListViewimpl(this);
   }
 
 }

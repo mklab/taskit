@@ -4,44 +4,35 @@
 
 	<ui:style>
 		.base {
-			background-color: gray;
-			display: inline;
-			position: fixed;
-			top: 0;
-			padding: 4px;
-			width: 100%;
-			border: solid 2px black;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+		border-radius: 6px;
+		background: literal("-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6C85A4), color-stop(50%, #556C89),color-stop(51%, #4B5F79), color-stop(100%, #415369))");
+		border: solid 1px
+		black;
 		}
-		
-		.title {
-			display: inline;
-			font-weight: bold;
-			vertical-align: middle;
-			font-size: 18px;
+
+		.toolbar{
+		padding-left:10px;
+		height:32px;
 		}
-		
-		.rightAlignment {
-			position: fixed;
-			display: inline;
-			right: 0px;
-			margin: 0px;
+
+		.label{
+		color:white;
 		}
 	</ui:style>
 
-	<g:HTMLPanel>
-		<div class='{style.base}'>
-			<g:HorizontalPanel ui:field='buttonPanel'></g:HorizontalPanel>
-
-			<div class='{style.rightAlignment}'>
-				<g:InlineLabel ui:field="userIdLabel" />
-				<span style='padding-left:10px' />
-				|
-				<span style='padding-left:10px' />
-				<g:InlineLabel ui:field="userTypeLabel" />
-				<span style='padding-left:10px' />
-				<g:Button ui:field="logoutButton" />
-				<span style='padding-left:5px' />
-			</div>
-		</div>
-	</g:HTMLPanel>
+	<g:DockLayoutPanel unit='PX' styleName='{style.base}'>
+		<g:center>
+			<g:HorizontalPanel ui:field='buttonPanel'
+				styleName='{style.toolbar}'>
+			</g:HorizontalPanel>
+		</g:center>
+		<g:east size='100'>
+			<g:VerticalPanel>
+				<g:InlineLabel ui:field="userIdLabel" styleName='{style.label}'>unknown</g:InlineLabel>
+				<g:InlineLabel ui:field="userTypeLabel" styleName='{style.label}'>unknown</g:InlineLabel>
+			</g:VerticalPanel>
+		</g:east>
+	</g:DockLayoutPanel>
 </ui:UiBinder> 

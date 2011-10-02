@@ -1,10 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
-
-import org.mklab.taskit.client.ui.HeaderView;
-import org.mklab.taskit.client.ui.ToolBarButton;
+package org.mklab.taskit.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -18,16 +15,15 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.Widget;
 
 
 /**
  * @author ishikura
  */
-public class CwHeaderView extends Composite implements HeaderView {
+public class HeaderViewImpl extends Composite implements HeaderView {
 
-  interface Binder extends UiBinder<Widget, CwHeaderView> {
+  interface Binder extends UiBinder<Widget, HeaderViewImpl> {
     // empty
   }
 
@@ -41,9 +37,9 @@ public class CwHeaderView extends Composite implements HeaderView {
   InlineLabel userTypeLabel;
 
   /**
-   * {@link CwHeaderView}オブジェクトを構築します。
+   * {@link HeaderViewImpl}オブジェクトを構築します。
    */
-  public CwHeaderView() {
+  public HeaderViewImpl() {
     initWidget(binder.createAndBindUi(this));
   }
 

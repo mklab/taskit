@@ -1,11 +1,9 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
+package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.Date;
@@ -23,17 +21,17 @@ import com.google.gwt.view.client.SingleSelectionModel;
 /**
  * @author ishikura
  */
-public class CwHelpCallListView extends AbstractTaskitView implements HelpCallListView {
+public class HelpCallListViewimpl extends AbstractTaskitView implements HelpCallListView {
 
   private Presenter presenter;
   private CellList<HelpCallProxy> list;
 
   /**
-   * {@link CwHelpCallListView}オブジェクトを構築します。
+   * {@link HelpCallListViewimpl}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public CwHelpCallListView(ClientFactory clientFactory) {
+  public HelpCallListViewimpl(ClientFactory clientFactory) {
     super(clientFactory);
   }
 
@@ -84,7 +82,7 @@ public class CwHelpCallListView extends AbstractTaskitView implements HelpCallLi
       @Override
       public void onSelectionChange(@SuppressWarnings("unused") SelectionChangeEvent event) {
         final HelpCallProxy selectedCall = selectionModel.getSelectedObject();
-        CwHelpCallListView.this.presenter.helpCallSelected(selectedCall);
+        HelpCallListViewimpl.this.presenter.helpCallSelected(selectedCall);
       }
     });
     this.list.setSelectionModel(selectionModel);

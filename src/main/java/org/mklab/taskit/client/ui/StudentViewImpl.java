@@ -1,13 +1,11 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui.cw;
+package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
-import org.mklab.taskit.client.ui.AbstractTaskitView;
-import org.mklab.taskit.client.ui.StudentView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,11 +23,11 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * @author ishikura
  */
-public class CwStudentView extends AbstractTaskitView implements StudentView {
+public class StudentViewImpl extends AbstractTaskitView implements StudentView {
 
   private static final Binder binder = GWT.create(Binder.class);
 
-  static interface Binder extends UiBinder<Widget, CwStudentView> {
+  static interface Binder extends UiBinder<Widget, StudentViewImpl> {
     // do nothing
   }
 
@@ -45,12 +43,12 @@ public class CwStudentView extends AbstractTaskitView implements StudentView {
   private boolean editable;
 
   /**
-   * {@link CwStudentView}オブジェクトを構築します。
+   * {@link StudentViewImpl}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    * @param editable 提出状況、出席状況を編集可能かどうか
    */
-  public CwStudentView(ClientFactory clientFactory, boolean editable) {
+  public StudentViewImpl(ClientFactory clientFactory, boolean editable) {
     super(clientFactory);
     this.editable = editable;
   }
