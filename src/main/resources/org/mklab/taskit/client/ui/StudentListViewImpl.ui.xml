@@ -2,28 +2,60 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:mk="urn:import:org.mklab.taskit.client.ui">
+	
+	<ui:style>
+		.userListArea {
+			background-color:#eeeeee;
+		}
+		.toolbar {
+			background-color:#eeeeee;
+		}
+	</ui:style>
 
 	<g:DockLayoutPanel unit='EM'>
-		<g:west size='10'>
-			<g:ScrollPanel>
-				<ce:CellList ui:field='list'></ce:CellList>
-			</g:ScrollPanel>
-		</g:west>
+		<!-- User List -->
+		<g:north size='2'>
+			<g:HTMLPanel styleName='{style.userListArea}'>
+				<g:HorizontalPanel>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:Label>User List: </g:Label>
+					</g:cell>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:ValueListBox ui:field='userList'></g:ValueListBox>
+					</g:cell>
+				</g:HorizontalPanel>
+			</g:HTMLPanel>
+		</g:north>
+		<!-- Profile and Scores -->
 		<g:center>
 			<g:ScrollPanel>
 				<g:VerticalPanel>
-					<g:HorizontalPanel>
-						<g:Label>User ID:</g:Label>
-						<g:Label ui:field='userId'></g:Label>
-					</g:HorizontalPanel>
-					<g:HorizontalPanel>
-						<g:Label>User Name:</g:Label>
-						<g:Label ui:field='userName'></g:Label>
-					</g:HorizontalPanel>
+					<g:CaptionPanel captionText='Profile'>
+						<g:VerticalPanel>
+							<g:HorizontalPanel>
+								<g:Label>User ID:</g:Label>
+								<g:Label ui:field='userId'></g:Label>
+							</g:HorizontalPanel>
+							<g:HorizontalPanel>
+								<g:Label>User Name:</g:Label>
+								<g:Label ui:field='userName'></g:Label>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+					</g:CaptionPanel>
 					<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
-					<g:Button ui:field='uncallButton'>Uncall</g:Button>
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:center>
+		<!-- Tools -->
+		<g:south size='2'>
+			<g:HTMLPanel styleName='{style.toolbar}'>
+				<g:HorizontalPanel>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:Button ui:field='uncallButton'>Uncall</g:Button>
+					</g:cell>	
+				</g:HorizontalPanel>
+			</g:HTMLPanel>
+		</g:south>
 	</g:DockLayoutPanel>
+
 </ui:UiBinder> 

@@ -8,22 +8,20 @@ import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.shared.UserProxy;
 
+import java.io.IOException;
 import java.util.List;
 
-import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SingleSelectionModel;
 
 
 /**
@@ -32,7 +30,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class StudentListViewImpl extends AbstractTaskitView implements StudentListView {
 
   @UiField(provided = true)
-  CellList<UserProxy> list;
+  ValueListBox<UserProxy> userList;
   @UiField(provided = true)
   StudentScorePanel panel;
   @UiField
@@ -69,7 +67,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void setSelectedListData(UserProxy user) {
-    this.list.getSelectionModel().setSelected(user, true);
+    this.userList.setValue(user, true);
   }
 
   /**
@@ -77,7 +75,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void setListData(List<UserProxy> listData) {
-    this.list.setRowData(listData);
+    listData.add(0, null);
+    this.userList.setAcceptableValues(listData);
   }
 
   /**
@@ -103,26 +102,29 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   protected Widget initContent() {
     this.panel = new StudentScorePanel(true);
 
-    final Cell<UserProxy> userCell = new AbstractCell<UserProxy>() {
+    this.userList = new ValueListBox<UserProxy>(new Renderer<UserProxy>() {
 
       @Override
-      public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, UserProxy value, SafeHtmlBuilder sb) {
-        sb.appendHtmlConstant("<div style='font-size:2em;'>"); //$NON-NLS-1$
-        sb.appendEscaped(value.getAccount().getId());
-        sb.appendHtmlConstant("</div>"); //$NON-NLS-1$
+      public String render(UserProxy object) {
+        if (object == null) return "Select ID"; //$NON-NLS-1$
+        StringBuilder sb = new StringBuilder(object.getAccount().getId());
+        if (object.getName() != null) {
+          sb.append(" " + object.getName()); //$NON-NLS-1$
+        }
+        return sb.toString();
       }
 
-    };
-    this.list = new CellList<UserProxy>(userCell);
-    final SingleSelectionModel<UserProxy> selectionModel = new SingleSelectionModel<UserProxy>();
-    this.list.setSelectionModel(selectionModel);
-    this.list.getSelectionModel().addSelectionChangeHandler(new Handler() {
-
-      @SuppressWarnings({"synthetic-access", "unused"})
       @Override
-      public void onSelectionChange(SelectionChangeEvent event) {
-        final UserProxy selected = selectionModel.getSelectedObject();
-        StudentListViewImpl.this.presenter.listSelectionChanged(selected);
+      public void render(UserProxy object, Appendable appendable) throws IOException {
+        appendable.append(render(object));
+      }
+    });
+    this.userList.addValueChangeHandler(new ValueChangeHandler<UserProxy>() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onValueChange(ValueChangeEvent<UserProxy> event) {
+        StudentListViewImpl.this.presenter.listSelectionChanged(event.getValue());
       }
     });
 
@@ -147,10 +149,9 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public UserProxy getSelectedUser() {
-    return ((SingleSelectionModel<UserProxy>)this.list.getSelectionModel()).getSelectedObject();
+    return this.userList.getValue();
   }
 
 }
