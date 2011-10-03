@@ -178,7 +178,7 @@ public class StudentScoreModel {
      * @param index 課題のインデックス
      * @return 課題
      */
-    public ReportProxy getReport(int index) {
+    public ReportProxy getReport(@SuppressWarnings("hiding") int index) {
       return this.lecture.getReports().get(index);
     }
 

@@ -171,7 +171,7 @@ public class ProgrammingS2011 {
    * @param args プログラム引数
    */
   public static void main(String[] args) {
-    EMF.setPersistenceUnitName("taskit");
+    EMF.setPersistenceUnitName("taskit"); //$NON-NLS-1$
     registerAccounts();
     registerLectures();
 
