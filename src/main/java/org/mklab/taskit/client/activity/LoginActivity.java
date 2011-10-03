@@ -8,7 +8,6 @@ import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.UserType;
 
 import java.util.Date;
 
@@ -100,7 +99,7 @@ public final class LoginActivity extends AbstractActivity {
     this.clientFactory.getRequestFactory().accountRequest().login(id, password).fire(new Receiver<UserProxy>() {
 
       @Override
-      public void onSuccess(@SuppressWarnings("unused") UserProxy response) {
+      public void onSuccess(UserProxy response) {
         view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
 
         final boolean autoLoginEnabled = view.isAutoLoginEnabled();

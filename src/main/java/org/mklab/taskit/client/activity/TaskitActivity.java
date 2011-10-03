@@ -20,7 +20,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -41,7 +40,6 @@ public abstract class TaskitActivity extends AbstractActivity {
   private AcceptsOneWidget container;
   private HeaderView header;
   private UserProxy loginUser;
-  private Place place;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -51,7 +49,6 @@ public abstract class TaskitActivity extends AbstractActivity {
   public TaskitActivity(ClientFactory clientFactory) {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
-    this.place = this.clientFactory.getPlaceController().getWhere();
   }
 
   /**
@@ -185,15 +182,15 @@ public abstract class TaskitActivity extends AbstractActivity {
     }
 
     if (userType == UserType.TEACHER) {
-//      final ToolBarButton adminButton = this.header.addButton("admin");
-//      adminButton.setIcon("taskit/admin64.png");
-//      adminButton.setClickHandler(new ClickHandler() {
-//
-//        @Override
-//        public void onClick(ClickEvent event) {
-//          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
-//        }
-//      });
+      //      final ToolBarButton adminButton = this.header.addButton("admin");
+      //      adminButton.setIcon("taskit/admin64.png");
+      //      adminButton.setClickHandler(new ClickHandler() {
+      //
+      //        @Override
+      //        public void onClick(ClickEvent event) {
+      //          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+      //        }
+      //      });
     }
 
     if (userType == UserType.STUDENT) {
@@ -288,13 +285,6 @@ public abstract class TaskitActivity extends AbstractActivity {
   @SuppressWarnings("static-method")
   protected final void showInformationMessage(String message) {
     Window.alert(message);
-  }
-
-  /**
-   * ページへ再遷移します。
-   */
-  protected final void reload() {
-    getClientFactory().getPlaceController().goTo(this.place);
   }
 
 }

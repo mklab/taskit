@@ -72,7 +72,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
-        reload();
         showInformationMessage("Failed to call. : " + error.getMessage()); //$NON-NLS-1$
       }
 
@@ -96,7 +95,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
-        reload();
         showInformationMessage("Failed to uncall. : " + error.getMessage()); //$NON-NLS-1$
       }
 
