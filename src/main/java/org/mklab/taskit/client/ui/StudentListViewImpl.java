@@ -106,7 +106,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       @Override
       public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, UserProxy value, SafeHtmlBuilder sb) {
         sb.appendHtmlConstant("<div style='font-size:2em;'>"); //$NON-NLS-1$
-        sb.appendHtmlConstant(value.getAccount().getId());
+        sb.appendEscaped(value.getAccount().getId());
         sb.appendHtmlConstant("</div>"); //$NON-NLS-1$
       }
 

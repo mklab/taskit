@@ -25,6 +25,7 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -102,7 +103,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
 
       @Override
       public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, UserProxy value, SafeHtmlBuilder sb) {
-        sb.appendHtmlConstant(value.getAccount().getId());
+        sb.appendEscaped(value.getAccount().getId());
       }
 
     }) {
@@ -168,7 +169,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
     public void render(com.google.gwt.cell.client.Cell.Context context, AttendanceListItem value, SafeHtmlBuilder sb) {
       final String id = value.getUser().getAccount().getId();
       final boolean checked = value.getAttendance() != null && value.getAttendance().getType() == this.attendanceType;
-      sb.appendHtmlConstant("<input type='radio' name='" + id + "'" + (checked ? " checked" : "") + "/>");
+      sb.appendHtmlConstant("<input type='radio' name='" + SafeHtmlUtils.htmlEscape(id) + "'" + (checked ? " checked" : "") + "/>");
     }
 
   }

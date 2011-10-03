@@ -11,6 +11,8 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
 
 /**
  * 提出物の状態を編集するセルです。
@@ -75,7 +77,8 @@ class SelectCell extends AbstractInputCell<String, String> {
 
     for (String option : this.options) {
       final boolean selected = option.equals(value);
-      sb.appendHtmlConstant("<option value='" + option + "'" + (selected ? " selected" : "") + ">" + option + "</option>");
+      final String escapedOption = SafeHtmlUtils.htmlEscape(option);
+      sb.appendHtmlConstant("<option value='" + escapedOption + "'" + (selected ? " selected" : "") + ">" + escapedOption + "</option>");
     }
     sb.appendHtmlConstant("</select>");
   }

@@ -78,7 +78,9 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
         sb.appendHtmlConstant("<br>"); //$NON-NLS-1$
         sb.appendHtmlConstant("<b>" + callerId + "</b>"); //$NON-NLS-1$ //$NON-NLS-2$
         if (message != null && message.length() > 0) {
-          sb.appendHtmlConstant("<font color='red'> '" + message + "'</font>"); //$NON-NLS-1$ //$NON-NLS-2$
+          sb.appendHtmlConstant("<font color='red'> '"); //$NON-NLS-1$ 
+          sb.appendEscaped(message);
+          sb.appendHtmlConstant("'</font>"); //$NON-NLS-1$
         }
       }
 
