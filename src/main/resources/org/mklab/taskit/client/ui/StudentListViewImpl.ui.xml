@@ -10,16 +10,20 @@
 			</g:ScrollPanel>
 		</g:west>
 		<g:center>
-			<g:VerticalPanel>
-				<g:HorizontalPanel>
-					<g:Label>User Name:</g:Label>
-					<g:Label ui:field='userName'></g:Label>
-				</g:HorizontalPanel>
-				<g:ScrollPanel>
+			<g:ScrollPanel>
+				<g:VerticalPanel>
+					<g:HorizontalPanel>
+						<g:Label>User ID:</g:Label>
+						<g:Label ui:field='userId'></g:Label>
+					</g:HorizontalPanel>
+					<g:HorizontalPanel>
+						<g:Label>User Name:</g:Label>
+						<g:Label ui:field='userName'></g:Label>
+					</g:HorizontalPanel>
 					<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
-				</g:ScrollPanel>
-				<g:Button ui:field='uncallButton'>Uncall</g:Button>
-			</g:VerticalPanel>
+					<g:Button ui:field='uncallButton'>Uncall</g:Button>
+				</g:VerticalPanel>
+			</g:ScrollPanel>
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

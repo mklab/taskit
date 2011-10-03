@@ -10,11 +10,13 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -25,9 +27,17 @@ import com.google.gwt.view.client.SingleSelectionModel;
  */
 public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCallListView {
 
+  private static final Binder binder = GWT.create(Binder.class);
+
+  static interface Binder extends UiBinder<Widget, HelpCallListViewImpl> {
+    // empty
+  }
+
   private Presenter presenter;
-  private CellList<HelpCallProxy> list;
-  private Label messageLabel;
+  @UiField(provided = true)
+  CellList<HelpCallProxy> list;
+  @UiField
+  Label messageLabel;
 
   /**
    * {@link HelpCallListViewImpl}オブジェクトを構築します。
@@ -76,7 +86,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
 
         sb.appendHtmlConstant(date.toLocaleString());
         sb.appendHtmlConstant("<br>"); //$NON-NLS-1$
-        sb.appendHtmlConstant("<b>" + callerId + "</b>"); //$NON-NLS-1$ //$NON-NLS-2$
+        sb.appendHtmlConstant("<b>" + SafeHtmlUtils.htmlEscape(callerId) + "</b>"); //$NON-NLS-1$ //$NON-NLS-2$
         if (message != null && message.length() > 0) {
           sb.appendHtmlConstant("<font color='red'> '"); //$NON-NLS-1$ 
           sb.appendEscaped(message);
@@ -97,13 +107,8 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
       }
     });
     this.list.setSelectionModel(selectionModel);
-    this.messageLabel = new Label();
 
-    final VerticalPanel pn = new VerticalPanel();
-    pn.add(new ScrollPanel(this.list));
-    pn.add(this.messageLabel);
-
-    return pn;
+    return binder.createAndBindUi(this);
   }
 
 }

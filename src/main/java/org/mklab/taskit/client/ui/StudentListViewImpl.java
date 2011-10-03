@@ -37,6 +37,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   StudentScorePanel panel;
   @UiField
   Label userName;
+  @UiField
+  Label userId;
   private Presenter presenter;
   private static final Binder binder = GWT.create(Binder.class);
 
@@ -132,6 +134,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void showUserPage(UserProxy user, StudentScoreModel model) {
+    this.userId.setText(user.getAccount().getId());
     this.userName.setText(user.getName() != null ? user.getName() : "<< Not set >>"); //$NON-NLS-1$
     this.panel.showUserPage(model);
   }
