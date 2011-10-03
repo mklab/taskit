@@ -13,6 +13,8 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 @SuppressWarnings("javadoc")
 public interface SubmissionProxy extends EntityProxy {
 
+  Integer getId();
+
   AccountProxy getSubmitter();
 
   void setSubmitter(AccountProxy account);

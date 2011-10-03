@@ -20,7 +20,7 @@ public interface SubmissionRequest extends RequestContext {
 
   InstanceRequest<SubmissionProxy, Void> persist();
 
-  Request<Void> delete(SubmissionProxy submission);
+  InstanceRequest<SubmissionProxy, Void> delete();
 
   Request<List<SubmissionProxy>> getMySubmissions();
 

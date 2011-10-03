@@ -12,6 +12,8 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 @ProxyFor(value = Attendance.class, locator = AttendanceLocator.class)
 @SuppressWarnings("javadoc")
 public interface AttendanceProxy extends EntityProxy {
+  
+  Integer getId();
 
   AccountProxy getAttender();
 

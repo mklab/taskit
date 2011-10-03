@@ -63,7 +63,7 @@ public class SubmissionRequestTest extends DomainTest {
       }
 
     });
-    getRequestFactory().submissionRequest().delete(submission).fire();
+    getRequestFactory().submissionRequest().delete().using(submission).fire();
     getRequestFactory().submissionRequest().getSubmissionsByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<SubmissionProxy>>() {
 
       @Override

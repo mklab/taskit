@@ -5,9 +5,11 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.shared.AccountProxy;
+import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
+import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.util.List;
@@ -90,6 +92,20 @@ public interface StudentListView extends TaskitView {
      * @param value 得点
      */
     void submit(ReportProxy report, int value);
+
+    /**
+     * 提出物を削除します。
+     * 
+     * @param submission 提出物
+     */
+    void delete(SubmissionProxy submission);
+
+    /**
+     * 出席情報を削除します。
+     * 
+     * @param attendance 出席情報
+     */
+    void delete(AttendanceProxy attendance);
 
     /**
      * 出席を記録します。

@@ -169,19 +169,18 @@ public class StudentScorePanel extends Composite {
           return;
         }
         final ReportProxy report = object.getReport(reportIndex);
-        int n;
         if (value.equals(options.get(0))) {
-          n = 100;
+          presenter.submit(report, 100);
         } else if (value.equals(options.get(1))) {
-          n = 50;
+          presenter.submit(report, 50);
         } else if (value.equals(options.get(2))) {
-          n = 0;
+          presenter.submit(report, 0);
+        } else if (value.equals(options.get(3))) {
+          presenter.delete(object.getSubmission(report));
         } else {
           presenter.reloadUserPage();
           return;
         }
-
-        presenter.submit(report, n);
       }
 
     });
@@ -226,6 +225,12 @@ public class StudentScorePanel extends Composite {
       @SuppressWarnings({"unqualified-field-access", "synthetic-access", "unused"})
       @Override
       public void update(int index, LectureScore object, String value) {
+        if (value.equals("")) { //$NON-NLS-1$
+          System.out.println(object.getAttendance());
+          presenter.delete(object.getAttendance());
+          return;
+        }
+
         final LectureProxy lecture = object.getLecture();
         final AttendanceType type;
         try {

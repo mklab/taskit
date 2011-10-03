@@ -16,7 +16,7 @@ public interface AttendanceRequest extends RequestContext {
 
   InstanceRequest<AttendanceProxy, Void> persist();
 
-  Request<Void> delete(AttendanceProxy attendance);
+  InstanceRequest<AttendanceProxy, Void> delete();
 
   Request<List<AttendanceProxy>> getMyAttendances();
 

@@ -73,7 +73,7 @@ public class Attendance extends AbstractEntity<Integer> {
    * {@inheritDoc}
    */
   @Override
-  void setId(Integer id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -182,14 +182,12 @@ public class Attendance extends AbstractEntity<Integer> {
 
   /**
    * 出席情報の削除を行います。
-   * 
-   * @param attendance 削除する出席情報
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static void delete(Attendance attendance) {
+  public void delete() {
     final EntityManager em = EMF.get().createEntityManager();
-    Query q = em.createQuery("delete from Attendance a where a=:attendance"); //$NON-NLS-1$
-    q.setParameter("attendance", attendance); //$NON-NLS-1$
+    Query q = em.createQuery("delete from Attendance a where a.id=:attendanceId"); //$NON-NLS-1$
+    q.setParameter("attendanceId", getId()); //$NON-NLS-1$
 
     final EntityTransaction t = em.getTransaction();
     try {

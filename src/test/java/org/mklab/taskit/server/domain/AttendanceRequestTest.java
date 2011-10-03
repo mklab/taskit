@@ -1,12 +1,13 @@
 package org.mklab.taskit.server.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
-import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 
 import java.util.List;
@@ -116,7 +117,7 @@ public class AttendanceRequestTest extends DomainTest {
       }
     });
 
-    getRequestFactory().attendanceRequest().delete(attendance[0]).fire();
+    getRequestFactory().attendanceRequest().delete().using(attendance[0]).fire();
     getRequestFactory().attendanceRequest().getAttendancesByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<AttendanceProxy>>() {
 
       @Override

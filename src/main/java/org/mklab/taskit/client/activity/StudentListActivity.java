@@ -9,10 +9,12 @@ import org.mklab.taskit.client.model.StudentScoreQuery;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.shared.AccountProxy;
+import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
+import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 import org.mklab.taskit.shared.UserProxy;
 
@@ -183,4 +185,49 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     fetchAndShowAsync(selectedUser);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void delete(SubmissionProxy submission) {
+    getClientFactory().getRequestFactory().submissionRequest().delete().using(submission).fire(new Receiver<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
+        // do nothing
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onFailure(ServerFailure error) {
+        showErrorMessage("Failed to delete the submission. : " + error.getMessage()); //$NON-NLS-1$
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void delete(AttendanceProxy attendance) {
+    getClientFactory().getRequestFactory().attendanceRequest().delete().using(attendance).fire(new Receiver<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
+        // do nothing
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onFailure(ServerFailure error) {
+        showErrorMessage("Failed to delete the attendance. : " + error.getMessage()); //$NON-NLS-1$
+      }
+
+    });
+
+  }
 }

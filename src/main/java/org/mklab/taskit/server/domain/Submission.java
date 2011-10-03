@@ -72,7 +72,7 @@ public class Submission extends AbstractEntity<Integer> {
    * {@inheritDoc}
    */
   @Override
-  void setId(Integer id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -226,14 +226,12 @@ public class Submission extends AbstractEntity<Integer> {
 
   /**
    * 提出物を削除します。
-   * 
-   * @param submission 削除する提出物
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static void delete(Submission submission) {
+  public void delete() {
     final EntityManager em = EMF.get().createEntityManager();
-    Query q = em.createQuery("delete from Submission s where s=:submission"); //$NON-NLS-1$
-    q.setParameter("submission", submission); //$NON-NLS-1$
+    Query q = em.createQuery("delete from Submission s where s.id=:submissionId"); //$NON-NLS-1$
+    q.setParameter("submissionId", getId()); //$NON-NLS-1$
 
     final EntityTransaction t = em.getTransaction();
     try {
