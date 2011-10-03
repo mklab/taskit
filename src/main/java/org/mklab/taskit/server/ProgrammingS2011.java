@@ -4,6 +4,7 @@
 package org.mklab.taskit.server;
 
 import org.mklab.taskit.server.domain.Account;
+import org.mklab.taskit.server.domain.EMF;
 import org.mklab.taskit.server.domain.Lecture;
 import org.mklab.taskit.server.domain.Report;
 import org.mklab.taskit.shared.UserType;
@@ -170,6 +171,7 @@ public class ProgrammingS2011 {
    * @param args プログラム引数
    */
   public static void main(String[] args) {
+    EMF.setPersistenceUnitName("taskit");
     registerAccounts();
     registerLectures();
 
