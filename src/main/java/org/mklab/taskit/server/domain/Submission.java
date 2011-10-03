@@ -9,6 +9,7 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -221,6 +222,29 @@ public class Submission extends AbstractEntity<Integer> {
     submission.setPoint(point);
     submission.setDate(new Date());
     submission.update();
+  }
+
+  /**
+   * 提出物を削除します。
+   * 
+   * @param submission 削除する提出物
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static void delete(Submission submission) {
+    final EntityManager em = EMF.get().createEntityManager();
+    Query q = em.createQuery("delete from Submission s where s=:submission"); //$NON-NLS-1$
+    q.setParameter("submission", submission); //$NON-NLS-1$
+
+    final EntityTransaction t = em.getTransaction();
+    try {
+      t.begin();
+      q.executeUpdate();
+      t.commit();
+    } catch (Throwable e) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
   }
 
   @SuppressWarnings({"nls", "unchecked"})

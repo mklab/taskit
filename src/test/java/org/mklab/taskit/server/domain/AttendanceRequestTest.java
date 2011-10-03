@@ -6,6 +6,7 @@ import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 
 import java.util.List;
@@ -93,6 +94,38 @@ public class AttendanceRequestTest extends DomainTest {
 
   }
 
+  /**
+   * 提出物削除のテストを行います。
+   */
+  @Test
+  public void testDelete() {
+    loginAsTeacher();
+
+    final Lectures lectures = new Lectures();
+    lectures.initialize(getRequestFactory());
+
+    getRequestFactory().attendanceRequest().attend(STUDENT_PROXY.getAccount(), lectures.lecture1, AttendanceType.ABSENT).fire();
+
+    final AttendanceProxy[] attendance = new AttendanceProxy[1];
+    getRequestFactory().attendanceRequest().getAttendancesByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<AttendanceProxy>>() {
+
+      @Override
+      public void onSuccess(List<AttendanceProxy> response) {
+        assertEquals(1, response.size());
+        attendance[0] = response.get(0);
+      }
+    });
+
+    getRequestFactory().attendanceRequest().delete(attendance[0]).fire();
+    getRequestFactory().attendanceRequest().getAttendancesByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<AttendanceProxy>>() {
+
+      @Override
+      public void onSuccess(List<AttendanceProxy> response) {
+        assertEquals(0, response.size());
+
+      }
+    });
+  }
   //  /**
   //   * アカウントとレポートのIDの組み合わせが重複する提出がなされた場合に例外が発生するかどうかテストします。
   //   */

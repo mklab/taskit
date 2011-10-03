@@ -45,6 +45,36 @@ public class SubmissionRequestTest extends DomainTest {
   }
 
   /**
+   * 提出物削除のテストを行います。
+   */
+  @Test
+  public void testDelete() {
+    loginAsTeacher();
+
+    final Lectures lectures = new Lectures();
+    lectures.initialize(getRequestFactory());
+
+    final SubmissionProxy submission = registerSingleSubmission(lectures);
+    getRequestFactory().submissionRequest().getSubmissionsByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<SubmissionProxy>>() {
+
+      @Override
+      public void onSuccess(List<SubmissionProxy> response) {
+        assertEquals(1, response.size());
+      }
+
+    });
+    getRequestFactory().submissionRequest().delete(submission).fire();
+    getRequestFactory().submissionRequest().getSubmissionsByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<List<SubmissionProxy>>() {
+
+      @Override
+      public void onSuccess(List<SubmissionProxy> response) {
+        assertEquals(0, response.size());
+      }
+
+    });
+  }
+
+  /**
    * アカウントとレポートのIDの組み合わせが重複する提出がなされた場合に例外が発生するかどうかテストします。
    */
   @Test
@@ -65,23 +95,23 @@ public class SubmissionRequestTest extends DomainTest {
     assertTrue(thrown);
   }
 
-  private static void registerSingleSubmission(final Lectures lectures) {
+  private static SubmissionProxy registerSingleSubmission(final Lectures lectures) {
     loginAsTA();
-    {
-      SubmissionRequest req = getRequestFactory().submissionRequest();
-      final SubmissionProxy submission = req.create(SubmissionProxy.class);
-      submission.setPoint(100);
-      submission.setSubmitter(STUDENT_PROXY.getAccount());
-      submission.setReport(lectures.lecture1_report1);
-      req.persist().using(submission).fire(new Receiver<Void>() {
 
-        @Override
-        public void onSuccess(@SuppressWarnings("unused") Void response) {
-          // do nothing
-        }
+    SubmissionRequest req = getRequestFactory().submissionRequest();
+    final SubmissionProxy submission = req.create(SubmissionProxy.class);
+    submission.setPoint(100);
+    submission.setSubmitter(STUDENT_PROXY.getAccount());
+    submission.setReport(lectures.lecture1_report1);
+    req.persist().using(submission).fire(new Receiver<Void>() {
 
-      });
-    }
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
+        // do nothing
+      }
+
+    });
+    return submission;
   }
 
 }

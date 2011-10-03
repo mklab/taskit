@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -177,6 +178,29 @@ public class Attendance extends AbstractEntity<Integer> {
     attendance.setType(type);
     attendance.setDate(new Date());
     attendance.update();
+  }
+
+  /**
+   * 出席情報の削除を行います。
+   * 
+   * @param attendance 削除する出席情報
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static void delete(Attendance attendance) {
+    final EntityManager em = EMF.get().createEntityManager();
+    Query q = em.createQuery("delete from Attendance a where a=:attendance"); //$NON-NLS-1$
+    q.setParameter("attendance", attendance); //$NON-NLS-1$
+
+    final EntityTransaction t = em.getTransaction();
+    try {
+      t.begin();
+      q.executeUpdate();
+      t.commit();
+    } catch (Throwable e) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
   }
 
   /**
