@@ -3,6 +3,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,24 @@ public class Lecture extends AbstractEntity<Integer> {
   private List<Report> reports;
 
   /**
+   * {@link Lecture}オブジェクトを構築します。
+   */
+  public Lecture() {
+    // for JPA
+  }
+
+  /**
+   * {@link Lecture}オブジェクトを構築します。
+   * 
+   * @param date 日付
+   */
+  public Lecture(Date date) {
+    if (date == null) throw new NullPointerException();
+    this.date = date;
+    this.reports = new ArrayList<Report>();
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -54,7 +73,7 @@ public class Lecture extends AbstractEntity<Integer> {
    * 
    * @return 課題
    */
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture", fetch = FetchType.EAGER,targetEntity=Report.class)
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "lecture", fetch = FetchType.EAGER, targetEntity = Report.class)
   public List<Report> getReports() {
     return this.reports;
   }
@@ -133,6 +152,24 @@ public class Lecture extends AbstractEntity<Integer> {
   public static List<Lecture> getAllLectures() {
     final EntityManager em = EMF.get().createEntityManager();
     final Query q = em.createQuery("select l from Lecture l order by l.date"); //$NON-NLS-1$
+    try {
+      return q.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  /**
+   * 講義をタイトルで取得します。
+   * 
+   * @param title 講義タイトル
+   * @return 講義
+   */
+  @SuppressWarnings("unchecked")
+  public static List<Lecture> getLectureByTitle(String title) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select l from Lecture l where l.title=:title"); //$NON-NLS-1$
+    q.setParameter("title", title); //$NON-NLS-1$
     try {
       return q.getResultList();
     } finally {
