@@ -151,7 +151,10 @@ public class User extends AbstractEntity<Integer> {
     EntityManager em = EMF.get().createEntityManager();
     Query q = em.createQuery("select s from User s where s.account.id=:accountId"); //$NON-NLS-1$
     q.setParameter("accountId", accountId); //$NON-NLS-1$
-    return (User)q.getSingleResult();
+    @SuppressWarnings("unchecked")
+    final List<User> res = q.getResultList();
+    if (res.size() == 0) throw new IllegalArgumentException("No such user : " + accountId); //$NON-NLS-1$
+    return res.get(0);
   }
 
   /**
