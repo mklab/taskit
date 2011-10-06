@@ -34,3 +34,7 @@ v1.3.0 リアルタイム性
 * 出席状況ビューの列ヘッダの固定
   http://stackoverflow.com/questions/4073624/a-gwt-celltable-with-frozen-header-and-initial-column
   
+バグ
+* 番号引数付き学生リスト
+* 学生別成績一覧で課題のないところが○表示になる
+  
