@@ -7,12 +7,25 @@
 
 	<servlet>
 		<servlet-name>requestFactoryServlet</servlet-name>
-		<servlet-class>com.google.web.bindery.requestfactory.server.RequestFactoryServlet</servlet-class>
+		<servlet-class>org.mklab.taskit.server.TaskitRequestFactoryServlet</servlet-class>
 		<init-param>
 			<param-name>symbolMapsDirectory</param-name>
 			<!-- You'll need to compile with -extras and move the symbolMaps directory 
 				to this location if you want stack trace deobfuscation to work -->
 			<param-value>WEB-INF/classes/symbolMaps/</param-value>
+		</init-param>
+		<!-- Database information -->
+		<init-param>
+			<param-name>taskit-db-url</param-name>
+			<param-value>jdbc:mysql://kamome.mk.ces.kyutech.ac.jp/PROG2011</param-value>
+		</init-param>
+		<init-param>
+			<param-name>taskit-dbuser-id</param-name>
+			<param-value>taskit</param-value>
+		</init-param>
+		<init-param>
+			<param-name>taskit-dbuser-password</param-name>
+			<param-value>ta2k3t3</param-value>
 		</init-param>
 	</servlet>
 

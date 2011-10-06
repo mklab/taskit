@@ -16,6 +16,8 @@
 package org.mklab.taskit.server.domain;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -28,6 +30,14 @@ public final class EMF {
 
   private static EntityManagerFactory emfInstance;
   private static String persistenceUnitName = "taskit-local"; //$NON-NLS-1$
+  /** データベースユーザーのIDを設定するためのキーです。 */
+  public static String DB_USER_KEY = "hibernate.connection.username"; //$NON-NLS-1$
+  /** データベースユーザーのパスワードを設定するためのキーです。 */
+  public static String DB_PASSWORD_KEY = "hibernate.connection.password"; //$NON-NLS-1$
+  /** データベースの場所を設定するためのキーです。 */
+  public static String DB_URL_KEY = "hibernate.connection.url"; //$NON-NLS-1$
+
+  private static Map<String, String> props = new HashMap<String, String>();
 
   static {
     if (isDevelopmentMode()) {
@@ -50,10 +60,11 @@ public final class EMF {
   public static synchronized EntityManagerFactory get() {
     if (emfInstance == null) {
       try {
-        emfInstance = Persistence.createEntityManagerFactory(persistenceUnitName);
+        emfInstance = Persistence.createEntityManagerFactory(persistenceUnitName, props);
       } catch (Throwable ex) {
         ex.printStackTrace();
       }
+      props = null;
     }
     return emfInstance;
   }
@@ -68,6 +79,17 @@ public final class EMF {
   public static void setPersistenceUnitName(String name) {
     persistenceUnitName = name;
     emfInstance = null;
+  }
+
+  /**
+   * {@link EntityManagerFactory}生成のためのプロパティを設定します。
+   * 
+   * @param key キー
+   * @param value 値
+   */
+  public static void setPersistenceProperty(String key, String value) {
+    if (emfInstance != null) throw new IllegalStateException("EntityManagerFactory has already initialized."); //$NON-NLS-1$
+    props.put(key, value);
   }
 
   /**
