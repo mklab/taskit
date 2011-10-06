@@ -244,7 +244,7 @@ public class StudentScorePanel extends Composite {
       @SuppressWarnings({"unqualified-field-access", "synthetic-access", "unused"})
       @Override
       public void update(int index, LectureScore object, AttendanceType value) {
-        if (value.equals("")) { //$NON-NLS-1$
+        if (value == null) {
           presenter.delete(object.getAttendance());
           return;
         }

@@ -72,8 +72,6 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
   @SuppressWarnings("nls")
   @Override
   public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, E value, SafeHtmlBuilder sb) {
-    if (value == null) return;
-
     if (this.editable) {
       sb.appendHtmlConstant("<select>");
     } else {
@@ -82,7 +80,7 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
 
     for (E option : this.options) {
       final boolean selected = equals(option, value);
-      final String escapedOption = SafeHtmlUtils.htmlEscape(this.renderer.render(option));
+      final String escapedOption = value == null ? "" : SafeHtmlUtils.htmlEscape(this.renderer.render(option));
       sb.appendHtmlConstant("<option value='" + escapedOption + "'" + (selected ? " selected" : "") + ">" + escapedOption + "</option>");
     }
     sb.appendHtmlConstant("</select>");
