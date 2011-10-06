@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.Validator;
 
@@ -12,6 +13,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CaptionPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -36,6 +40,21 @@ public class ProfileViewImpl extends AbstractTaskitView implements ProfileView {
   PasswordTextBox password1;
   @UiField
   PasswordTextBox password2;
+
+  @UiField
+  Button passwordChangeButton;
+  @UiField
+  Button userNameChangeButton;
+  @UiField
+  Label currentPasswordLabel;
+  @UiField
+  Label password1Label;
+  @UiField
+  Label password2Label;
+  @UiField
+  CaptionPanel userNameCaption;
+  @UiField
+  CaptionPanel passwordCaption;
 
   private Presenter presenter;
 
@@ -104,7 +123,21 @@ public class ProfileViewImpl extends AbstractTaskitView implements ProfileView {
   @Override
   protected Widget initContent() {
     final Widget widget = binder.createAndBindUi(this);
+    final Messages messages = getClientFactory().getMessages();
+    localizeMessages(messages);
+
     return widget;
+  }
+
+  @SuppressWarnings("nls")
+  private void localizeMessages(final Messages messages) {
+    this.currentPasswordLabel.setText(messages.passwordCurrentLabel() + ": ");
+    this.password1Label.setText(messages.passwordNewLabel() + ": ");
+    this.password2Label.setText(messages.passwordLabelForConfirmation() + ": ");
+    this.passwordChangeButton.setText(messages.changeLabel());
+    this.userNameChangeButton.setText(messages.changeLabel());
+    this.userNameCaption.setCaptionText(messages.userNameLabel());
+    this.passwordCaption.setCaptionText(messages.passwordLabel());
   }
 
 }

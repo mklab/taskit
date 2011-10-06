@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -33,7 +32,6 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   private List<AttendanceProxy> attendances;
   private List<UserProxy> students;
   private List<LectureProxy> lectures;
-  private Timer updateTimer;
 
   /**
    * {@link AttendanceListActivity}オブジェクトを構築します。
@@ -54,27 +52,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
     fetchLecturesAsync();
 
-    this.updateTimer = new Timer() {
-
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        updateListAsync();
-      }
-    };
-    this.updateTimer.scheduleRepeating(30 * 1000);
-
     return this.view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void onStop() {
-    if (this.updateTimer != null) {
-      this.updateTimer.cancel();
-    }
   }
 
   /**
@@ -101,7 +79,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     });
   }
 
-  private void updateListAsync() {
+  void updateListAsync() {
     final LectureProxy currentSelection = this.view.getSelectedLecture();
     updateListAsync(currentSelection);
   }

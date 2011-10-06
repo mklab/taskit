@@ -54,9 +54,9 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
   @Override
   public void setHelpCalls(List<HelpCallProxy> helpCalls) {
     if (helpCalls.isEmpty()) {
-      this.messageLabel.setText("No one is calling."); //$NON-NLS-1$
+      this.messageLabel.setText(getClientFactory().getMessages().nooneCallingMessage());
     } else {
-      this.messageLabel.setText(helpCalls.size() + " people are calling."); //$NON-NLS-1$
+      this.messageLabel.setText(getClientFactory().getMessages().callingMessage(String.valueOf(helpCalls.size())));
     }
 
     this.list.setRowData(helpCalls);

@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.shared.UserProxy;
@@ -19,6 +20,8 @@ import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -37,6 +40,18 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   Label userName;
   @UiField
   Label userId;
+
+  @UiField
+  CaptionPanel profileCaption;
+  @UiField
+  Label userIdLabel;
+  @UiField
+  Label userNameLabel;
+  @UiField
+  Label userListLabel;
+  @UiField
+  Button uncallButton;
+
   private Presenter presenter;
   private static final Binder binder = GWT.create(Binder.class);
 
@@ -100,13 +115,14 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   protected Widget initContent() {
-    this.panel = new StudentScorePanel(getClientFactory().getMessages(), true);
+    final Messages messages = getClientFactory().getMessages();
+    this.panel = new StudentScorePanel(messages, true);
 
     this.userList = new ValueListBox<UserProxy>(new Renderer<UserProxy>() {
 
       @Override
       public String render(UserProxy object) {
-        if (object == null) return "Select ID"; //$NON-NLS-1$
+        if (object == null) return messages.selectIdLabel();
         StringBuilder sb = new StringBuilder(object.getAccount().getId());
         if (object.getName() != null) {
           sb.append(" " + object.getName()); //$NON-NLS-1$
@@ -127,8 +143,19 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
         StudentListViewImpl.this.presenter.listSelectionChanged(event.getValue());
       }
     });
+    final Widget widget = binder.createAndBindUi(this);
 
-    return binder.createAndBindUi(this);
+    localizeMessages(messages);
+
+    return widget;
+  }
+
+  private void localizeMessages(final Messages messages) {
+    this.userIdLabel.setText(messages.userIdLabel() + ": "); //$NON-NLS-1$
+    this.userNameLabel.setText(messages.userNameLabel() + ": "); //$NON-NLS-1$
+    this.userListLabel.setText(messages.userListLabel() + ": "); //$NON-NLS-1$
+    this.profileCaption.setCaptionText(messages.profileLabel());
+    this.uncallButton.setText(messages.uncallLabel());
   }
 
   /**
@@ -137,7 +164,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @Override
   public void showUserPage(UserProxy user, StudentScoreModel model) {
     this.userId.setText(user.getAccount().getId());
-    this.userName.setText(user.getName() != null ? user.getName() : "<< Not set >>"); //$NON-NLS-1$
+    this.userName.setText(user.getName() != null ? user.getName() : "<< " + getClientFactory().getMessages().unsetLabel() + " >>"); //$NON-NLS-1$ //$NON-NLS-2$
     this.panel.showUserPage(model);
   }
 

@@ -14,6 +14,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -36,6 +37,8 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   StudentScorePanel scorePanel;
   @UiField
   ToggleButton helpCallButton;
+  @UiField
+  Label helpCallMessageLabel;
   @UiField
   TextBox helpCallMessage;
   @UiField
@@ -97,6 +100,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
     this.helpCallButton.getDownFace().setImage(waitImage);
     this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
     this.helpCallArea.setCellHorizontalAlignment(this.helpCallButton, HasHorizontalAlignment.ALIGN_CENTER);
+    this.helpCallMessageLabel.setText(getClientFactory().getMessages().messageLabel() + ":"); //$NON-NLS-1$
     return widget;
   }
 

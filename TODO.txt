@@ -31,3 +31,6 @@ v1.3.0 リアルタイム性
   IPで判定すれば座る場所すら縛らなくなるかも。
 * GWT最新版(2.4)への更新
   今はMavenプラグインのサポートの関係か移行できないため、出来るようになり次第2.4へ
+* 出席状況ビューの列ヘッダの固定
+  http://stackoverflow.com/questions/4073624/a-gwt-celltable-with-frozen-header-and-initial-column
+  

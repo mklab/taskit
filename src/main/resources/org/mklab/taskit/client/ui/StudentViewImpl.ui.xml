@@ -18,7 +18,7 @@
 		<g:FlowPanel>
 			<g:VerticalPanel styleName='{style.helpCallArea}' ui:field='helpCallArea'>
 				<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
-				<g:Label>Message:</g:Label>
+				<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
 				<g:TextBox ui:field='helpCallMessage'></g:TextBox>
 			</g:VerticalPanel>
 		</g:FlowPanel>

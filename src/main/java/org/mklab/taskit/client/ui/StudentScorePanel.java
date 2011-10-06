@@ -200,6 +200,12 @@ public class StudentScorePanel extends Composite {
   }
 
   private void initCommonColumns() {
+    this.table.addColumn(createLectureNumberColumn(), this.messages.numberColumnLabel());
+    this.table.addColumn(createAttendanceColumn(), this.messages.attendenceTypeLabel());
+  }
+
+  @SuppressWarnings("static-method")
+  private Column<LectureScore, Void> createLectureNumberColumn() {
     final Column<LectureScore, Void> lectureNumberColumn = new Column<StudentScoreModel.LectureScore, Void>(new AbstractCell<Void>() {
 
       @Override
@@ -214,7 +220,10 @@ public class StudentScorePanel extends Composite {
         return null;
       }
     };
+    return lectureNumberColumn;
+  }
 
+  private Column<LectureScore, AttendanceType> createAttendanceColumn() {
     final List<AttendanceType> attendanceTypes = new ArrayList<AttendanceType>();
     for (AttendanceType type : AttendanceType.values()) {
       attendanceTypes.add(type);
@@ -224,7 +233,6 @@ public class StudentScorePanel extends Composite {
 
       @Override
       public String render(AttendanceType value) {
-        if (value == null) return ""; //$NON-NLS-1$
         return AttendanceListViewImpl.getLabelOfAttendanceType(StudentScorePanel.this.messages, value);
       }
     });
@@ -254,8 +262,6 @@ public class StudentScorePanel extends Composite {
       }
 
     });
-
-    this.table.addColumn(lectureNumberColumn, "No."); //$NON-NLS-1$
-    this.table.addColumn(attendanceColumn, this.messages.attendenceTypeLabel());
+    return attendanceColumn;
   }
 }

@@ -18,7 +18,7 @@
 			<g:HTMLPanel styleName='{style.userListArea}'>
 				<g:HorizontalPanel>
 					<g:cell verticalAlignment="ALIGN_MIDDLE">
-						<g:Label>User List: </g:Label>
+						<g:Label ui:field='userListLabel'>User List: </g:Label>
 					</g:cell>
 					<g:cell verticalAlignment="ALIGN_MIDDLE">
 						<g:ValueListBox ui:field='userList'></g:ValueListBox>
@@ -30,14 +30,14 @@
 		<g:center>
 			<g:ScrollPanel>
 				<g:VerticalPanel>
-					<g:CaptionPanel captionText='Profile'>
+					<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
 						<g:VerticalPanel>
 							<g:HorizontalPanel>
-								<g:Label>User ID:</g:Label>
+								<g:Label ui:field='userIdLabel'>User ID:</g:Label>
 								<g:Label ui:field='userId'></g:Label>
 							</g:HorizontalPanel>
 							<g:HorizontalPanel>
-								<g:Label>User Name:</g:Label>
+								<g:Label ui:field='userNameLabel'>User Name:</g:Label>
 								<g:Label ui:field='userName'></g:Label>
 							</g:HorizontalPanel>
 						</g:VerticalPanel>

@@ -81,7 +81,8 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
       @Override
       public String render(LectureListItem object) {
         if (object == null) return null;
-        return String.valueOf(object.getIndex() + 1) + " " + object.getLecture().getTitle() + " [" + object.getLecture().getDate().toLocaleString() + "]";
+        final String number = getClientFactory().getMessages().numberLabel(String.valueOf(object.getIndex() + 1));
+        return number + " " + object.getLecture().getTitle() + " [" + object.getLecture().getDate().toLocaleString() + "]";
       }
 
       @Override
@@ -114,7 +115,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
         return object.getUser();
       }
     };
-    this.table.addColumn(userColumn, "User"); //$NON-NLS-1$
+    this.table.addColumn(userColumn, getClientFactory().getMessages().studentLabel());
     for (AttendanceType type : AttendanceType.values()) {
       final Column<AttendanceListItem, AttendanceListItem> attendanceCell = new Column<AttendanceListItem, AttendanceListItem>(new AttendanceCell(type)) {
 
@@ -131,15 +132,17 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   }
 
   static String getLabelOfAttendanceType(Messages messages, AttendanceType type) {
+    if (type == null) return messages.attendanceColumnNullLabel();
+
     switch (type) {
       case ABSENT:
-        return messages.absentLabel();
+        return messages.attendanceColumnAbsentLabel();
       case ILLNESS:
-        return messages.illnessLabel();
+        return messages.attendanceColumnIllnessLabel();
       case PRESENT:
-        return messages.attendedLabel();
+        return messages.attendanceColumnAttendedLabel();
       case LATE:
-        return messages.lateLabel();
+        return messages.attendanceColumnLateLabel();
       default:
         return null;
     }

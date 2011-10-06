@@ -3,26 +3,25 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
 	<g:HTMLPanel>
-		<h1>Profile Settings</h1>
 		<g:VerticalPanel>
-			<g:CaptionPanel captionText='User Name'>
+			<g:CaptionPanel captionText='User Name' ui:field='userNameCaption'>
 				<g:FlowPanel>
 					<g:TextBox ui:field='userName'></g:TextBox>
 					<g:Button ui:field='userNameChangeButton'>Change</g:Button>
 				</g:FlowPanel>
 			</g:CaptionPanel>
-			<g:CaptionPanel captionText='Password'>
+			<g:CaptionPanel captionText='Password' ui:field='passwordCaption'>
 				<g:VerticalPanel>
 					<g:FlowPanel>
-						<g:Label>Current Password:</g:Label>
+						<g:Label ui:field='currentPasswordLabel'>Current Password:</g:Label>
 						<g:PasswordTextBox ui:field='currentPassword'></g:PasswordTextBox>
 					</g:FlowPanel>
 					<g:FlowPanel>
-						<g:Label>Password:</g:Label>
+						<g:Label ui:field='password1Label'>Password:</g:Label>
 						<g:PasswordTextBox ui:field='password1'></g:PasswordTextBox>
 					</g:FlowPanel>
 					<g:FlowPanel>
-						<g:Label>Password (Confirmation):</g:Label>
+						<g:Label ui:field='password2Label'>Password (Confirmation):</g:Label>
 						<g:PasswordTextBox ui:field='password2'></g:PasswordTextBox>
 						<g:Button ui:field='passwordChangeButton'>Change</g:Button>
 					</g:FlowPanel>
