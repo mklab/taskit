@@ -11,6 +11,7 @@ import org.mklab.taskit.client.place.Profile;
 import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HeaderView;
+import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.client.ui.ToolBarButton;
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.UserType;
@@ -24,7 +25,6 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -40,6 +40,7 @@ public abstract class TaskitActivity extends AbstractActivity {
   private AcceptsOneWidget container;
   private HeaderView header;
   private UserProxy loginUser;
+  private TaskitView view;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -136,6 +137,8 @@ public abstract class TaskitActivity extends AbstractActivity {
 
     final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
     pn.addNorth(this.header, this.header.getHeight());
+
+    this.view = createTaskitView(this.clientFactory);
     pn.add(createTaskitView(this.clientFactory));
     this.container.setWidget(pn);
   }
@@ -234,7 +237,16 @@ public abstract class TaskitActivity extends AbstractActivity {
    * @param clientFactory クライアントファクトリ
    * @return ビュー
    */
-  protected abstract Widget createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+  protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
+
+  /**
+   * アクティビティで表示するビューを取得します。
+   * 
+   * @return ビュー。まだ生成されていない場合はnull
+   */
+  protected TaskitView getTaskitView() {
+    return this.view;
+  }
 
   /**
    * ログアウトします。
@@ -263,9 +275,12 @@ public abstract class TaskitActivity extends AbstractActivity {
    * 
    * @param errorMessage エラーメッセージ
    */
-  @SuppressWarnings("static-method")
   protected final void showErrorMessage(String errorMessage) {
-    Window.alert(errorMessage);
+    if (this.view == null) {
+      Window.alert(errorMessage);
+    } else {
+      this.view.showErrorMessage(errorMessage);
+    }
   }
 
   /**
@@ -282,9 +297,12 @@ public abstract class TaskitActivity extends AbstractActivity {
    * 
    * @param message メッセージ
    */
-  @SuppressWarnings("static-method")
   protected final void showInformationMessage(String message) {
-    Window.alert(message);
+    if (this.view == null) {
+      Window.alert(message);
+    } else {
+      this.view.showInformationMessage(message);
+    }
   }
 
 }

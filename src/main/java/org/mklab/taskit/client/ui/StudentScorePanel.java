@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.StudentListView.Presenter;
@@ -34,15 +35,20 @@ public class StudentScorePanel extends Composite {
   private Presenter presenter;
   private TableRowElement lastHighlightElement;
   private boolean editable;
+  Messages messages;
 
   /**
    * {@link StudentScorePanel}オブジェクトを構築します。
    * 
+   * @param messages メッセージ
    * @param editable 編集可能かどうか
    */
-  public StudentScorePanel(boolean editable) {
+  public StudentScorePanel(Messages messages, boolean editable) {
+    if (messages == null) throw new NullPointerException();
+
     this.table = new CellTable<StudentScoreModel.LectureScore>();
     this.editable = editable;
+    this.messages = messages;
     initColumns();
     initWidget(this.table);
 
@@ -134,7 +140,13 @@ public class StudentScorePanel extends Composite {
   @SuppressWarnings("nls")
   private void addSubmissionColumn(final int reportIndex) {
     final List<String> options = Arrays.asList("○", "△", "×", "");
-    final SelectCell submissionCell = new SelectCell(options);
+    final SelectCell<String> submissionCell = new SelectCell<String>(options, new SelectCell.Renderer<String>() {
+
+      @Override
+      public String render(String value) {
+        return value;
+      }
+    });
     submissionCell.setEditable(this.editable);
 
     final Column<LectureScore, String> submissionColumn = new Column<StudentScoreModel.LectureScore, String>(submissionCell) {
@@ -203,48 +215,47 @@ public class StudentScorePanel extends Composite {
       }
     };
 
-    final List<String> attendanceTypes = new ArrayList<String>();
+    final List<AttendanceType> attendanceTypes = new ArrayList<AttendanceType>();
     for (AttendanceType type : AttendanceType.values()) {
-      attendanceTypes.add(type.name());
+      attendanceTypes.add(type);
     }
-    attendanceTypes.add(""); //$NON-NLS-1$
-    final SelectCell selectionCell = new SelectCell(attendanceTypes);
-    selectionCell.setEditable(this.editable);
-
-    final Column<LectureScore, String> attendanceColumn = new Column<StudentScoreModel.LectureScore, String>(selectionCell) {
+    attendanceTypes.add(null);
+    final SelectCell<AttendanceType> selectionCell = new SelectCell<AttendanceType>(attendanceTypes, new SelectCell.Renderer<AttendanceType>() {
 
       @Override
-      public String getValue(LectureScore object) {
-        if (object.getAttendance() == null) return ""; //$NON-NLS-1$
-        return object.getAttendance().getType().name();
+      public String render(AttendanceType value) {
+        if (value == null) return ""; //$NON-NLS-1$
+        return AttendanceListViewImpl.getLabelOfAttendanceType(StudentScorePanel.this.messages, value);
+      }
+    });
+    selectionCell.setEditable(this.editable);
+
+    final Column<LectureScore, AttendanceType> attendanceColumn = new Column<StudentScoreModel.LectureScore, AttendanceType>(selectionCell) {
+
+      @Override
+      public AttendanceType getValue(LectureScore object) {
+        if (object.getAttendance() == null) return null;
+        return object.getAttendance().getType();
       }
 
     };
-    attendanceColumn.setFieldUpdater(new FieldUpdater<StudentScoreModel.LectureScore, String>() {
+    attendanceColumn.setFieldUpdater(new FieldUpdater<StudentScoreModel.LectureScore, AttendanceType>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access", "unused"})
       @Override
-      public void update(int index, LectureScore object, String value) {
+      public void update(int index, LectureScore object, AttendanceType value) {
         if (value.equals("")) { //$NON-NLS-1$
-          System.out.println(object.getAttendance());
           presenter.delete(object.getAttendance());
           return;
         }
 
         final LectureProxy lecture = object.getLecture();
-        final AttendanceType type;
-        try {
-          type = AttendanceType.valueOf(value);
-        } catch (Throwable e) {
-          presenter.reloadUserPage();
-          return;
-        }
-        presenter.attend(lecture, type);
+        presenter.attend(lecture, value);
       }
 
     });
 
     this.table.addColumn(lectureNumberColumn, "No."); //$NON-NLS-1$
-    this.table.addColumn(attendanceColumn, "Attendance"); //$NON-NLS-1$
+    this.table.addColumn(attendanceColumn, this.messages.attendenceTypeLabel());
   }
 }

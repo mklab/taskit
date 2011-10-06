@@ -6,13 +6,13 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HelpCallListView;
+import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -35,7 +35,7 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
    * {@inheritDoc}
    */
   @Override
-  protected Widget createTaskitView(ClientFactory clientFactory) {
+  protected TaskitView createTaskitView(ClientFactory clientFactory) {
     final HelpCallListView view = clientFactory.getHelpCallListView();
     view.setPresenter(this);
 
@@ -54,7 +54,7 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
             showErrorMessage(error.getMessage());
           }
         });
-    return view.asWidget();
+    return view;
   }
 
   /**

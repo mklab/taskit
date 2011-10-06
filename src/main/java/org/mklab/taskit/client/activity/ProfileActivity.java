@@ -5,8 +5,8 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.ProfileView;
+import org.mklab.taskit.client.ui.TaskitView;
 
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -29,13 +29,13 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
    * {@inheritDoc}
    */
   @Override
-  protected Widget createTaskitView(ClientFactory clientFactory) {
+  protected TaskitView createTaskitView(ClientFactory clientFactory) {
     final ProfileView profileView = clientFactory.getProfileView();
     profileView.setPresenter(this);
 
     profileView.setUser(getLoginUser());
 
-    return profileView.asWidget();
+    return profileView;
   }
 
   /**

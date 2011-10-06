@@ -7,8 +7,8 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreQuery;
 import org.mklab.taskit.client.ui.StudentView;
+import org.mklab.taskit.client.ui.TaskitView;
 
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -31,7 +31,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
    * {@inheritDoc}
    */
   @Override
-  protected Widget createTaskitView(ClientFactory clientFactory) {
+  protected TaskitView createTaskitView(ClientFactory clientFactory) {
     final StudentView studentView = clientFactory.getStudentView();
     studentView.setPresenter(this);
 
@@ -52,7 +52,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
         studentView.setCalling(response.booleanValue());
       }
     });
-    return studentView.asWidget();
+    return studentView;
   }
 
   /**

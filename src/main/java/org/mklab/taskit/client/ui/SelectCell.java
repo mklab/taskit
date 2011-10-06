@@ -21,19 +21,22 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  * 
  * @author ishikura
  */
-class SelectCell extends AbstractInputCell<String, String> {
+class SelectCell<E> extends AbstractInputCell<E, E> {
 
-  private List<String> options;
+  private List<E> options;
   private boolean editable;
+  private Renderer<E> renderer;
 
   /**
    * {@link SelectCell}オブジェクトを構築します。
    * 
    * @param options 選択可能なオプションのリスト
+   * @param renderer 値を、描画する文字列に変換するオブジェクト
    */
-  public SelectCell(List<String> options) {
+  public SelectCell(List<E> options, Renderer<E> renderer) {
     super("change"); //$NON-NLS-1$
     this.options = options;
+    this.renderer = renderer;
   }
 
   /**
@@ -49,12 +52,14 @@ class SelectCell extends AbstractInputCell<String, String> {
    * {@inheritDoc}
    */
   @Override
-  public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, String value, NativeEvent event, ValueUpdater<String> valueUpdater) {
+  public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, E value, NativeEvent event, ValueUpdater<E> valueUpdater) {
     if ("change".equals(event.getType()) == false) return; //$NON-NLS-1$
 
     final SelectElement select = parent.getFirstChild().cast();
-    final String selectedValue = select.getValue();
+    final int selectedIndex = select.getSelectedIndex();
+    if (selectedIndex < 0) return;
 
+    final E selectedValue = this.options.get(selectedIndex);
     finishEditing(parent, value, context.getKey(), valueUpdater);
     if (valueUpdater != null) {
       valueUpdater.update(selectedValue);
@@ -66,7 +71,7 @@ class SelectCell extends AbstractInputCell<String, String> {
    */
   @SuppressWarnings("nls")
   @Override
-  public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
+  public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, E value, SafeHtmlBuilder sb) {
     if (value == null) return;
 
     if (this.editable) {
@@ -75,12 +80,37 @@ class SelectCell extends AbstractInputCell<String, String> {
       sb.appendHtmlConstant("<select disabled>");
     }
 
-    for (String option : this.options) {
-      final boolean selected = option.equals(value);
-      final String escapedOption = SafeHtmlUtils.htmlEscape(option);
+    for (E option : this.options) {
+      final boolean selected = equals(option, value);
+      final String escapedOption = SafeHtmlUtils.htmlEscape(this.renderer.render(option));
       sb.appendHtmlConstant("<option value='" + escapedOption + "'" + (selected ? " selected" : "") + ">" + escapedOption + "</option>");
     }
     sb.appendHtmlConstant("</select>");
+  }
+
+  private boolean equals(E e1, E e2) {
+    if (e1 == null || e2 == null) {
+      if (e1 == null && e2 == null) return true;
+      return false;
+    }
+    return e1.equals(e2);
+  }
+
+  /**
+   * 値をセルに描画する文字列に変換するクラスです。
+   * 
+   * @author ishikura
+   * @param <E> 値の型
+   */
+  public static interface Renderer<E> {
+
+    /**
+     * 値を文字列にします。
+     * 
+     * @param value 値
+     * @return 文字列
+     */
+    String render(E value);
   }
 
 }

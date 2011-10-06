@@ -236,6 +236,7 @@ public class Attendance extends AbstractEntity<Integer> {
    * @return 出席状況
    */
   @SuppressWarnings({"nls", "unchecked"})
+  @Invoker({UserType.TA, UserType.TEACHER})
   public static List<Attendance> getAttendancesByLecture(Lecture lecture) {
     final EntityManager em = EMF.get().createEntityManager();
     final Query q = em.createQuery("select s from Attendance s where s.lecture=:lecture order by s.attender.id");

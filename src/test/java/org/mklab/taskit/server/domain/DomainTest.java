@@ -56,9 +56,11 @@ public abstract class DomainTest {
   @Before
   public void setup() {
     EMF.resetEntityManagerFactory();
-    EMF.setPersistenceUnitName("taskit-test"); //$NON-NLS-1$
-    ServiceUtil.setImplementation(new ServiceUtilImplementationForTest());
+    EMF.setPersistenceProperty(EMF.DB_URL_KEY, "jdbc:mysql://localhost/taskit_test"); //$NON-NLS-1$
+    EMF.setPersistenceProperty(EMF.DB_SCHEMA_DDL, "create-drop"); //$NON-NLS-1$
+    EMF.setPersistenceProperty(EMF.DB_PASSWORD_KEY, ""); //$NON-NLS-1$
 
+    ServiceUtil.setImplementation(new ServiceUtilImplementationForTest());
     registerTestUsers();
   }
 
@@ -106,7 +108,6 @@ public abstract class DomainTest {
    */
   public static void resetDatabase() {
     EMF.resetEntityManagerFactory();
-    registerTestUsers();
   }
 
   /**

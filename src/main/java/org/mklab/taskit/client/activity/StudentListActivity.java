@@ -8,6 +8,7 @@ import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreQuery;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.StudentListView;
+import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
@@ -21,7 +22,6 @@ import org.mklab.taskit.shared.UserProxy;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -49,7 +49,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
    */
   @Override
-  protected Widget createTaskitView(ClientFactory clientFactory) {
+  protected TaskitView createTaskitView(ClientFactory clientFactory) {
     final StudentListView list = clientFactory.getStudentListView();
     this.view = list;
     list.setPresenter(this);
@@ -77,7 +77,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
           }
 
         });
-    return list.asWidget();
+    return list;
   }
 
   /**

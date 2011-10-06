@@ -63,7 +63,15 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
    * {@inheritDoc}
    */
   @Override
-  public void showMessage(String message) {
+  public void showInformationMessage(String message) {
+    Window.alert(message);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void showErrorMessage(String message) {
     Window.alert(message);
   }
 

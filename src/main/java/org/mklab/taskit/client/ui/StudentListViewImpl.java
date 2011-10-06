@@ -100,7 +100,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   protected Widget initContent() {
-    this.panel = new StudentScorePanel(true);
+    this.panel = new StudentScorePanel(getClientFactory().getMessages(), true);
 
     this.userList = new ValueListBox<UserProxy>(new Renderer<UserProxy>() {
 

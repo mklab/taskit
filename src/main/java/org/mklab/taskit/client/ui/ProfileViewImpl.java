@@ -54,7 +54,7 @@ public class ProfileViewImpl extends AbstractTaskitView implements ProfileView {
     try {
       Validator.validateUserName(newUserName);
     } catch (IllegalArgumentException e) {
-      showMessage(e.getMessage());
+      showInformationMessage(e.getMessage());
       return;
     }
 
@@ -69,13 +69,13 @@ public class ProfileViewImpl extends AbstractTaskitView implements ProfileView {
     final String newPasswordForConfirmation = this.password2.getText();
 
     if (newPassword.equals(newPasswordForConfirmation) == false) {
-      showMessage("Password pair was wrong."); //$NON-NLS-1$
+      showInformationMessage("Password pair was wrong."); //$NON-NLS-1$
       return;
     }
     try {
       Validator.validatePassword(newPassword);
     } catch (IllegalArgumentException e) {
-      showMessage(e.getMessage());
+      showInformationMessage(e.getMessage());
       return;
     }
 

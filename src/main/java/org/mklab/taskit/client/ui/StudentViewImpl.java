@@ -88,11 +88,11 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   protected Widget initContent() {
-    this.scorePanel = new StudentScorePanel(this.editable);
+    this.scorePanel = new StudentScorePanel(getClientFactory().getMessages(), this.editable);
 
     final Widget widget = binder.createAndBindUi(this);
     final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$
-    final Image waitImage = new Image("taskit/wait128.png"); //$NON-NLS-1$
+    final Image waitImage = new Image("taskit/calling128.png"); //$NON-NLS-1$
     this.helpCallButton.getUpFace().setImage(helpImage);
     this.helpCallButton.getDownFace().setImage(waitImage);
     this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
