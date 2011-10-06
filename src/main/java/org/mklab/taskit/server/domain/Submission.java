@@ -191,6 +191,15 @@ public class Submission extends AbstractEntity<Integer> {
     return q.getResultList();
   }
 
+  @SuppressWarnings({"nls", "unchecked"})
+  static List<Submission> getSubmissionByAccountIdAndLectureId(String accountId, Integer lectureId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select s from Submission s where s.submitter.id=:accountId and s.report.lecture.id=:lectureId order by s.report.id");
+    q.setParameter("accountId", accountId);
+    q.setParameter("lectureId", lectureId);
+    return q.getResultList();
+  }
+
   /**
    * 提出物を保存します。
    * 

@@ -35,6 +35,8 @@ public abstract class DomainTest {
   public static UserProxy STUDENT_PROXY;
   /** テスト用TAアカウントです。 */
   public static User TA;
+  /** テスト用TAアカウントです。 */
+  public static UserProxy TA_PROXY;
   /** テスト用先生アカウントです。 */
   public static User TEACHER;
 
@@ -70,6 +72,7 @@ public abstract class DomainTest {
 
     loginAsTeacher();
     STUDENT_PROXY = proxyOf(STUDENT);
+    TA_PROXY = proxyOf(STUDENT);
     logout();
   }
 

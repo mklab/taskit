@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.shared;
 
-import org.mklab.taskit.server.domain.StudentRecord;
+import org.mklab.taskit.server.domain.LecturewiseStudentRecords;
 
 import java.util.List;
 
@@ -12,16 +12,14 @@ import com.google.web.bindery.requestfactory.shared.ValueProxy;
 
 
 /**
- * @author ishikura
+ * @author yuhi
  */
-@ProxyFor(value = StudentRecord.class)
+@ProxyFor(value = LecturewiseStudentRecords.class)
 @SuppressWarnings("javadoc")
-public interface StudentRecordProxy extends ValueProxy {
+public interface LecturewiseStudentRecordsProxy extends ValueProxy {
 
   UserProxy getStudent();
 
-  List<SubmissionProxy> getSubmissions();
-
-  List<AttendanceProxy> getAttendances();
+  List<LecturewiseStudentRecordProxy> getRecords();
 
 }

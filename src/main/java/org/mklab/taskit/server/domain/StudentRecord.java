@@ -7,6 +7,8 @@ import java.util.List;
 
 
 /**
+ * 単一生徒の成績を保持するクラスです。
+ * 
  * @author ishikura
  */
 public class StudentRecord {

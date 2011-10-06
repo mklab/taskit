@@ -10,11 +10,9 @@ import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
@@ -42,18 +40,18 @@ public class Lectures {
 
   public void initialize(TaskitRequestFactory requestFactory) {
     LectureRequest req = requestFactory.lectureRequest();
-    this.lecture1 = createLecture(req, "1");
+    this.lecture1 = createLecture(req, "1", new Date());
     this.lecture1_report1 = createReport(req, "1-1", this.lecture1);
     this.lecture1_report2 = createReport(req, "1-2", this.lecture1);
     this.lecture1_report3 = createReport(req, "1-3", this.lecture1);
     this.lecture1.setReports(Arrays.asList(this.lecture1_report1, this.lecture1_report2, this.lecture1_report3));
 
-    this.lecture2 = createLecture(req, "2");
+    this.lecture2 = createLecture(req, "2", new Date(System.currentTimeMillis() + 1000000));
     this.lecture2_report1 = createReport(req, "2-1", this.lecture2);
     this.lecture2_report2 = createReport(req, "2-2", this.lecture2);
     this.lecture2.setReports(Arrays.asList(this.lecture2_report1, this.lecture2_report2));
 
-    this.lecture3 = createLecture(req, "3");
+    this.lecture3 = createLecture(req, "3", new Date(System.currentTimeMillis() + 5000000));
     this.lecture3_report1 = createReport(req, "3-1", this.lecture3);
     this.lecture3_report2 = createReport(req, "3-2", this.lecture3);
     this.lecture3_report3 = createReport(req, "3-3", this.lecture3);
@@ -73,9 +71,9 @@ public class Lectures {
     });
   }
 
-  private LectureProxy createLecture(RequestContext req, String title) {
+  private LectureProxy createLecture(RequestContext req, String title, Date date) {
     LectureProxy l = req.create(LectureProxy.class);
-    l.setDate(new Date(System.currentTimeMillis() + (int)(Math.random() * TimeUnit.DAYS.toMillis(100))));
+    l.setDate(date);
     l.setTitle(title);
     return l;
   }
