@@ -80,7 +80,7 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
 
     for (E option : this.options) {
       final boolean selected = equals(option, value);
-      final String escapedOption = value == null ? "" : SafeHtmlUtils.htmlEscape(this.renderer.render(option));
+      final String escapedOption = SafeHtmlUtils.htmlEscape(this.renderer.render(option));
       sb.appendHtmlConstant("<option value='" + escapedOption + "'" + (selected ? " selected" : "") + ">" + escapedOption + "</option>");
     }
     sb.appendHtmlConstant("</select>");
