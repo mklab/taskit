@@ -228,7 +228,7 @@ public class Attendance extends AbstractEntity<Integer> {
     q.setParameter("accountId", accountId);
     return q.getResultList();
   }
-
+  
   /**
    * 講義を指定して出席状況を取得します。
    * 

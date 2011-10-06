@@ -8,6 +8,7 @@ import org.mklab.taskit.shared.UserType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -28,13 +29,21 @@ public class StudentRecordService {
   public static LecturewiseStudentRecords getLecturewiseRecordsByAccountId(String accountId) {
     final User user = User.getUserByAccountId(accountId);
     final List<Lecture> lectures = Lecture.getAllLectures();
+    final Iterator<Attendance> attendances = Attendance.getAttendancesByAccountId(accountId).iterator();
+    Attendance next = attendances.hasNext() ? attendances.next() : null;
 
+    final List<LecturewiseStudentRecord> records = new ArrayList<LecturewiseStudentRecord>();
     for (final Lecture lecture : lectures) {
       List<Submission> submissions = Submission.getSubmissionByAccountIdAndLectureId(accountId, lecture.getId());
-      System.out.println(submissions);
+      Attendance attendance = null;
+      if (next != null && next.getLecture().getId().equals(lecture.getId())) {
+        attendance = next;
+        next = attendances.hasNext() ? attendances.next() : null;
+      }
+      records.add(new LecturewiseStudentRecord(lecture, attendance, submissions));
     }
 
-    return null;
+    return new LecturewiseStudentRecords(user, records);
   }
 
   /**

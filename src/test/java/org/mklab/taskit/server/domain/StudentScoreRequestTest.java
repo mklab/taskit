@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.server.domain;
 
+import static org.junit.Assert.*;
+
 import org.mklab.taskit.shared.LecturewiseStudentRecordsProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 
@@ -16,6 +18,9 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
  */
 public class StudentScoreRequestTest extends DomainTest {
 
+  /**
+   * 学生一人の、講義別成績取得のテストを行います。
+   */
   @Test
   public void testGetLecturewiseRecordsByAccountId() {
     loginAsTeacher();
@@ -31,12 +36,15 @@ public class StudentScoreRequestTest extends DomainTest {
     req.submit(TA_PROXY.getAccount(), lectures.lecture2_report2, 10);
     req.fire();
 
-    getRequestFactory().studentRecordRequest().getLecturewiseRecordsByAccountId(STUDENT_PROXY.getAccount().getId()).fire(new Receiver<LecturewiseStudentRecordsProxy>() {
+    getRequestFactory().studentRecordRequest().getLecturewiseRecordsByAccountId(STUDENT_PROXY.getAccount().getId()).with("records.submissions", "records.attendance") //$NON-NLS-1$ //$NON-NLS-2$
+        .fire(new Receiver<LecturewiseStudentRecordsProxy>() {
 
-      @Override
-      public void onSuccess(LecturewiseStudentRecordsProxy response) {
-
-      }
-    });
+          @Override
+          public void onSuccess(LecturewiseStudentRecordsProxy response) {
+            assertEquals(response.getRecords().get(0).getSubmissions().size(), 3);
+            assertEquals(response.getRecords().get(1).getSubmissions().size(), 2);
+          }
+        });
   }
+
 }
