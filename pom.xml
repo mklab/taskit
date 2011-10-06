@@ -218,6 +218,17 @@
 								<groupId>org.mklab</groupId>
 								<artifactId>taskit</artifactId>
 								<type>war</type>
+								<properties>
+									<context>programdesign2011</context>
+								</properties>
+							</deployable>
+							<deployable>
+								<groupId>org.mklab</groupId>
+								<artifactId>taskit</artifactId>
+								<type>war</type>
+								<properties>
+									<context>programmings2011</context>
+								</properties>
 							</deployable>
 						</deployables>
 					</deployer>

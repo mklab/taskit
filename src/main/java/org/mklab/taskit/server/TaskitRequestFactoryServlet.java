@@ -7,6 +7,7 @@ import org.mklab.taskit.server.auth.AuthenticationServiceLayer;
 import org.mklab.taskit.server.domain.EMF;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
 import com.google.web.bindery.requestfactory.server.ExceptionHandler;
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
@@ -26,19 +27,24 @@ public class TaskitRequestFactoryServlet extends RequestFactoryServlet {
    */
   public TaskitRequestFactoryServlet() {
     super(new MyExceptionHandler(), new AuthenticationServiceLayer());
-    loadDatabaseInfo();
   }
 
-  private void loadDatabaseInfo() {
-    final ServletConfig config = getServletConfig();
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
 
     final String url = config.getInitParameter("taskit-db-url"); //$NON-NLS-1$
     final String id = config.getInitParameter("taskit-dbuser-id"); //$NON-NLS-1$
     final String password = config.getInitParameter("taskit-dbuser-password"); //$NON-NLS-1$
+    final String schemaddl = config.getInitParameter("taskit-db-ddl"); //$NON-NLS-1$
 
     if (url != null) EMF.setPersistenceProperty(EMF.DB_URL_KEY, url);
     if (id != null) EMF.setPersistenceProperty(EMF.DB_USER_KEY, id);
     if (password != null) EMF.setPersistenceProperty(EMF.DB_PASSWORD_KEY, password);
+    if (schemaddl != null) EMF.setPersistenceProperty(EMF.DB_SCHEMA_DDL, schemaddl);
   }
 
   static class MyExceptionHandler implements ExceptionHandler {

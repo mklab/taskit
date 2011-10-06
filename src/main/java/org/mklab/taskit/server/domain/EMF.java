@@ -15,7 +15,6 @@
  */
 package org.mklab.taskit.server.domain;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,28 +28,16 @@ import javax.persistence.Persistence;
 public final class EMF {
 
   private static EntityManagerFactory emfInstance;
-  private static String persistenceUnitName = "taskit-local"; //$NON-NLS-1$
   /** データベースユーザーのIDを設定するためのキーです。 */
   public static String DB_USER_KEY = "hibernate.connection.username"; //$NON-NLS-1$
   /** データベースユーザーのパスワードを設定するためのキーです。 */
   public static String DB_PASSWORD_KEY = "hibernate.connection.password"; //$NON-NLS-1$
   /** データベースの場所を設定するためのキーです。 */
   public static String DB_URL_KEY = "hibernate.connection.url"; //$NON-NLS-1$
+  /** スキーマ自動生成ルールを設定するためのキーです。 */
+  public static String DB_SCHEMA_DDL = "hibernate.hbm2ddl.auto"; //$NON-NLS-1$
 
   private static Map<String, String> props = new HashMap<String, String>();
-
-  static {
-    if (isDevelopmentMode()) {
-      persistenceUnitName = "taskit-local"; //$NON-NLS-1$
-    } else {
-      persistenceUnitName = "taskit"; //$NON-NLS-1$
-    }
-  }
-
-  @SuppressWarnings("nls")
-  private static boolean isDevelopmentMode() {
-    return new File("src").exists() && new File("pom.xml").exists();
-  }
 
   /**
    * {@link EntityManagerFactory}インスタンスを必要に応じて生成し取得します。
@@ -60,32 +47,25 @@ public final class EMF {
   public static synchronized EntityManagerFactory get() {
     if (emfInstance == null) {
       try {
-        emfInstance = Persistence.createEntityManagerFactory(persistenceUnitName, props);
+        emfInstance = Persistence.createEntityManagerFactory("taskit", props); //$NON-NLS-1$
       } catch (Throwable ex) {
         ex.printStackTrace();
       }
-      props = null;
     }
     return emfInstance;
   }
 
   /**
-   * 永続化設定の識別子を設定します。
-   * <p>
-   * テスト目的以外で利用しないでください。
-   * 
-   * @param name 永続化設定の識別子
-   */
-  public static void setPersistenceUnitName(String name) {
-    persistenceUnitName = name;
-    emfInstance = null;
-  }
-
-  /**
    * {@link EntityManagerFactory}生成のためのプロパティを設定します。
+   * <p>
+   * {@link EntityManagerFactory}が既に生成された場合には変更することができません。 変更したい場合には
+   * {@link #resetEntityManagerFactory()}を実行後変更してください。
+   * <p>
+   * 通常実行中に変更すべきではありません。
    * 
    * @param key キー
    * @param value 値
+   * @throws IllegalStateException プロパティの変更が無効なタイミングで呼び出された場合
    */
   public static void setPersistenceProperty(String key, String value) {
     if (emfInstance != null) throw new IllegalStateException("EntityManagerFactory has already initialized."); //$NON-NLS-1$
