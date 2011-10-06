@@ -15,6 +15,18 @@ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 		</properties>
 	</persistence-unit>
+	<persistence-unit name="taskit-programdesign2011" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<properties>
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.connection.url"
+				value="jdbc:mysql://kamome.mk.ces.kyutech.ac.jp/PROGRAM_DESIGN2011" />
+			<property name="hibernate.connection.username" value="taskit" />
+			<property name="hibernate.connection.password" value="ta2k3t3" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+		</properties>
+	</persistence-unit>
 	<persistence-unit name="taskit-test" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
