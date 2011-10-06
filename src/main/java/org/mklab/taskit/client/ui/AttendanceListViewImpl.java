@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.AttendanceListItem;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
@@ -123,10 +124,25 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
         }
 
       };
-      this.table.addColumn(attendanceCell, type.name());
+      this.table.addColumn(attendanceCell, getLabelOfAttendanceType(getClientFactory().getMessages(), type));
     }
 
     return binder.createAndBindUi(this);
+  }
+
+  static String getLabelOfAttendanceType(Messages messages, AttendanceType type) {
+    switch (type) {
+      case ABSENT:
+        return messages.absentLabel();
+      case ILLNESS:
+        return messages.illnessLabel();
+      case PRESENT:
+        return messages.attendedLabel();
+      case LATE:
+        return messages.lateLabel();
+      default:
+        return null;
+    }
   }
 
   /**

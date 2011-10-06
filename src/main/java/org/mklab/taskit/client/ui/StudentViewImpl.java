@@ -88,7 +88,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   protected Widget initContent() {
-    this.scorePanel = new StudentScorePanel(this.editable);
+    this.scorePanel = new StudentScorePanel(getClientFactory().getMessages(), this.editable);
 
     final Widget widget = binder.createAndBindUi(this);
     final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$
