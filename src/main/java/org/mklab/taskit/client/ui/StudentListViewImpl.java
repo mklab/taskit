@@ -10,6 +10,7 @@ import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -90,8 +91,9 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void setListData(List<UserProxy> listData) {
-    listData.add(0, null);
-    this.userList.setAcceptableValues(listData);
+    final List<UserProxy> acceptableValues = new ArrayList<UserProxy>(listData);
+    acceptableValues.add(0, null);
+    this.userList.setAcceptableValues(acceptableValues);
   }
 
   /**
