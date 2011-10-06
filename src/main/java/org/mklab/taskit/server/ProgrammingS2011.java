@@ -141,7 +141,7 @@ public class ProgrammingS2011 extends DBInitializer {
    * @param args プログラム引数
    */
   public static void main(String[] args) {
-    EMF.setPersistenceUnitName("taskit"); //$NON-NLS-1$
+    EMF.setPersistenceProperty(EMF.DB_URL_KEY, "jdbc:mysql://kamome.mk.ces.kyutech.ac.jp/PROG2011");
 
     ProgrammingS2011 p = new ProgrammingS2011();
     p.registerAll();

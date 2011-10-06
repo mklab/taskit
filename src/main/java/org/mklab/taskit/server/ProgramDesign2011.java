@@ -65,7 +65,8 @@ public class ProgramDesign2011 extends DBInitializer {
    * @param args プログラム引数
    */
   public static void main(String[] args) {
-    EMF.setPersistenceUnitName("taskit-programdesign2011"); //$NON-NLS-1$
+    EMF.setPersistenceProperty(EMF.DB_URL_KEY, "jdbc:mysql://kamome.mk.ces.kyutech.ac.jp/PROGRAM_DESIGN2011");
+
     ProgramDesign2011 p = new ProgramDesign2011();
     p.registerAll();
     p.exportAccounts();

@@ -17,7 +17,7 @@
 		<!-- Database information -->
 		<init-param>
 			<param-name>taskit-db-url</param-name>
-			<param-value>jdbc:mysql://kamome.mk.ces.kyutech.ac.jp/PROG2011</param-value>
+			<param-value>jdbc:mysql://localhost/taskit</param-value>
 		</init-param>
 		<init-param>
 			<param-name>taskit-dbuser-id</param-name>
@@ -25,7 +25,7 @@
 		</init-param>
 		<init-param>
 			<param-name>taskit-dbuser-password</param-name>
-			<param-value>ta2k3t3</param-value>
+			<param-value></param-value>
 		</init-param>
 	</servlet>
 
