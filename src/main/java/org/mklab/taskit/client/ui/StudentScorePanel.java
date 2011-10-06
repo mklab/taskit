@@ -146,7 +146,17 @@ public class StudentScorePanel extends Composite {
       public String render(String value) {
         return value;
       }
-    });
+    }) {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
+        if (value == null) return;
+        super.render(context, value, sb);
+      }
+    };
     submissionCell.setEditable(this.editable);
 
     final Column<LectureScore, String> submissionColumn = new Column<StudentScoreModel.LectureScore, String>(submissionCell) {

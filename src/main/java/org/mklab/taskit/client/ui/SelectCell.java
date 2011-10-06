@@ -87,8 +87,10 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
   }
 
   private boolean equals(E e1, E e2) {
-    if (e1 == null || e2 == null) {
-      if (e1 == null && e2 == null) return true;
+    if (e1 == null) {
+      if (e2 == null) {
+        return true;
+      }
       return false;
     }
     return e1.equals(e2);
