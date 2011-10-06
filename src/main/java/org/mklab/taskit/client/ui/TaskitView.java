@@ -19,6 +19,13 @@ public interface TaskitView extends IsWidget {
    * 
    * @param message メッセージ
    */
-  void showMessage(String message);
+  void showInformationMessage(String message);
+
+  /**
+   * エラーメッセージを表示します。
+   * 
+   * @param message エラーメッセージ
+   */
+  void showErrorMessage(String message);
 
 }

@@ -6,6 +6,7 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.model.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
+import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceType;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -48,7 +48,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    * {@inheritDoc}
    */
   @Override
-  protected Widget createTaskitView(ClientFactory clientFactory) {
+  protected TaskitView createTaskitView(ClientFactory clientFactory) {
     this.view = clientFactory.getAttendanceListView();
     this.view.setPresenter(this);
 
@@ -64,7 +64,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     };
     this.updateTimer.scheduleRepeating(30 * 1000);
 
-    return this.view.asWidget();
+    return this.view;
   }
 
   /**
