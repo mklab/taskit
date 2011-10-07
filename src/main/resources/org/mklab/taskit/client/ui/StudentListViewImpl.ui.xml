@@ -2,13 +2,16 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:mk="urn:import:org.mklab.taskit.client.ui">
-	
+
 	<ui:style>
 		.userListArea {
 			background-color:#eeeeee;
 		}
 		.toolbar {
 			background-color:#eeeeee;
+		}
+		.fillHorizontal {
+			width : 100%;
 		}
 	</ui:style>
 
@@ -31,7 +34,7 @@
 			<g:ScrollPanel>
 				<g:VerticalPanel>
 					<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
-						<g:VerticalPanel>
+						<g:VerticalPanel styleName='{style.fillHorizontal}'>
 							<g:HorizontalPanel>
 								<g:Label ui:field='userIdLabel'>User ID:</g:Label>
 								<g:Label ui:field='userId'></g:Label>
@@ -40,22 +43,15 @@
 								<g:Label ui:field='userNameLabel'>User Name:</g:Label>
 								<g:Label ui:field='userName'></g:Label>
 							</g:HorizontalPanel>
+							<g:cell horizontalAlignment="ALIGN_RIGHT">
+								<g:Button ui:field='uncallButton'>Uncall</g:Button>
+							</g:cell>
 						</g:VerticalPanel>
 					</g:CaptionPanel>
 					<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:center>
-		<!-- Tools -->
-		<g:south size='2'>
-			<g:HTMLPanel styleName='{style.toolbar}'>
-				<g:HorizontalPanel>
-					<g:cell verticalAlignment="ALIGN_MIDDLE">
-						<g:Button ui:field='uncallButton'>Uncall</g:Button>
-					</g:cell>	
-				</g:HorizontalPanel>
-			</g:HTMLPanel>
-		</g:south>
 	</g:DockLayoutPanel>
 
 </ui:UiBinder> 
