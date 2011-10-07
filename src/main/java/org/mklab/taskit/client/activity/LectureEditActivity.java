@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.LectureEditor;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.LectureProxy;
@@ -20,17 +19,17 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 /**
  * @author yuhi
  */
-public class AdminActivity extends TaskitActivity implements AdminView.Presenter {
+public class LectureEditActivity extends TaskitActivity implements LectureEditor.Presenter {
 
   private LectureRequest lectureRequest;
   private LectureEditor lectureEditor;
 
   /**
-   * {@link AdminActivity}オブジェクトを構築します。
+   * {@link LectureEditActivity}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public AdminActivity(ClientFactory clientFactory) {
+  public LectureEditActivity(ClientFactory clientFactory) {
     super(clientFactory);
   }
 
@@ -39,10 +38,9 @@ public class AdminActivity extends TaskitActivity implements AdminView.Presenter
    */
   @Override
   protected TaskitView createTaskitView(final ClientFactory clientFactory) {
-    final AdminView view = new AdminView(clientFactory);
-    view.setPresenter(this);
-    this.lectureEditor = view.getLectureEditor();
-    return view;
+    this.lectureEditor = new LectureEditor(clientFactory);
+    this.lectureEditor.setPresenter(this);
+    return this.lectureEditor;
   }
 
   /**
@@ -108,7 +106,7 @@ public class AdminActivity extends TaskitActivity implements AdminView.Presenter
         for (LectureProxy lecture : response) {
           editableList.add(lecture);
         }
-        AdminActivity.this.lectureEditor.setLectures(editableList);
+        LectureEditActivity.this.lectureEditor.setLectures(editableList);
       }
     });
   }
@@ -136,12 +134,4 @@ public class AdminActivity extends TaskitActivity implements AdminView.Presenter
     });
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void selectedTabChanged() {
-    // TODO Auto-generated method stub
-
-  }
 }

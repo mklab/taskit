@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.shared.LectureProxy;
 
@@ -21,7 +22,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @author ishikura
  */
-public class LectureEditor extends Composite implements Editor<LectureProxy> {
+public class LectureEditor extends AbstractTaskitView implements Editor<LectureProxy> {
 
   private static final Binder binder = GWT.create(Binder.class);
 
@@ -40,23 +40,29 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
 
   @UiField(provided = true)
   CellTable<LectureProxy> table;
-  private Messages messages;
   private Presenter presenter;
 
   /**
    * {@link LectureEditor}オブジェクトを構築します。
    * 
-   * @param messages メッセージバンドル
+   * @param clientFactory クライアントファクトリ
    */
-  public LectureEditor(Messages messages) {
-    this.messages = messages;
+  public LectureEditor(ClientFactory clientFactory) {
+    super(clientFactory);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Widget initContent() {
+    final Messages messages = getClientFactory().getMessages();
     this.table = new CellTable<LectureProxy>();
     this.table.addColumn(createDateColumn(), messages.dateLabel());
     this.table.addColumn(createTitleColumn(), messages.titleLabel());
     this.table.addColumn(createDescriptionColumn(), messages.descriptionLabel());
     this.table.addColumn(createDeleteColumn());
-
-    initWidget(binder.createAndBindUi(this));
+    return binder.createAndBindUi(this);
   }
 
   private Column<LectureProxy, Date> createDateColumn() {
@@ -128,10 +134,10 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
   private Column<LectureProxy, String> createDeleteColumn() {
     final Column<LectureProxy, String> deleteButtonColumn = new Column<LectureProxy, String>(new ButtonCell()) {
 
-      @SuppressWarnings({"synthetic-access", "unqualified-field-access", "unused"})
+      @SuppressWarnings("unused")
       @Override
       public String getValue(LectureProxy object) {
-        return messages.deleteLabel();
+        return getClientFactory().getMessages().deleteLabel();
       }
 
     };
@@ -152,7 +158,7 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
   void onNewButtonClicked(@SuppressWarnings("unused") ClickEvent evt) {
     final LectureProxy lecture = this.presenter.newLecture();
     lecture.setDate(new Date());
-    lecture.setTitle(this.messages.defaultLectureTitle());
+    lecture.setTitle(getClientFactory().getMessages().defaultLectureTitle());
     this.presenter.save(lecture);
   }
 
@@ -211,4 +217,5 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
     void save(LectureProxy lecture);
 
   }
+
 }
