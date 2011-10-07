@@ -35,7 +35,7 @@ public class SampleDataInitializer {
   }
 
   private static void createAccounts() {
-    Account.registerNewAccount("koga", Passwords.hashPassword("taskit"), UserType.TEACHER);
+    Account.registerNewAccount("koga", "taskit", UserType.TEACHER);
     for (int i = 0; i < 5; i++) {
       Account.registerNewAccount(String.valueOf(10675001 + i), "taskit", UserType.TA);
     }

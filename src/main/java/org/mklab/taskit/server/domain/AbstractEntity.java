@@ -83,4 +83,35 @@ public abstract class AbstractEntity<I> {
       em.close();
     }
   }
+
+  /**
+   * エンティティがすでに存在すればそれを更新し、まだ存在しなければ新しく保存します。
+   */
+  public void updateOrCreate() {
+    final EntityManager em = EMF.get().createEntityManager();
+    if (getId() != null && em.find(getClass(), getId()) != null) {
+      update();
+    } else {
+      persist();
+    }
+  }
+
+  /**
+   * エンティティをデータベースから削除します。
+   */
+  public void delete() {
+    final EntityManager em = EMF.get().createEntityManager();
+    final EntityTransaction t = em.getTransaction();
+
+    try {
+      t.begin();
+      final AbstractEntity<?> entity = em.find(getClass(), getId());
+      em.remove(entity);
+      t.commit();
+    } catch (Throwable ex) {
+      t.rollback();
+    } finally {
+      em.close();
+    }
+  }
 }

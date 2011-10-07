@@ -194,4 +194,30 @@ public class Lecture extends AbstractEntity<Integer> {
   public void update() {
     super.update();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker({UserType.TEACHER})
+  public void updateOrCreate() {
+    super.updateOrCreate();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker({UserType.TEACHER})
+  public void delete() {
+    @SuppressWarnings("hiding")
+    final Integer id = getId();
+    if (id == null) throw new IllegalStateException();
+
+    if (Report.lectureIsRefered(id)) {
+      throw new IllegalStateException("The lecture can't be deleted because it has already refered by report(s)."); //$NON-NLS-1$
+    }
+
+    super.delete();
+  }
 }

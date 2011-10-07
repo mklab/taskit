@@ -185,6 +185,17 @@ public class Report extends AbstractEntity<Integer> {
     }
   }
 
+  static boolean lectureIsRefered(Integer lectureId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    try {
+      Query q = em.createQuery("select r from Report r where r.lecture.id=:lectureId"); //$NON-NLS-1$
+      q.setParameter("lectureId", lectureId); //$NON-NLS-1$
+      return q.getResultList().size() > 0;
+    } finally {
+      em.close();
+    }
+  }
+
   /**
    * {@inheritDoc}
    */

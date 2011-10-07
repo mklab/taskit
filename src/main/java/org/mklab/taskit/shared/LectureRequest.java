@@ -26,4 +26,8 @@ public interface LectureRequest extends RequestContext {
 
   InstanceRequest<LectureProxy, Void> update();
 
+  InstanceRequest<LectureProxy, Void> updateOrCreate();
+
+  InstanceRequest<LectureProxy, Void> delete();
+
 }

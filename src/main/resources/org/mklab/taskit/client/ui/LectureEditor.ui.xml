@@ -5,7 +5,10 @@
 	<g:DockLayoutPanel unit='EM'>
 		<g:center>
 			<g:ScrollPanel>
-				<ce:CellTable ui:field='table'></ce:CellTable>
+				<g:VerticalPanel>
+					<g:Button ui:field='newButton'>New Lecture</g:Button>
+					<ce:CellTable ui:field='table'></ce:CellTable>
+				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:center>
 	</g:DockLayoutPanel>
