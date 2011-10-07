@@ -141,6 +141,14 @@ public abstract class TaskitActivity extends AbstractActivity {
     this.view = createTaskitView(this.clientFactory);
     pn.add(createTaskitView(this.clientFactory));
     this.container.setWidget(pn);
+    onViewShown();
+  }
+
+  /**
+   * ビューが表示されたときに呼び出されます。
+   */
+  protected void onViewShown() {
+    // do nothing
   }
 
   /**

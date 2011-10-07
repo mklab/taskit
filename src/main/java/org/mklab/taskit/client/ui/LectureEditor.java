@@ -76,7 +76,6 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
         final LectureProxy lecture = presenter.edit(object);
         lecture.setDate(value);
         presenter.save(lecture);
-        presenter.updateLectureListData();
       }
     });
     return dateColumn;
@@ -143,7 +142,6 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
       public void update(int index, LectureProxy object, String value) {
         final LectureProxy lecture = LectureEditor.this.presenter.edit(object);
         LectureEditor.this.presenter.delete(lecture);
-        LectureEditor.this.presenter.updateLectureListData();
       }
     });
 
@@ -153,13 +151,9 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
   @UiHandler("newButton")
   void onNewButtonClicked(@SuppressWarnings("unused") ClickEvent evt) {
     final LectureProxy lecture = this.presenter.newLecture();
-    try {
-      lecture.setDate(new Date());
-      lecture.setTitle(this.messages.defaultLectureTitle());
-      this.presenter.save(lecture);
-    } finally {
-      this.presenter.updateLectureListData();
-    }
+    lecture.setDate(new Date());
+    lecture.setTitle(this.messages.defaultLectureTitle());
+    this.presenter.save(lecture);
   }
 
   /**
@@ -216,9 +210,5 @@ public class LectureEditor extends Composite implements Editor<LectureProxy> {
      */
     void save(LectureProxy lecture);
 
-    /**
-     * リストデータを最新のデータに更新します。
-     */
-    void updateLectureListData();
   }
 }

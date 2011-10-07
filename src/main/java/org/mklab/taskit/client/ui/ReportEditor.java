@@ -110,6 +110,14 @@ public class ReportEditor extends Composite {
   public static interface Presenter {
 
     /**
+     * 課題オブジェクトの編集を開始します。
+     * 
+     * @param report 変更する課題オブジェクト
+     * @return 変更可能な課題オブジェクト
+     */
+    ReportProxy edit(ReportProxy report);
+
+    /**
      * 与えられた課題を保存します。
      * <p>
      * すでに存在すればID以外の属性を保存します。

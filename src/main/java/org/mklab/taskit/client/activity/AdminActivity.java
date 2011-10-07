@@ -4,7 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.AbstractTaskitView;
+import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.LectureEditor;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.LectureProxy;
@@ -13,7 +13,6 @@ import org.mklab.taskit.shared.LectureRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -21,7 +20,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 /**
  * @author yuhi
  */
-public class AdminActivity extends TaskitActivity implements LectureEditor.Presenter {
+public class AdminActivity extends TaskitActivity implements AdminView.Presenter {
 
   private LectureRequest lectureRequest;
   private LectureEditor lectureEditor;
@@ -40,17 +39,19 @@ public class AdminActivity extends TaskitActivity implements LectureEditor.Prese
    */
   @Override
   protected TaskitView createTaskitView(final ClientFactory clientFactory) {
-    return new AbstractTaskitView(clientFactory) {
+    final AdminView view = new AdminView(clientFactory);
+    view.setPresenter(this);
+    this.lectureEditor = view.getLectureEditor();
+    return view;
+  }
 
-      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
-      @Override
-      protected Widget initContent() {
-        lectureEditor = new LectureEditor(clientFactory.getMessages());
-        lectureEditor.setPresenter(AdminActivity.this);
-        updateLectureListData();
-        return lectureEditor;
-      }
-    };
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onViewShown() {
+    super.onViewShown();
+    updateLectureListData();
   }
 
   /**
@@ -62,7 +63,7 @@ public class AdminActivity extends TaskitActivity implements LectureEditor.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        updateLectureListData();
       }
 
       /**
@@ -70,6 +71,7 @@ public class AdminActivity extends TaskitActivity implements LectureEditor.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
+        updateLectureListData();
         showErrorMessage(error.getMessage());
       }
     });
@@ -95,11 +97,7 @@ public class AdminActivity extends TaskitActivity implements LectureEditor.Prese
     return edit(null);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateLectureListData() {
+  void updateLectureListData() {
     final LectureRequest req = getClientFactory().getRequestFactory().lectureRequest();
     req.getAllLectures().fire(new Receiver<List<LectureProxy>>() {
 
@@ -124,7 +122,7 @@ public class AdminActivity extends TaskitActivity implements LectureEditor.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        updateLectureListData();
       }
 
       /**
@@ -132,8 +130,18 @@ public class AdminActivity extends TaskitActivity implements LectureEditor.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
+        updateLectureListData();
         showErrorMessage(error.getMessage());
       }
     });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void selectedTabChanged() {
+    // TODO Auto-generated method stub
+
   }
 }
