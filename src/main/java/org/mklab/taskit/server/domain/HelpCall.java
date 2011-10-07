@@ -212,7 +212,7 @@ public class HelpCall extends AbstractEntity<Integer> {
   @Invoker({UserType.TEACHER, UserType.TA})
   public static List<HelpCall> getAllHelpCalls() {
     final EntityManager em = EMF.get().createEntityManager();
-    Query q = em.createQuery("select o from HelpCall o"); //$NON-NLS-1$
+    Query q = em.createQuery("select o from HelpCall o order by o.date"); //$NON-NLS-1$
 
     @SuppressWarnings("unchecked")
     List<HelpCall> list = q.getResultList();
