@@ -13,6 +13,7 @@ import org.mklab.taskit.shared.HelpCallProxy;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -22,6 +23,8 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public class HelpCallListActivity extends TaskitActivity implements HelpCallListView.Presenter {
 
+  Timer timer;
+
   /**
    * {@link HelpCallListActivity}オブジェクトを構築します。
    * 
@@ -29,6 +32,33 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
    */
   public HelpCallListActivity(ClientFactory clientFactory) {
     super(clientFactory);
+    this.timer = new Timer() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void run() {
+        updateHelpCallList();
+      }
+    };
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onViewShown() {
+    super.onViewShown();
+
+    updateHelpCallList();
+    this.timer.scheduleRepeating(10 * 1000);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onStop() {
+    this.timer.cancel();
   }
 
   /**
@@ -39,11 +69,15 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
     final HelpCallListView view = clientFactory.getHelpCallListView();
     view.setPresenter(this);
 
-    clientFactory.getRequestFactory().helpCallRequest().getAllHelpCalls().with("caller").fire(new Receiver<List<HelpCallProxy>>() { //$NON-NLS-1$
+    return view;
+  }
+
+  private void updateHelpCallList() {
+    getClientFactory().getRequestFactory().helpCallRequest().getAllHelpCalls().with("caller").fire(new Receiver<List<HelpCallProxy>>() { //$NON-NLS-1$
 
           @Override
           public void onSuccess(List<HelpCallProxy> response) {
-            view.setHelpCalls(response);
+            ((HelpCallListView)getTaskitView()).setHelpCalls(response);
           }
 
           /**
@@ -54,7 +88,6 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
             showErrorMessage(error.getMessage());
           }
         });
-    return view;
   }
 
   /**

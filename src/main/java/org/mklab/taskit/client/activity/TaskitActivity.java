@@ -120,8 +120,8 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     if (user == null) throw new NullPointerException();
     this.loginUser = user;
 
-    final TaskitView taskitView = createTaskitView(this.clientFactory);
-    Widget page = this.layout.layout(taskitView, user);
+    this.view = createTaskitView(this.clientFactory);
+    Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
 
     onViewShown();
