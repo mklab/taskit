@@ -26,4 +26,8 @@ public interface ReportRequest extends RequestContext {
 
   InstanceRequest<ReportProxy, Void> update();
 
+  InstanceRequest<ReportProxy, Void> updateOrCreate();
+
+  InstanceRequest<ReportProxy, Void> delete();
+
 }

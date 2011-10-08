@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -236,22 +235,10 @@ public class Submission extends AbstractEntity<Integer> {
   /**
    * 提出物を削除します。
    */
+  @Override
   @Invoker({UserType.TA, UserType.TEACHER})
   public void delete() {
-    final EntityManager em = EMF.get().createEntityManager();
-    Query q = em.createQuery("delete from Submission s where s.id=:submissionId"); //$NON-NLS-1$
-    q.setParameter("submissionId", getId()); //$NON-NLS-1$
-
-    final EntityTransaction t = em.getTransaction();
-    try {
-      t.begin();
-      q.executeUpdate();
-      t.commit();
-    } catch (Throwable e) {
-      t.rollback();
-    } finally {
-      em.close();
-    }
+    super.delete();
   }
 
   @SuppressWarnings({"nls", "unchecked"})
@@ -267,6 +254,23 @@ public class Submission extends AbstractEntity<Integer> {
 
   private static boolean isAlreadySubmit(Submission submission) {
     return getSubmissionIfExists(submission.getSubmitter(), submission.getReport()) != null;
+  }
+
+  /**
+   * Submissionテーブル中に、与えられたレポートIDを参照する行があるかどうか調べます。
+   * 
+   * @param reportId レポートID
+   * @return 存在するかどうか
+   */
+  static boolean reportIsRefered(Integer reportId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    try {
+      Query q = em.createQuery("select s from Submission s where s.report.id=:reportId"); //$NON-NLS-1$
+      q.setParameter("reportId", reportId); //$NON-NLS-1$
+      return q.getResultList().size() > 0;
+    } finally {
+      em.close();
+    }
   }
 
 }

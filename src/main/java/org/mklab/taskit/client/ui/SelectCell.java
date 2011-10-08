@@ -24,8 +24,24 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 class SelectCell<E> extends AbstractInputCell<E, E> {
 
   private List<E> options;
-  private boolean editable;
+  private boolean editable = true;
   private Renderer<E> renderer;
+  private Comparator<E> comparator;
+
+  /**
+   * {@link SelectCell}オブジェクトを構築します。
+   * 
+   * @param options 選択可能なオプションのリスト
+   */
+  public SelectCell(List<E> options) {
+    this(options, new Renderer<E>() {
+
+      @Override
+      public String render(@SuppressWarnings("unused") int index, E value) {
+        return String.valueOf(value);
+      }
+    });
+  }
 
   /**
    * {@link SelectCell}オブジェクトを構築します。
@@ -34,9 +50,36 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
    * @param renderer 値を、描画する文字列に変換するオブジェクト
    */
   public SelectCell(List<E> options, Renderer<E> renderer) {
+    this(options, renderer, new Comparator<E>() {
+
+      @Override
+      public boolean equals(E e1, E e2) {
+        if (e1 == null) {
+          if (e2 == null) {
+            return true;
+          }
+          return false;
+        }
+        return e1.equals(e2);
+      }
+    });
+  }
+
+  /**
+   * {@link SelectCell}オブジェクトを構築します。
+   * 
+   * @param options 選択可能なオプションのリスト
+   * @param renderer 値を、描画する文字列に変換するオブジェクト
+   * @param comparator 値とオプションの比較を行うオブジェクト
+   */
+  public SelectCell(List<E> options, Renderer<E> renderer, Comparator<E> comparator) {
     super("change"); //$NON-NLS-1$
+    if (options == null) throw new NullPointerException();
+    if (renderer == null) throw new NullPointerException();
+    if (comparator == null) throw new NullPointerException();
     this.options = options;
     this.renderer = renderer;
+    this.comparator = comparator;
   }
 
   /**
@@ -78,22 +121,13 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
       sb.appendHtmlConstant("<select disabled>");
     }
 
+    int index = 0;
     for (E option : this.options) {
-      final boolean selected = equals(option, value);
-      final String escapedOption = SafeHtmlUtils.htmlEscape(this.renderer.render(option));
+      final boolean selected = this.comparator.equals(option, value);
+      final String escapedOption = SafeHtmlUtils.htmlEscape(this.renderer.render(index++, option));
       sb.appendHtmlConstant("<option value='" + escapedOption + "'" + (selected ? " selected" : "") + ">" + escapedOption + "</option>");
     }
     sb.appendHtmlConstant("</select>");
-  }
-
-  private boolean equals(E e1, E e2) {
-    if (e1 == null) {
-      if (e2 == null) {
-        return true;
-      }
-      return false;
-    }
-    return e1.equals(e2);
   }
 
   /**
@@ -107,10 +141,30 @@ class SelectCell<E> extends AbstractInputCell<E, E> {
     /**
      * 値を文字列にします。
      * 
+     * @param index リストのインデックス
      * @param value 値
      * @return 文字列
      */
-    String render(E value);
+    String render(int index, E value);
+
+  }
+
+  /**
+   * オブジェクトの比較を行うインターフェースです。
+   * 
+   * @author ishikura
+   * @param <E> オブジェクトの型
+   */
+  public static interface Comparator<E> {
+
+    /**
+     * 二つのオブジェクトが同じであるか調べます。
+     * 
+     * @param e1 オブジェクト
+     * @param e2 オブジェクト
+     * @return 二つのオブジェクトが同じかどうか
+     */
+    boolean equals(E e1, E e2);
   }
 
 }

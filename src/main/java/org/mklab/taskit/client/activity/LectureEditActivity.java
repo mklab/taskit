@@ -4,7 +4,8 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.LectureEditor;
+import org.mklab.taskit.client.ui.EntityEditorView;
+import org.mklab.taskit.client.ui.LectureEditorView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.LectureRequest;
@@ -19,10 +20,10 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 /**
  * @author yuhi
  */
-public class LectureEditActivity extends TaskitActivity implements LectureEditor.Presenter<LectureProxy> {
+public class LectureEditActivity extends TaskitActivity implements EntityEditorView.Presenter<LectureProxy> {
 
   private LectureRequest lectureRequest;
-  private LectureEditor lectureEditor;
+  private LectureEditorView lectureEditor;
 
   /**
    * {@link LectureEditActivity}オブジェクトを構築します。
@@ -38,7 +39,7 @@ public class LectureEditActivity extends TaskitActivity implements LectureEditor
    */
   @Override
   protected TaskitView createTaskitView(final ClientFactory clientFactory) {
-    this.lectureEditor = new LectureEditor(clientFactory);
+    this.lectureEditor = new LectureEditorView(clientFactory);
     this.lectureEditor.setPresenter(this);
     return this.lectureEditor;
   }

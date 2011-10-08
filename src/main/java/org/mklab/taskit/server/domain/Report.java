@@ -6,9 +6,9 @@ import org.mklab.taskit.shared.UserType;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -64,7 +64,7 @@ public class Report extends AbstractEntity<Integer> {
    * @return 講義
    */
   @NotNull
-  @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.EAGER)
   public Lecture getLecture() {
     return this.lecture;
   }
@@ -110,7 +110,7 @@ public class Report extends AbstractEntity<Integer> {
    * 
    * @param period レポート提出期限
    */
-  void setPeriod(Date period) {
+  public void setPeriod(Date period) {
     this.period = period;
   }
 
@@ -178,7 +178,7 @@ public class Report extends AbstractEntity<Integer> {
   public static List<Report> getAllReports() {
     final EntityManager em = EMF.get().createEntityManager();
     try {
-      Query q = em.createQuery("select r from Report r"); //$NON-NLS-1$
+      Query q = em.createQuery("select r from Report r order by r.lecture.date"); //$NON-NLS-1$
       return q.getResultList();
     } finally {
       em.close();
@@ -214,4 +214,54 @@ public class Report extends AbstractEntity<Integer> {
     super.persist();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker(UserType.TEACHER)
+  public void updateOrCreate() {
+    super.updateOrCreate();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @Invoker(UserType.TEACHER)
+  public void delete() {
+    @SuppressWarnings("hiding")
+    final Integer id = getId();
+    if (id == null) throw new IllegalStateException();
+
+    if (Submission.reportIsRefered(id)) {
+      throw new IllegalStateException("This report can't be deleted because refered by submission(s) already."); //$NON-NLS-1$
+    }
+
+    /*
+     * super.delete()で済ませたいけれども、
+     * 削除しようとしているReportの参照しているLectureから、OneToManyでReportを参照しており
+     * 当然そのなかの一つは今削除しようとしているReportなので、
+     * Lectureのflush時のpersistで、削除したReportをpersistしようとしてしまい
+     * "deleted entity passed to persist"
+     * となってしまう。
+     * 
+     * そのため、Hibernateの管理の外でJPQLで削除している。
+     */
+
+    final EntityManager em = EMF.get().createEntityManager();
+    final EntityTransaction t = em.getTransaction();
+    final Query q = em.createQuery("delete from Report r where r.id=:id"); //$NON-NLS-1$
+    q.setParameter("id", getId()); //$NON-NLS-1$
+
+    try {
+      t.begin();
+      q.executeUpdate();
+      t.commit();
+    } catch (Throwable ex) {
+      ex.printStackTrace();
+      t.rollback();
+    } finally {
+      em.close();
+    }
+  }
 }

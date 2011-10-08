@@ -15,9 +15,9 @@ public interface EntityEditorView<E> extends TaskitView {
   /**
    * エンティティを設定します。
    * 
-   * @param lectures 講義データ
+   * @param entities エンティティのリスト
    */
-  void setEntities(List<E> lectures);
+  void setEntities(List<E> entities);
 
   /**
    * プレゼンターを設定します。

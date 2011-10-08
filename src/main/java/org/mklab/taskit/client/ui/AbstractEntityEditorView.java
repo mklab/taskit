@@ -7,12 +7,15 @@ import org.mklab.taskit.client.ClientFactory;
 
 import java.util.List;
 
+import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -28,8 +31,9 @@ public abstract class AbstractEntityEditorView<E> extends AbstractTaskitView imp
     // empty
   }
 
+  /** エンティティを編集するテーブルです。 */
   @UiField(provided = true)
-  CellTable<E> table;
+  protected CellTable<E> table;
   private Presenter<E> presenter;
 
   /**
@@ -47,20 +51,47 @@ public abstract class AbstractEntityEditorView<E> extends AbstractTaskitView imp
   @Override
   protected final Widget initContent() {
     this.table = new CellTable<E>();
-    initTable(this.table);
+    initTable();
     return binder.createAndBindUi(this);
   }
 
   /**
    * エンティティを編集するテーブルを設定します。
-   * 
-   * @param cellTable エンティティを編集するテーブル
    */
-  protected abstract void initTable(CellTable<E> cellTable);
+  protected abstract void initTable();
+
+  /**
+   * エンティティ削除ボタン列を生成します。
+   * 
+   * @return エンティティ削除ボタン列
+   */
+  protected Column<E, String> createDeleteColumn() {
+    final Column<E, String> deleteButtonColumn = new Column<E, String>(new ButtonCell()) {
+
+      @SuppressWarnings("unused")
+      @Override
+      public String getValue(E object) {
+        return getClientFactory().getMessages().deleteLabel();
+      }
+
+    };
+    deleteButtonColumn.setFieldUpdater(new FieldUpdater<E, String>() {
+
+      @Override
+      @SuppressWarnings("unused")
+      public void update(int index, E object, String value) {
+        final E lecture = getPresenter().edit(object);
+        getPresenter().delete(lecture);
+      }
+    });
+
+    return deleteButtonColumn;
+  }
 
   @UiHandler("newButton")
   void onNewButtonClicked(@SuppressWarnings("unused") ClickEvent evt) {
     final E entity = this.presenter.newEntity();
+    if (entity == null) return;
     createDefaultEntity(entity);
     this.presenter.save(entity);
   }

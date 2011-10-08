@@ -9,6 +9,7 @@ import org.mklab.taskit.client.place.HelpCallList;
 import org.mklab.taskit.client.place.LectureEdit;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.place.Profile;
+import org.mklab.taskit.client.place.ReportEdit;
 import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
 
@@ -49,6 +50,8 @@ public class TaskitActivityMapper implements ActivityMapper {
     if (place instanceof Profile) return new ProfileActivity(this.clientFactory);
     if (place instanceof HelpCallList) return new HelpCallListActivity(this.clientFactory);
     if (place instanceof LectureEdit) return new LectureEditActivity(this.clientFactory);
+    if (place instanceof ReportEdit) return new ReportEditActivity(this.clientFactory);
+
     return null;
   }
 

@@ -143,7 +143,7 @@ public class StudentScorePanel extends Composite {
     final SelectCell<String> submissionCell = new SelectCell<String>(options, new SelectCell.Renderer<String>() {
 
       @Override
-      public String render(String value) {
+      public String render(@SuppressWarnings("unused") int index, String value) {
         return value;
       }
     }) {
@@ -242,7 +242,7 @@ public class StudentScorePanel extends Composite {
     final SelectCell<AttendanceType> selectionCell = new SelectCell<AttendanceType>(attendanceTypes, new SelectCell.Renderer<AttendanceType>() {
 
       @Override
-      public String render(AttendanceType value) {
+      public String render(@SuppressWarnings("unused") int index, AttendanceType value) {
         return AttendanceListViewImpl.getLabelOfAttendanceType(StudentScorePanel.this.messages, value);
       }
     });

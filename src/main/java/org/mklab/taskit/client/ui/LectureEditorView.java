@@ -9,11 +9,9 @@ import org.mklab.taskit.shared.LectureProxy;
 
 import java.util.Date;
 
-import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 
 
@@ -22,14 +20,14 @@ import com.google.gwt.user.cellview.client.Column;
  * 
  * @author ishikura
  */
-public class LectureEditor extends AbstractEntityEditorView<LectureProxy> {
+public class LectureEditorView extends AbstractEntityEditorView<LectureProxy> {
 
   /**
-   * {@link LectureEditor}オブジェクトを構築します。
+   * {@link LectureEditorView}オブジェクトを構築します。
    * 
    * @param clientFactory クライアントファクトリ
    */
-  public LectureEditor(ClientFactory clientFactory) {
+  public LectureEditorView(ClientFactory clientFactory) {
     super(clientFactory);
   }
 
@@ -96,39 +94,16 @@ public class LectureEditor extends AbstractEntityEditorView<LectureProxy> {
     return descriptionColumn;
   }
 
-  private Column<LectureProxy, String> createDeleteColumn() {
-    final Column<LectureProxy, String> deleteButtonColumn = new Column<LectureProxy, String>(new ButtonCell()) {
-
-      @SuppressWarnings("unused")
-      @Override
-      public String getValue(LectureProxy object) {
-        return getClientFactory().getMessages().deleteLabel();
-      }
-
-    };
-    deleteButtonColumn.setFieldUpdater(new FieldUpdater<LectureProxy, String>() {
-
-      @Override
-      @SuppressWarnings("unused")
-      public void update(int index, LectureProxy object, String value) {
-        final LectureProxy lecture = getPresenter().edit(object);
-        getPresenter().delete(lecture);
-      }
-    });
-
-    return deleteButtonColumn;
-  }
-
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void initTable(CellTable<LectureProxy> cellTable) {
+  protected void initTable() {
     Messages messages = getClientFactory().getMessages();
-    cellTable.addColumn(createDateColumn(), messages.dateLabel());
-    cellTable.addColumn(createTitleColumn(), messages.titleLabel());
-    cellTable.addColumn(createDescriptionColumn(), messages.descriptionLabel());
-    cellTable.addColumn(createDeleteColumn());
+    this.table.addColumn(createDateColumn(), messages.dateLabel());
+    this.table.addColumn(createTitleColumn(), messages.titleLabel());
+    this.table.addColumn(createDescriptionColumn(), messages.descriptionLabel());
+    this.table.addColumn(createDeleteColumn());
   }
 
   /**

@@ -9,7 +9,6 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -183,22 +182,10 @@ public class Attendance extends AbstractEntity<Integer> {
   /**
    * 出席情報の削除を行います。
    */
+  @Override
   @Invoker({UserType.TA, UserType.TEACHER})
   public void delete() {
-    final EntityManager em = EMF.get().createEntityManager();
-    Query q = em.createQuery("delete from Attendance a where a.id=:attendanceId"); //$NON-NLS-1$
-    q.setParameter("attendanceId", getId()); //$NON-NLS-1$
-
-    final EntityTransaction t = em.getTransaction();
-    try {
-      t.begin();
-      q.executeUpdate();
-      t.commit();
-    } catch (Throwable e) {
-      t.rollback();
-    } finally {
-      em.close();
-    }
+    super.delete();
   }
 
   /**
@@ -228,7 +215,7 @@ public class Attendance extends AbstractEntity<Integer> {
     q.setParameter("accountId", accountId);
     return q.getResultList();
   }
-  
+
   /**
    * 講義を指定して出席状況を取得します。
    * 
@@ -258,6 +245,17 @@ public class Attendance extends AbstractEntity<Integer> {
     if (result.size() > 1) throw new IllegalStateException("Internal Error.");
 
     return result.size() == 0 ? null : result.get(0);
+  }
+
+  static boolean lectureIsRefered(Integer lectureId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    try {
+      Query q = em.createQuery("select a from Attendance a where a.lecture.id=:lectureId"); //$NON-NLS-1$
+      q.setParameter("lectureId", lectureId); //$NON-NLS-1$
+      return q.getResultList().size() > 0;
+    } finally {
+      em.close();
+    }
   }
 
 }

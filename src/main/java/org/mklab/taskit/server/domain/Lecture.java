@@ -64,7 +64,7 @@ public class Lecture extends AbstractEntity<Integer> {
    * {@inheritDoc}
    */
   @Override
-  void setId(Integer id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -216,6 +216,9 @@ public class Lecture extends AbstractEntity<Integer> {
 
     if (Report.lectureIsRefered(id)) {
       throw new IllegalStateException("The lecture can't be deleted because it has already refered by report(s)."); //$NON-NLS-1$
+    }
+    if(Attendance.lectureIsRefered(id)){
+      throw new IllegalStateException("The lecture can't be deleted because it has already refered by attendance(s)."); //$NON-NLS-1$
     }
 
     super.delete();

@@ -60,6 +60,7 @@ public abstract class AbstractEntity<I> {
       em.merge(this);
       t.commit();
     } catch (Throwable ex) {
+      ex.printStackTrace();
       t.rollback();
     } finally {
       em.close();
@@ -78,6 +79,7 @@ public abstract class AbstractEntity<I> {
       em.persist(this);
       t.commit();
     } catch (Throwable ex) {
+      ex.printStackTrace();
       t.rollback();
     } finally {
       em.close();
@@ -109,6 +111,7 @@ public abstract class AbstractEntity<I> {
       em.remove(entity);
       t.commit();
     } catch (Throwable ex) {
+      ex.printStackTrace();
       t.rollback();
     } finally {
       em.close();

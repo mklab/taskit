@@ -20,6 +20,8 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 @SuppressWarnings("javadoc")
 public interface LectureProxy extends EntityProxy {
 
+  Integer getId();
+
   Date getDate();
 
   void setDate(Date date);
