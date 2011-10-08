@@ -3,8 +3,8 @@
  */
 package org.mklab.taskit.client.activity;
 
-import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
 import org.mklab.taskit.shared.LectureProxy;
 
 import java.util.Date;
@@ -26,8 +26,8 @@ class Util {
     });
   }
 
-  static StudentScoreModel.LectureScore getLatestScore(StudentScoreModel model) {
-    return getLatestItem(model.asList(), new Util.DateExtractor<StudentScoreModel.LectureScore>() {
+  static StudentwiseRecordModel.LectureScore getLatestScore(StudentwiseRecordModel model) {
+    return getLatestItem(model.asList(), new Util.DateExtractor<StudentwiseRecordModel.LectureScore>() {
 
       @Override
       public Date getDateOf(LectureScore item) {

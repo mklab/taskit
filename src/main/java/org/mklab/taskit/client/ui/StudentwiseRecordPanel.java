@@ -4,8 +4,8 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.Messages;
-import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
 import org.mklab.taskit.client.ui.StudentListView.Presenter;
 import org.mklab.taskit.client.ui.cell.SelectCell;
 import org.mklab.taskit.shared.AttendanceType;
@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Composite;
 public class StudentwiseRecordPanel extends Composite {
 
   private CellTable<LectureScore> table;
-  private StudentScoreModel model;
+  private StudentwiseRecordModel model;
   private Presenter presenter;
   private TableRowElement lastHighlightElement;
   private boolean editable;
@@ -47,7 +47,7 @@ public class StudentwiseRecordPanel extends Composite {
   public StudentwiseRecordPanel(Messages messages, boolean editable) {
     if (messages == null) throw new NullPointerException();
 
-    this.table = new CellTable<StudentScoreModel.LectureScore>();
+    this.table = new CellTable<StudentwiseRecordModel.LectureScore>();
     this.editable = editable;
     this.messages = messages;
     initColumns();
@@ -87,7 +87,7 @@ public class StudentwiseRecordPanel extends Composite {
    * @param model ユーザーの成績情報
    */
   @SuppressWarnings("hiding")
-  public void showUserPage(StudentScoreModel model) {
+  public void showUserPage(StudentwiseRecordModel model) {
     this.model = model;
     this.table.setRowData(this.model.asList());
     initColumns();
@@ -106,7 +106,7 @@ public class StudentwiseRecordPanel extends Composite {
    * 
    * @param rowData 行データ
    */
-  public void highlightRow(StudentScoreModel.LectureScore rowData) {
+  public void highlightRow(StudentwiseRecordModel.LectureScore rowData) {
     if (this.lastHighlightElement != null) {
       this.lastHighlightElement.getStyle().clearBackgroundColor();
     }
@@ -144,7 +144,7 @@ public class StudentwiseRecordPanel extends Composite {
     final SelectCell<String> submissionCell = new SubmissionCell(options);
     submissionCell.setEditable(this.editable);
 
-    final Column<LectureScore, String> submissionColumn = new Column<StudentScoreModel.LectureScore, String>(submissionCell) {
+    final Column<LectureScore, String> submissionColumn = new Column<StudentwiseRecordModel.LectureScore, String>(submissionCell) {
 
       @Override
       public String getValue(LectureScore object) {
@@ -166,7 +166,7 @@ public class StudentwiseRecordPanel extends Composite {
       }
 
     };
-    submissionColumn.setFieldUpdater(new FieldUpdater<StudentScoreModel.LectureScore, String>() {
+    submissionColumn.setFieldUpdater(new FieldUpdater<StudentwiseRecordModel.LectureScore, String>() {
 
       @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
       @Override
@@ -201,7 +201,7 @@ public class StudentwiseRecordPanel extends Composite {
 
   @SuppressWarnings("static-method")
   private Column<LectureScore, Void> createLectureNumberColumn() {
-    final Column<LectureScore, Void> lectureNumberColumn = new Column<StudentScoreModel.LectureScore, Void>(new AbstractCell<Void>() {
+    final Column<LectureScore, Void> lectureNumberColumn = new Column<StudentwiseRecordModel.LectureScore, Void>(new AbstractCell<Void>() {
 
       @Override
       public void render(com.google.gwt.cell.client.Cell.Context context, @SuppressWarnings("unused") Void value, SafeHtmlBuilder sb) {
@@ -233,7 +233,7 @@ public class StudentwiseRecordPanel extends Composite {
     });
     selectionCell.setEditable(this.editable);
 
-    final Column<LectureScore, AttendanceType> attendanceColumn = new Column<StudentScoreModel.LectureScore, AttendanceType>(selectionCell) {
+    final Column<LectureScore, AttendanceType> attendanceColumn = new Column<StudentwiseRecordModel.LectureScore, AttendanceType>(selectionCell) {
 
       @Override
       public AttendanceType getValue(LectureScore object) {
@@ -242,7 +242,7 @@ public class StudentwiseRecordPanel extends Composite {
       }
 
     };
-    attendanceColumn.setFieldUpdater(new FieldUpdater<StudentScoreModel.LectureScore, AttendanceType>() {
+    attendanceColumn.setFieldUpdater(new FieldUpdater<StudentwiseRecordModel.LectureScore, AttendanceType>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access", "unused"})
       @Override

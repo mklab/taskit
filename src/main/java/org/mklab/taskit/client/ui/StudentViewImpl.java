@@ -4,8 +4,8 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -60,7 +60,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    * {@inheritDoc}
    */
   @Override
-  public void setModel(StudentScoreModel model) {
+  public void setModel(StudentwiseRecordModel model) {
     this.scorePanel.showUserPage(model);
   }
 

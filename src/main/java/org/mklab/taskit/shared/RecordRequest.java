@@ -17,7 +17,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 @SuppressWarnings("javadoc")
 public interface RecordRequest extends RequestContext {
 
-  Request<StudentwiseRecordsProxy> getRecordByAccountId(String accountId);
+  Request<LecturewiseRecordsProxy> getMyLecturewiseRecords();
 
   Request<StudentwiseRecordsProxy> getAllRecords();
 

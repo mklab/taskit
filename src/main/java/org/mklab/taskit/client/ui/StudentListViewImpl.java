@@ -5,8 +5,8 @@ package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
-import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.io.IOException;
@@ -164,7 +164,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    * {@inheritDoc}
    */
   @Override
-  public void showUserPage(UserProxy user, StudentScoreModel model) {
+  public void showUserPage(UserProxy user, StudentwiseRecordModel model) {
     this.userId.setText(user.getAccount().getId());
     this.userName.setText(user.getName() != null ? user.getName() : "<< " + getClientFactory().getMessages().unsetLabel() + " >>"); //$NON-NLS-1$ //$NON-NLS-2$
     this.panel.showUserPage(model);

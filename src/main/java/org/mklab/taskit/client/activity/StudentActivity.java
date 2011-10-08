@@ -4,8 +4,8 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.client.model.StudentScoreQuery;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.TaskitView;
 
@@ -35,13 +35,13 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
     final StudentView studentView = clientFactory.getStudentView();
     studentView.setPresenter(this);
 
-    final StudentScoreQuery query = new StudentScoreQuery(clientFactory.getRequestFactory());
-    query.query(new StudentScoreQuery.Handler() {
+    final StudentwiseRecordQuery query = new StudentwiseRecordQuery(clientFactory.getRequestFactory());
+    query.query(new StudentwiseRecordQuery.Handler() {
 
       @Override
-      public void handleResult(StudentScoreModel model) {
+      public void handleResult(StudentwiseRecordModel model) {
         studentView.setModel(model);
-        StudentScoreModel.LectureScore latestScore = Util.getLatestScore(model);
+        StudentwiseRecordModel.LectureScore latestScore = Util.getLatestScore(model);
         studentView.highlightRow(latestScore);
       }
     });

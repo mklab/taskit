@@ -48,7 +48,7 @@
 							</g:cell>
 						</g:VerticalPanel>
 					</g:CaptionPanel>
-					<mk:StudentScorePanel ui:field='panel'></mk:StudentScorePanel>
+					<mk:StudentwiseRecordPanel ui:field='panel'></mk:StudentwiseRecordPanel>
 				</g:VerticalPanel>
 			</g:ScrollPanel>
 		</g:center>

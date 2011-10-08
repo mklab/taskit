@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
-import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceType;
@@ -43,7 +43,7 @@ public interface StudentListView extends TaskitView {
    * @param user ユーザー
    * @param model 成績データ
    */
-  void showUserPage(UserProxy user, StudentScoreModel model);
+  void showUserPage(UserProxy user, StudentwiseRecordModel model);
 
   /**
    * ユーザーの成績の表示をクリアします。
@@ -55,7 +55,7 @@ public interface StudentListView extends TaskitView {
    * 
    * @param rowData ハイライトする行
    */
-  void highlightRow(StudentScoreModel.LectureScore rowData);
+  void highlightRow(StudentwiseRecordModel.LectureScore rowData);
 
   /**
    * プレゼンターを設定します。

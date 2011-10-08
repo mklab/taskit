@@ -4,8 +4,8 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.model.StudentScoreModel;
-import org.mklab.taskit.client.model.StudentScoreQuery;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.TaskitView;
@@ -33,7 +33,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 public class StudentListActivity extends TaskitActivity implements StudentListView.Presenter {
 
   private StudentListView view;
-  private StudentScoreQuery query;
+  private StudentwiseRecordQuery query;
 
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
@@ -42,7 +42,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   public StudentListActivity(ClientFactory clientFactory) {
     super(clientFactory);
-    this.query = new StudentScoreQuery(clientFactory.getRequestFactory());
+    this.query = new StudentwiseRecordQuery(clientFactory.getRequestFactory());
   }
 
   /**
@@ -162,14 +162,14 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   }
 
   private void fetchAndShowAsync(final UserProxy selectedUser) {
-    this.query.query(selectedUser.getAccount().getId(), new StudentScoreQuery.Handler() {
+    this.query.query(selectedUser.getAccount().getId(), new StudentwiseRecordQuery.Handler() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
-      public void handleResult(StudentScoreModel model) {
+      public void handleResult(StudentwiseRecordModel model) {
         view.showUserPage(selectedUser, model);
 
-        final StudentScoreModel.LectureScore latestRow = Util.getLatestScore(model);
+        final StudentwiseRecordModel.LectureScore latestRow = Util.getLatestScore(model);
         view.highlightRow(latestRow);
       }
     });

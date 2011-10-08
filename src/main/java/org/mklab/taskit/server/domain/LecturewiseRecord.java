@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * 講義別の成績を表すクラスです。
+ * 単一生徒の講義別の成績を表すクラスです。
  * <p>
  * 講義情報、その講義でのある生徒の提出状況、出席状況を保持します。
  * 
@@ -38,7 +38,7 @@ public class LecturewiseRecord {
   /**
    * 出席状況を取得します。
    * 
-   * @return 出席状況
+   * @return 出席状況。出席データがまだない場合はnull
    */
   public Attendance getAttendance() {
     return this.attendance;
@@ -47,7 +47,7 @@ public class LecturewiseRecord {
   /**
    * 提出状況を取得します。
    * 
-   * @return 提出状況
+   * @return 提出状況。提出されていない場合は空のリスト
    */
   public List<Submission> getSubmissions() {
     return this.submissions;

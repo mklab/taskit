@@ -13,10 +13,11 @@
 	</ui:style>
 
 	<g:HorizontalPanel>
-		<mk:StudentScorePanel ui:field='scorePanel'></mk:StudentScorePanel>
+		<mk:StudentwiseRecordPanel ui:field='scorePanel'></mk:StudentwiseRecordPanel>
 		<g:HTMLPanel styleName='{style.padding}'></g:HTMLPanel>
 		<g:FlowPanel>
-			<g:VerticalPanel styleName='{style.helpCallArea}' ui:field='helpCallArea'>
+			<g:VerticalPanel styleName='{style.helpCallArea}'
+				ui:field='helpCallArea'>
 				<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
 				<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
 				<g:TextBox ui:field='helpCallMessage'></g:TextBox>

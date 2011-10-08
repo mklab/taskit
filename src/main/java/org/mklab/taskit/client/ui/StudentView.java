@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
-import org.mklab.taskit.client.model.StudentScoreModel;
+import org.mklab.taskit.client.model.StudentwiseRecordModel;
 
 
 /**
@@ -18,7 +18,7 @@ public interface StudentView extends TaskitView {
    * 
    * @param model 成績データ
    */
-  void setModel(StudentScoreModel model);
+  void setModel(StudentwiseRecordModel model);
 
   /**
    * プレゼンターを設定します。
@@ -32,7 +32,7 @@ public interface StudentView extends TaskitView {
    * 
    * @param rowData ハイライトする行
    */
-  void highlightRow(StudentScoreModel.LectureScore rowData);
+  void highlightRow(StudentwiseRecordModel.LectureScore rowData);
 
   /**
    * 呼び出し中かどうか設定します。

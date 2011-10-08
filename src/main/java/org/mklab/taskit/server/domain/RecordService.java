@@ -47,6 +47,17 @@ public class RecordService {
   }
 
   /**
+   * 自分の講義別成績を取得します。
+   * 
+   * @return 自分の成績
+   */
+  @Invoker({UserType.STUDENT})
+  public static LecturewiseRecords getMyLecturewiseRecords() {
+    final User loginUser = ServiceUtil.getLoginUser();
+    return getLecturewiseRecordsByAccountId(loginUser.getAccount().getId());
+  }
+
+  /**
    * 与えられたIDの成績を取得します。
    * 
    * @param id ID
