@@ -4,9 +4,9 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.ui.EntityEditorView;
-import org.mklab.taskit.client.ui.LectureEditorView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.client.ui.admin.EntityEditorView;
+import org.mklab.taskit.client.ui.admin.LectureEditorView;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.LectureRequest;
 

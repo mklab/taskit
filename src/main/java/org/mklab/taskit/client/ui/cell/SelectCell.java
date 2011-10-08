@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.cell;
 
 import java.util.List;
 
@@ -20,8 +20,9 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  * コンボボックスにより編集を行います。列にそもそも課題がない場合には、編集ができないようにしています。
  * 
  * @author ishikura
+ * @param <E> オプションの型
  */
-class SelectCell<E> extends AbstractInputCell<E, E> {
+public class SelectCell<E> extends AbstractInputCell<E, E> {
 
   private List<E> options;
   private boolean editable = true;

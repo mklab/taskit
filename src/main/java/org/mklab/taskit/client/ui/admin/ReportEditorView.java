@@ -1,9 +1,11 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.admin;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.cell.NullableDatePickerCell;
+import org.mklab.taskit.client.ui.cell.SelectCell;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
 
@@ -11,14 +13,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.cell.client.DatePickerCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.NativeEvent;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 
 
@@ -68,7 +68,7 @@ public class ReportEditorView extends AbstractEntityEditorView<ReportProxy> {
     options.add(null);
     final SelectCell.Renderer<LectureProxy> lectureRenderer = new SelectCell.Renderer<LectureProxy>() {
 
-      @SuppressWarnings("deprecation")
+      @SuppressWarnings({"deprecation", "synthetic-access"})
       @Override
       public String render(int index, LectureProxy value) {
         if (value == null) return ""; //$NON-NLS-1$
@@ -241,37 +241,5 @@ public class ReportEditorView extends AbstractEntityEditorView<ReportProxy> {
   protected void createDefaultEntity(ReportProxy entity) {
     entity.setPoint(1);
     entity.setTitle(getClientFactory().getMessages().defaultReportTitle());
-  }
-
-  /**
-   * @author ishikura
-   */
-  static final class NullableDatePickerCell extends DatePickerCell {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, Date value, NativeEvent event, ValueUpdater<Date> valueUpdater) {
-      if (value == null) {
-        super.onBrowserEvent(context, parent, new Date(), event, valueUpdater);
-      } else {
-        super.onBrowserEvent(context, parent, value, event, valueUpdater);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void render(com.google.gwt.cell.client.Cell.Context context, Date value, SafeHtmlBuilder sb) {
-      if (value == null) {
-        // セル中のどこをクリックしても編集を開始しますが、分かりやすいようにボタンを表示します。
-        sb.appendHtmlConstant("<input type='button' value='Edit'/>"); //$NON-NLS-1$
-        return;
-      }
-
-      super.render(context, value, sb);
-    }
   }
 }

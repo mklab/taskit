@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.admin;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
+import org.mklab.taskit.client.ui.AbstractTaskitView;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;

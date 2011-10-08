@@ -7,6 +7,7 @@ import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.StudentScoreModel;
 import org.mklab.taskit.client.model.StudentScoreModel.LectureScore;
 import org.mklab.taskit.client.ui.StudentListView.Presenter;
+import org.mklab.taskit.client.ui.cell.SelectCell;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
@@ -140,23 +141,7 @@ public class StudentScorePanel extends Composite {
   @SuppressWarnings("nls")
   private void addSubmissionColumn(final int reportIndex) {
     final List<String> options = Arrays.asList("○", "△", "×", "");
-    final SelectCell<String> submissionCell = new SelectCell<String>(options, new SelectCell.Renderer<String>() {
-
-      @Override
-      public String render(@SuppressWarnings("unused") int index, String value) {
-        return value;
-      }
-    }) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
-        if (value == null) return;
-        super.render(context, value, sb);
-      }
-    };
+    final SelectCell<String> submissionCell = new SubmissionCell(options);
     submissionCell.setEditable(this.editable);
 
     final Column<LectureScore, String> submissionColumn = new Column<StudentScoreModel.LectureScore, String>(submissionCell) {
@@ -273,5 +258,36 @@ public class StudentScorePanel extends Composite {
 
     });
     return attendanceColumn;
+  }
+
+  /**
+   * @author ishikura
+   */
+  final class SubmissionCell extends SelectCell<String> {
+
+    /**
+     * {@link SubmissionCell}オブジェクトを構築します。
+     * 
+     * @param options 選択可能なオプション
+     */
+    SubmissionCell(List<String> options) {
+      super(options, new SelectCell.Renderer<String>() {
+
+        @Override
+        public String render(@SuppressWarnings("unused") int index, String value) {
+          return value;
+        }
+      });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
+      // nullの場合にはオプションすら表示しない
+      if (value == null) return;
+      super.render(context, value, sb);
+    }
   }
 }

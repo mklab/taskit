@@ -1,9 +1,10 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.admin;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.ui.AbstractTaskitView;
 
 import java.util.List;
 
@@ -68,7 +69,7 @@ public abstract class AbstractEntityEditorView<E> extends AbstractTaskitView imp
   protected Column<E, String> createDeleteColumn() {
     final Column<E, String> deleteButtonColumn = new Column<E, String>(new ButtonCell()) {
 
-      @SuppressWarnings("unused")
+      @SuppressWarnings({"unused", "synthetic-access"})
       @Override
       public String getValue(E object) {
         return getClientFactory().getMessages().deleteLabel();
@@ -115,7 +116,7 @@ public abstract class AbstractEntityEditorView<E> extends AbstractTaskitView imp
    * {@inheritDoc}
    */
   @Override
-  public final void setPresenter(org.mklab.taskit.client.ui.EntityEditorView.Presenter<E> presenter) {
+  public final void setPresenter(org.mklab.taskit.client.ui.admin.EntityEditorView.Presenter<E> presenter) {
     this.presenter = presenter;
   }
 

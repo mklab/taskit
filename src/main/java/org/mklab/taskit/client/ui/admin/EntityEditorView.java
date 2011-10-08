@@ -1,7 +1,9 @@
 /**
  * 
  */
-package org.mklab.taskit.client.ui;
+package org.mklab.taskit.client.ui.admin;
+
+import org.mklab.taskit.client.ui.TaskitView;
 
 import java.util.List;
 

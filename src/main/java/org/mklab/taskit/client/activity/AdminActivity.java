@@ -6,8 +6,8 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.LectureEdit;
 import org.mklab.taskit.client.place.ReportEdit;
-import org.mklab.taskit.client.ui.AdminView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.client.ui.admin.AdminView;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
