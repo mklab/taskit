@@ -7,6 +7,7 @@ import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.LoginView;
+import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.ProfileView;
 import org.mklab.taskit.client.ui.StudentListView;
 import org.mklab.taskit.client.ui.StudentView;
@@ -56,6 +57,13 @@ public interface ClientFactory {
    * @return ログインビュー
    */
   LoginView getLoginView();
+
+  /**
+   * ページレイアウトを取得します。
+   * 
+   * @return ページレイアウト
+   */
+  PageLayout getPageLayout();
 
   /**
    * ヘッダビューを取得します。

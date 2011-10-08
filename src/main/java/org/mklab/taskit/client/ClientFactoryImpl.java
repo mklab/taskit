@@ -11,6 +11,8 @@ import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.HelpCallListViewImpl;
 import org.mklab.taskit.client.ui.LoginView;
 import org.mklab.taskit.client.ui.LoginViewImpl;
+import org.mklab.taskit.client.ui.PageLayout;
+import org.mklab.taskit.client.ui.PageLayoutImpl;
 import org.mklab.taskit.client.ui.ProfileView;
 import org.mklab.taskit.client.ui.ProfileViewImpl;
 import org.mklab.taskit.client.ui.StudentListView;
@@ -136,6 +138,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public HelpCallListView getHelpCallListView() {
     return new HelpCallListViewImpl(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public PageLayout getPageLayout() {
+    return new PageLayoutImpl(this);
   }
 
 }

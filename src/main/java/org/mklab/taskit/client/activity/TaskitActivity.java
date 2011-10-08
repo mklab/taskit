@@ -4,28 +4,19 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.place.AttendanceList;
-import org.mklab.taskit.client.place.HelpCallList;
 import org.mklab.taskit.client.place.Login;
-import org.mklab.taskit.client.place.Profile;
-import org.mklab.taskit.client.place.Student;
-import org.mklab.taskit.client.place.StudentList;
-import org.mklab.taskit.client.ui.HeaderView;
+import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
-import org.mklab.taskit.client.ui.ToolBarButton;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.UserType;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
@@ -33,14 +24,14 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
-public abstract class TaskitActivity extends AbstractActivity {
+public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter {
 
   private static UserProxy loginUserCache;
   private ClientFactory clientFactory;
   private AcceptsOneWidget container;
-  private HeaderView header;
   private UserProxy loginUser;
   private TaskitView view;
+  private PageLayout layout;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -50,6 +41,8 @@ public abstract class TaskitActivity extends AbstractActivity {
   public TaskitActivity(ClientFactory clientFactory) {
     if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
+    this.layout = clientFactory.getPageLayout();
+    this.layout.setPresenter(this);
   }
 
   /**
@@ -57,12 +50,7 @@ public abstract class TaskitActivity extends AbstractActivity {
    */
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
-    /*
-     * すぐにビューを表示せずに、ユーザー情報の取得が完了してから行います。
-     */
-    this.header = this.clientFactory.getHeaderView();
     this.container = panel;
-
     fetchLoginUserAndShowLater();
   }
 
@@ -96,29 +84,31 @@ public abstract class TaskitActivity extends AbstractActivity {
       return;
     }
 
-    getClientFactory().getRequestFactory().userRequest().getLoginUser().with("account").fire(new Receiver<UserProxy>() { //$NON-NLS-1$
+    final Request<UserProxy> request = getClientFactory().getRequestFactory().userRequest().getLoginUser();
+    request.with("account"); //$NON-NLS-1$
+    request.fire(new Receiver<UserProxy>() {
 
-          @SuppressWarnings("synthetic-access")
-          @Override
-          public void onSuccess(UserProxy user) {
-            if (user == null) {
-              logout();
-              return;
-            }
-            loginUserCache = user;
-            initViewWith(user);
-          }
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(UserProxy user) {
+        if (user == null) {
+          logout();
+          return;
+        }
+        loginUserCache = user;
+        initViewWith(user);
+      }
 
-          /**
-           * {@inheritDoc}
-           */
-          @Override
-          public void onFailure(ServerFailure error) {
-            showErrorMessage(error.getMessage());
-            logout();
-            return;
-          }
-        });
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onFailure(ServerFailure error) {
+        showErrorMessage(error.getMessage());
+        logout();
+        return;
+      }
+    });
   }
 
   /**
@@ -130,113 +120,11 @@ public abstract class TaskitActivity extends AbstractActivity {
     if (user == null) throw new NullPointerException();
     this.loginUser = user;
 
-    initToolBarButtons(user);
-    final String name = user.getName() == null ? user.getAccount().getId() : user.getName();
-    this.header.setUserId(name);
-    this.header.setUserType(user.getType().name());
+    final TaskitView taskitView = createTaskitView(this.clientFactory);
+    Widget page = this.layout.layout(taskitView, user);
+    this.container.setWidget(page);
 
-    final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
-    pn.addNorth(this.header, this.header.getHeight());
-
-    this.view = createTaskitView(this.clientFactory);
-    pn.add(createTaskitView(this.clientFactory));
-    this.container.setWidget(pn);
     onViewShown();
-  }
-
-  /**
-   * ビューが表示されたときに呼び出されます。
-   */
-  protected void onViewShown() {
-    // do nothing
-  }
-
-  /**
-   * 上部のツールバーに表示するボタン、及びそのアクションを設定します。
-   * 
-   * @param user ログインユーザー情報
-   */
-  @SuppressWarnings({"nls", "unused"})
-  private void initToolBarButtons(UserProxy user) {
-    final UserType userType = user.getType();
-
-    if (userType == UserType.TA || userType == UserType.TEACHER) {
-      final ToolBarButton studentListButton = this.header.addButton("student_list");
-      studentListButton.setIcon("taskit/students64.png");
-      studentListButton.setClickHandler(new ClickHandler() {
-
-        @Override
-        public void onClick(ClickEvent event) {
-          getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
-        }
-      });
-
-      final ToolBarButton attendanceListButton = this.header.addButton("attendance_list");
-      attendanceListButton.setIcon("taskit/attendance64.png");
-      attendanceListButton.setClickHandler(new ClickHandler() {
-
-        @Override
-        public void onClick(ClickEvent event) {
-          getClientFactory().getPlaceController().goTo(AttendanceList.INSTANCE);
-        }
-      });
-
-      final ToolBarButton helpCallListButton = this.header.addButton("call_list");
-      helpCallListButton.setIcon("taskit/helplist64.png");
-      helpCallListButton.setClickHandler(new ClickHandler() {
-
-        @Override
-        public void onClick(ClickEvent event) {
-          getClientFactory().getPlaceController().goTo(HelpCallList.INSTANCE);
-        }
-      });
-    }
-
-    if (userType == UserType.TEACHER) {
-      //      final ToolBarButton adminButton = this.header.addButton("admin");
-      //      adminButton.setIcon("taskit/admin64.png");
-      //      adminButton.setClickHandler(new ClickHandler() {
-      //
-      //        @Override
-      //        public void onClick(ClickEvent event) {
-      //          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
-      //        }
-      //      });
-    }
-
-    if (userType == UserType.STUDENT) {
-      final ToolBarButton studentButton = this.header.addButton("admin");
-      studentButton.setIcon("taskit/student64.png");
-      studentButton.setClickHandler(new ClickHandler() {
-
-        @Override
-        public void onClick(ClickEvent event) {
-          getClientFactory().getPlaceController().goTo(Student.INSTANCE);
-        }
-      });
-    }
-
-    final ToolBarButton profileButton = this.header.addButton("profile");
-    profileButton.setIcon("taskit/profile64.png");
-    profileButton.setClickHandler(new ClickHandler() {
-
-      @Override
-      public void onClick(ClickEvent event) {
-        getClientFactory().getPlaceController().goTo(Profile.INSTANCE);
-      }
-    });
-
-    this.header.addSeparator();
-
-    final ToolBarButton logoutButton = this.header.addButton("logout");
-    logoutButton.setIcon("taskit/logout64.png");
-    logoutButton.setClickHandler(new ClickHandler() {
-
-      @Override
-      public void onClick(ClickEvent event) {
-        logout();
-      }
-    });
   }
 
   /**
@@ -248,6 +136,13 @@ public abstract class TaskitActivity extends AbstractActivity {
   protected abstract TaskitView createTaskitView(@SuppressWarnings("hiding") ClientFactory clientFactory);
 
   /**
+   * ビューが表示されたときに呼び出されます。
+   */
+  protected void onViewShown() {
+    // do nothing
+  }
+
+  /**
    * アクティビティで表示するビューを取得します。
    * 
    * @return ビュー。まだ生成されていない場合はnull
@@ -257,9 +152,10 @@ public abstract class TaskitActivity extends AbstractActivity {
   }
 
   /**
-   * ログアウトします。
+   * @{inheritDoc
    */
-  protected void logout() {
+  @Override
+  public void logout() {
     loginUserCache = null;
     try {
       getClientFactory().getRequestFactory().accountRequest().logout().fire();
