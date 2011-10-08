@@ -3,9 +3,13 @@
  */
 package org.mklab.taskit.server.domain;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.mklab.taskit.shared.LectureProxy;
+import org.mklab.taskit.shared.LectureRequest;
 import org.mklab.taskit.shared.ReportProxy;
 import org.mklab.taskit.shared.ReportRequest;
 
@@ -37,7 +41,7 @@ public class ReportRequestTest extends DomainTest {
 
   @SuppressWarnings("nls")
   private static void createLectureAndReport() {
-    ReportRequest req = getRequestFactory().reportRequest();
+    LectureRequest req = getRequestFactory().lectureRequest();
     final LectureProxy lecture = req.create(LectureProxy.class);
     lecture.setDate(new Date());
     final ReportProxy report = req.create(ReportProxy.class);
@@ -48,7 +52,7 @@ public class ReportRequestTest extends DomainTest {
     report2.setLecture(lecture);
     lecture.setReports(Arrays.asList(report, report2));
 
-    req.persist().using(report).fire(new Receiver<Void>() {
+    req.persist().using(lecture).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void arg0) {

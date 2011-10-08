@@ -16,7 +16,7 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 /**
  * @author yuhi
  */
-public class StudentScoreRequestTest extends DomainTest {
+public class RecordRequestTest extends DomainTest {
 
   /**
    * 学生一人の、講義別成績取得のテストを行います。
@@ -36,7 +36,7 @@ public class StudentScoreRequestTest extends DomainTest {
     req.submit(TA_PROXY.getAccount(), lectures.lecture2_report2, 10);
     req.fire();
 
-    getRequestFactory().studentRecordRequest().getLecturewiseRecordsByAccountId(STUDENT_PROXY.getAccount().getId()).with("records.submissions", "records.attendance") //$NON-NLS-1$ //$NON-NLS-2$
+    getRequestFactory().recordRequest().getLecturewiseRecordsByAccountId(STUDENT_PROXY.getAccount().getId()).with("records.submissions", "records.attendance") //$NON-NLS-1$ //$NON-NLS-2$
         .fire(new Receiver<LecturewiseRecordsProxy>() {
 
           @Override
