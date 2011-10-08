@@ -19,7 +19,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 /**
  * @author yuhi
  */
-public class LectureEditActivity extends TaskitActivity implements LectureEditor.Presenter {
+public class LectureEditActivity extends TaskitActivity implements LectureEditor.Presenter<LectureProxy> {
 
   private LectureRequest lectureRequest;
   private LectureEditor lectureEditor;
@@ -91,7 +91,7 @@ public class LectureEditActivity extends TaskitActivity implements LectureEditor
    * {@inheritDoc}
    */
   @Override
-  public LectureProxy newLecture() {
+  public LectureProxy newEntity() {
     return edit(null);
   }
 
@@ -106,7 +106,7 @@ public class LectureEditActivity extends TaskitActivity implements LectureEditor
         for (LectureProxy lecture : response) {
           editableList.add(lecture);
         }
-        LectureEditActivity.this.lectureEditor.setLectures(editableList);
+        LectureEditActivity.this.lectureEditor.setEntities(editableList);
       }
     });
   }
