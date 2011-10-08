@@ -11,12 +11,12 @@ import java.util.List;
  * 
  * @author ishikura
  */
-public class LecturewiseStudentRecords {
+public class LecturewiseRecords {
 
   private User student;
-  private List<LecturewiseStudentRecord> records;
+  private List<LecturewiseRecord> records;
 
-  LecturewiseStudentRecords(User student, List<LecturewiseStudentRecord> records) {
+  LecturewiseRecords(User student, List<LecturewiseRecord> records) {
     this.student = student;
     this.records = records;
   }
@@ -35,7 +35,7 @@ public class LecturewiseStudentRecords {
    * 
    * @return 講義別の成績
    */
-  public List<LecturewiseStudentRecord> getRecords() {
+  public List<LecturewiseRecord> getRecords() {
     return this.records;
   }
 }

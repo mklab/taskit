@@ -17,7 +17,7 @@ import java.util.List;
  * 
  * @author ishikura
  */
-public class StudentRecordService {
+public class RecordService {
 
   /**
    * 与えられたアカウントIDの生徒の、講義別成績を取得します。
@@ -26,13 +26,13 @@ public class StudentRecordService {
    * @return 講義別成績
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static LecturewiseStudentRecords getLecturewiseRecordsByAccountId(String accountId) {
+  public static LecturewiseRecords getLecturewiseRecordsByAccountId(String accountId) {
     final User user = User.getUserByAccountId(accountId);
     final List<Lecture> lectures = Lecture.getAllLectures();
     final Iterator<Attendance> attendances = Attendance.getAttendancesByAccountId(accountId).iterator();
     Attendance next = attendances.hasNext() ? attendances.next() : null;
 
-    final List<LecturewiseStudentRecord> records = new ArrayList<LecturewiseStudentRecord>();
+    final List<LecturewiseRecord> records = new ArrayList<LecturewiseRecord>();
     for (final Lecture lecture : lectures) {
       List<Submission> submissions = Submission.getSubmissionByAccountIdAndLectureId(accountId, lecture.getId());
       Attendance attendance = null;
@@ -40,10 +40,10 @@ public class StudentRecordService {
         attendance = next;
         next = attendances.hasNext() ? attendances.next() : null;
       }
-      records.add(new LecturewiseStudentRecord(lecture, attendance, submissions));
+      records.add(new LecturewiseRecord(lecture, attendance, submissions));
     }
 
-    return new LecturewiseStudentRecords(user, records);
+    return new LecturewiseRecords(user, records);
   }
 
   /**
@@ -53,17 +53,17 @@ public class StudentRecordService {
    * @return 成績
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static StudentRecords getRecordByAccountId(String id) {
+  public static StudentwiseRecords getRecordByAccountId(String id) {
     final User user = User.getUserByAccountId(id);
     final List<Lecture> lectures = Lecture.getAllLectures();
-    return new StudentRecords(lectures, Arrays.asList(getRecord(user)));
+    return new StudentwiseRecords(lectures, Arrays.asList(getRecord(user)));
   }
 
-  private static StudentRecord getRecord(User user) {
+  private static StudentwiseRecord getRecord(User user) {
     final List<Submission> submissions = Submission.getSubmissionsByAccountId(user.getAccount().getId());
     final List<Attendance> attendances = Attendance.getAttendancesByAccountId(user.getAccount().getId());
 
-    final StudentRecord record = new StudentRecord(user, submissions, attendances);
+    final StudentwiseRecord record = new StudentwiseRecord(user, submissions, attendances);
     return record;
   }
 
@@ -73,14 +73,14 @@ public class StudentRecordService {
    * @return 成績
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static StudentRecords getAllRecords() {
+  public static StudentwiseRecords getAllRecords() {
     final List<Lecture> lectures = Lecture.getAllLectures();
     final List<User> users = User.getAllStudents();
-    final List<StudentRecord> recordList = new ArrayList<StudentRecord>();
+    final List<StudentwiseRecord> recordList = new ArrayList<StudentwiseRecord>();
     for (final User user : users) {
       recordList.add(getRecord(user));
     }
-    return new StudentRecords(lectures, recordList);
+    return new StudentwiseRecords(lectures, recordList);
   }
 
 }

@@ -34,7 +34,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
 
   private Presenter presenter;
   @UiField(provided = true)
-  StudentScorePanel scorePanel;
+  StudentwiseRecordPanel scorePanel;
   @UiField
   ToggleButton helpCallButton;
   @UiField
@@ -91,7 +91,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   protected Widget initContent() {
-    this.scorePanel = new StudentScorePanel(getClientFactory().getMessages(), this.editable);
+    this.scorePanel = new StudentwiseRecordPanel(getClientFactory().getMessages(), this.editable);
 
     final Widget widget = binder.createAndBindUi(this);
     final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$

@@ -13,13 +13,13 @@ import java.util.List;
  * 
  * @author ishikura
  */
-public class LecturewiseStudentRecord {
+public class LecturewiseRecord {
 
   private Lecture lecture;
   private Attendance attendance;
   private List<Submission> submissions;
 
-  LecturewiseStudentRecord(Lecture lecture, Attendance attendance, List<Submission> submissions) {
+  LecturewiseRecord(Lecture lecture, Attendance attendance, List<Submission> submissions) {
     super();
     this.lecture = lecture;
     this.attendance = attendance;

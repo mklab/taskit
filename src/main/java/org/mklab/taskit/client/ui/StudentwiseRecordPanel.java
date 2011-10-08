@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Composite;
 /**
  * @author ishikura
  */
-public class StudentScorePanel extends Composite {
+public class StudentwiseRecordPanel extends Composite {
 
   private CellTable<LectureScore> table;
   private StudentScoreModel model;
@@ -39,12 +39,12 @@ public class StudentScorePanel extends Composite {
   Messages messages;
 
   /**
-   * {@link StudentScorePanel}オブジェクトを構築します。
+   * {@link StudentwiseRecordPanel}オブジェクトを構築します。
    * 
    * @param messages メッセージ
    * @param editable 編集可能かどうか
    */
-  public StudentScorePanel(Messages messages, boolean editable) {
+  public StudentwiseRecordPanel(Messages messages, boolean editable) {
     if (messages == null) throw new NullPointerException();
 
     this.table = new CellTable<StudentScoreModel.LectureScore>();
@@ -228,7 +228,7 @@ public class StudentScorePanel extends Composite {
 
       @Override
       public String render(@SuppressWarnings("unused") int index, AttendanceType value) {
-        return AttendanceListViewImpl.getLabelOfAttendanceType(StudentScorePanel.this.messages, value);
+        return AttendanceListViewImpl.getLabelOfAttendanceType(StudentwiseRecordPanel.this.messages, value);
       }
     });
     selectionCell.setEditable(this.editable);

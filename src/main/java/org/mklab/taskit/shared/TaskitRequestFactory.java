@@ -24,6 +24,6 @@ public interface TaskitRequestFactory extends RequestFactory {
 
   ReportRequest reportRequest();
 
-  StudentRecordRequest studentRecordRequest();
+  RecordRequest studentRecordRequest();
 
 }

@@ -11,13 +11,13 @@ import java.util.List;
  * 
  * @author ishikura
  */
-public class StudentRecord {
+public class StudentwiseRecord {
 
   private User student;
   private List<Submission> submissions;
   private List<Attendance> attendances;
 
-  StudentRecord(User student, List<Submission> submissions, List<Attendance> attendances) {
+  StudentwiseRecord(User student, List<Submission> submissions, List<Attendance> attendances) {
     this.student = student;
     this.submissions = submissions;
     this.attendances = attendances;

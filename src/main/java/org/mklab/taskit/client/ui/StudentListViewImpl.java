@@ -36,7 +36,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiField(provided = true)
   ValueListBox<UserProxy> userList;
   @UiField(provided = true)
-  StudentScorePanel panel;
+  StudentwiseRecordPanel panel;
   @UiField
   Label userName;
   @UiField
@@ -118,7 +118,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @Override
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
-    this.panel = new StudentScorePanel(messages, true);
+    this.panel = new StudentwiseRecordPanel(messages, true);
 
     this.userList = new ValueListBox<UserProxy>(new Renderer<UserProxy>() {
 
