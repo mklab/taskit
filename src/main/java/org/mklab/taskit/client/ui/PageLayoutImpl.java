@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
 import org.mklab.taskit.client.place.HelpCallList;
 import org.mklab.taskit.client.place.Profile;
@@ -116,15 +117,15 @@ public class PageLayoutImpl implements PageLayout {
     }
 
     if (userType == UserType.TEACHER) {
-      //      final ToolBarButton adminButton = this.header.addButton("admin");
-      //      adminButton.setIcon("taskit/admin64.png");
-      //      adminButton.setClickHandler(new ClickHandler() {
-      //
-      //        @Override
-      //        public void onClick(ClickEvent event) {
-      //          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
-      //        }
-      //      });
+      final ToolBarButton adminButton = this.header.addButton("admin");
+      adminButton.setIcon("taskit/admin64.png");
+      adminButton.setClickHandler(new ClickHandler() {
+
+        @Override
+        public void onClick(ClickEvent event) {
+          getClientFactory().getPlaceController().goTo(Admin.INSTANCE);
+        }
+      });
     }
 
     if (userType == UserType.STUDENT) {

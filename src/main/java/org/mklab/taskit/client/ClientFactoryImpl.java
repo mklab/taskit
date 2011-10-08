@@ -3,6 +3,8 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.ui.AdminView;
+import org.mklab.taskit.client.ui.AdminViewImpl;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.HeaderView;
@@ -146,6 +148,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public PageLayout getPageLayout() {
     return new PageLayoutImpl(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AdminView getAdminView() {
+    return new AdminViewImpl(this);
   }
 
 }
