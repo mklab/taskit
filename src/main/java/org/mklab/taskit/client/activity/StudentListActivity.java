@@ -53,7 +53,16 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     final StudentListView list = clientFactory.getStudentListView();
     this.view = list;
     list.setPresenter(this);
+    return list;
+  }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onViewShown() {
+    super.onViewShown();
+    final StudentListView list = (StudentListView)getTaskitView();
     getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
 
           @Override
@@ -78,7 +87,6 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
           }
 
         });
-    return list;
   }
 
   /**
@@ -215,7 +223,8 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   @Override
   public void delete(final AttendanceProxy attendance) {
-    getClientFactory().getRequestFactory().attendanceRequest().delete().using(attendance).fire(new Receiver<Void>() {
+    final AttendanceRequest req = getClientFactory().getRequestFactory().attendanceRequest();
+    req.delete().using(attendance).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {

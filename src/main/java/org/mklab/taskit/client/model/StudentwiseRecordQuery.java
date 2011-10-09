@@ -18,7 +18,7 @@ public class StudentwiseRecordQuery {
 
   private TaskitRequestFactory requestFactory;
   @SuppressWarnings("nls")
-  private static final String[] recordPropertyRefs = {"records.submissions.submitter", "records.submissions.report", "records.lecture.reports"};
+  private static final String[] recordPropertyRefs = {"records.submissions.submitter", "records.submissions.report", "records.lecture.reports", "records.attendance.lecture"};
 
   /**
    * {@link StudentwiseRecordQuery}オブジェクトを構築します。
