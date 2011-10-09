@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.client.ui.admin.EntityEditorView;
 import org.mklab.taskit.client.ui.admin.ReportEditorView;
@@ -52,12 +53,18 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
   protected void onViewShown() {
     super.onViewShown();
     updateReportListData();
+    updateChoosableLectures();
+  }
 
+  private void updateChoosableLectures() {
+    final Messages messages = getClientFactory().getMessages();
+    showInformationMessage(messages.fetchingChoosableLecturesMessage());
     getClientFactory().getRequestFactory().lectureRequest().getAllLectures().with().fire(new Receiver<List<LectureProxy>>() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void onSuccess(List<LectureProxy> response) {
+        showInformationMessage(messages.fetchedChoosableLecturesMessage());
         lectures = response;
         reportEditor.setChoosableLectures(response);
       }
@@ -68,11 +75,13 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
    * {@inheritDoc}
    */
   @Override
-  public void save(ReportProxy report) {
+  public void save(final ReportProxy report) {
+    final Messages messages = getClientFactory().getMessages();
     this.reportRequest.updateOrCreate().using(report).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
+        showInformationMessage(messages.savedReportMessage(report.getTitle()));
         updateReportListData();
       }
 
@@ -82,7 +91,7 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
       @Override
       public void onFailure(ServerFailure error) {
         updateReportListData();
-        showErrorMessage(error.getMessage());
+        showErrorDialog(messages.savedReportFailMessage(report.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
     this.reportRequest = null;
@@ -105,11 +114,11 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
   @Override
   public ReportProxy newEntity() {
     if (this.lectures == null) {
-      showErrorMessage("Lecture data not fetched. Please retry later."); //$NON-NLS-1$
+      showErrorDialog("Lecture data not fetched. Please retry later."); //$NON-NLS-1$
       return null;
     }
     if (this.lectures.size() == 0) {
-      showErrorMessage("No lecture data exists. Please create at least one lecture before do this."); //$NON-NLS-1$
+      showErrorDialog("No lecture data exists. Please create at least one lecture before do this."); //$NON-NLS-1$
       return null;
     }
 
@@ -120,11 +129,14 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
 
   void updateReportListData() {
     final ReportRequest req = getClientFactory().getRequestFactory().reportRequest();
+    final Messages messages = getClientFactory().getMessages();
+    showInformationMessage(messages.fetchingReportListMessage());
     req.getAllReports().with("lecture").fire(new Receiver<List<ReportProxy>>() { //$NON-NLS-1$
 
           @SuppressWarnings("synthetic-access")
           @Override
           public void onSuccess(List<ReportProxy> response) {
+            showInformationMessage(messages.fetchedReportListMessage());
             ReportEditActivity.this.reportEditor.setEntities(response);
           }
         });
@@ -134,11 +146,13 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
    * {@inheritDoc}
    */
   @Override
-  public void delete(ReportProxy report) {
+  public void delete(final ReportProxy report) {
+    final Messages messages = getClientFactory().getMessages();
     this.reportRequest.delete().using(report).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
+        showInformationMessage(messages.deletedReportMessage(report.getTitle()));
         updateReportListData();
       }
 
@@ -148,7 +162,7 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
       @Override
       public void onFailure(ServerFailure error) {
         updateReportListData();
-        showErrorMessage(error.getMessage());
+        showErrorMessage(messages.deletedReportFailMessage(report.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
   }

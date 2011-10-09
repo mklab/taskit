@@ -4,13 +4,13 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.client.ui.admin.EntityEditorView;
 import org.mklab.taskit.client.ui.admin.LectureEditorView;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.LectureRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -57,11 +57,13 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
    * {@inheritDoc}
    */
   @Override
-  public void save(LectureProxy lecture) {
+  public void save(final LectureProxy lecture) {
+    final Messages messages = getClientFactory().getMessages();
     this.lectureRequest.updateOrCreate().using(lecture).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
+        showInformationMessage(messages.savedLectureMessage(lecture.getTitle()));
         updateLectureListData();
       }
 
@@ -71,7 +73,7 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
       @Override
       public void onFailure(ServerFailure error) {
         updateLectureListData();
-        showErrorMessage(error.getMessage());
+        showErrorDialog(messages.savedLectureFailMessage(lecture.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
     this.lectureRequest = null;
@@ -98,16 +100,15 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
 
   void updateLectureListData() {
     final LectureRequest req = getClientFactory().getRequestFactory().lectureRequest();
+    final Messages messages = getClientFactory().getMessages();
+    showInformationMessage(messages.fetchingLectureListMessage());
     req.getAllLectures().fire(new Receiver<List<LectureProxy>>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(List<LectureProxy> response) {
-        final List<LectureProxy> editableList = new ArrayList<LectureProxy>();
-        for (LectureProxy lecture : response) {
-          editableList.add(lecture);
-        }
-        LectureEditActivity.this.lectureEditor.setEntities(editableList);
+        showInformationMessage(messages.fetchedLectureListMessage());
+        LectureEditActivity.this.lectureEditor.setEntities(response);
       }
     });
   }
@@ -116,11 +117,13 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
    * {@inheritDoc}
    */
   @Override
-  public void delete(LectureProxy lecture) {
+  public void delete(final LectureProxy lecture) {
+    final Messages messages = getClientFactory().getMessages();
     this.lectureRequest.delete().using(lecture).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
+        showInformationMessage(messages.deletedLectureMessage(lecture.getTitle()));
         updateLectureListData();
       }
 
@@ -130,7 +133,7 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
       @Override
       public void onFailure(ServerFailure error) {
         updateLectureListData();
-        showErrorMessage(error.getMessage());
+        showErrorDialog(messages.deletedLectureFailMessage(lecture.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
   }

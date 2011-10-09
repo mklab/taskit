@@ -104,7 +104,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
+        showErrorDialog(error.getMessage());
         logout();
         return;
       }
@@ -179,11 +179,11 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * 
    * @param errorMessage エラーメッセージ
    */
-  protected final void showErrorMessage(String errorMessage) {
+  protected final void showErrorDialog(String errorMessage) {
     if (this.view == null) {
       Window.alert(errorMessage);
     } else {
-      this.view.showErrorMessage(errorMessage);
+      this.view.showErrorDialog(errorMessage);
     }
   }
 
@@ -192,8 +192,8 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * 
    * @param e 例外
    */
-  protected final void showErrorMessage(Throwable e) {
-    showErrorMessage(e.toString());
+  protected final void showErrorDialog(Throwable e) {
+    showErrorDialog(e.toString());
   }
 
   /**
@@ -201,12 +201,32 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * 
    * @param message メッセージ
    */
-  protected final void showInformationMessage(String message) {
+  protected final void showInformationDialog(String message) {
     if (this.view == null) {
       Window.alert(message);
     } else {
-      this.view.showInformationMessage(message);
+      this.view.showInformationDialog(message);
     }
+  }
+
+  /**
+   * エラーメッセージを表示します。
+   * 
+   * @param message エラーメッセージ
+   */
+  protected final void showErrorMessage(String message) {
+    if (this.view == null) showErrorDialog(message);
+    this.view.showErrorMessage(message);
+  }
+
+  /**
+   * 情報メッセージを表示します。
+   * 
+   * @param message 情報メッセージ
+   */
+  protected final void showInformationMessage(String message) {
+    if (this.view == null) showInformationDialog(message);
+    this.view.showInformationMessage(message);
   }
 
 }

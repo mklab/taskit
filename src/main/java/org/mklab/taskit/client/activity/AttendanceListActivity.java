@@ -49,9 +49,6 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
     this.view = clientFactory.getAttendanceListView();
     this.view.setPresenter(this);
-
-    fetchLecturesAsync();
-
     return this.view;
   }
 
@@ -59,13 +56,22 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
    * {@inheritDoc}
    */
   @Override
-  public void attend(AccountProxy user, AttendanceType type) {
+  protected void onViewShown() {
+    super.onViewShown();
+    fetchLecturesAsync();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void attend(final AccountProxy user, AttendanceType type) {
     final LectureProxy lecture = this.view.getSelectedLecture();
     getClientFactory().getRequestFactory().attendanceRequest().attend(user, lecture, type).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        showInformationMessage(getClientFactory().getMessages().submittedAttendanceMessage(user.getId(), lecture.getTitle()));
       }
 
       /**
@@ -73,7 +79,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
+        showErrorDialog(getClientFactory().getMessages().submittedAttendanceFailMessage(user.getId(), lecture.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
     });
@@ -98,11 +104,13 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   private void fetchLecturesAsync() {
+    showInformationMessage(getClientFactory().getMessages().fetchingLectureListMessage());
     getClientFactory().getRequestFactory().lectureRequest().getAllLectures().fire(new Receiver<List<LectureProxy>>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(List<LectureProxy> arg0) {
+        showInformationMessage(getClientFactory().getMessages().fetchedLectureListMessage());
         AttendanceListActivity.this.lectures = arg0;
         updateLectures();
         selectLatestLecture();
@@ -121,11 +129,13 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   private void fetchStudentsAsync() {
+    showInformationMessage(getClientFactory().getMessages().fetchingUserListMessage());
     getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
 
           @SuppressWarnings("synthetic-access")
           @Override
           public void onSuccess(List<UserProxy> response) {
+            showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
             AttendanceListActivity.this.students = response;
             updateAttendanceList();
           }
@@ -134,11 +144,13 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
   }
 
   private void fetchAttendancesByLectureAsync(LectureProxy lecture) {
+    showInformationMessage(getClientFactory().getMessages().fetchingAttendancesMessage());
     getClientFactory().getRequestFactory().attendanceRequest().getAttendancesByLecture(lecture).with("attender").fire(new Receiver<List<AttendanceProxy>>() { //$NON-NLS-1$
 
           @SuppressWarnings("synthetic-access")
           @Override
           public void onSuccess(List<AttendanceProxy> response) {
+            showInformationMessage(getClientFactory().getMessages().fetchedAttendancesMessage());
             AttendanceListActivity.this.attendances = response;
             updateAttendanceList();
           }

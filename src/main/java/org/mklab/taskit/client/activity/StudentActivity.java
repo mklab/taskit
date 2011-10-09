@@ -35,24 +35,38 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
     final StudentView studentView = clientFactory.getStudentView();
     studentView.setPresenter(this);
 
-    final StudentwiseRecordQuery query = new StudentwiseRecordQuery(clientFactory.getRequestFactory());
+    return studentView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onViewShown() {
+    super.onViewShown();
+
+    final StudentwiseRecordQuery query = new StudentwiseRecordQuery(getClientFactory().getRequestFactory());
+    final StudentView studentView = (StudentView)getTaskitView();
+
+    showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(getLoginUser().getAccount().getId()));
     query.query(new StudentwiseRecordQuery.Handler() {
 
       @Override
       public void handleResult(StudentwiseRecordModel model) {
+        showInformationMessage(getClientFactory().getMessages().fetchedUserRecordsMessage(getLoginUser().getAccount().getId()));
         studentView.setModel(model);
         StudentwiseRecordModel.LectureScore latestScore = Util.getLatestScore(model);
         studentView.highlightRow(latestScore);
       }
     });
-    clientFactory.getRequestFactory().helpCallRequest().isCalling().fire(new Receiver<Boolean>() {
+    getClientFactory().getRequestFactory().helpCallRequest().isCalling().fire(new Receiver<Boolean>() {
 
       @Override
       public void onSuccess(Boolean response) {
+        showInformationMessage(getClientFactory().getMessages().fetchedHelpCallState());
         studentView.setCalling(response.booleanValue());
       }
     });
-    return studentView;
   }
 
   /**
@@ -64,7 +78,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage("Called successfully."); //$NON-NLS-1$
+        showInformationDialog(getClientFactory().getMessages().callingNowMessage());
       }
 
       /**
@@ -72,7 +86,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showInformationMessage("Failed to call. : " + error.getMessage()); //$NON-NLS-1$
+        showErrorDialog(getClientFactory().getMessages().calledFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
     });
@@ -87,7 +101,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage("Uncalled successfully."); //$NON-NLS-1$
+        showInformationDialog(getClientFactory().getMessages().uncalledMyselfMessage());
       }
 
       /**
@@ -95,7 +109,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showInformationMessage("Failed to uncall. : " + error.getMessage()); //$NON-NLS-1$
+        showErrorDialog(getClientFactory().getMessages().uncalledMyselfFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
     });

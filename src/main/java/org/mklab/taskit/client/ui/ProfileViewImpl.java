@@ -73,7 +73,7 @@ public class ProfileViewImpl extends AbstractTaskitView implements ProfileView {
     try {
       Validator.validateUserName(newUserName);
     } catch (IllegalArgumentException e) {
-      showInformationMessage(e.getMessage());
+      showErrorMessage(e.getMessage());
       return;
     }
 
@@ -94,7 +94,7 @@ public class ProfileViewImpl extends AbstractTaskitView implements ProfileView {
     try {
       Validator.validatePassword(newPassword);
     } catch (IllegalArgumentException e) {
-      showInformationMessage(e.getMessage());
+      showErrorMessage(e.getMessage());
       return;
     }
 

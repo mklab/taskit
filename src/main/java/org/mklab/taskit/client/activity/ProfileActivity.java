@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.ui.ProfileView;
 import org.mklab.taskit.client.ui.TaskitView;
 
@@ -33,9 +34,16 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
     final ProfileView profileView = clientFactory.getProfileView();
     profileView.setPresenter(this);
 
-    profileView.setUser(getLoginUser());
-
     return profileView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onViewShown() {
+    super.onViewShown();
+    ((ProfileView)getTaskitView()).setUser(getLoginUser());
   }
 
   /**
@@ -44,14 +52,15 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
   @Override
   public void changePassword(String currentPassword, String password) {
     if (currentPassword.equals(password)) {
-      showInformationMessage("Password not changed."); //$NON-NLS-1$
+      showInformationDialog("Password not changed."); //$NON-NLS-1$
       return;
     }
+    final Messages messages = getClientFactory().getMessages();
     getClientFactory().getRequestFactory().accountRequest().changeMyPassword(currentPassword, password).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage("Password was changed successfully!"); //$NON-NLS-1$
+        showInformationMessage(messages.changedPasswordMessage());
         clearLoginUserCache();
       }
 
@@ -60,7 +69,7 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
+        showErrorMessage(messages.changedPasswordFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
   }
@@ -70,11 +79,12 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
    */
   @Override
   public void changeUserName(String name) {
+    final Messages messages = getClientFactory().getMessages();
     getClientFactory().getRequestFactory().userRequest().changeUserName(name).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage("User name was changed successfully!"); //$NON-NLS-1$
+        showInformationMessage(messages.changedUserNameMessage());
         clearLoginUserCache();
       }
 
@@ -83,7 +93,7 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
+        showErrorMessage(messages.changedUserNameFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
   }

@@ -58,6 +58,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
 
           @Override
           public void onSuccess(List<UserProxy> arg0) {
+            showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
             list.setListData(arg0);
 
             final String initialSelection = getAccountIdInPlaceToken();
@@ -84,14 +85,14 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
-  public void submit(ReportProxy report, int point) {
+  public void submit(final ReportProxy report, final int point) {
     final UserProxy user = this.view.getSelectedUser();
     final SubmissionRequest submissionRequest = getClientFactory().getRequestFactory().submissionRequest();
     submissionRequest.submit(user.getAccount(), report, point).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        showInformationMessage(getClientFactory().getMessages().submittedReportMessage(user.getAccount().getId(), report.getTitle()));
       }
 
       /**
@@ -99,7 +100,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
+        showErrorDialog(error.getMessage());
       }
 
     });
@@ -109,14 +110,14 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
-  public void attend(LectureProxy lecture, AttendanceType type) {
+  public void attend(final LectureProxy lecture, AttendanceType type) {
     final UserProxy user = this.view.getSelectedUser();
     final AttendanceRequest attendanceRequest = getClientFactory().getRequestFactory().attendanceRequest();
     attendanceRequest.attend(user.getAccount(), lecture, type).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        showInformationMessage(getClientFactory().getMessages().submittedAttendanceMessage(user.getAccount().getId(), lecture.getTitle()));
       }
 
       /**
@@ -124,7 +125,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage(error.getMessage());
+        showErrorDialog(error.getMessage());
       }
 
     });
@@ -134,12 +135,12 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
-  public void uncall(AccountProxy user) {
+  public void uncall(final AccountProxy user) {
     getClientFactory().getRequestFactory().helpCallRequest().cancelCall(user.getId()).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage("Successfully canceled the call."); //$NON-NLS-1$
+        showInformationDialog(getClientFactory().getMessages().uncalledMessage(user.getId()));
       }
 
       /**
@@ -147,7 +148,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage("Failed to cancel the call. : " + error.getMessage()); //$NON-NLS-1$
+        showErrorDialog(getClientFactory().getMessages().uncallFailedMessage(user.getId()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
   }
@@ -162,11 +163,13 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   }
 
   private void fetchAndShowAsync(final UserProxy selectedUser) {
+    showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(selectedUser.getAccount().getId()));
     this.query.query(selectedUser.getAccount().getId(), new StudentwiseRecordQuery.Handler() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void handleResult(StudentwiseRecordModel model) {
+        showInformationMessage(getClientFactory().getMessages().fetchedUserRecordsMessage(selectedUser.getAccount().getId()));
         view.showUserPage(selectedUser, model);
 
         final StudentwiseRecordModel.LectureScore latestRow = Util.getLatestScore(model);
@@ -189,12 +192,12 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
-  public void delete(SubmissionProxy submission) {
+  public void delete(final SubmissionProxy submission) {
     getClientFactory().getRequestFactory().submissionRequest().delete().using(submission).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        showInformationMessage(getClientFactory().getMessages().deletedSubmissionMessage(submission.getReport().getTitle()));
       }
 
       /**
@@ -202,7 +205,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage("Failed to delete the submission. : " + error.getMessage()); //$NON-NLS-1$
+        showErrorDialog(getClientFactory().getMessages().deletedSubmissionFailMessage(submission.getReport().getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
   }
@@ -211,12 +214,12 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
-  public void delete(AttendanceProxy attendance) {
+  public void delete(final AttendanceProxy attendance) {
     getClientFactory().getRequestFactory().attendanceRequest().delete().using(attendance).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        // do nothing
+        showInformationMessage(getClientFactory().getMessages().deletedAttendanceMessage(attendance.getLecture().getTitle()));
       }
 
       /**
@@ -224,7 +227,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        showErrorMessage("Failed to delete the attendance. : " + error.getMessage()); //$NON-NLS-1$
+        showErrorDialog(getClientFactory().getMessages().deletedAttendanceFailMessage(attendance.getLecture().getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
     });
