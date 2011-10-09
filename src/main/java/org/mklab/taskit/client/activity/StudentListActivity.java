@@ -213,6 +213,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
+        reloadUserPage();
         showErrorDialog(getClientFactory().getMessages().deletedSubmissionFailMessage(submission.getReport().getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
@@ -236,6 +237,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
        */
       @Override
       public void onFailure(ServerFailure error) {
+        reloadUserPage();
         showErrorDialog(getClientFactory().getMessages().deletedAttendanceFailMessage(attendance.getLecture().getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
