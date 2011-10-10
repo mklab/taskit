@@ -32,6 +32,9 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
   private ClientFactory clientFactory;
   private MessageDisplay informationDisplay;
   private MessageDisplay errorDisplay;
+
+  private DockLayoutPanel header;
+  private Widget helpCallArea;
   private Label helpCallCountLabel;
 
   /**
@@ -55,7 +58,7 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
     this.informationDisplay.clearMessage();
 
     final DockLayoutPanel dock = new DockLayoutPanel(Unit.EM);
-    final DockLayoutPanel header = new DockLayoutPanel(Unit.EM);
+    this.header = new DockLayoutPanel(Unit.EM);
     {
       this.helpCallCountLabel = new Label();
       this.helpCallCountLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -65,22 +68,31 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
       final Image image = new Image("taskit/hand32.png"); //$NON-NLS-1$
       image.setSize("1em", "1em"); //$NON-NLS-1$ //$NON-NLS-2$
 
-      final LayoutPanel helpCallArea = new LayoutPanel();
-      helpCallArea.add(image);
-      helpCallArea.setWidgetTopHeight(image, 0, Unit.EM, 1, Unit.EM);
-      helpCallArea.setWidgetLeftWidth(image, 0, Unit.EM, 2, Unit.EM);
-      helpCallArea.add(this.helpCallCountLabel);
-      helpCallArea.setWidgetTopHeight(this.helpCallCountLabel, 0, Unit.EM, 1, Unit.EM);
-      helpCallArea.setWidgetLeftWidth(this.helpCallCountLabel, 0, Unit.EM, 2, Unit.EM);
-      DOM.setStyleAttribute(helpCallArea.getElement(), "backgroundColor", "#070"); //$NON-NLS-1$ //$NON-NLS-2$
+      final LayoutPanel layoutPanel = new LayoutPanel();
+      layoutPanel.add(image);
+      layoutPanel.setWidgetTopHeight(image, 0, Unit.EM, 1, Unit.EM);
+      layoutPanel.setWidgetLeftWidth(image, 0, Unit.EM, 2, Unit.EM);
+      layoutPanel.add(this.helpCallCountLabel);
+      layoutPanel.setWidgetTopHeight(this.helpCallCountLabel, 0, Unit.EM, 1, Unit.EM);
+      layoutPanel.setWidgetLeftWidth(this.helpCallCountLabel, 0, Unit.EM, 2, Unit.EM);
+      DOM.setStyleAttribute(layoutPanel.getElement(), "backgroundColor", "#070"); //$NON-NLS-1$ //$NON-NLS-2$
+      this.helpCallArea = layoutPanel;
 
-      header.addWest(helpCallArea, 2);
+      this.header.addWest(layoutPanel, 2);
     }
-    header.add(messageArea);
-    dock.addNorth(header, 1);
+    this.header.add(messageArea);
+    dock.addNorth(this.header, 1);
     dock.add(content);
 
     add(dock);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setHelpCallDisplayEnabled(boolean enabled) {
+    this.header.setWidgetSize(this.helpCallArea, enabled ? 2 : 0);
   }
 
   /**

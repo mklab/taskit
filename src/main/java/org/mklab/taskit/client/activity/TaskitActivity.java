@@ -130,10 +130,14 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     final HelpCallWatcher helpCallWatcher = this.clientFactory.getHelpCallWatcher();
     if (user.getType() == UserType.STUDENT) {
       helpCallWatcher.stop();
+      if (this.view instanceof HelpCallDisplayable) {
+        ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(false);
+      }
     } else {
       helpCallWatcher.setHelpCallObserver(this);
       helpCallWatcher.start();
       if (this.view instanceof HelpCallDisplayable) {
+        ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
         ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallWatcher.getHelpCallCount());
       }
     }

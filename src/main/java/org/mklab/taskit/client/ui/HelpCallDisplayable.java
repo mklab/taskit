@@ -15,4 +15,11 @@ public interface HelpCallDisplayable {
    */
   void showHelpCallCount(int count);
 
+  /**
+   * 表示・非表示を切り替えます。
+   * 
+   * @param enabled 表示するかどうか
+   */
+  void setHelpCallDisplayEnabled(boolean enabled);
+
 }
