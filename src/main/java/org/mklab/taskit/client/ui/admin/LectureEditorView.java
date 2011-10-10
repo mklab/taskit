@@ -5,6 +5,7 @@ package org.mklab.taskit.client.ui.admin;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
+import org.mklab.taskit.client.ui.cell.TextAreaCell;
 import org.mklab.taskit.shared.LectureProxy;
 
 import java.util.Date;
@@ -74,7 +75,7 @@ public class LectureEditorView extends AbstractEntityEditorView<LectureProxy> {
   }
 
   private Column<LectureProxy, String> createDescriptionColumn() {
-    final Column<LectureProxy, String> descriptionColumn = new Column<LectureProxy, String>(new TextInputCell()) {
+    final Column<LectureProxy, String> descriptionColumn = new Column<LectureProxy, String>(new TextAreaCell()) {
 
       @Override
       public String getValue(LectureProxy object) {

@@ -6,6 +6,7 @@ package org.mklab.taskit.client.ui.admin;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.ui.cell.NullableDatePickerCell;
 import org.mklab.taskit.client.ui.cell.SelectCell;
+import org.mklab.taskit.client.ui.cell.TextAreaCell;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
 
@@ -132,7 +133,7 @@ public class ReportEditorView extends AbstractEntityEditorView<ReportProxy> {
   }
 
   private Column<ReportProxy, String> createDescriptionColumn() {
-    final Column<ReportProxy, String> description = new Column<ReportProxy, String>(new TextInputCell()) {
+    final Column<ReportProxy, String> description = new Column<ReportProxy, String>(new TextAreaCell()) {
 
       @Override
       public String getValue(ReportProxy object) {

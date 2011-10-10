@@ -13,6 +13,8 @@ import com.google.gwt.user.client.Timer;
  */
 public final class MessageDisplay {
 
+  /** メッセージを表示後非表示にするまでの時間(ms)です。*/
+  private static final int MESSAGE_TIMEOUT_MILLIS = 10000;
   private Target target;
   private Timer timer;
 
@@ -53,7 +55,7 @@ public final class MessageDisplay {
   }
 
   private void clearMessageLater() {
-    this.timer.schedule(5000);
+    this.timer.schedule(MESSAGE_TIMEOUT_MILLIS);
   }
 
   /**
