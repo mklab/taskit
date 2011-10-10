@@ -8,6 +8,7 @@ import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
 import org.mklab.taskit.client.ui.StudentListView.Presenter;
 import org.mklab.taskit.client.ui.cell.SelectCell;
+import org.mklab.taskit.client.ui.cell.TooltipCell;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.ReportProxy;
@@ -18,12 +19,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.CompositeCell;
 import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.HasCell;
 import com.google.gwt.dom.client.TableRowElement;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 
 /**
@@ -129,7 +139,8 @@ public class StudentwiseRecordPanel extends Composite {
 
     if (newReportCount > currentReportColumnCount) {
       for (int i = currentReportColumnCount; i < newReportCount; i++) {
-        addSubmissionColumn(i - currentReportColumnCount);
+        final int reportIndex = i - currentReportColumnCount;
+        this.table.addColumn(createSubmissionColumn(reportIndex), String.valueOf(reportIndex + 1));
       }
     } else {
       for (int i = newReportCount; i < currentReportColumnCount; i++) {
@@ -138,82 +149,81 @@ public class StudentwiseRecordPanel extends Composite {
     }
   }
 
-  @SuppressWarnings("nls")
-  private void addSubmissionColumn(final int reportIndex) {
-    final List<String> options = Arrays.asList("○", "△", "×", "");
-    final SelectCell<String> submissionCell = new SubmissionCell(options);
-    submissionCell.setEditable(this.editable);
-
-    final Column<LectureScore, String> submissionColumn = new Column<StudentwiseRecordModel.LectureScore, String>(submissionCell) {
-
-      @Override
-      public String getValue(LectureScore object) {
-        if (object.getReportCount() <= reportIndex) {// そもそもそんな課題ない場合
-          return null;
-        }
-        final ReportProxy report = object.getReport(reportIndex);
-        final SubmissionProxy submission = object.getSubmission(report);
-        if (submission == null) return options.get(3); // 未提出
-
-        final int point = submission.getPoint();
-        if (point >= 80) {
-          return options.get(0);
-        } else if (point >= 40) {
-          return options.get(1);
-        } else {
-          return options.get(2);
-        }
-      }
-
-    };
-    submissionColumn.setFieldUpdater(new FieldUpdater<StudentwiseRecordModel.LectureScore, String>() {
-
-      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
-      @Override
-      public void update(@SuppressWarnings("unused") int index, LectureScore object, String value) {
-        if (object.getReportCount() <= reportIndex) {
-          presenter.reloadUserPage();
-          return;
-        }
-        final ReportProxy report = object.getReport(reportIndex);
-        if (value.equals(options.get(0))) {
-          presenter.submit(report, 100);
-        } else if (value.equals(options.get(1))) {
-          presenter.submit(report, 50);
-        } else if (value.equals(options.get(2))) {
-          presenter.submit(report, 0);
-        } else if (value.equals(options.get(3))) {
-          presenter.delete(object.getSubmission(report));
-        } else {
-          presenter.reloadUserPage();
-          return;
-        }
-      }
-
-    });
-    this.table.addColumn(submissionColumn, String.valueOf(reportIndex + 1));
-  }
-
   private void initCommonColumns() {
     this.table.addColumn(createLectureNumberColumn(), this.messages.numberColumnLabel());
     this.table.addColumn(createAttendanceColumn(), this.messages.attendenceTypeLabel());
   }
 
   @SuppressWarnings("static-method")
-  private Column<LectureScore, Void> createLectureNumberColumn() {
-    final Column<LectureScore, Void> lectureNumberColumn = new Column<StudentwiseRecordModel.LectureScore, Void>(new AbstractCell<Void>() {
+  private Column<LectureScore, LectureScore> createLectureNumberColumn() {
+    final List<HasCell<LectureScore, ?>> cells = new ArrayList<HasCell<LectureScore, ?>>();
+    cells.add(new HasCell<StudentwiseRecordModel.LectureScore, Void>() {
 
       @Override
-      public void render(com.google.gwt.cell.client.Cell.Context context, @SuppressWarnings("unused") Void value, SafeHtmlBuilder sb) {
-        sb.appendHtmlConstant(String.valueOf(context.getIndex() + 1));
+      public Cell<Void> getCell() {
+        return new AbstractCell<Void>() {
+
+          @Override
+          public void render(com.google.gwt.cell.client.Cell.Context context, @SuppressWarnings("unused") Void value, SafeHtmlBuilder sb) {
+            sb.appendHtmlConstant(String.valueOf(context.getIndex() + 1));
+          }
+
+        };
       }
 
-    }) {
+      @Override
+      public FieldUpdater<LectureScore, Void> getFieldUpdater() {
+        return null;
+      }
 
       @Override
       public Void getValue(@SuppressWarnings("unused") LectureScore object) {
         return null;
       }
+    });
+    cells.add(new HasCell<LectureScore, LectureScore>() {
+
+      @Override
+      public Cell<LectureScore> getCell() {
+        return new TooltipCell<LectureScore>() {
+
+          @Override
+          protected Widget getTooltipOf(LectureScore value) {
+            final LectureProxy lecture = value.getLecture();
+            final Label title = new Label(lecture.getTitle());
+            final Label date = new Label(DateTimeFormat.getFormat(PredefinedFormat.YEAR_MONTH_DAY).format(lecture.getDate()));
+            final TextArea description = new TextArea();
+            description.setReadOnly(true);
+            description.setText(lecture.getDescription());
+
+            final VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(date);
+            vPanel.add(title);
+            vPanel.add(description);
+
+            return vPanel;
+          }
+        };
+      }
+
+      @Override
+      public FieldUpdater<LectureScore, LectureScore> getFieldUpdater() {
+        return null;
+      }
+
+      @Override
+      public LectureScore getValue(LectureScore object) {
+        return object;
+      }
+    });
+
+    final Column<LectureScore, LectureScore> lectureNumberColumn = new Column<LectureScore, LectureScore>(new CompositeCell<LectureScore>(cells)) {
+
+      @Override
+      public LectureScore getValue(LectureScore object) {
+        return object;
+      }
+
     };
     return lectureNumberColumn;
   }
@@ -258,6 +268,128 @@ public class StudentwiseRecordPanel extends Composite {
 
     });
     return attendanceColumn;
+  }
+
+  private Column<LectureScore, LectureScore> createSubmissionColumn(final int reportIndex) {
+    final List<HasCell<LectureScore, ?>> cells = new ArrayList<HasCell<LectureScore, ?>>();
+
+    // 提出物の種別選択コンボボックス
+    cells.add(new HasCell<LectureScore, String>() {
+
+      @SuppressWarnings("nls")
+      final List<String> options = Arrays.asList("○", "△", "×", "");
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public Cell<String> getCell() {
+        final SubmissionCell submissionCell = new SubmissionCell(this.options);
+        submissionCell.setEditable(StudentwiseRecordPanel.this.editable);
+        return submissionCell;
+      }
+
+      @Override
+      public FieldUpdater<LectureScore, String> getFieldUpdater() {
+        return new FieldUpdater<StudentwiseRecordModel.LectureScore, String>() {
+
+          @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
+          @Override
+          public void update(@SuppressWarnings("unused") int index, LectureScore object, String value) {
+            if (object.getReportCount() <= reportIndex) {
+              presenter.reloadUserPage();
+              return;
+            }
+            final ReportProxy report = object.getReport(reportIndex);
+            if (value.equals(options.get(0))) {
+              presenter.submit(report, 100);
+            } else if (value.equals(options.get(1))) {
+              presenter.submit(report, 50);
+            } else if (value.equals(options.get(2))) {
+              presenter.submit(report, 0);
+            } else if (value.equals(options.get(3))) {
+              presenter.delete(object.getSubmission(report));
+            } else {
+              presenter.reloadUserPage();
+              return;
+            }
+          }
+
+        };
+      }
+
+      @Override
+      public String getValue(LectureScore object) {
+        if (object.getReportCount() <= reportIndex) {// そもそもそんな課題ない場合
+          return null;
+        }
+        final ReportProxy report = object.getReport(reportIndex);
+        final SubmissionProxy submission = object.getSubmission(report);
+        if (submission == null) return this.options.get(3); // 未提出
+
+        final int point = submission.getPoint();
+        if (point >= 80) {
+          return this.options.get(0);
+        } else if (point >= 40) {
+          return this.options.get(1);
+        } else {
+          return this.options.get(2);
+        }
+      }
+
+    });
+    // 課題の詳細ボタン
+    cells.add(new HasCell<LectureScore, LectureScore>() {
+
+      @Override
+      public Cell<LectureScore> getCell() {
+        return new TooltipCell<StudentwiseRecordModel.LectureScore>() {
+
+          /**
+           * {@inheritDoc}
+           */
+          @Override
+          public void render(com.google.gwt.cell.client.Cell.Context context, LectureScore value, SafeHtmlBuilder sb) {
+            // 課題の存在しない列の場合には詳細ボタンを非表示
+            if (value.getReportCount() <= reportIndex) return;
+            super.render(context, value, sb);
+          }
+
+          @Override
+          protected Widget getTooltipOf(LectureScore value) {
+            final ReportProxy report = value.getReport(reportIndex);
+            final Label title = new Label(report.getTitle());
+            final TextArea description = new TextArea();
+            description.setReadOnly(true);
+            description.setText(report.getDescription());
+
+            final VerticalPanel vPanel = new VerticalPanel();
+            vPanel.add(title);
+            vPanel.add(description);
+
+            return vPanel;
+          }
+        };
+      }
+
+      @Override
+      public FieldUpdater<LectureScore, LectureScore> getFieldUpdater() {
+        return null;
+      }
+
+      @Override
+      public LectureScore getValue(LectureScore object) {
+        return object;
+      }
+    });
+
+    final Column<LectureScore, LectureScore> submissionColumn = new Column<LectureScore, LectureScore>(new CompositeCell<LectureScore>(cells)) {
+
+      @Override
+      public LectureScore getValue(LectureScore object) {
+        return object;
+      }
+
+    };
+    return submissionColumn;
   }
 
   /**

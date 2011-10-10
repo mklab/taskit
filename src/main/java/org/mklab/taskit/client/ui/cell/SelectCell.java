@@ -9,6 +9,7 @@ import com.google.gwt.cell.client.AbstractInputCell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.SelectElement;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -99,7 +100,7 @@ public class SelectCell<E> extends AbstractInputCell<E, E> {
   public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, E value, NativeEvent event, ValueUpdater<E> valueUpdater) {
     if ("change".equals(event.getType()) == false) return; //$NON-NLS-1$
 
-    final SelectElement select = parent.getFirstChild().cast();
+    final SelectElement select = getSelectElement(parent);
     final int selectedIndex = select.getSelectedIndex();
     if (selectedIndex < 0) return;
 
@@ -108,6 +109,14 @@ public class SelectCell<E> extends AbstractInputCell<E, E> {
     if (valueUpdater != null) {
       valueUpdater.update(selectedValue);
     }
+  }
+
+  private static SelectElement getSelectElement(Element parent) {
+    Node child = parent;
+    do {
+      if (child.getNodeName().toLowerCase().equals("select")) return child.cast(); //$NON-NLS-1$
+    } while ((child = child.getFirstChild()) != null);
+    return null;
   }
 
   /**
