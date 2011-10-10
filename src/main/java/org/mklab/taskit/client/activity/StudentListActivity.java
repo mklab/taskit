@@ -149,6 +149,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
         showInformationDialog(getClientFactory().getMessages().uncalledMessage(user.getId()));
+        getClientFactory().getHelpCallWatcher().watchNow();
       }
 
       /**

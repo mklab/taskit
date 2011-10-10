@@ -4,10 +4,13 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.HelpCallWatcher;
 import org.mklab.taskit.client.place.Login;
+import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
+import org.mklab.taskit.shared.UserType;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -24,7 +27,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
-public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter {
+public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, HelpCallObserver {
 
   private static UserProxy loginUserCache;
   private ClientFactory clientFactory;
@@ -124,6 +127,17 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
 
+    final HelpCallWatcher helpCallWatcher = this.clientFactory.getHelpCallWatcher();
+    if (user.getType() == UserType.STUDENT) {
+      helpCallWatcher.stop();
+    } else {
+      helpCallWatcher.setHelpCallObserver(this);
+      helpCallWatcher.start();
+      if (this.view instanceof HelpCallDisplayable) {
+        ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallWatcher.getHelpCallCount());
+      }
+    }
+
     onViewShown();
   }
 
@@ -157,8 +171,11 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   @Override
   public void logout() {
     loginUserCache = null;
+    this.clientFactory.getHelpCallWatcher().stop();
     try {
       getClientFactory().getRequestFactory().accountRequest().logout().fire();
+    } catch (Throwable e) {
+      showErrorDialog(e);
     } finally {
       Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
       getClientFactory().getPlaceController().goTo(Login.INSTANCE);
@@ -227,6 +244,17 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   protected final void showInformationMessage(String message) {
     if (this.view == null) showInformationDialog(message);
     this.view.showInformationMessage(message);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void helpCallCountChanged(int count) {
+    if (this.view == null) return;
+    if (this.view instanceof HelpCallDisplayable) {
+      ((HelpCallDisplayable)this.view).showHelpCallCount(count);
+    }
   }
 
 }

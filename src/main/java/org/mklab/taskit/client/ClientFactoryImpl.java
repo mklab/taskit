@@ -41,6 +41,7 @@ public class ClientFactoryImpl implements ClientFactory {
   private PlaceController placeController;
   private Messages messages;
   private TaskitRequestFactory requestFactory;
+  private HelpCallWatcher helpCallWatcher;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -156,6 +157,17 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public AdminView getAdminView() {
     return new AdminViewImpl(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public HelpCallWatcher getHelpCallWatcher() {
+    if (this.helpCallWatcher == null) {
+      this.helpCallWatcher = new HelpCallWatcher(this);
+    }
+    return this.helpCallWatcher;
   }
 
 }

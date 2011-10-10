@@ -7,9 +7,13 @@ import org.mklab.taskit.client.ClientFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,11 +27,12 @@ import com.google.gwt.user.client.ui.Widget;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 24, 2011
  */
-public abstract class AbstractTaskitView extends LayoutPanel implements TaskitView {
+public abstract class AbstractTaskitView extends LayoutPanel implements TaskitView, HelpCallDisplayable {
 
   private ClientFactory clientFactory;
   private MessageDisplay informationDisplay;
   private MessageDisplay errorDisplay;
+  private Label helpCallCountLabel;
 
   /**
    * {@link AbstractTaskitView}オブジェクトを構築します。
@@ -40,9 +45,6 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
     init();
   }
 
-  /**
-   * ビューの初期化を行ないます。
-   */
   private final void init() {
     final Widget content = initContent();
     if (content == null) throw new NullPointerException();
@@ -53,7 +55,29 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
     this.informationDisplay.clearMessage();
 
     final DockLayoutPanel dock = new DockLayoutPanel(Unit.EM);
-    dock.addNorth(messageArea, 1);
+    final DockLayoutPanel header = new DockLayoutPanel(Unit.EM);
+    {
+      this.helpCallCountLabel = new Label();
+      this.helpCallCountLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+      this.helpCallCountLabel.setSize("100%", "100%"); //$NON-NLS-1$ //$NON-NLS-2$
+      DOM.setStyleAttribute(this.helpCallCountLabel.getElement(), "color", "white"); //$NON-NLS-1$ //$NON-NLS-2$
+
+      final Image image = new Image("taskit/hand32.png"); //$NON-NLS-1$
+      image.setSize("1em", "1em"); //$NON-NLS-1$ //$NON-NLS-2$
+
+      final LayoutPanel helpCallArea = new LayoutPanel();
+      helpCallArea.add(image);
+      helpCallArea.setWidgetTopHeight(image, 0, Unit.EM, 1, Unit.EM);
+      helpCallArea.setWidgetLeftWidth(image, 0, Unit.EM, 2, Unit.EM);
+      helpCallArea.add(this.helpCallCountLabel);
+      helpCallArea.setWidgetTopHeight(this.helpCallCountLabel, 0, Unit.EM, 1, Unit.EM);
+      helpCallArea.setWidgetLeftWidth(this.helpCallCountLabel, 0, Unit.EM, 2, Unit.EM);
+      DOM.setStyleAttribute(helpCallArea.getElement(), "backgroundColor", "#070"); //$NON-NLS-1$ //$NON-NLS-2$
+
+      header.addWest(helpCallArea, 2);
+    }
+    header.add(messageArea);
+    dock.addNorth(header, 1);
     dock.add(content);
 
     add(dock);
@@ -107,6 +131,14 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
   public void showErrorMessage(String message) {
     this.informationDisplay.clearMessage();
     this.errorDisplay.showMessage(message);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void showHelpCallCount(int count) {
+    this.helpCallCountLabel.setText(String.valueOf(count));
   }
 
   static class MessageTarget implements MessageDisplay.Target {

@@ -216,7 +216,22 @@ public class HelpCall extends AbstractEntity<Integer> {
 
     @SuppressWarnings("unchecked")
     List<HelpCall> list = q.getResultList();
+    em.close();
     return list;
+  }
+
+  /**
+   * ヘルプコールの数を取得します。
+   * 
+   * @return ヘルプコール数
+   */
+  @Invoker({UserType.TEACHER, UserType.TA})
+  public static long getHelpCallCount() {
+    final EntityManager em = EMF.get().createEntityManager();
+    Query q = em.createQuery("select count(o) from HelpCall o"); //$NON-NLS-1$
+    Object result = q.getSingleResult();
+    em.close();
+    return ((Long)result).longValue();
   }
 
 }

@@ -114,4 +114,11 @@ public interface ClientFactory {
    * @return 管理者ビュー
    */
   AdminView getAdminView();
+
+  /**
+   * ヘルプコール監視オブジェクトを取得します。
+   * 
+   * @return ヘルプコール監視オブジェクト
+   */
+  HelpCallWatcher getHelpCallWatcher();
 }
