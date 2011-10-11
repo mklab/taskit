@@ -66,6 +66,8 @@ public class ProgramDesign2011 extends DBInitializer {
    */
   public static void main(String[] args) {
     EMF.setPersistenceProperty(EMF.DB_URL_KEY, "jdbc:mysql://kamome.mk.ces.kyutech.ac.jp/PROGRAM_DESIGN2011");
+    EMF.setPersistenceProperty(EMF.DB_PASSWORD_KEY, "ta2k3t3");
+    EMF.setPersistenceProperty(EMF.DB_USER_KEY, "taskit");
 
     ProgramDesign2011 p = new ProgramDesign2011();
     p.registerAll();
