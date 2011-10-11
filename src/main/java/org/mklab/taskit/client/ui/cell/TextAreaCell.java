@@ -30,7 +30,7 @@ public class TextAreaCell extends AbstractInputCell<String, String> {
   @Override
   public void render(com.google.gwt.cell.client.Cell.Context context, String value, SafeHtmlBuilder sb) {
     sb.appendHtmlConstant("<textarea rows='2'>");
-    sb.appendEscaped(value);
+    if (value != null) sb.appendEscaped(value);
     sb.appendHtmlConstant("</textarea>");
   }
 
