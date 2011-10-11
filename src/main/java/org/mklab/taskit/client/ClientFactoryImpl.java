@@ -42,6 +42,7 @@ public class ClientFactoryImpl implements ClientFactory {
   private Messages messages;
   private TaskitRequestFactory requestFactory;
   private HelpCallWatcher helpCallWatcher;
+  private LocalDatabase localDatabase;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -165,9 +166,20 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public HelpCallWatcher getHelpCallWatcher() {
     if (this.helpCallWatcher == null) {
-      this.helpCallWatcher = new HelpCallWatcher(this);
+      this.helpCallWatcher = new HelpCallWatcher(getLocalDatabase());
     }
     return this.helpCallWatcher;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public LocalDatabase getLocalDatabase() {
+    if (this.localDatabase == null) {
+      this.localDatabase = new LocalDatabase(getRequestFactory());
+    }
+    return this.localDatabase;
   }
 
 }

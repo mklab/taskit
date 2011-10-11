@@ -121,4 +121,11 @@ public interface ClientFactory {
    * @return ヘルプコール監視オブジェクト
    */
   HelpCallWatcher getHelpCallWatcher();
+
+  /**
+   * ローカルデータベースを取得します。
+   * 
+   * @return ローカルデータベース
+   */
+  LocalDatabase getLocalDatabase();
 }

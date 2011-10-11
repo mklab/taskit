@@ -3,7 +3,9 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.LocalDatabase.Query;
 import org.mklab.taskit.client.activity.HelpCallObserver;
+import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -16,16 +18,23 @@ public class HelpCallWatcher {
 
   private static final int WATCH_PERIOD = 60 * 1000;
   private Timer helpCallWatchTimer;
-  private ClientFactory clientFactory;
-  private int latestHelpCallCount;
   private HelpCallObserver helpCallObserver;
   private boolean running = false;
+  private LocalDatabase database;
+
+  private Query<Long> helpCallCountQuery = new Query<Long>() {
+
+    @Override
+    public void query(TaskitRequestFactory requestFactory, Receiver<Long> receiver) {
+      requestFactory.helpCallRequest().getHelpCallCount().fire(receiver);
+    }
+  };
 
   /**
    * {@link HelpCallWatcher}オブジェクトを構築します。
    */
-  HelpCallWatcher(ClientFactory clientFactory) {
-    this.clientFactory = clientFactory;
+  HelpCallWatcher(LocalDatabase database) {
+    this.database = database;
     this.helpCallWatchTimer = new Timer() {
 
       @SuppressWarnings("synthetic-access")
@@ -67,7 +76,9 @@ public class HelpCallWatcher {
    * @return ヘルプコール数
    */
   public int getHelpCallCount() {
-    return this.latestHelpCallCount;
+    final Long cached = this.database.getCache(this.helpCallCountQuery);
+    if (cached != null) return cached.intValue();
+    return 0;
   }
 
   /**
@@ -89,12 +100,12 @@ public class HelpCallWatcher {
   }
 
   void fireHelpCallCountChanged(int count) {
-    if (this.helpCallObserver != null && this.latestHelpCallCount != count) this.helpCallObserver.helpCallCountChanged(count);
-    this.latestHelpCallCount = count;
+    final int latestHelpCallCount = getHelpCallCount();
+    if (this.helpCallObserver != null && latestHelpCallCount != count) this.helpCallObserver.helpCallCountChanged(count);
   }
 
   private void fetchHelpCallCount() {
-    this.clientFactory.getRequestFactory().helpCallRequest().getHelpCallCount().fire(new Receiver<Long>() {
+    this.database.execute(this.helpCallCountQuery, new Receiver<Long>() {
 
       @Override
       public void onSuccess(Long response) {
