@@ -83,7 +83,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void setSelectedListData(UserProxy user) {
-    this.userList.setValue(user, true);
+    this.userList.setValue(user, false);
   }
 
   /**

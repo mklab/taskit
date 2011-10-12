@@ -33,6 +33,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public class StudentListActivity extends TaskitActivity implements StudentListView.Presenter {
 
+  private static final boolean TOKEN_FOLLOWS_STUDENT_SELECTION = false;
   private StudentListView view;
   private StudentwiseRecordQuery query;
 
@@ -67,6 +68,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
 
     getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.STUDENT_LIST, new Receiver<List<UserProxy>>() {
 
+      @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(List<UserProxy> arg0) {
         showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
@@ -77,6 +79,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
           for (final UserProxy user : arg0) {
             if (initialSelection.equals(user.getAccount().getId())) {
               list.setSelectedListData(user);
+              fetchAndShowAsync(user);
               break;
             }
           }
@@ -170,7 +173,11 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   @Override
   public void listSelectionChanged(UserProxy selectedUser) {
     this.view.clearUserPage();
-    fetchAndShowAsync(selectedUser);
+    if (TOKEN_FOLLOWS_STUDENT_SELECTION) {
+      getClientFactory().getPlaceController().goTo(new StudentList(selectedUser.getAccount().getId()));
+    } else {
+      fetchAndShowAsync(selectedUser);
+    }
   }
 
   private void fetchAndShowAsync(final UserProxy selectedUser) {

@@ -32,6 +32,9 @@ public interface StudentListView extends TaskitView {
 
   /**
    * 選択中のリストデータを設定します。
+   * <p>
+   * 選択は変更しますが、このときイベントは発生しません。(
+   * {@link Presenter#listSelectionChanged(UserProxy)}は呼び出しません。)
    * 
    * @param user 選択するリストデータ
    */
