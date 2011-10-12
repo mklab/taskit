@@ -31,4 +31,6 @@ public interface HelpCallRequest extends RequestContext {
   Request<List<HelpCallProxy>> getAllHelpCalls();
 
   Request<Long> getHelpCallCount();
+
+  Request<Long> getPosition();
 }

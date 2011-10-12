@@ -162,24 +162,6 @@ public class HelpCall extends AbstractEntity<Integer> {
   }
 
   /**
-   * 指定されたアカウントIDのユーザーが呼び出し中であるかどうか調べます。
-   * 
-   * @param callerAccountId 呼び出し中か調べるユーザー
-   * @return 呼び出し中ならばtrue,そうでなければfalse
-   */
-  private static boolean isCallingByAccountId(final String callerAccountId) {
-    final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select s from HelpCall s where s.caller.id=:callerId"); //$NON-NLS-1$
-    q.setParameter("callerId", callerAccountId); //$NON-NLS-1$
-
-    @SuppressWarnings("unchecked")
-    final List<HelpCall> result = q.getResultList();
-    if (result.size() > 1) throw new IllegalStateException();
-
-    return result.size() > 0;
-  }
-
-  /**
    * 呼び出しをキャンセルします。
    * 
    * @param accountId キャンセルする生徒のアカウントID
@@ -202,6 +184,35 @@ public class HelpCall extends AbstractEntity<Integer> {
     } finally {
       em.close();
     }
+  }
+
+  /**
+   * 指定されたアカウントIDのユーザーが呼び出し中であるかどうか調べます。
+   * 
+   * @param callerAccountId 呼び出し中か調べるユーザー
+   * @return 呼び出し中ならばtrue,そうでなければfalse
+   */
+  private static boolean isCallingByAccountId(final String callerAccountId) {
+    return getHelpCall(callerAccountId) != null;
+  }
+
+  /**
+   * 与えられたアカウントIDのユーザーによる呼び出しを取得します。
+   * 
+   * @param callerAccountId ユーザーのID
+   * @return 呼び出し情報。呼び出し中でなければnull
+   */
+  private static HelpCall getHelpCall(final String callerAccountId) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select s from HelpCall s where s.caller.id=:callerId"); //$NON-NLS-1$
+    q.setParameter("callerId", callerAccountId); //$NON-NLS-1$
+
+    @SuppressWarnings("unchecked")
+    final List<HelpCall> result = q.getResultList();
+    if (result.size() == 0) return null;
+    if (result.size() > 1) throw new IllegalStateException();
+
+    return result.get(0);
   }
 
   /**
@@ -234,4 +245,24 @@ public class HelpCall extends AbstractEntity<Integer> {
     return ((Long)result).longValue();
   }
 
+  /**
+   * 自分の呼び出しが何番目なのか調べます。
+   * 
+   * @return 何番目かどうか。1番目ならば0、2番目なら1...
+   */
+  @Invoker({UserType.STUDENT})
+  public static long getPosition() {
+    final User loginUser = ServiceUtil.getLoginUser();
+    final HelpCall helpCall = getHelpCall(loginUser.getAccount().getId());
+    if (helpCall == null) return -1;
+
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select count(o) from HelpCall o where o.date<:date"); //$NON-NLS-1$
+    q.setParameter("date", helpCall.getDate()); //$NON-NLS-1$
+    try {
+      return ((Long)q.getResultList().get(0)).intValue();
+    } finally {
+      em.close();
+    }
+  }
 }

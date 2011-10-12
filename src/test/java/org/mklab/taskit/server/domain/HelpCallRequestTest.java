@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.HelpCallRequest;
+import org.mklab.taskit.shared.UserType;
 
 import java.util.List;
 
@@ -58,5 +59,47 @@ public class HelpCallRequestTest extends DomainTest {
           }
 
         });
+  }
+
+  /**
+   * ヘルプコールの呼び出し順序取得のテストを行います。
+   */
+  @SuppressWarnings("nls")
+  @Test
+  public void testGetPosition() {
+    Account.registerNewAccount("s1", "", UserType.STUDENT);
+    Account.registerNewAccount("s2", "", UserType.STUDENT);
+
+    final User student1 = User.getUserByAccountId("s1");
+    final User student2 = User.getUserByAccountId("s2");
+
+    login(student1);
+    getRequestFactory().helpCallRequest().call(null).fire();
+
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+    login(student2);
+    getRequestFactory().helpCallRequest().call(null).fire();
+
+    login(student1);
+    getRequestFactory().helpCallRequest().getPosition().fire(new Receiver<Long>() {
+
+      @Override
+      public void onSuccess(Long response) {
+        assertEquals(0l, response.longValue());
+      }
+    });
+    login(student2);
+    getRequestFactory().helpCallRequest().getPosition().fire(new Receiver<Long>() {
+
+      @Override
+      public void onSuccess(Long response) {
+        assertEquals(1l, response.longValue());
+      }
+    });
   }
 }
