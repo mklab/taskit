@@ -42,6 +42,13 @@ public interface StudentView extends TaskitView {
   void setCalling(boolean calling);
 
   /**
+   * 呼び出し順序を取得します。
+   * 
+   * @param position 自分が何番目の呼び出しかどうか
+   */
+  void setHelpCallPosition(int position);
+
+  /**
    * {@link StudentView}で利用するプレゼンターです。
    * 
    * @author ishikura

@@ -38,6 +38,8 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @UiField
   ToggleButton helpCallButton;
   @UiField
+  Label helpCallPosition;
+  @UiField
   Label helpCallMessageLabel;
   @UiField
   TextBox helpCallMessage;
@@ -83,6 +85,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
       this.helpCallMessage.setEnabled(false);
     } else {
       this.helpCallMessage.setEnabled(true);
+      this.helpCallPosition.setText(""); //$NON-NLS-1$
     }
   }
 
@@ -121,6 +124,14 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @Override
   public void highlightRow(LectureScore rowData) {
     this.scorePanel.highlightRow(rowData);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setHelpCallPosition(int position) {
+    this.helpCallPosition.setText(getClientFactory().getMessages().helpCallPositionMessage(String.valueOf(position + 1)));
   }
 
 }

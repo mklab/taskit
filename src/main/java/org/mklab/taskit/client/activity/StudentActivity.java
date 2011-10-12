@@ -9,6 +9,7 @@ import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.TaskitView;
 
+import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -18,6 +19,8 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public class StudentActivity extends TaskitActivity implements StudentView.Presenter {
 
+  private Timer helpCallPositionUpdater;
+
   /**
    * {@link StudentActivity}オブジェクトを構築します。
    * 
@@ -25,6 +28,13 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
    */
   public StudentActivity(ClientFactory clientFactory) {
     super(clientFactory);
+    this.helpCallPositionUpdater = new Timer() {
+
+      @Override
+      public void run() {
+        updateHelpCallPosition();
+      }
+    };
   }
 
   /**
@@ -64,7 +74,36 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
       @Override
       public void onSuccess(Boolean response) {
         showInformationMessage(getClientFactory().getMessages().fetchedHelpCallState());
-        studentView.setCalling(response.booleanValue());
+        setCalling(response.booleanValue());
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onStop() {
+    super.onStop();
+    this.helpCallPositionUpdater.cancel();
+  }
+
+  void setCalling(boolean calling) {
+    ((StudentView)getTaskitView()).setCalling(calling);
+    if (calling) {
+      updateHelpCallPosition();
+      this.helpCallPositionUpdater.scheduleRepeating(5 * 1000);
+    } else {
+      this.helpCallPositionUpdater.cancel();
+    }
+  }
+
+  void updateHelpCallPosition() {
+    getClientFactory().getRequestFactory().helpCallRequest().getPosition().fire(new Receiver<Long>() {
+
+      @Override
+      public void onSuccess(Long response) {
+        ((StudentView)getTaskitView()).setHelpCallPosition(response.intValue());
       }
     });
   }
@@ -78,6 +117,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
+        setCalling(true);
         showInformationDialog(getClientFactory().getMessages().callingNowMessage());
       }
 
@@ -86,6 +126,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
+        setCalling(false);
         showErrorDialog(getClientFactory().getMessages().calledFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
@@ -101,6 +142,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
+        setCalling(false);
         showInformationDialog(getClientFactory().getMessages().uncalledMyselfMessage());
       }
 
@@ -109,6 +151,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
        */
       @Override
       public void onFailure(ServerFailure error) {
+        setCalling(true);
         showErrorDialog(getClientFactory().getMessages().uncalledMyselfFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
 
