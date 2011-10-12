@@ -5,8 +5,6 @@ package org.mklab.taskit.client.model;
 
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.LectureProxy;
-import org.mklab.taskit.shared.LecturewiseRecordProxy;
-import org.mklab.taskit.shared.LecturewiseRecordsProxy;
 import org.mklab.taskit.shared.ReportProxy;
 import org.mklab.taskit.shared.SubmissionProxy;
 
@@ -24,17 +22,34 @@ import java.util.Map;
 public class StudentwiseRecordModel {
 
   private List<LectureScore> lectureScores;
+  private Map<LectureProxy, LectureScore> lectureToScore;
 
   /**
    * {@link StudentwiseRecordModel}オブジェクトを構築します。
    * 
-   * @param records 単一生徒の講義別成績
+   * @param lectures 講義データ
    */
-  public StudentwiseRecordModel(LecturewiseRecordsProxy records) {
-    this.lectureScores = new ArrayList<StudentwiseRecordModel.LectureScore>();
-    int index = 0;
-    for (LecturewiseRecordProxy record : records.getRecords()) {
-      this.lectureScores.add(new LectureScore(record, index++));
+  public StudentwiseRecordModel(List<LectureProxy> lectures) {
+    this.lectureScores = new ArrayList<LectureScore>();
+    this.lectureToScore = new HashMap<LectureProxy, LectureScore>();
+    for (LectureProxy lecture : lectures) {
+      final LectureScore lectureScore = new LectureScore(lecture);
+      this.lectureScores.add(lectureScore);
+      this.lectureToScore.put(lecture, lectureScore);
+    }
+  }
+
+  void setAttendances(List<AttendanceProxy> attendances) {
+    for (AttendanceProxy attendance : attendances) {
+      final LectureScore score = this.lectureToScore.get(attendance.getLecture());
+      score.setAttendance(attendance);
+    }
+  }
+
+  void setSubmissions(List<SubmissionProxy> submissions) {
+    for (SubmissionProxy submission : submissions) {
+      final LectureScore score = this.lectureToScore.get(submission.getReport().getLecture());
+      score.addSubmission(submission);
     }
   }
 
@@ -91,16 +106,20 @@ public class StudentwiseRecordModel {
 
     int index;
     Map<ReportProxy, SubmissionProxy> reportToSubmission;
-    LecturewiseRecordProxy record;
+    LectureProxy lecture;
+    AttendanceProxy attendance;
 
-    LectureScore(LecturewiseRecordProxy record, int index) {
-      super();
-      this.record = record;
-      this.index = index;
+    LectureScore(LectureProxy lecture) {
+      this.lecture = lecture;
       this.reportToSubmission = new HashMap<ReportProxy, SubmissionProxy>();
-      for (SubmissionProxy submission : record.getSubmissions()) {
-        this.reportToSubmission.put(submission.getReport(), submission);
-      }
+    }
+
+    void addSubmission(SubmissionProxy submission) {
+      this.reportToSubmission.put(submission.getReport(), submission);
+    }
+
+    void setAttendance(AttendanceProxy attendance) {
+      this.attendance = attendance;
     }
 
     /**
@@ -118,7 +137,7 @@ public class StudentwiseRecordModel {
      * @return attendance
      */
     public AttendanceProxy getAttendance() {
-      return this.record.getAttendance();
+      return this.attendance;
     }
 
     /**
@@ -127,7 +146,7 @@ public class StudentwiseRecordModel {
      * @return lecture
      */
     public LectureProxy getLecture() {
-      return this.record.getLecture();
+      return this.lecture;
     }
 
     /**
@@ -136,8 +155,7 @@ public class StudentwiseRecordModel {
      * @return 課題数
      */
     public int getReportCount() {
-      final LectureProxy lecture = getLecture();
-      final List<ReportProxy> reports = lecture.getReports();
+      final List<ReportProxy> reports = this.lecture.getReports();
       return reports.size();
     }
 

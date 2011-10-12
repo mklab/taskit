@@ -42,7 +42,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   public StudentListActivity(ClientFactory clientFactory) {
     super(clientFactory);
-    this.query = new StudentwiseRecordQuery(clientFactory.getRequestFactory());
+    this.query = new StudentwiseRecordQuery(clientFactory);
   }
 
   /**

@@ -45,7 +45,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   protected void onViewShown() {
     super.onViewShown();
 
-    final StudentwiseRecordQuery query = new StudentwiseRecordQuery(getClientFactory().getRequestFactory());
+    final StudentwiseRecordQuery query = new StudentwiseRecordQuery(getClientFactory());
     final StudentView studentView = (StudentView)getTaskitView();
 
     showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(getLoginUser().getAccount().getId()));
