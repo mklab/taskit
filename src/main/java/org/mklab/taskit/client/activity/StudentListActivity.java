@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.place.StudentList;
@@ -63,30 +64,31 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   protected void onViewShown() {
     super.onViewShown();
     final StudentListView list = (StudentListView)getTaskitView();
-    getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
 
-          @Override
-          public void onSuccess(List<UserProxy> arg0) {
-            showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
-            list.setListData(arg0);
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.STUDENT_LIST, new Receiver<List<UserProxy>>() {
 
-            final String initialSelection = getAccountIdInPlaceToken();
-            if (initialSelection != null && initialSelection.length() > 0) {
-              for (final UserProxy user : arg0) {
-                if (initialSelection.equals(user.getAccount().getId())) {
-                  list.setSelectedListData(user);
-                  break;
-                }
-              }
+      @Override
+      public void onSuccess(List<UserProxy> arg0) {
+        showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
+        list.setListData(arg0);
+
+        final String initialSelection = getAccountIdInPlaceToken();
+        if (initialSelection != null && initialSelection.length() > 0) {
+          for (final UserProxy user : arg0) {
+            if (initialSelection.equals(user.getAccount().getId())) {
+              list.setSelectedListData(user);
+              break;
             }
           }
+        }
+      }
 
-          private String getAccountIdInPlaceToken() {
-            final Place place = getClientFactory().getPlaceController().getWhere();
-            return ((StudentList)place).getStudentId();
-          }
+      private String getAccountIdInPlaceToken() {
+        final Place place = getClientFactory().getPlaceController().getWhere();
+        return ((StudentList)place).getStudentId();
+      }
 
-        });
+    });
   }
 
   /**

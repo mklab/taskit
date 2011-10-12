@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.model.AttendanceListItem;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.TaskitView;
@@ -105,7 +106,7 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
   private void fetchLecturesAsync() {
     showInformationMessage(getClientFactory().getMessages().fetchingLectureListMessage());
-    getClientFactory().getRequestFactory().lectureRequest().getAllLectures().fire(new Receiver<List<LectureProxy>>() {
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.LECTURE_LIST, new Receiver<List<LectureProxy>>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -130,17 +131,17 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
 
   private void fetchStudentsAsync() {
     showInformationMessage(getClientFactory().getMessages().fetchingUserListMessage());
-    getClientFactory().getRequestFactory().userRequest().getAllStudents().with("account").fire(new Receiver<List<UserProxy>>() { //$NON-NLS-1$
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.STUDENT_LIST, new Receiver<List<UserProxy>>() {
 
-          @SuppressWarnings("synthetic-access")
-          @Override
-          public void onSuccess(List<UserProxy> response) {
-            showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
-            AttendanceListActivity.this.students = response;
-            updateAttendanceList();
-          }
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(List<UserProxy> response) {
+        showInformationMessage(getClientFactory().getMessages().fetchedUserListMessage());
+        AttendanceListActivity.this.students = response;
+        updateAttendanceList();
+      }
 
-        });
+    });
   }
 
   private void fetchAttendancesByLectureAsync(LectureProxy lecture) {

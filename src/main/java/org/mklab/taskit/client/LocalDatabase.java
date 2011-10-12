@@ -55,7 +55,17 @@ public class LocalDatabase {
 
     @Override
     public void query(TaskitRequestFactory requestFactory, Receiver<List<HelpCallProxy>> receiver) {
-      requestFactory.helpCallRequest().getAllHelpCalls().with("account").fire(receiver); //$NON-NLS-1$
+      requestFactory.helpCallRequest().getAllHelpCalls().with("account", "caller").fire(receiver); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+  };
+
+  /** ログインユーザーを取得するためのクエリです。 */
+  public static Query<UserProxy> LOGIN_USER = new Query<UserProxy>() {
+
+    @Override
+    public void query(TaskitRequestFactory requestFactory, Receiver<UserProxy> receiver) {
+      requestFactory.userRequest().getLoginUser().with("account", "caller").fire(receiver); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
   };
@@ -82,6 +92,22 @@ public class LocalDatabase {
     return cachedValue;
   }
 
+  /**
+   * 与えられたクエリのキャッシュをクリアします。
+   * 
+   * @param query クエリ
+   */
+  public <T> void clearCache(final Query<T> query) {
+    this.cache.remove(query);
+  }
+
+  /**
+   * すべてのキャッシュをクリアします。
+   */
+  public <T> void clearAllCache() {
+    this.cache.clear();
+  }
+
   <T> void setCache(Query<T> query, T value) {
     this.cache.put(query, value);
   }
@@ -97,10 +123,25 @@ public class LocalDatabase {
   }
 
   /**
-   * キャッシュが存在すればレシーバーに渡した後に、クエリを実行しもう一度レシーバーに結果を渡します。
+   * キャッシュが存在すればそれをレシーバーに渡し、存在しなければクエリを実行してからレシーバーに実行結果を渡します。
    * 
    * @param query クエリ
    * @param receiver レシーバー
+   */
+  public <T> void getCacheOrExecute(final Query<T> query, final Receiver<T> receiver) {
+    if (isCached(query)) {
+      final T cachedValue = getCache(query);
+      receiver.onSuccess(cachedValue);
+      return;
+    }
+    execute(query, receiver);
+  }
+
+  /**
+   * キャッシュが存在すればレシーバーに渡した後に、クエリを実行しもう一度レシーバーに結果を渡します。
+   * 
+   * @param query クエリ
+   * @param receiver レシーバー。キャッシュが存在した場合は二度呼び出されます。
    */
   public <T> void getCacheAndExecute(final Query<T> query, final Receiver<T> receiver) {
     if (isCached(query)) {

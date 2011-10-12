@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.ui.ProfileView;
 import org.mklab.taskit.client.ui.TaskitView;
@@ -96,6 +97,10 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
         showErrorMessage(messages.changedUserNameFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
+  }
+
+  void clearLoginUserCache() {
+    getClientFactory().getLocalDatabase().clearCache(LocalDatabase.LOGIN_USER);
   }
 
 }

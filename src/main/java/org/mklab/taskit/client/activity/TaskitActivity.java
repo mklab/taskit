@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.HelpCallWatcher;
+import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
@@ -19,7 +20,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
@@ -29,7 +29,6 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, HelpCallObserver {
 
-  private static UserProxy loginUserCache;
   private ClientFactory clientFactory;
   private AcceptsOneWidget container;
   private UserProxy loginUser;
@@ -67,13 +66,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   }
 
   /**
-   * ログインユーザーのキャッシュをクリアします。
-   */
-  protected static void clearLoginUserCache() {
-    loginUserCache = null;
-  }
-
-  /**
    * ログインユーザー情報を取得し、取得が完了し次第ユーザーに応じたビューを表示します。
    * <p>
    * ユーザー情報はキャッシュされ、アプリケーション実行中はログアウトするまでその情報を利用します。<br>
@@ -82,14 +74,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * この仕様はプロフィール変更があることを考えると問題ありすぎなので、変更予定。
    */
   private void fetchLoginUserAndShowLater() {
-    if (loginUserCache != null) {
-      initViewWith(loginUserCache);
-      return;
-    }
-
-    final Request<UserProxy> request = getClientFactory().getRequestFactory().userRequest().getLoginUser();
-    request.with("account"); //$NON-NLS-1$
-    request.fire(new Receiver<UserProxy>() {
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.LOGIN_USER, new Receiver<UserProxy>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
@@ -98,7 +83,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
           logout();
           return;
         }
-        loginUserCache = user;
         initViewWith(user);
       }
 
@@ -174,8 +158,8 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   @Override
   public void logout() {
-    loginUserCache = null;
     this.clientFactory.getHelpCallWatcher().stop();
+    this.clientFactory.getLocalDatabase().clearAllCache();
     try {
       getClientFactory().getRequestFactory().accountRequest().logout().fire();
     } catch (Throwable e) {
