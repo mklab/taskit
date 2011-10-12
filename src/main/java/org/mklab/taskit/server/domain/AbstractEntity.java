@@ -40,7 +40,7 @@ public abstract class AbstractEntity<I> {
    * 
    * @param id ID
    */
-  abstract void setId(I id);
+  public abstract void setId(I id);
 
   @SuppressWarnings("unchecked")
   final Class<I> getIdType() {

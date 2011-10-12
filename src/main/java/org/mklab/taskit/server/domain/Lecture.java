@@ -178,6 +178,16 @@ public class Lecture extends AbstractEntity<Integer> {
   }
 
   /**
+   * IDを元に講義データを取得します。
+   * 
+   * @param id 講義ID
+   * @return 講義データ
+   */
+  public static Lecture getLectureById(int id) {
+    return ServiceUtil.findEntity(Lecture.class, Integer.valueOf(id));
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -217,7 +227,7 @@ public class Lecture extends AbstractEntity<Integer> {
     if (Report.lectureIsRefered(id)) {
       throw new IllegalStateException("The lecture can't be deleted because it has already refered by report(s)."); //$NON-NLS-1$
     }
-    if(Attendance.lectureIsRefered(id)){
+    if (Attendance.lectureIsRefered(id)) {
       throw new IllegalStateException("The lecture can't be deleted because it has already refered by attendance(s)."); //$NON-NLS-1$
     }
 

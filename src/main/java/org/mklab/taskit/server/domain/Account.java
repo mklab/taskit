@@ -6,6 +6,8 @@ import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.Validator;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -33,7 +35,12 @@ public class Account extends AbstractEntity<String> {
     return this.hashedPassword;
   }
 
-  void setHashedPassword(String hashedPassword) {
+  /**
+   * ハッシュ化したパスワードを設定します。
+   * 
+   * @param hashedPassword ハッシュ化したパスワード
+   */
+  public void setHashedPassword(String hashedPassword) {
     this.hashedPassword = hashedPassword;
   }
 
@@ -50,7 +57,7 @@ public class Account extends AbstractEntity<String> {
    * {@inheritDoc}
    */
   @Override
-  void setId(String id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -179,6 +186,15 @@ public class Account extends AbstractEntity<String> {
   }
 
   /**
+   * 全アカウントを取得します。
+   * 
+   * @return 全アカウント
+   */
+  public static List<Account> getAllAccounts() {
+    return ServiceUtil.getAllEntities("Account"); //$NON-NLS-1$
+  }
+
+  /**
    * IDからアカウントを取得します。
    * 
    * @param id ID
@@ -186,9 +202,7 @@ public class Account extends AbstractEntity<String> {
    */
   @Invoker({UserType.TEACHER, UserType.TA})
   public static Account getAccountById(String id) {
-    final EntityManager em = EMF.get().createEntityManager();
-    final Account account = em.find(Account.class, id);
-    return account;
+    return ServiceUtil.findEntity(Account.class, id);
   }
 
 }

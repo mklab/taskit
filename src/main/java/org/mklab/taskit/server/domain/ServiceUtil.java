@@ -3,7 +3,10 @@
  */
 package org.mklab.taskit.server.domain;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -42,6 +45,23 @@ public class ServiceUtil {
     final EntityManager em = EMF.get().createEntityManager();
     try {
       return em.find(clazz, id);
+    } finally {
+      em.close();
+    }
+  }
+
+  /**
+   * 与えられたテーブル名のエンティティをすべて取得します。
+   * 
+   * @param tableName テーブル名
+   * @return すべてのエンティティ
+   */
+  @SuppressWarnings({"nls", "unchecked"})
+  public static <T> List<T> getAllEntities(String tableName) {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select o from " + tableName+" o");
+    try {
+      return q.getResultList();
     } finally {
       em.close();
     }

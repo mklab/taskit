@@ -124,7 +124,12 @@ public class Submission extends AbstractEntity<Integer> {
     return this.date;
   }
 
-  void setDate(Date date) {
+  /**
+   * 提出日を設定します。
+   * 
+   * @param date 提出日
+   */
+  public void setDate(Date date) {
     this.date = date;
   }
 
@@ -250,6 +255,15 @@ public class Submission extends AbstractEntity<Integer> {
     List<Submission> submission = q.getResultList();
     if (submission.size() > 1) throw new IllegalStateException("Internal Error.");
     return submission.size() == 0 ? null : submission.get(0);
+  }
+
+  /**
+   * すべての提出物を取得します。
+   * 
+   * @return すべての提出物
+   */
+  public static List<Submission> getAllSubmissions() {
+    return ServiceUtil.getAllEntities("Submission"); //$NON-NLS-1$
   }
 
   private static boolean isAlreadySubmit(Submission submission) {

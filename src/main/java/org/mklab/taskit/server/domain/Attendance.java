@@ -123,7 +123,12 @@ public class Attendance extends AbstractEntity<Integer> {
     return this.date;
   }
 
-  void setDate(Date date) {
+  /**
+   * 出席チェックを行った時間を設定します。
+   * 
+   * @param date 出席チェックを行った時間
+   */
+  public void setDate(Date date) {
     this.date = date;
   }
 
@@ -229,6 +234,15 @@ public class Attendance extends AbstractEntity<Integer> {
     final Query q = em.createQuery("select s from Attendance s where s.lecture=:lecture order by s.attender.id");
     q.setParameter("lecture", lecture);
     return q.getResultList();
+  }
+
+  /**
+   * すべての提出物を取得します。
+   * 
+   * @return すべての提出物
+   */
+  public static List<Attendance> getAllAttendance() {
+    return ServiceUtil.getAllEntities("Attendance"); //$NON-NLS-1$
   }
 
   private static boolean isAlreadyMarked(Attendance attendance) {

@@ -92,7 +92,7 @@ public class Report extends AbstractEntity<Integer> {
    * {@inheritDoc}
    */
   @Override
-  void setId(Integer id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -183,6 +183,16 @@ public class Report extends AbstractEntity<Integer> {
     } finally {
       em.close();
     }
+  }
+
+  /**
+   * IDを元に課題データを取得します。
+   * 
+   * @param id 課題ID
+   * @return 課題データ
+   */
+  public static Report getReportById(int id) {
+    return ServiceUtil.findEntity(Report.class, Integer.valueOf(id));
   }
 
   static boolean lectureIsRefered(Integer lectureId) {

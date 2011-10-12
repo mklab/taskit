@@ -39,15 +39,12 @@ public class User extends AbstractEntity<Integer> {
    * {@link User}オブジェクトを構築します。
    * 
    * @param account アカウント
-   * @param name 名前
    * @param type ユーザー種別
    */
-  public User(Account account, String name, UserType type) {
+  public User(Account account, UserType type) {
     if (account == null) throw new NullPointerException();
-    if (name == null) throw new NullPointerException();
     if (type == null) throw new NullPointerException();
     this.account = account;
-    this.name = name;
     this.type = type;
   }
 
@@ -65,7 +62,7 @@ public class User extends AbstractEntity<Integer> {
    * {@inheritDoc}
    */
   @Override
-  void setId(Integer id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -91,7 +88,12 @@ public class User extends AbstractEntity<Integer> {
     return this.name;
   }
 
-  void setName(String name) {
+  /**
+   * ユーザー名を設定します。
+   * 
+   * @param name ユーザー名
+   */
+  public void setName(String name) {
     this.name = name;
   }
 
@@ -166,6 +168,15 @@ public class User extends AbstractEntity<Integer> {
   public static User getLoginUser() {
     User loginUser = ServiceUtil.getLoginUser();
     return loginUser;
+  }
+
+  /**
+   * 全ユーザーを取得します。
+   * 
+   * @return 全ユーザーのリスト
+   */
+  public static List<User> getAllUsers() {
+    return ServiceUtil.getAllEntities("User"); //$NON-NLS-1$
   }
 
   /**
