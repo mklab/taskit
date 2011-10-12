@@ -52,7 +52,7 @@ public class StudentwiseRecordQuery {
         final StudentwiseRecordModel model = new StudentwiseRecordModel(response);
         handler.handleResult(model);
 
-        getClientFactory().getRequestFactory().submissionRequest().getSubmissionsByAccountId(accountId).with("submitter", "report").fire(new Receiver<List<SubmissionProxy>>() {
+        getClientFactory().getRequestFactory().submissionRequest().getSubmissionsByAccountId(accountId).with("submitter", "report.lecture").fire(new Receiver<List<SubmissionProxy>>() {
 
           @Override
           public void onSuccess(@SuppressWarnings("hiding") List<SubmissionProxy> response) {
@@ -87,7 +87,7 @@ public class StudentwiseRecordQuery {
         final StudentwiseRecordModel model = new StudentwiseRecordModel(response);
         handler.handleResult(model);
 
-        getClientFactory().getRequestFactory().submissionRequest().getMySubmissions().with("submitter", "report").fire(new Receiver<List<SubmissionProxy>>() {
+        getClientFactory().getRequestFactory().submissionRequest().getMySubmissions().with("submitter", "report.lecture").fire(new Receiver<List<SubmissionProxy>>() {
 
           @Override
           public void onSuccess(@SuppressWarnings("hiding") List<SubmissionProxy> response) {

@@ -22,7 +22,7 @@ import java.util.Map;
 public class StudentwiseRecordModel {
 
   private List<LectureScore> lectureScores;
-  private Map<LectureProxy, LectureScore> lectureToScore;
+  private Map<Integer, LectureScore> lectureToScore;
 
   /**
    * {@link StudentwiseRecordModel}オブジェクトを構築します。
@@ -31,24 +31,24 @@ public class StudentwiseRecordModel {
    */
   public StudentwiseRecordModel(List<LectureProxy> lectures) {
     this.lectureScores = new ArrayList<LectureScore>();
-    this.lectureToScore = new HashMap<LectureProxy, LectureScore>();
+    this.lectureToScore = new HashMap<Integer, LectureScore>();
     for (LectureProxy lecture : lectures) {
       final LectureScore lectureScore = new LectureScore(lecture);
       this.lectureScores.add(lectureScore);
-      this.lectureToScore.put(lecture, lectureScore);
+      this.lectureToScore.put(lecture.getId(), lectureScore);
     }
   }
 
   void setAttendances(List<AttendanceProxy> attendances) {
     for (AttendanceProxy attendance : attendances) {
-      final LectureScore score = this.lectureToScore.get(attendance.getLecture());
+      final LectureScore score = this.lectureToScore.get(attendance.getLecture().getId());
       score.setAttendance(attendance);
     }
   }
 
   void setSubmissions(List<SubmissionProxy> submissions) {
     for (SubmissionProxy submission : submissions) {
-      final LectureScore score = this.lectureToScore.get(submission.getReport().getLecture());
+      final LectureScore score = this.lectureToScore.get(submission.getReport().getLecture().getId());
       score.addSubmission(submission);
     }
   }
