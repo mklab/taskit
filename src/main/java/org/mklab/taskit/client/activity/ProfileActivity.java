@@ -61,7 +61,7 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage(messages.changedPasswordMessage());
+        showInformationDialog(messages.changedPasswordMessage());
         clearLoginUserCache();
       }
 
@@ -85,7 +85,7 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
-        showInformationMessage(messages.changedUserNameMessage());
+        showInformationDialog(messages.changedUserNameMessage());
         clearLoginUserCache();
       }
 
