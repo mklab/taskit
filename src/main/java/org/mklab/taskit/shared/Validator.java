@@ -33,7 +33,7 @@ public class Validator {
     for (char c = '0'; c <= '9'; c++) {
       set.add(Character.valueOf(c));
     }
-    set.addAll(Arrays.asList('.', '/', '%', '&', '@', '#', '!', '^', '*', '-', '+', '~', '?'));
+    set.addAll(Arrays.asList('.', '/', '%', '&', '@', '#', '!', '^', '*', '-', '+', '~', '?', '_'));
     passwordCharacters = set;
   }
 
