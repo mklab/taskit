@@ -7,6 +7,7 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.place.StudentList;
+import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
@@ -83,6 +84,7 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
       public void onSuccess(List<HelpCallProxy> response) {
         showInformationMessage(isAuto ? messages.fetchedCallListAutoMessage() : messages.fetchedCallListMessage());
         ((HelpCallListView)getTaskitView()).setHelpCalls(response);
+        ((HelpCallDisplayable)getTaskitView()).showHelpCallCount(response.size());
       }
 
       /**

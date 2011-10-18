@@ -7,6 +7,7 @@ import org.mklab.taskit.client.LocalDatabase.Query;
 import org.mklab.taskit.client.activity.HelpCallObserver;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 
@@ -21,6 +22,7 @@ public class HelpCallWatcher {
   private HelpCallObserver helpCallObserver;
   private boolean running = false;
   private LocalDatabase database;
+  private int lastHelpCallCount = 0;
 
   private Query<Long> helpCallCountQuery = new Query<Long>() {
 
@@ -76,9 +78,7 @@ public class HelpCallWatcher {
    * @return ヘルプコール数
    */
   public int getHelpCallCount() {
-    final Long cached = this.database.getCache(this.helpCallCountQuery);
-    if (cached != null) return cached.intValue();
-    return 0;
+    return this.lastHelpCallCount;
   }
 
   /**
@@ -100,8 +100,23 @@ public class HelpCallWatcher {
   }
 
   void fireHelpCallCountChanged(int count) {
-    final int latestHelpCallCount = getHelpCallCount();
-    if (this.helpCallObserver != null && latestHelpCallCount != count) this.helpCallObserver.helpCallCountChanged(count);
+    if (this.helpCallObserver != null && this.lastHelpCallCount != count) {
+      this.helpCallObserver.helpCallCountChanged(count);
+
+      // TAへの通知。オブザーバーに記述したいけれどもアクティビティの切り替えの度に音がなることになってしまう
+      if (this.lastHelpCallCount == 0 && count > 0) {
+        playCallSound();
+      }
+    }
+    this.lastHelpCallCount = count;
+  }
+
+  private static void playCallSound() {
+    final Audio audio = Audio.createIfSupported();
+    if (audio != null) {
+      audio.setSrc("taskit/call.mp3"); //$NON-NLS-1$
+      audio.play();
+    }
   }
 
   private void fetchHelpCallCount() {
