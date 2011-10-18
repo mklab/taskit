@@ -5,11 +5,17 @@ package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.LocalDatabase.Query;
 import org.mklab.taskit.client.activity.HelpCallObserver;
+import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.TaskitRequestFactory;
+
+import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 
 /**
@@ -79,6 +85,38 @@ public class HelpCallWatcher {
    */
   public int getHelpCallCount() {
     return this.lastHelpCallCount;
+  }
+
+  /**
+   * 呼び出し一覧を取得します。
+   * 
+   * @param receiver 結果を受け取るレシーバー。結果は、キャッシュが存在する場合は、そのキャッシュと新たに取得したものの二回渡されます。
+   */
+  public void getHelpCallList(final Receiver<List<HelpCallProxy>> receiver) {
+    this.database.getCacheAndExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+
+      @Override
+      public void onSuccess(List<HelpCallProxy> response) {
+        receiver.onSuccess(response);
+        fireHelpCallCountChanged(response.size());
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onFailure(ServerFailure error) {
+        receiver.onFailure(error);
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onViolation(Set<Violation> errors) {
+        receiver.onViolation(errors);
+      }
+    });
   }
 
   /**
