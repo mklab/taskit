@@ -27,7 +27,9 @@ class Util {
   }
 
   static StudentwiseRecordModel.LectureScore getLatestScore(StudentwiseRecordModel model) {
-    return getLatestItem(model.asList(), new Util.DateExtractor<StudentwiseRecordModel.LectureScore>() {
+    final List<LectureScore> list = model.asList();
+    if (list.size() == 0) return null;
+    return getLatestItem(list, new Util.DateExtractor<StudentwiseRecordModel.LectureScore>() {
 
       @Override
       public Date getDateOf(LectureScore item) {

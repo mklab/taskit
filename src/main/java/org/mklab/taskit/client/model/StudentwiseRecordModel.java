@@ -32,8 +32,9 @@ public class StudentwiseRecordModel {
   public StudentwiseRecordModel(List<LectureProxy> lectures) {
     this.lectureScores = new ArrayList<LectureScore>();
     this.lectureToScore = new HashMap<Integer, LectureScore>();
+    int i = 0;
     for (LectureProxy lecture : lectures) {
-      final LectureScore lectureScore = new LectureScore(lecture);
+      final LectureScore lectureScore = new LectureScore(i++, lecture);
       this.lectureScores.add(lectureScore);
       this.lectureToScore.put(lecture.getId(), lectureScore);
     }
@@ -109,8 +110,9 @@ public class StudentwiseRecordModel {
     LectureProxy lecture;
     AttendanceProxy attendance;
 
-    LectureScore(LectureProxy lecture) {
+    LectureScore(int index, LectureProxy lecture) {
       this.lecture = lecture;
+      this.index = index;
       this.reportToSubmission = new HashMap<ReportProxy, SubmissionProxy>();
     }
 

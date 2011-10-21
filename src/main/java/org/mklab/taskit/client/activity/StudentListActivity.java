@@ -191,7 +191,9 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
         view.showUserPage(selectedUser, model);
 
         final StudentwiseRecordModel.LectureScore latestRow = Util.getLatestScore(model);
-        view.highlightRow(latestRow);
+        if (latestRow != null) {
+          view.highlightRow(latestRow);
+        }
       }
     });
   }
