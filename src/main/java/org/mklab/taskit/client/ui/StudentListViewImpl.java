@@ -52,6 +52,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   Label userListLabel;
   @UiField
   Button uncallButton;
+  @UiField
+  Button reloadButton;
 
   private Presenter presenter;
   private static final Binder binder = GWT.create(Binder.class);
@@ -158,6 +160,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     this.userListLabel.setText(messages.userListLabel() + ": "); //$NON-NLS-1$
     this.profileCaption.setCaptionText(messages.profileLabel());
     this.uncallButton.setText(messages.uncallLabel());
+    this.reloadButton.setText(messages.reloadLabel());
   }
 
   /**
@@ -173,6 +176,11 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiHandler("uncallButton")
   void uncallButtonPressed(@SuppressWarnings("unused") ClickEvent evt) {
     this.presenter.uncall(getSelectedUser().getAccount());
+  }
+
+  @UiHandler("reloadButton")
+  void reloadUserPage(@SuppressWarnings("unused") ClickEvent evt) {
+    this.presenter.reloadUserPage();
   }
 
   /**

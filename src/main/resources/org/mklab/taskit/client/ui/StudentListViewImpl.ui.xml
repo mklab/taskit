@@ -26,6 +26,7 @@
 					<g:cell verticalAlignment="ALIGN_MIDDLE">
 						<g:ValueListBox ui:field='userList'></g:ValueListBox>
 					</g:cell>
+					<g:Button ui:field='reloadButton'></g:Button>
 				</g:HorizontalPanel>
 			</g:HTMLPanel>
 		</g:north>
