@@ -182,6 +182,7 @@
 					<draftCompile>true</draftCompile>
 					<disableClassMetadata>true</disableClassMetadata>
 					<extraJvmArgs>-Xmx256m</extraJvmArgs>
+					<debugPort>8080</debugPort>
 				</configuration>
 			</plugin>
 
@@ -216,13 +217,14 @@
 						<type>runtime</type>
 						<properties>
 							<cargo.tomcat.manager.url>http://kamome.mk.ces.kyutech.ac.jp/manager/</cargo.tomcat.manager.url>
-							<cargo.remote.username>taskit</cargo.remote.username>
-							<cargo.remote.password>ta2k3t3</cargo.remote.password>
+							<cargo.remote.username>${tomcatManagerUsername}</cargo.remote.username>
+							<cargo.remote.password>${tomcatManagerPassword}</cargo.remote.password>
 						</properties>
 					</configuration>
 					<deployer>
 						<type>remote</type>
 						<deployables>
+							<!-- for Program Design 2011 -->
 							<deployable>
 								<groupId>org.mklab</groupId>
 								<artifactId>taskit</artifactId>
@@ -231,12 +233,22 @@
 									<context>programdesign2011</context>
 								</properties>
 							</deployable>
+							<!-- for Programming S 2011 -->
 							<deployable>
 								<groupId>org.mklab</groupId>
 								<artifactId>taskit</artifactId>
 								<type>war</type>
 								<properties>
 									<context>programmings2011</context>
+								</properties>
+							</deployable>
+							<!-- for KIT48 Programming Contest(Temporary) -->
+							<deployable>
+								<groupId>org.mklab</groupId>
+								<artifactId>taskit</artifactId>
+								<type>war</type>
+								<properties>
+									<context>kit48</context>
 								</properties>
 							</deployable>
 						</deployables>

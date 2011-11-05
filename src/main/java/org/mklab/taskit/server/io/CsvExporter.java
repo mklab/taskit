@@ -5,7 +5,6 @@ package org.mklab.taskit.server.io;
 
 import org.mklab.taskit.server.domain.Account;
 import org.mklab.taskit.server.domain.Attendance;
-import org.mklab.taskit.server.domain.EMF;
 import org.mklab.taskit.server.domain.Lecture;
 import org.mklab.taskit.server.domain.Report;
 import org.mklab.taskit.server.domain.Submission;
@@ -110,9 +109,6 @@ public class CsvExporter {
    * @throws IOException エクスポート出来なかった場合
    */
   public static void main(String[] args) throws IOException {
-    EMF.setPersistenceProperty(EMF.DB_PASSWORD_KEY, "ta2k3t3");
-    EMF.setPersistenceProperty(EMF.DB_URL_KEY, "jdbc:mysql://taskit.mk.ces.kyutech.ac.jp/PROG2011");
-    EMF.setPersistenceProperty(EMF.DB_USER_KEY, "taskit");
     final CsvExporter exporter = new CsvExporter(new File("backup.csv"));
     exporter.write("Account", Account.getAllAccounts());
     exporter.write("User", User.getAllUsers());
