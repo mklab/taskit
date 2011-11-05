@@ -160,13 +160,20 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   public void logout() {
     this.clientFactory.getHelpCallWatcher().stop();
     this.clientFactory.getLocalDatabase().clearAllCache();
+
+    /*
+     * ログアウトを先にしてしまうと、Activity#onStop()での処理がログアウト後になってしまい行えないため。
+     * アクティビティの移動後ログアウトを行う。
+     * 
+     * 出来たらログアウト完了後移動にしたい。
+     */
+    getClientFactory().getPlaceController().goTo(Login.INSTANCE);
     try {
       getClientFactory().getRequestFactory().accountRequest().logout().fire();
     } catch (Throwable e) {
       showErrorDialog(e);
     } finally {
       Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
-      getClientFactory().getPlaceController().goTo(Login.INSTANCE);
     }
   }
 

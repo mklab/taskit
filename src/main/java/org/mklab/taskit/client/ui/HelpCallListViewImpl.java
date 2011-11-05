@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.shared.HelpCallListItemProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.Date;
@@ -35,7 +36,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
 
   private Presenter presenter;
   @UiField(provided = true)
-  CellList<HelpCallProxy> list;
+  CellList<HelpCallListItemProxy> list;
   @UiField
   Label messageLabel;
 
@@ -52,7 +53,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
    * {@inheritDoc}
    */
   @Override
-  public void setHelpCalls(List<HelpCallProxy> helpCalls) {
+  public void setHelpCalls(List<HelpCallListItemProxy> helpCalls) {
     if (helpCalls.isEmpty()) {
       this.messageLabel.setText(getClientFactory().getMessages().nooneCallingMessage());
     } else {
@@ -75,16 +76,32 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
    */
   @Override
   protected Widget initContent() {
-    this.list = new CellList<HelpCallProxy>(new AbstractCell<HelpCallProxy>() {
+    this.list = new CellList<HelpCallListItemProxy>(new AbstractCell<HelpCallListItemProxy>() {
 
       @SuppressWarnings("deprecation")
       @Override
-      public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallProxy value, SafeHtmlBuilder sb) {
-        final Date date = value.getDate();
-        final String callerId = value.getCaller().getId();
-        final String message = value.getMessage();
+      public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallListItemProxy value, SafeHtmlBuilder sb) {
+        final HelpCallProxy helpCall = value.getHelpCall();
+        final Date date = helpCall.getDate();
+        final String callerId = helpCall.getCaller().getId();
+        final String message = helpCall.getMessage();
 
         sb.appendHtmlConstant(date.toLocaleString());
+
+        if (value.getUsersInCharge().size() > 0) {
+          final List<String> usersInCharge = value.getUsersInCharge();
+          final StringBuilder userList = new StringBuilder();
+          for (int i = 0; i < usersInCharge.size(); i++) {
+            if (i != 0) userList.append(","); //$NON-NLS-1$
+            userList.append(usersInCharge.get(i));
+          }
+
+          sb.appendHtmlConstant("<font color='gray'><i>"); //$NON-NLS-1$ 
+          sb.appendEscaped("==>"); //$NON-NLS-1$
+          sb.appendEscaped(getClientFactory().getMessages().receivedByMessage(userList.toString()));
+          sb.appendHtmlConstant("</i></font>"); //$NON-NLS-1$ 
+        }
+
         sb.appendHtmlConstant("<br>"); //$NON-NLS-1$
         sb.appendHtmlConstant("<b>" + SafeHtmlUtils.htmlEscape(callerId) + "</b>"); //$NON-NLS-1$ //$NON-NLS-2$
         if (message != null && message.length() > 0) {
@@ -96,14 +113,14 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
 
     });
 
-    final SingleSelectionModel<HelpCallProxy> selectionModel = new SingleSelectionModel<HelpCallProxy>();
+    final SingleSelectionModel<HelpCallListItemProxy> selectionModel = new SingleSelectionModel<HelpCallListItemProxy>();
     selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 
       @SuppressWarnings("synthetic-access")
       @Override
       public void onSelectionChange(@SuppressWarnings("unused") SelectionChangeEvent event) {
-        final HelpCallProxy selectedCall = selectionModel.getSelectedObject();
-        HelpCallListViewImpl.this.presenter.helpCallSelected(selectedCall);
+        final HelpCallListItemProxy selectedCall = selectionModel.getSelectedObject();
+        HelpCallListViewImpl.this.presenter.helpCallSelected(selectedCall.getHelpCall());
       }
     });
     this.list.setSelectionModel(selectionModel);

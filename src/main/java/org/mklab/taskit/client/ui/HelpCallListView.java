@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.ui;
 
+import org.mklab.taskit.shared.HelpCallListItemProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface HelpCallListView extends TaskitView {
    * 
    * @param helpCalls 呼び出し一覧
    */
-  void setHelpCalls(List<HelpCallProxy> helpCalls);
+  void setHelpCalls(List<HelpCallListItemProxy> helpCalls);
 
   /**
    * プレゼンターを設定します。

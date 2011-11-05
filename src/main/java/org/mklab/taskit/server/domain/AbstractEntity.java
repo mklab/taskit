@@ -108,7 +108,9 @@ public abstract class AbstractEntity<I> {
     try {
       t.begin();
       final AbstractEntity<?> entity = em.find(getClass(), getId());
-      em.remove(entity);
+      if (entity != null) {
+        em.remove(entity);
+      }
       t.commit();
     } catch (Throwable ex) {
       ex.printStackTrace();

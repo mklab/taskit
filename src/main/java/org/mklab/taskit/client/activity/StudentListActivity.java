@@ -98,6 +98,14 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
+  public void onStop() {
+    checkOutLater();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void submit(final ReportProxy report, final int point) {
     final UserProxy user = this.view.getSelectedUser();
     final SubmissionRequest submissionRequest = getClientFactory().getRequestFactory().submissionRequest();
@@ -194,6 +202,27 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
         if (latestRow != null) {
           view.highlightRow(latestRow);
         }
+        checkInLater(selectedUser);
+      }
+    });
+  }
+
+  private void checkInLater(UserProxy user) {
+    getClientFactory().getRequestFactory().checkMapRequest().checkIn(user.getAccount()).fire(new Receiver<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
+        // do nothing
+      }
+    });
+  }
+
+  private void checkOutLater() {
+    getClientFactory().getRequestFactory().checkMapRequest().checkOut().fire(new Receiver<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void response) {
+        // do nothing
       }
     });
   }

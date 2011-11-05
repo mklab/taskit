@@ -5,7 +5,7 @@ package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.LocalDatabase.Query;
 import org.mklab.taskit.client.activity.HelpCallObserver;
-import org.mklab.taskit.shared.HelpCallProxy;
+import org.mklab.taskit.shared.HelpCallListItemProxy;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import java.util.List;
@@ -92,11 +92,11 @@ public class HelpCallWatcher {
    * 
    * @param receiver 結果を受け取るレシーバー。結果は、キャッシュが存在する場合は、そのキャッシュと新たに取得したものの二回渡されます。
    */
-  public void getHelpCallList(final Receiver<List<HelpCallProxy>> receiver) {
-    this.database.getCacheAndExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+  public void getHelpCallList(final Receiver<List<HelpCallListItemProxy>> receiver) {
+    this.database.getCacheAndExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallListItemProxy>>() {
 
       @Override
-      public void onSuccess(List<HelpCallProxy> response) {
+      public void onSuccess(List<HelpCallListItemProxy> response) {
         receiver.onSuccess(response);
         fireHelpCallCountChanged(response.size());
       }

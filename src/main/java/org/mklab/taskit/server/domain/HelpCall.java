@@ -6,6 +6,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -229,6 +230,25 @@ public class HelpCall extends AbstractEntity<Integer> {
     List<HelpCall> list = q.getResultList();
     em.close();
     return list;
+  }
+
+  /**
+   * すべてのヘルプコールを取得します。
+   * <p>
+   * {@link #getAllHelpCalls()}と異なり、呼び出し者に対応中のユーザー情報も含まれます。
+   * 
+   * @return すべてのヘルプコール
+   */
+  @Invoker({UserType.TEACHER, UserType.TA})
+  public static List<HelpCallListItem> getHelpCallListItems() {
+    final List<HelpCall> helpCalls = getAllHelpCalls();
+    final List<HelpCallListItem> listItems = new ArrayList<HelpCallListItem>();
+    for (HelpCall helpCall : helpCalls) {
+      final List<String> users = CheckMap.getUsersInCheck(helpCall.getCaller());
+      final HelpCallListItem item = new HelpCallListItem(helpCall, users);
+      listItems.add(item);
+    }
+    return listItems;
   }
 
   /**

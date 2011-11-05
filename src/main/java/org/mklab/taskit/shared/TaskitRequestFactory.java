@@ -26,4 +26,6 @@ public interface TaskitRequestFactory extends RequestFactory {
 
   RecordRequest recordRequest();
 
+  CheckMapRequest checkMapRequest();
+
 }
