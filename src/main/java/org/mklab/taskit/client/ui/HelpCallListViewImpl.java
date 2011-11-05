@@ -78,36 +78,50 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
   protected Widget initContent() {
     this.list = new CellList<HelpCallListItemProxy>(new AbstractCell<HelpCallListItemProxy>() {
 
-      @SuppressWarnings("deprecation")
+      @SuppressWarnings({"deprecation", "nls"})
       @Override
       public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallListItemProxy value, SafeHtmlBuilder sb) {
         final HelpCallProxy helpCall = value.getHelpCall();
         final Date date = helpCall.getDate();
         final String callerId = helpCall.getCaller().getId();
         final String message = helpCall.getMessage();
+        final boolean isReceived = value.getUsersInCharge().size() > 0;
 
+        sb.appendHtmlConstant("<div style='background-color:" + (isReceived ? "#ddd" : "white") + ";'>");
         sb.appendHtmlConstant(date.toLocaleString());
+        sb.appendHtmlConstant("<br>");
+        appendCallerInfo(sb, callerId, message);
+        if (isReceived) {
+          sb.appendHtmlConstant("<br>");
+          appendUsersInCharge(sb, value);
+        }
+        sb.appendHtmlConstant("</div>");
+      }
 
-        if (value.getUsersInCharge().size() > 0) {
-          final List<String> usersInCharge = value.getUsersInCharge();
-          final StringBuilder userList = new StringBuilder();
-          for (int i = 0; i < usersInCharge.size(); i++) {
-            if (i != 0) userList.append(","); //$NON-NLS-1$
-            userList.append(usersInCharge.get(i));
-          }
+      @SuppressWarnings("nls")
+      private void appendUsersInCharge(SafeHtmlBuilder sb, HelpCallListItemProxy value) {
+        if (value.getUsersInCharge().size() == 0) return;
 
-          sb.appendHtmlConstant("<font color='gray'><i>"); //$NON-NLS-1$ 
-          sb.appendEscaped("==>"); //$NON-NLS-1$
-          sb.appendEscaped(getClientFactory().getMessages().receivedByMessage(userList.toString()));
-          sb.appendHtmlConstant("</i></font>"); //$NON-NLS-1$ 
+        final List<String> usersInCharge = value.getUsersInCharge();
+        final StringBuilder userList = new StringBuilder();
+        for (int i = 0; i < usersInCharge.size(); i++) {
+          if (i != 0) userList.append(",");
+          userList.append(usersInCharge.get(i));
         }
 
-        sb.appendHtmlConstant("<br>"); //$NON-NLS-1$
-        sb.appendHtmlConstant("<b>" + SafeHtmlUtils.htmlEscape(callerId) + "</b>"); //$NON-NLS-1$ //$NON-NLS-2$
+        sb.appendHtmlConstant("<i>");
+        sb.appendEscaped("==>");
+        sb.appendEscaped(getClientFactory().getMessages().receivedByMessage(userList.toString()));
+        sb.appendHtmlConstant("</i>");
+      }
+
+      @SuppressWarnings("nls")
+      private void appendCallerInfo(SafeHtmlBuilder sb, final String callerId, final String message) {
+        sb.appendHtmlConstant("<b>" + SafeHtmlUtils.htmlEscape(callerId) + "</b>");
         if (message != null && message.length() > 0) {
-          sb.appendHtmlConstant("<font color='red'> '"); //$NON-NLS-1$ 
+          sb.appendHtmlConstant("<font color='red'> '");
           sb.appendEscaped(message);
-          sb.appendHtmlConstant("'</font>"); //$NON-NLS-1$
+          sb.appendHtmlConstant("'</font>");
         }
       }
 
