@@ -20,6 +20,13 @@ public class HelpCallListItem implements ValueProxy {
 
   /**
    * {@link HelpCallListItem}オブジェクトを構築します。
+   */
+  public HelpCallListItem() {
+    // for framework
+  }
+
+  /**
+   * {@link HelpCallListItem}オブジェクトを構築します。
    * 
    * @param helpCall 呼び出し情報
    * @param usersInCharge 呼び出し生徒に対応中の担当者

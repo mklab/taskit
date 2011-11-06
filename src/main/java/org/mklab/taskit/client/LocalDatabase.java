@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.google.web.bindery.requestfactory.shared.Violation;
 
 
 /**
@@ -194,8 +195,8 @@ public class LocalDatabase {
        * {@inheritDoc}
        */
       @Override
-      public void onViolation(Set<Violation> errors) {
-        receiver.onViolation(errors);
+      public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
+        receiver.onConstraintViolation(violations);
       }
     });
   }

@@ -14,8 +14,8 @@ import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.admin.AdminView;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
 
 
 /**

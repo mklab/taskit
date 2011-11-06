@@ -19,7 +19,21 @@ public class LecturewiseRecord {
   private Attendance attendance;
   private List<Submission> submissions;
 
-  LecturewiseRecord(Lecture lecture, Attendance attendance, List<Submission> submissions) {
+  /**
+   * {@link LecturewiseRecord}オブジェクトを構築します。
+   */
+  public LecturewiseRecord() {
+    // for framework
+  }
+
+  /**
+   * {@link LecturewiseRecord}オブジェクトを構築します。
+   * 
+   * @param lecture 講義
+   * @param attendance 出席データ
+   * @param submissions 提出物
+   */
+  public LecturewiseRecord(Lecture lecture, Attendance attendance, List<Submission> submissions) {
     super();
     this.lecture = lecture;
     this.attendance = attendance;

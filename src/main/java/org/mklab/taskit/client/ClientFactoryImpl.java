@@ -24,9 +24,9 @@ import org.mklab.taskit.client.ui.admin.AdminViewImpl;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.web.bindery.event.shared.EventBus;
 
 
 /**

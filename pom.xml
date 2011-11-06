@@ -10,7 +10,7 @@
 	<name>GWT Maven Archetype</name>
 
 	<properties>
-		<gwtVersion>2.3.0</gwtVersion>
+		<gwtVersion>2.4.0</gwtVersion>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,7 +34,12 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-dev</artifactId>
 			<version>${gwtVersion}</version>
-			<scope>test</scope>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.web.bindery</groupId>
+			<artifactId>requestfactory-server</artifactId>
+			<version>${gwtVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -140,6 +145,7 @@
 								<source>src/main/java</source>
 								<!-- for *Async callback interfaces -->
 								<source>${project.build.directory}/generated-sources/gwt</source>
+								<source>${project.build.directory}/generated-sources/apt</source>
 							</sources>
 						</configuration>
 					</execution>
@@ -155,23 +161,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.3.0-1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test</goal>
-							<goal>i18n</goal>
-							<!-- <goal>generateAsync</goal> -->
-						</goals>
-					</execution>
-					<execution>
-						<id>gwt-compile</id>
-						<phase>install</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
+				<version>2.4.0</version>
 				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
 					documentation at codehaus.org -->
 				<configuration>
@@ -181,9 +171,31 @@
 					<draftCompile>true</draftCompile>
 					<disableClassMetadata>true</disableClassMetadata>
 					<extraJvmArgs>-Xmx256m</extraJvmArgs>
+					<style>${gwt.style}</style>
 				</configuration>
 			</plugin>
-
+			<!-- Annotation Processor for GWT RequestFactory -->
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<version>2.0.5</version>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.web.bindery</groupId>
+						<artifactId>requestfactory-apt</artifactId>
+						<version>${gwtVersion}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 			<!-- Copy static web files before executing gwt:run -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -298,6 +310,7 @@
 										<goals>
 											<goal>generateAsync</goal>
 											<goal>i18n</goal>
+											<goal>test</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -317,6 +330,23 @@
 										</versionRange>
 										<goals>
 											<goal>exploded</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.bsc.maven</groupId>
+										<artifactId>
+											maven-processor-plugin
+										</artifactId>
+										<versionRange>
+											[2.0.5,)
+										</versionRange>
+										<goals>
+											<goal>process</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

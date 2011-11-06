@@ -17,6 +17,13 @@ public class StudentwiseRecord {
   private List<Submission> submissions;
   private List<Attendance> attendances;
 
+  /**
+   * {@link StudentwiseRecord}オブジェクトを構築します。
+   */
+  public StudentwiseRecord() {
+    // for framework
+  }
+
   StudentwiseRecord(User student, List<Submission> submissions, List<Attendance> attendances) {
     this.student = student;
     this.submissions = submissions;

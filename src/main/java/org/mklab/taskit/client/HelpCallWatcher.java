@@ -11,11 +11,12 @@ import org.mklab.taskit.shared.TaskitRequestFactory;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.ConstraintViolation;
+
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.google.web.bindery.requestfactory.shared.Violation;
 
 
 /**
@@ -113,8 +114,8 @@ public class HelpCallWatcher {
        * {@inheritDoc}
        */
       @Override
-      public void onViolation(Set<Violation> errors) {
-        receiver.onViolation(errors);
+      public void onConstraintViolation(Set<ConstraintViolation<?>> violations) {
+        receiver.onConstraintViolation(violations);
       }
     });
   }
