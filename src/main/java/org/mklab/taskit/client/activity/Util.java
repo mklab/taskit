@@ -12,10 +12,25 @@ import java.util.List;
 
 
 /**
- * @author ishikura
+ * アクティビティで共通に利用するユーティリティを提供するクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
-class Util {
+final class Util {
 
+  /**
+   * {@link Util}オブジェクトを構築します。
+   */
+  private Util() {
+    // Forbid instantiation
+  }
+
+  /**
+   * 与えられた講義データの中から最も現在の時刻に近い講義を取得します。
+   * 
+   * @param lectures 講義データ
+   * @return 最も現在の時刻に近い講義
+   */
   static LectureProxy getLatestLecture(List<LectureProxy> lectures) {
     return getLatestItem(lectures, new DateExtractor<LectureProxy>() {
 
@@ -26,6 +41,12 @@ class Util {
     });
   }
 
+  /**
+   * 講義別の学生成績から、最も現在の時刻に近い成績を取得します。
+   * 
+   * @param model 講義別の学生成績
+   * @return 最も現在の時刻に近い講義の成績
+   */
   static StudentwiseRecordModel.LectureScore getLatestScore(StudentwiseRecordModel model) {
     final List<LectureScore> list = model.asList();
     if (list.size() == 0) return null;

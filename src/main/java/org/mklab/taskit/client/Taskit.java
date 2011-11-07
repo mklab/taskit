@@ -20,7 +20,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * TASKitのエントリーポイントです。
  */
 public class Taskit implements EntryPoint {
 

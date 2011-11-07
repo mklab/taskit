@@ -29,6 +29,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public final class LoginActivity extends AbstractActivity {
 
+  /** クライアントのクッキー中に保持する「自動更新するかどうか」のキーです。 */
   static final String COOKIE_AUTO_LOGIN_KEY = "taskitAutoLogin"; //$NON-NLS-1$
   private ClientFactory clientFactory;
 
@@ -42,13 +43,8 @@ public final class LoginActivity extends AbstractActivity {
     this.clientFactory = clientFactory;
   }
 
-  ClientFactory getClientFactory() {
-    return this.clientFactory;
-  }
-
   /**
-   * @see com.google.gwt.activity.shared.Activity#start(com.google.gwt.user.client.ui.AcceptsOneWidget,
-   *      com.google.gwt.event.shared.EventBus)
+   * {@inheritDoc}
    */
   @Override
   public void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
@@ -61,6 +57,11 @@ public final class LoginActivity extends AbstractActivity {
     view.requestFocus();
   }
 
+  /**
+   * クライアントのクッキーを調べ、自動ログインが有効であるかどうか調べます。
+   * 
+   * @return 自動ログインが有効であるかどうか
+   */
   private static boolean isAutoLoginEnabledClient() {
     String enabled = Cookies.getCookie(COOKIE_AUTO_LOGIN_KEY);
     if (enabled == null) return false;
@@ -74,15 +75,18 @@ public final class LoginActivity extends AbstractActivity {
 
       @Override
       public void onClick(@SuppressWarnings("unused") ClickEvent event) {
-        final String id = view.getId();
-        final String password = view.getPassword();
-        tryLoginAsync(view, id, password);
+        tryLoginAsync(view);
       }
 
     });
     return view;
   }
 
+  /**
+   * 自動ログインを非同期で試みます。
+   * <p>
+   * 自動ログインができない、すなわちサーバー上でセッションが残っていない場合には何も行いません。
+   */
   void tryAutoLoginAsync() {
     this.clientFactory.getRequestFactory().userRequest().getLoginUser().fire(new Receiver<UserProxy>() {
 
@@ -95,12 +99,22 @@ public final class LoginActivity extends AbstractActivity {
     });
   }
 
-  void tryLoginAsync(final LoginView view, final String id, final String password) {
+  /**
+   * 非同期でログインを試みます。
+   * <p>
+   * ログインが成功した場合には直ちにユーザー別のトップページに移動します。失敗した場合はユーザーへのその通知のみを行います。
+   * 
+   * @param view ログインビュー。入力情報の取得、ステータス情報更新のために利用します。
+   */
+  void tryLoginAsync(final LoginView view) {
+    final String id = view.getId();
+    final String password = view.getPassword();
     this.clientFactory.getRequestFactory().accountRequest().login(id, password).fire(new Receiver<UserProxy>() {
 
+      @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(UserProxy response) {
-        view.setStatusText(getClientFactory().getMessages().loginSuccessMessage());
+        view.setStatusText(LoginActivity.this.clientFactory.getMessages().loginSuccessMessage());
 
         final boolean autoLoginEnabled = view.isAutoLoginEnabled();
         storeAutoLoginState(autoLoginEnabled);
@@ -124,14 +138,19 @@ public final class LoginActivity extends AbstractActivity {
     });
   }
 
+  /**
+   * ユーザー別のトップページ（ログイン後に表示される画面）に直ちに移動します。
+   * 
+   * @param user ユーザー情報
+   */
   void goToTopPage(UserProxy user) {
     switch (user.getType()) {
       case TA:
       case TEACHER:
-        getClientFactory().getPlaceController().goTo(StudentList.INSTANCE);
+        this.clientFactory.getPlaceController().goTo(StudentList.INSTANCE);
         break;
       case STUDENT:
-        getClientFactory().getPlaceController().goTo(Student.INSTANCE);
+        this.clientFactory.getPlaceController().goTo(Student.INSTANCE);
     }
   }
 

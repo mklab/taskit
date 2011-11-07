@@ -8,6 +8,10 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
+ * 学生一覧アクティビティの場所を表すクラスです。
+ * <p>
+ * 学生IDを引数に与えることで、その学生データを直接表示します。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */

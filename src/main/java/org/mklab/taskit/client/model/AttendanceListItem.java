@@ -8,7 +8,9 @@ import org.mklab.taskit.shared.UserProxy;
 
 
 /**
- * @author yuhi
+ * 講義別の全生徒の出席データリストの、単一生徒の出席状況を表すクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class AttendanceListItem {
 

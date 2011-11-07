@@ -19,8 +19,18 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
+/*
+ * TODO パッケージの移動 
+ * TODO Server Push
+ */
 /**
- * @author ishikura
+ * ヘルプコールを監視するクラスです。
+ * <p>
+ * ヘルプコールの監視は、通信量を減らすため件数のみ行います。<br>
+ * その他ヘルプコールの詳細を取得にもこのクラスを用いることにより、件数の変更を検出し{@link HelpCallObserver}
+ * に通知することが出来ます。
+ * 
+ * @author Yuhi Ishikura
  */
 public class HelpCallWatcher {
 

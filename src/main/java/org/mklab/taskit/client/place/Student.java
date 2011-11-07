@@ -8,7 +8,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
- * @author ishikura
+ * 学生用アクティビティの場所を表すクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class Student extends Place {
 

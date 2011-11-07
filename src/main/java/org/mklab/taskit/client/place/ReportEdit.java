@@ -8,7 +8,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
- * @author ishikura
+ * 課題データ編集アクティビティの場所を表すクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class ReportEdit extends Place {
 
@@ -16,7 +18,7 @@ public class ReportEdit extends Place {
   public static final Place INSTANCE = new ReportEdit();
 
   /**
-   * @author ishikura
+   * @author Yuhi Ishikura
    */
   public static class Tokenizer implements PlaceTokenizer<ReportEdit> {
 

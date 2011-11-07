@@ -21,10 +21,13 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
- * @author ishikura
+ * 現在呼び出し中のヘルプコールのリストを表示するアクティビティです。
+ * 
+ * @author Yuhi Ishikura
  */
-public class HelpCallListActivity extends TaskitActivity implements HelpCallListView.Presenter {
+public final class HelpCallListActivity extends TaskitActivity implements HelpCallListView.Presenter {
 
+  /** ヘルプコールリストの定期的な更新のために利用します。 */
   Timer timer;
 
   /**
@@ -39,7 +42,7 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
       @SuppressWarnings("synthetic-access")
       @Override
       public void run() {
-        updateHelpCallList(true);
+        updateHelpCallListAsync(true);
       }
     };
   }
@@ -51,7 +54,7 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
   protected void onViewShown() {
     super.onViewShown();
 
-    updateHelpCallList(false);
+    updateHelpCallListAsync(false);
     this.timer.scheduleRepeating(10 * 1000);
   }
 
@@ -74,7 +77,12 @@ public class HelpCallListActivity extends TaskitActivity implements HelpCallList
     return view;
   }
 
-  private void updateHelpCallList(final boolean isAuto) {
+  /**
+   * ヘルプコールリストを非同期で更新します。
+   * 
+   * @param isAuto 定期的に行う自動更新の場合はtrue,そうでなければfalse。この値は表示するステータスメッセージにのみ影響します。
+   */
+  private void updateHelpCallListAsync(final boolean isAuto) {
     final Messages messages = getClientFactory().getMessages();
     showInformationMessage(isAuto ? messages.fetchingCallListAutoMessage() : messages.fetchingCallListMessage());
     getClientFactory().getHelpCallWatcher().getHelpCallList(new Receiver<List<HelpCallListItemProxy>>() {

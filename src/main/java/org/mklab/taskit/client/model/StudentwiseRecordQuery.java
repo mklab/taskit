@@ -17,7 +17,7 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 /**
  * 成績データの非同期取得を行うクラスです。
  * 
- * @author ishikura
+ * @author Yuhi Ishikura
  */
 public class StudentwiseRecordQuery {
 

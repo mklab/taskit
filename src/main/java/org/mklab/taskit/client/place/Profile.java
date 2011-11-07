@@ -8,7 +8,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
- * @author ishikura
+ * プロフィール編集アクティビティの場所を表すクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class Profile extends Place {
 
@@ -16,7 +18,7 @@ public class Profile extends Place {
   public static final Place INSTANCE = new Profile();
 
   /**
-   * @author ishikura
+   * @author Yuhi Ishikura
    */
   public static class Tokenizer implements PlaceTokenizer<Profile> {
 

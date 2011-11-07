@@ -15,7 +15,11 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
- * @author ishikura
+ * 学生用のアクティビティです。
+ * <p>
+ * 自分の成績の確認、及びTAの呼び出しを行うことが出来ます。
+ * 
+ * @author Yuhi Ishikura
  */
 public class StudentActivity extends TaskitActivity implements StudentView.Presenter {
 
@@ -32,7 +36,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
 
       @Override
       public void run() {
-        updateHelpCallPosition();
+        updateHelpCallPositionAsync();
       }
     };
   }
@@ -88,17 +92,27 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
     this.helpCallPositionUpdater.cancel();
   }
 
+  /**
+   * TAの呼び出し状況を変更します。
+   * <p>
+   * このメソッドは表示のみを更新するだけであり、サーバーへの呼び出しのリクエストは送信しません。
+   * 
+   * @param calling 呼び出し状態にするのであればtrue,そうでなければfalse
+   */
   void setCalling(boolean calling) {
     ((StudentView)getTaskitView()).setCalling(calling);
     if (calling) {
-      updateHelpCallPosition();
+      updateHelpCallPositionAsync();
       this.helpCallPositionUpdater.scheduleRepeating(5 * 1000);
     } else {
       this.helpCallPositionUpdater.cancel();
     }
   }
 
-  void updateHelpCallPosition() {
+  /**
+   * 自分が何番目の呼び出しなのかを表すポジションを非同期で更新しビューに反映します。
+   */
+  void updateHelpCallPositionAsync() {
     getClientFactory().getRequestFactory().helpCallRequest().getPosition().fire(new Receiver<Long>() {
 
       @Override

@@ -16,7 +16,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 /**
  * 管理者アクティビティを表すクラスです。
  * 
- * @author ishikura
+ * @author Yuhi Ishikura
  */
 public class AdminActivity extends TaskitActivity {
 

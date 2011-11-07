@@ -18,9 +18,11 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
- * @author yuhi
+ * 講義データを編集する管理者向けのアクティビティです。
+ * 
+ * @author Yuhi Ishikura
  */
-public class LectureEditActivity extends TaskitActivity implements EntityEditorView.Presenter<LectureProxy> {
+public final class LectureEditActivity extends TaskitActivity implements EntityEditorView.Presenter<LectureProxy> {
 
   private LectureRequest lectureRequest;
   private LectureEditorView lectureEditor;
@@ -50,7 +52,7 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
   @Override
   protected void onViewShown() {
     super.onViewShown();
-    updateLectureListData();
+    updateLectureListDataAsync();
   }
 
   /**
@@ -64,7 +66,7 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
         showInformationMessage(messages.savedLectureMessage(lecture.getTitle()));
-        updateLectureListData();
+        updateLectureListDataAsync();
       }
 
       /**
@@ -72,7 +74,7 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
        */
       @Override
       public void onFailure(ServerFailure error) {
-        updateLectureListData();
+        updateLectureListDataAsync();
         showErrorDialog(messages.savedLectureFailMessage(lecture.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
@@ -98,21 +100,6 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
     return edit(null);
   }
 
-  void updateLectureListData() {
-    final LectureRequest req = getClientFactory().getRequestFactory().lectureRequest();
-    final Messages messages = getClientFactory().getMessages();
-    showInformationMessage(messages.fetchingLectureListMessage());
-    req.getAllLectures().fire(new Receiver<List<LectureProxy>>() {
-
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void onSuccess(List<LectureProxy> response) {
-        showInformationMessage(messages.fetchedLectureListMessage());
-        LectureEditActivity.this.lectureEditor.setEntities(response);
-      }
-    });
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -124,7 +111,7 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
         showInformationMessage(messages.deletedLectureMessage(lecture.getTitle()));
-        updateLectureListData();
+        updateLectureListDataAsync();
       }
 
       /**
@@ -132,8 +119,26 @@ public class LectureEditActivity extends TaskitActivity implements EntityEditorV
        */
       @Override
       public void onFailure(ServerFailure error) {
-        updateLectureListData();
+        updateLectureListDataAsync();
         showErrorDialog(messages.deletedLectureFailMessage(lecture.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
+      }
+    });
+  }
+
+  /**
+   * 最新の講義データを非同期で取得しビューを更新します。
+   */
+  void updateLectureListDataAsync() {
+    final LectureRequest req = getClientFactory().getRequestFactory().lectureRequest();
+    final Messages messages = getClientFactory().getMessages();
+    showInformationMessage(messages.fetchingLectureListMessage());
+    req.getAllLectures().fire(new Receiver<List<LectureProxy>>() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(List<LectureProxy> response) {
+        showInformationMessage(messages.fetchedLectureListMessage());
+        LectureEditActivity.this.lectureEditor.setEntities(response);
       }
     });
   }

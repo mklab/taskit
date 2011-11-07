@@ -30,7 +30,7 @@ import com.google.web.bindery.event.shared.EventBus;
 
 
 /**
- * {@link ClientFactory}の実装クラスです。
+ * 画面の大きさによる制約のないデスクトップ向けのビューを提供する{@link ClientFactory}の実装クラスです。
  * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
@@ -65,7 +65,7 @@ public class ClientFactoryImpl implements ClientFactory {
   }
 
   /**
-   * @see org.mklab.taskit.client.ClientFactory#getEventBus()
+   * {@inheritDoc}
    */
   @Override
   public EventBus getEventBus() {
@@ -73,7 +73,7 @@ public class ClientFactoryImpl implements ClientFactory {
   }
 
   /**
-   * @see org.mklab.taskit.client.ClientFactory#getPlaceController()
+   * {@inheritDoc}
    */
   @Override
   public PlaceController getPlaceController() {
@@ -81,7 +81,29 @@ public class ClientFactoryImpl implements ClientFactory {
   }
 
   /**
-   * @see org.mklab.taskit.client.ClientFactory#getMessages()
+   * {@inheritDoc}
+   */
+  @Override
+  public LocalDatabase getLocalDatabase() {
+    if (this.localDatabase == null) {
+      this.localDatabase = new LocalDatabase(getRequestFactory());
+    }
+    return this.localDatabase;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public HelpCallWatcher getHelpCallWatcher() {
+    if (this.helpCallWatcher == null) {
+      this.helpCallWatcher = new HelpCallWatcher(getLocalDatabase());
+    }
+    return this.helpCallWatcher;
+  }
+
+  /**
+   * {@inheritDoc}
    */
   @Override
   public Messages getMessages() {
@@ -89,7 +111,15 @@ public class ClientFactoryImpl implements ClientFactory {
   }
 
   /**
-   * @see org.mklab.taskit.client.ClientFactory#getLoginView()
+   * {@inheritDoc}
+   */
+  @Override
+  public PageLayout getPageLayout() {
+    return new PageLayoutImpl(this);
+  }
+
+  /**
+   * {@inheritDoc}
    */
   @Override
   public LoginView getLoginView() {
@@ -97,7 +127,7 @@ public class ClientFactoryImpl implements ClientFactory {
   }
 
   /**
-   * @see org.mklab.taskit.client.ClientFactory#getHeaderView()
+   * {@inheritDoc}
    */
   @Override
   public HeaderView getHeaderView() {
@@ -105,7 +135,7 @@ public class ClientFactoryImpl implements ClientFactory {
   }
 
   /**
-   * @see org.mklab.taskit.client.ClientFactory#getStudentListView()
+   * {@inheritDoc}
    */
   @Override
   public StudentListView getStudentListView() {
@@ -148,38 +178,8 @@ public class ClientFactoryImpl implements ClientFactory {
    * {@inheritDoc}
    */
   @Override
-  public PageLayout getPageLayout() {
-    return new PageLayoutImpl(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public AdminView getAdminView() {
     return new AdminViewImpl(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public HelpCallWatcher getHelpCallWatcher() {
-    if (this.helpCallWatcher == null) {
-      this.helpCallWatcher = new HelpCallWatcher(getLocalDatabase());
-    }
-    return this.helpCallWatcher;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public LocalDatabase getLocalDatabase() {
-    if (this.localDatabase == null) {
-      this.localDatabase = new LocalDatabase(getRequestFactory());
-    }
-    return this.localDatabase;
   }
 
 }

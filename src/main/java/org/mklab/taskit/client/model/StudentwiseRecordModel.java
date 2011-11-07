@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 単一生徒の成績情報のモデルです。
  * 
- * @author ishikura
+ * @author Yuhi Ishikura
  */
 public class StudentwiseRecordModel {
 

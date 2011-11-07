@@ -24,14 +24,14 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * <p>
  * サーバーからのデータ取得をキャッシュする機能を提供します。
  * 
- * @author ishikura
+ * @author Yuhi Ishikura
  */
 public class LocalDatabase {
 
   private Map<Query<?>, Object> cache = new HashMap<Query<?>, Object>();
   private TaskitRequestFactory requestFactory;
 
-  /** 全学生のリストです。 */
+  /** 全学生のリストを取得するクエリです。 */
   public static Query<List<UserProxy>> STUDENT_LIST = new Query<List<UserProxy>>() {
 
     @Override
@@ -41,7 +41,7 @@ public class LocalDatabase {
 
   };
 
-  /** 全講義のリストです。 */
+  /** 全講義のリストを取得するクエリです。 */
   public static Query<List<LectureProxy>> LECTURE_LIST = new Query<List<LectureProxy>>() {
 
     @Override
@@ -51,7 +51,7 @@ public class LocalDatabase {
 
   };
 
-  /** 全講義のリストです。 */
+  /** 全講義のリストを取得するクエリです。 */
   public static Query<List<HelpCallListItemProxy>> CALL_LIST = new Query<List<HelpCallListItemProxy>>() {
 
     @Override
@@ -85,7 +85,7 @@ public class LocalDatabase {
    * キャッシュが存在すれば取得します。
    * 
    * @param query クエリ
-   * @return キャッシュされたデータ
+   * @return キャッシュされたデータ。存在しなければnull
    */
   public <T> T getCache(Query<T> query) {
     @SuppressWarnings("unchecked")
@@ -109,12 +109,18 @@ public class LocalDatabase {
     this.cache.clear();
   }
 
+  /**
+   * クエリのキャッシュを設定します。
+   * 
+   * @param query クエリ
+   * @param value キャッシュ
+   */
   <T> void setCache(Query<T> query, T value) {
     this.cache.put(query, value);
   }
 
   /**
-   * キャッシュされているかどうか調べます。
+   * 与えられたクエリがキャッシュされているかどうか調べます。
    * 
    * @param query クエリ
    * @return キャッシュされているかどうか
@@ -202,9 +208,9 @@ public class LocalDatabase {
   }
 
   /**
-   * データを取得するクラスです。
+   * データを取得するインターフェースです。
    * 
-   * @author ishikura
+   * @author Yuhi Ishikura
    * @param <T> データの型
    */
   public static interface Query<T> {

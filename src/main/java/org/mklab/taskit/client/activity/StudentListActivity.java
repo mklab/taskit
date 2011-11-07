@@ -28,6 +28,8 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
+ * 学生別の成績を表示するアクティビティです。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 23, 2011
  */
@@ -48,7 +50,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   }
 
   /**
-   * @see org.mklab.taskit.client.activity.TaskitActivity#createTaskitView(org.mklab.taskit.client.ClientFactory)
+   * {@inheritDoc}
    */
   @Override
   protected TaskitView createTaskitView(ClientFactory clientFactory) {
@@ -79,7 +81,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
           for (final UserProxy user : arg0) {
             if (initialSelection.equals(user.getAccount().getId())) {
               list.setSelectedListData(user);
-              fetchAndShowAsync(user);
+              showStudentRecordAsync(user);
               break;
             }
           }
@@ -99,7 +101,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   @Override
   public void onStop() {
-    checkOutLater();
+    checkOutAsync();
   }
 
   /**
@@ -184,30 +186,40 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     if (TOKEN_FOLLOWS_STUDENT_SELECTION) {
       getClientFactory().getPlaceController().goTo(new StudentList(selectedUser.getAccount().getId()));
     } else {
-      fetchAndShowAsync(selectedUser);
+      showStudentRecordAsync(selectedUser);
     }
   }
 
-  private void fetchAndShowAsync(final UserProxy selectedUser) {
-    showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(selectedUser.getAccount().getId()));
-    this.query.query(selectedUser.getAccount().getId(), new StudentwiseRecordQuery.Handler() {
+  /**
+   * 与えられたユーザーの成績を非同期で取得しビューに表示します。
+   * 
+   * @param student 表示するユーザー
+   */
+  private void showStudentRecordAsync(final UserProxy student) {
+    showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(student.getAccount().getId()));
+    this.query.query(student.getAccount().getId(), new StudentwiseRecordQuery.Handler() {
 
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void handleResult(StudentwiseRecordModel model) {
-        showInformationMessage(getClientFactory().getMessages().fetchedUserRecordsMessage(selectedUser.getAccount().getId()));
-        view.showUserPage(selectedUser, model);
+        showInformationMessage(getClientFactory().getMessages().fetchedUserRecordsMessage(student.getAccount().getId()));
+        view.showUserPage(student, model);
 
         final StudentwiseRecordModel.LectureScore latestRow = Util.getLatestScore(model);
         if (latestRow != null) {
           view.highlightRow(latestRow);
         }
-        checkInLater(selectedUser);
+        checkInAsync(student);
       }
     });
   }
 
-  private void checkInLater(UserProxy user) {
+  /**
+   * 与えられたユーザーにチェックインしたこと(閲覧中であること)をサーバーに非同期で送信します。
+   * 
+   * @param user 閲覧中のユーザー
+   */
+  private void checkInAsync(UserProxy user) {
     getClientFactory().getRequestFactory().checkMapRequest().checkIn(user.getAccount()).fire(new Receiver<Void>() {
 
       @Override
@@ -217,7 +229,12 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     });
   }
 
-  private void checkOutLater() {
+  /**
+   * 現在閲覧中のユーザーからチェックアウトしたこと(閲覧終了したこと)をサーバーに非同期で送信します。
+   * <p>
+   * 閲覧中でない場合でも実行できます。
+   */
+  private void checkOutAsync() {
     getClientFactory().getRequestFactory().checkMapRequest().checkOut().fire(new Receiver<Void>() {
 
       @Override
@@ -234,7 +251,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   public void reloadUserPage() {
     this.view.clearUserPage();
     final UserProxy selectedUser = this.view.getSelectedUser();
-    fetchAndShowAsync(selectedUser);
+    showStudentRecordAsync(selectedUser);
   }
 
   /**

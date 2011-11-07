@@ -8,7 +8,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
- * @author ishikura
+ * ヘルプコールリストアクティビティの場所を表すクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class HelpCallList extends Place {
 
@@ -16,7 +18,7 @@ public class HelpCallList extends Place {
   public static final Place INSTANCE = new HelpCallList();
 
   /**
-   * @author ishikura
+   * @author Yuhi Ishikura
    */
   public static class Tokenizer implements PlaceTokenizer<HelpCallList> {
 

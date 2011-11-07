@@ -14,7 +14,9 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
- * @author ishikura
+ * プロフィールの表示・変更を行うアクティビティです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class ProfileActivity extends TaskitActivity implements ProfileView.Presenter {
 
@@ -99,6 +101,11 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
     });
   }
 
+  /**
+   * キャッシュしているログインユーザー情報をクリアします。
+   * <p>
+   * すなわち、次のアクティビティ遷移でユーザー情報を取得しなおすように要求します。
+   */
   void clearLoginUserCache() {
     getClientFactory().getLocalDatabase().clearCache(LocalDatabase.LOGIN_USER);
   }

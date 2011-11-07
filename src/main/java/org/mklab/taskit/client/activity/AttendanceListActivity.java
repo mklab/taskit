@@ -24,6 +24,8 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
+ * 講義別の全生徒の出席リストを表示するアクティビティです。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 30, 2011
  */
@@ -86,6 +88,9 @@ public class AttendanceListActivity extends TaskitActivity implements Attendance
     });
   }
 
+  /**
+   * 現在選択中の講義の出席リストを非同期で取得しビューを更新します。
+   */
   void updateListAsync() {
     final LectureProxy currentSelection = this.view.getSelectedLecture();
     updateListAsync(currentSelection);

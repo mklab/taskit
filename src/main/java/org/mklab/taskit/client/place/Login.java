@@ -8,6 +8,8 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
+ * ログインアクティビティの場所を表すクラスです。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */

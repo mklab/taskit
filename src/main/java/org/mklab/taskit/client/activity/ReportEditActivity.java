@@ -19,7 +19,9 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
- * @author yuhi
+ * 課題データの編集を行うアクティビティです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class ReportEditActivity extends TaskitActivity implements EntityEditorView.Presenter<ReportProxy> {
 
@@ -52,11 +54,14 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
   @Override
   protected void onViewShown() {
     super.onViewShown();
-    updateReportListData();
-    updateChoosableLectures();
+    updateReportListDataAsync();
+    updateLecturesAsync();
   }
 
-  private void updateChoosableLectures() {
+  /**
+   * 講義データを非同期で取得し、ビューを更新します。
+   */
+  private void updateLecturesAsync() {
     final Messages messages = getClientFactory().getMessages();
     showInformationMessage(messages.fetchingChoosableLecturesMessage());
     getClientFactory().getRequestFactory().lectureRequest().getAllLectures().with().fire(new Receiver<List<LectureProxy>>() {
@@ -82,7 +87,7 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
         showInformationMessage(messages.savedReportMessage(report.getTitle()));
-        updateReportListData();
+        updateReportListDataAsync();
       }
 
       /**
@@ -90,7 +95,7 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        updateReportListData();
+        updateReportListDataAsync();
         showErrorDialog(messages.savedReportFailMessage(report.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });
@@ -127,7 +132,10 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
     return report;
   }
 
-  void updateReportListData() {
+  /**
+   * 課題データを非同期で取得しビューを更新します。
+   */
+  void updateReportListDataAsync() {
     final ReportRequest req = getClientFactory().getRequestFactory().reportRequest();
     final Messages messages = getClientFactory().getMessages();
     showInformationMessage(messages.fetchingReportListMessage());
@@ -153,7 +161,7 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {
         showInformationMessage(messages.deletedReportMessage(report.getTitle()));
-        updateReportListData();
+        updateReportListDataAsync();
       }
 
       /**
@@ -161,7 +169,7 @@ public class ReportEditActivity extends TaskitActivity implements EntityEditorVi
        */
       @Override
       public void onFailure(ServerFailure error) {
-        updateReportListData();
+        updateReportListDataAsync();
         showErrorMessage(messages.deletedReportFailMessage(report.getTitle()) + ":" + error.getMessage()); //$NON-NLS-1$
       }
     });

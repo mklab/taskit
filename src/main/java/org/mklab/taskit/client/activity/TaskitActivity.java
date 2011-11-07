@@ -24,6 +24,10 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 
 /**
+ * 認証完了後のすべてのアクティビティの基底クラスです。
+ * <p>
+ * ビューの基本的なレイアウト、ユーザーへの情報通知機能を提供します。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
@@ -53,7 +57,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
     this.container = panel;
-    fetchLoginUserAndShowLater();
+    updateLoginUserInfoAsync();
   }
 
   /**
@@ -61,19 +65,16 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * 
    * @return ログインユーザー
    */
-  protected UserProxy getLoginUser() {
+  protected final UserProxy getLoginUser() {
     return this.loginUser;
   }
 
   /**
-   * ログインユーザー情報を取得し、取得が完了し次第ユーザーに応じたビューを表示します。
+   * ログインユーザー情報を非同期で取得し、取得が完了し次第ユーザーに応じたビューを表示します。
    * <p>
-   * ユーザー情報はキャッシュされ、アプリケーション実行中はログアウトするまでその情報を利用します。<br>
-   * アプリケーション実行中にユーザー種別やユーザー名が変わったりしても反映されないのでその時はブラウザをリロードしてください。
-   * <p>
-   * この仕様はプロフィール変更があることを考えると問題ありすぎなので、変更予定。
+   * ユーザー情報はキャッシュされ、アプリケーション実行中はログアウトするか、キャッシュをマニュアルでクリアするまでその情報を利用します。
    */
-  private void fetchLoginUserAndShowLater() {
+  private void updateLoginUserInfoAsync() {
     getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.LOGIN_USER, new Receiver<UserProxy>() {
 
       @SuppressWarnings("synthetic-access")
@@ -93,7 +94,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
       public void onFailure(ServerFailure error) {
         showErrorDialog(error.getMessage());
         logout();
-        return;
       }
     });
   }
@@ -139,6 +139,9 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
 
   /**
    * ビューが表示されたときに呼び出されます。
+   * <p>
+   * このメソッドは、認証、ユーザー情報の取得が完了し、ビューの構築が完了した後で呼び出されます。 <br>
+   * オーバーライドして利用するように設計されています。
    */
   protected void onViewShown() {
     // do nothing
@@ -149,7 +152,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * 
    * @return ビュー。まだ生成されていない場合はnull
    */
-  protected TaskitView getTaskitView() {
+  protected final TaskitView getTaskitView() {
     return this.view;
   }
 
@@ -157,7 +160,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * @{inheritDoc
    */
   @Override
-  public void logout() {
+  public final void logout() {
     this.clientFactory.getHelpCallWatcher().stop();
     this.clientFactory.getLocalDatabase().clearAllCache();
 
@@ -245,7 +248,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * {@inheritDoc}
    */
   @Override
-  public void helpCallCountChanged(int count) {
+  public final void helpCallCountChanged(int count) {
     if (this.view == null) return;
     if (this.view instanceof HelpCallDisplayable) {
       ((HelpCallDisplayable)this.view).showHelpCallCount(count);

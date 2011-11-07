@@ -4,7 +4,9 @@
 package org.mklab.taskit.client.activity;
 
 /**
- * @author ishikura
+ * ヘルプコール数を監視するインターフェースです。
+ * 
+ * @author Yuhi Ishikura
  */
 public interface HelpCallObserver {
 

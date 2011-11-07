@@ -35,7 +35,7 @@ public class TaskitActivityMapper implements ActivityMapper {
    * @param clientFactory {@link ClientFactory}インスタンス
    */
   public TaskitActivityMapper(ClientFactory clientFactory) {
-    super();
+    if (clientFactory == null) throw new NullPointerException();
     this.clientFactory = clientFactory;
   }
 

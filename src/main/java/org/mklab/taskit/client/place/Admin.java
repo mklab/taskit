@@ -8,7 +8,9 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 
 /**
- * @author ishikura
+ * 管理者ビューの場所を表すクラスです。
+ * 
+ * @author Yuhi Ishikura
  */
 public class Admin extends Place {
 
@@ -16,7 +18,7 @@ public class Admin extends Place {
   public static final Place INSTANCE = new Admin();
 
   /**
-   * @author ishikura
+   * @author Yuhi Ishikura
    */
   public static class Tokenizer implements PlaceTokenizer<Admin> {
 

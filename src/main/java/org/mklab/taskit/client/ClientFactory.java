@@ -19,6 +19,10 @@ import com.google.web.bindery.event.shared.EventBus;
 
 
 /**
+ * クライアントの端末に応じたビューや、すべてのビューで共通して利用するオブジェクトを提供するインターフェースです。
+ * <p>
+ * この実装を切り替えることにより、デスクトップPC用、タブレットPC用、スマートフォン用などでビューを切り替えることが出来ます。
+ * 
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 22, 2011
  */
@@ -44,6 +48,20 @@ public interface ClientFactory {
    * @return {@link PlaceController}インスタンス
    */
   PlaceController getPlaceController();
+
+  /**
+   * ローカルデータベースを取得します。
+   * 
+   * @return ローカルデータベース
+   */
+  LocalDatabase getLocalDatabase();
+
+  /**
+   * ヘルプコール監視オブジェクトを取得します。
+   * 
+   * @return ヘルプコール監視オブジェクト
+   */
+  HelpCallWatcher getHelpCallWatcher();
 
   /**
    * 文字列管理を行う{@link Messages}インスタンスを取得します。
@@ -114,18 +132,4 @@ public interface ClientFactory {
    * @return 管理者ビュー
    */
   AdminView getAdminView();
-
-  /**
-   * ヘルプコール監視オブジェクトを取得します。
-   * 
-   * @return ヘルプコール監視オブジェクト
-   */
-  HelpCallWatcher getHelpCallWatcher();
-
-  /**
-   * ローカルデータベースを取得します。
-   * 
-   * @return ローカルデータベース
-   */
-  LocalDatabase getLocalDatabase();
 }
