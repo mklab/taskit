@@ -161,7 +161,7 @@ public class CheckMap extends AbstractEntity<String> {
    * @return 与えられた学生を担当中のユーザーのリスト。一人もいなければ空のリスト
    */
   @SuppressWarnings("unchecked")
-  @Invoker({UserType.TA, UserType.TEACHER, UserType.STUDENT})
+  @Invoker({UserType.TA, UserType.TEACHER})
   public static List<String> getUsersInCheck(Account student) {
     final EntityManager em = EMF.get().createEntityManager();
     final EntityTransaction t = em.getTransaction();
@@ -179,5 +179,22 @@ public class CheckMap extends AbstractEntity<String> {
       em.close();
     }
     return userIdList;
+  }
+
+  /**
+   * 全てのチェックを取得します。
+   * 
+   * @return すべてのチェックのリスト。存在しなければ空のリスト
+   */
+  @SuppressWarnings("unchecked")
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static List<CheckMap> getAllCheckMap() {
+    final EntityManager em = EMF.get().createEntityManager();
+    final Query q = em.createQuery("select c from CheckMap c order by c.id"); //$NON-NLS-1$
+    try {
+      return q.getResultList();
+    } finally {
+      em.close();
+    }
   }
 }

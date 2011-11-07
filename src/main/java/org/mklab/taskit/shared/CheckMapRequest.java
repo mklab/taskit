@@ -26,4 +26,6 @@ public interface CheckMapRequest extends RequestContext {
   Request<AccountProxy> getTargetStudentOf(AccountProxy user);
 
   Request<List<String>> getUsersInCheck(AccountProxy student);
+
+  Request<List<CheckMapProxy>> getAllCheckMap();
 }
