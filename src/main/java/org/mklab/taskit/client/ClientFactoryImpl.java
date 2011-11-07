@@ -5,6 +5,8 @@ package org.mklab.taskit.client;
 
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
+import org.mklab.taskit.client.ui.CheckInListView;
+import org.mklab.taskit.client.ui.CheckInListViewImpl;
 import org.mklab.taskit.client.ui.HeaderView;
 import org.mklab.taskit.client.ui.HeaderViewImpl;
 import org.mklab.taskit.client.ui.HelpCallListView;
@@ -180,6 +182,14 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public AdminView getAdminView() {
     return new AdminViewImpl(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public CheckInListView getCheckInListView() {
+    return new CheckInListViewImpl(this);
   }
 
 }

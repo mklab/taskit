@@ -12,6 +12,7 @@
 		<g:VerticalPanel>
 			<g:Label ui:field='messageLabel' styleName='{style.message}'></g:Label>
 			<ce:CellList ui:field='list'></ce:CellList>
+			<g:Button ui:field='checkInListButton'></g:Button>
 		</g:VerticalPanel>
 	</g:ScrollPanel>
 

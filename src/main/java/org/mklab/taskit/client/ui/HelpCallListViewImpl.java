@@ -12,11 +12,14 @@ import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -39,6 +42,8 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
   CellList<HelpCallListItemProxy> list;
   @UiField
   Label messageLabel;
+  @UiField
+  Button checkInListButton;
 
   /**
    * {@link HelpCallListViewImpl}オブジェクトを構築します。
@@ -47,6 +52,11 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
    */
   public HelpCallListViewImpl(ClientFactory clientFactory) {
     super(clientFactory);
+  }
+
+  @UiHandler("checkInListButton")
+  void checkInListButtonPressed(@SuppressWarnings("unused") ClickEvent evt) {
+    this.presenter.goToCheckInList();
   }
 
   /**
@@ -139,7 +149,10 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
     });
     this.list.setSelectionModel(selectionModel);
 
-    return binder.createAndBindUi(this);
+    final Widget widget = binder.createAndBindUi(this);
+    this.checkInListButton.setText(getClientFactory().getMessages().checkInListLabel());
+
+    return widget;
   }
 
 }

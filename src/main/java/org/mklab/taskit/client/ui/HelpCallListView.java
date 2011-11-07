@@ -44,6 +44,11 @@ public interface HelpCallListView extends TaskitView {
      */
     void helpCallSelected(HelpCallProxy selectedHelpCall);
 
+    /**
+     * チェックインリストに遷移します。
+     */
+    void goToCheckInList();
+
   }
 
 }

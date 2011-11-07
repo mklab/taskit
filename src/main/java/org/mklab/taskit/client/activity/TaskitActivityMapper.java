@@ -6,6 +6,7 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.Admin;
 import org.mklab.taskit.client.place.AttendanceList;
+import org.mklab.taskit.client.place.CheckInList;
 import org.mklab.taskit.client.place.HelpCallList;
 import org.mklab.taskit.client.place.LectureEdit;
 import org.mklab.taskit.client.place.Login;
@@ -53,6 +54,7 @@ public class TaskitActivityMapper implements ActivityMapper {
     if (place instanceof LectureEdit) return new LectureEditActivity(this.clientFactory);
     if (place instanceof ReportEdit) return new ReportEditActivity(this.clientFactory);
     if (place instanceof Admin) return new AdminActivity(this.clientFactory);
+    if (place instanceof CheckInList) return new CheckInListActivity(this.clientFactory);
 
     return null;
   }

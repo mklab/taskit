@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
+import org.mklab.taskit.client.place.CheckInList;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.TaskitView;
@@ -115,6 +116,14 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
     final AccountProxy caller = selectedHelpCall.getCaller();
     final Place to = new StudentList(caller.getId());
     getClientFactory().getPlaceController().goTo(to);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void goToCheckInList() {
+    getClientFactory().getPlaceController().goTo(CheckInList.INSTANCE);
   }
 
 }
