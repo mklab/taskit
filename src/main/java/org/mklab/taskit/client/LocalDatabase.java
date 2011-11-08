@@ -56,7 +56,7 @@ public class LocalDatabase {
 
     @Override
     public void query(TaskitRequestFactory requestFactory, Receiver<List<HelpCallListItemProxy>> receiver) {
-      requestFactory.helpCallRequest().getHelpCallListItems().with("helpCall.account", "helpCall.caller").fire(receiver); //$NON-NLS-1$ //$NON-NLS-2$
+      requestFactory.helpCallRequest().getHelpCallListItems().with("helpCall.caller", "usersInCharge").fire(receiver); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
   };

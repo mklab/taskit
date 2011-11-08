@@ -109,6 +109,44 @@ public class HelpCall extends AbstractEntity<Integer> {
   // service methods
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((this.caller == null) ? 0 : this.caller.hashCode());
+    result = prime * result + ((this.date == null) ? 0 : this.date.hashCode());
+    result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+    result = prime * result + ((this.message == null) ? 0 : this.message.hashCode());
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    HelpCall other = (HelpCall)obj;
+    if (this.caller == null) {
+      if (other.caller != null) return false;
+    } else if (!this.caller.equals(other.caller)) return false;
+    if (this.date == null) {
+      if (other.date != null) return false;
+    } else if (!this.date.equals(other.date)) return false;
+    if (this.id == null) {
+      if (other.id != null) return false;
+    } else if (!this.id.equals(other.id)) return false;
+    if (this.message == null) {
+      if (other.message != null) return false;
+    } else if (!this.message.equals(other.message)) return false;
+    return true;
+  }
+
+  /**
    * 呼び出しを宣言します。
    * 
    * @param message メッセージ。nullを許容します。
@@ -245,8 +283,7 @@ public class HelpCall extends AbstractEntity<Integer> {
     final List<HelpCallListItem> listItems = new ArrayList<HelpCallListItem>();
     for (HelpCall helpCall : helpCalls) {
       final List<String> users = CheckMap.getUsersInCheck(helpCall.getCaller());
-      final HelpCallListItem item = new HelpCallListItem(helpCall, users);
-      listItems.add(item);
+      listItems.add(new HelpCallListItem(helpCall, users));
     }
     return listItems;
   }

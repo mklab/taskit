@@ -3,9 +3,8 @@
  */
 package org.mklab.taskit.server.domain;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.web.bindery.requestfactory.shared.ValueProxy;
 
 
 /**
@@ -13,10 +12,10 @@ import com.google.web.bindery.requestfactory.shared.ValueProxy;
  * 
  * @author Yuhi Ishikura
  */
-public class HelpCallListItem implements ValueProxy {
+public class HelpCallListItem {
 
   private HelpCall helpCall;
-  private List<String> usersInCharge;
+  private List<String> usersInCharge = new ArrayList<String>();
 
   /**
    * {@link HelpCallListItem}オブジェクトを構築します。
@@ -32,7 +31,8 @@ public class HelpCallListItem implements ValueProxy {
    * @param usersInCharge 呼び出し生徒に対応中の担当者
    */
   public HelpCallListItem(HelpCall helpCall, List<String> usersInCharge) {
-    super();
+    if (helpCall == null) throw new NullPointerException();
+    if (usersInCharge == null) throw new NullPointerException();
     this.helpCall = helpCall;
     this.usersInCharge = usersInCharge;
   }
@@ -53,6 +53,36 @@ public class HelpCallListItem implements ValueProxy {
    */
   public List<String> getUsersInCharge() {
     return this.usersInCharge;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((this.helpCall == null) ? 0 : this.helpCall.hashCode());
+    result = prime * result + ((this.usersInCharge == null) ? 0 : this.usersInCharge.hashCode());
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    HelpCallListItem other = (HelpCallListItem)obj;
+    if (this.helpCall == null) {
+      if (other.helpCall != null) return false;
+    } else if (!this.helpCall.equals(other.helpCall)) return false;
+    if (this.usersInCharge == null) {
+      if (other.usersInCharge != null) return false;
+    } else if (!this.usersInCharge.equals(other.usersInCharge)) return false;
+    return true;
   }
 
 }

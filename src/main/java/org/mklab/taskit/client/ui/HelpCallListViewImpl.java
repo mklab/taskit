@@ -92,6 +92,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
       @Override
       public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallListItemProxy value, SafeHtmlBuilder sb) {
         final HelpCallProxy helpCall = value.getHelpCall();
+        if (helpCall == null) throw new IllegalArgumentException();
         final Date date = helpCall.getDate();
         final String callerId = helpCall.getCaller().getId();
         final String message = helpCall.getMessage();
