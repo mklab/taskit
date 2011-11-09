@@ -89,6 +89,13 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
   private void updateHelpCallListAsync(final boolean isAuto) {
     final Messages messages = getClientFactory().getMessages();
     showInformationMessage(isAuto ? messages.fetchingCallListAutoMessage() : messages.fetchingCallListMessage());
+
+    /*
+     * org.mklab.taskit.shared.HelpCallListItemProxyにより一度の通信で済ませたいが、
+     * GWTのバグ(?)により取得できない。
+     * ValueProxyのリストの場合、Resolutionがリストの最後の要素にしか適用されず、その結果
+     * 最後のHelpCallListItem要素以外のHelpCallProxyのcallerがnullになってしまう。
+     */
     getClientFactory().getHelpCallWatcher().getHelpCallList(new Receiver<List<HelpCallProxy>>() {
 
       @Override
@@ -109,25 +116,25 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
         }
       }
     });
-    getClientFactory().getRequestFactory().checkMapRequest().getAllCheckMap().with("student").fire(new Receiver<List<CheckMapProxy>>() {
+    getClientFactory().getRequestFactory().checkMapRequest().getAllCheckMap().with("student").fire(new Receiver<List<CheckMapProxy>>() { //$NON-NLS-1$
 
-      @Override
-      public void onSuccess(List<CheckMapProxy> response) {
-        final Map<String, List<String>> studentToUsers = new HashMap<String, List<String>>();
-        for (CheckMapProxy checkMap : response) {
-          final String taId = checkMap.getId();
-          final String studentId = checkMap.getStudent().getId();
+          @Override
+          public void onSuccess(List<CheckMapProxy> response) {
+            final Map<String, List<String>> studentToUsers = new HashMap<String, List<String>>();
+            for (CheckMapProxy checkMap : response) {
+              final String taId = checkMap.getId();
+              final String studentId = checkMap.getStudent().getId();
 
-          List<String> students = studentToUsers.get(studentId);
-          if (students == null) {
-            students = new ArrayList<String>();
-            studentToUsers.put(studentId, students);
+              List<String> students = studentToUsers.get(studentId);
+              if (students == null) {
+                students = new ArrayList<String>();
+                studentToUsers.put(studentId, students);
+              }
+              students.add(taId);
+            }
+            ((HelpCallListView)getTaskitView()).setCheckMaps(studentToUsers);
           }
-          students.add(taId);
-        }
-        ((HelpCallListView)getTaskitView()).setCheckMaps(studentToUsers);
-      }
-    });
+        });
   }
 
   /**

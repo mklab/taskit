@@ -29,7 +29,9 @@ import com.google.gwt.view.client.SingleSelectionModel;
 
 
 /**
- * @author ishikura
+ * {@link HelpCallListView}のデフォルト実装です。
+ * 
+ * @author Yuhi Ishikura
  */
 public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCallListView {
 
@@ -92,6 +94,11 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
     updateListData();
   }
 
+  /**
+   * リストデータを更新します。
+   * <p>
+   * {@link #studentToUsersMap}がすでに取得されていれば、リストアイテムにそれを反映させます。
+   */
   private void updateListData() {
     if (this.listItems == null) return;
     if (this.studentToUsersMap != null) {
