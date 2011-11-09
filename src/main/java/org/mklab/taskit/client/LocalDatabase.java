@@ -66,7 +66,7 @@ public class LocalDatabase {
 
     @Override
     public void query(TaskitRequestFactory requestFactory, Receiver<UserProxy> receiver) {
-      requestFactory.userRequest().getLoginUser().with("account", "caller").fire(receiver); //$NON-NLS-1$ //$NON-NLS-2$
+      requestFactory.userRequest().getLoginUser().with("account").fire(receiver); //$NON-NLS-1$
     }
 
   };

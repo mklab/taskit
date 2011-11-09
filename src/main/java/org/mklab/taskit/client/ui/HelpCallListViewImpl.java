@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
@@ -46,6 +47,9 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
   @UiField
   Button checkInListButton;
 
+  List<HelpCallListItem> listItems;
+  Map<String, List<String>> studentToUsersMap;
+
   /**
    * {@link HelpCallListViewImpl}オブジェクトを構築します。
    * 
@@ -71,12 +75,37 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
       this.messageLabel.setText(getClientFactory().getMessages().callingMessage(String.valueOf(helpCalls.size())));
     }
 
-    final List<HelpCallListItem> listItems = new ArrayList<HelpCallListItem>(helpCalls.size());
+    this.listItems = new ArrayList<HelpCallListItem>(helpCalls.size());
     for (HelpCallProxy call : helpCalls) {
-      listItems.add(new HelpCallListItem(call));
+      this.listItems.add(new HelpCallListItem(call));
     }
 
-    this.list.setRowData(listItems);
+    updateListData();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setCheckMaps(Map<String, List<String>> studentToUsersMap) {
+    this.studentToUsersMap = studentToUsersMap;
+    updateListData();
+  }
+
+  private void updateListData() {
+    if (this.listItems == null) return;
+    if (this.studentToUsersMap != null) {
+      for (HelpCallListItem item : this.listItems) {
+        List<String> usersInCharge = this.studentToUsersMap.get(item.getHelpCall().getCaller().getId());
+        if (usersInCharge == null || usersInCharge.size() == 0) {
+          item.setUsersInCharge(Collections.<String> emptyList());
+        } else {
+          item.setUsersInCharge(usersInCharge);
+        }
+      }
+    }
+
+    this.list.setRowData(this.listItems);
   }
 
   /**

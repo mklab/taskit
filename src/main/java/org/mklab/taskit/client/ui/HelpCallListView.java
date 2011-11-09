@@ -6,6 +6,7 @@ package org.mklab.taskit.client.ui;
 import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -21,6 +22,13 @@ public interface HelpCallListView extends TaskitView {
    * @param helpCalls 呼び出し一覧
    */
   void setHelpCalls(List<HelpCallProxy> helpCalls);
+
+  /**
+   * 誰がどの生徒を応対しているかどうかを示すマップを取得します。
+   * 
+   * @param studentToUsersMap 生徒のIDから担当者へのマップ
+   */
+  void setCheckMaps(Map<String, List<String>> studentToUsersMap);
 
   /**
    * プレゼンターを設定します。

@@ -10,9 +10,13 @@ import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HelpCallListView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
+import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Timer;
@@ -103,6 +107,25 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
         } else {
           showErrorDialog(messages.fetchedCallListAutoFailMessage() + ":" + error.getMessage()); //$NON-NLS-1$
         }
+      }
+    });
+    getClientFactory().getRequestFactory().checkMapRequest().getAllCheckMap().with("student").fire(new Receiver<List<CheckMapProxy>>() {
+
+      @Override
+      public void onSuccess(List<CheckMapProxy> response) {
+        final Map<String, List<String>> studentToUsers = new HashMap<String, List<String>>();
+        for (CheckMapProxy checkMap : response) {
+          final String taId = checkMap.getId();
+          final String studentId = checkMap.getStudent().getId();
+
+          List<String> students = studentToUsers.get(studentId);
+          if (students == null) {
+            students = new ArrayList<String>();
+            studentToUsers.put(studentId, students);
+          }
+          students.add(taId);
+        }
+        ((HelpCallListView)getTaskitView()).setCheckMaps(studentToUsers);
       }
     });
   }
