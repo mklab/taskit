@@ -28,7 +28,8 @@ import de.novanic.eventservice.service.registry.EventRegistryFactory;
 public class ServiceUtil {
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
-  static final String USER_KEY = "user"; //$NON-NLS-1$
+  /** セッション中のユーザーオブジェクトのキーです。 */
+  public static final String USER_KEY = "user"; //$NON-NLS-1$
   private static ServiceUtilImplementation impl = new DefaultServiceUtilImplementation();
 
   static ServiceUtilImplementation getImplementation() {
@@ -121,6 +122,7 @@ public class ServiceUtil {
    */
   public static void fireEvent(Domain domain, Event event) {
     final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+
     registory.addEvent(domain, event);
   }
 

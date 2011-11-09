@@ -31,7 +31,7 @@
 
 	<servlet>
 		<servlet-name>EventService</servlet-name>
-		<servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+		<servlet-class>org.mklab.taskit.server.TaskitEventServiceServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
