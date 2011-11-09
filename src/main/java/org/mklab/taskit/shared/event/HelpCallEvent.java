@@ -3,6 +3,9 @@
  */
 package org.mklab.taskit.shared.event;
 
+import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.UserType;
+
 import java.util.Date;
 
 import de.novanic.eventservice.client.event.Event;
@@ -15,6 +18,7 @@ import de.novanic.eventservice.client.event.domain.DomainFactory;
  * 
  * @author Yuhi Ishikura
  */
+@Invoker({UserType.TA, UserType.TEACHER})
 public class HelpCallEvent implements Event {
 
   /**

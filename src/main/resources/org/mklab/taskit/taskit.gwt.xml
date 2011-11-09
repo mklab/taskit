@@ -19,6 +19,8 @@
 	<inherits name="com.google.gwt.i18n.I18N" />
 	<!-- Locales -->
 	<extend-property name="locale" values="ja_JP" />
+	
+	<servlet path="/gwteventservice" class='org.mklab.taskit.server.TaskitEventServiceServlet'/>
 
 	<!-- ClientFactory -->
 	<replace-with class="org.mklab.taskit.client.ClientFactoryImpl">

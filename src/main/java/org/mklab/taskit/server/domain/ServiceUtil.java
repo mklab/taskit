@@ -3,7 +3,13 @@
  */
 package org.mklab.taskit.server.domain;
 
+import org.mklab.taskit.server.auth.InvocationEntrance;
+import org.mklab.taskit.server.auth.Invoker;
+import org.mklab.taskit.shared.UserType;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -31,6 +37,8 @@ public class ServiceUtil {
   /** セッション中のユーザーオブジェクトのキーです。 */
   public static final String USER_KEY = "user"; //$NON-NLS-1$
   private static ServiceUtilImplementation impl = new DefaultServiceUtilImplementation();
+  /** gwteventserviceで利用するクライアントIDからユーザーへのマップです。 */
+  private static Map<String, User> clientIdToUser = new HashMap<String, User>();
 
   static ServiceUtilImplementation getImplementation() {
     return impl;
@@ -121,9 +129,63 @@ public class ServiceUtil {
    * @param event イベント
    */
   public static void fireEvent(Domain domain, Event event) {
-    final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+    final Invoker invoker = event.getClass().getAnnotation(Invoker.class);
+    if (invoker == null) {
+      System.err.println("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
+      throw new IllegalStateException("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
+    }
 
-    registory.addEvent(domain, event);
+    final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+    final Class<? extends InvocationEntrance> entranceClass = invoker.entrance();
+    if (entranceClass == InvocationEntrance.class) {
+      for (final String userId : registory.getRegisteredUserIds(domain)) {
+        final User eventTargetUser = clientIdToUser.get(userId);
+        if (eventTargetUser == null) continue;
+
+        for (final UserType userType : invoker.value()) {
+          if (eventTargetUser.getType() == userType) {
+            registory.addEventUserSpecific(userId, event);
+          }
+        }
+      }
+    } else {
+      final InvocationEntrance entrance;
+      try {
+        entrance = entranceClass.newInstance();
+      } catch (Throwable e) {
+        throw new RuntimeException(e);
+      }
+      for (final String userId : registory.getRegisteredUserIds(domain)) {
+        final User eventTargetUser = clientIdToUser.get(userId);
+        if (eventTargetUser == null) continue;
+
+        if (entrance.accept(eventTargetUser)) {
+          registory.addEventUserSpecific(userId, event);
+        }
+      }
+    }
+  }
+
+  /**
+   * gwteventserviceで利用するクライアントIDを登録します。
+   * 
+   * @param clientId クライアントID
+   * @param user ユーザー
+   */
+  public static void registerClient(String clientId, User user) {
+    if (user == null) {
+      throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+    }
+    clientIdToUser.put(clientId, user);
+  }
+
+  /**
+   * クライアントIDの登録を抹消します。
+   * 
+   * @param clientId クライアントID
+   */
+  public static void unregisterClient(String clientId) {
+    clientIdToUser.remove(clientId);
   }
 
   static interface ServiceUtilImplementation {
