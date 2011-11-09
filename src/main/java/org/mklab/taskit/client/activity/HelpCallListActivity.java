@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -31,9 +30,6 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public final class HelpCallListActivity extends TaskitActivity implements HelpCallListView.Presenter {
 
-  /** ヘルプコールリストの定期的な更新のために利用します。 */
-  Timer timer;
-
   /**
    * {@link HelpCallListActivity}オブジェクトを構築します。
    * 
@@ -41,14 +37,6 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
    */
   public HelpCallListActivity(ClientFactory clientFactory) {
     super(clientFactory);
-    this.timer = new Timer() {
-
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        updateHelpCallListAsync(true);
-      }
-    };
   }
 
   /**
@@ -57,17 +45,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
   @Override
   protected void onViewShown() {
     super.onViewShown();
-
     updateHelpCallListAsync(false);
-    this.timer.scheduleRepeating(10 * 1000);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void onStop() {
-    this.timer.cancel();
   }
 
   /**
@@ -86,7 +64,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
    * 
    * @param isAuto 定期的に行う自動更新の場合はtrue,そうでなければfalse。この値は表示するステータスメッセージにのみ影響します。
    */
-  private void updateHelpCallListAsync(final boolean isAuto) {
+  void updateHelpCallListAsync(final boolean isAuto) {
     final Messages messages = getClientFactory().getMessages();
     showInformationMessage(isAuto ? messages.fetchingCallListAutoMessage() : messages.fetchingCallListMessage());
 
@@ -153,6 +131,15 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
   @Override
   public void goToCheckInList() {
     getClientFactory().getPlaceController().goTo(CheckInList.INSTANCE);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void helpCallCountChanged(int count) {
+    super.helpCallCountChanged(count);
+    updateHelpCallListAsync(true);
   }
 
 }

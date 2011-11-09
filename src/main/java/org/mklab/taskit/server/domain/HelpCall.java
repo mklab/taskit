@@ -5,6 +5,7 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -170,6 +171,8 @@ public class HelpCall extends AbstractEntity<Integer> {
       t.begin();
       em.persist(call);
       t.commit();
+
+      ServiceUtil.fireEvent(HelpCallEvent.DOMAIN, new HelpCallEvent(call.getDate(), call.getCaller().getId(), message, HelpCallEvent.Type.ADDED, getHelpCallCount()));
     } catch (Throwable e) {
       t.rollback();
     } finally {
@@ -218,6 +221,8 @@ public class HelpCall extends AbstractEntity<Integer> {
       t.begin();
       q.executeUpdate();
       t.commit();
+
+      ServiceUtil.fireEvent(HelpCallEvent.DOMAIN, new HelpCallEvent(new Date(), accountId, null, HelpCallEvent.Type.DELETED, getHelpCallCount()));
     } catch (Throwable e) {
       t.rollback();
     } finally {
@@ -267,6 +272,7 @@ public class HelpCall extends AbstractEntity<Integer> {
     @SuppressWarnings("unchecked")
     List<HelpCall> list = q.getResultList();
     em.close();
+
     return list;
   }
 
@@ -294,12 +300,12 @@ public class HelpCall extends AbstractEntity<Integer> {
    * @return ヘルプコール数
    */
   @Invoker({UserType.TEACHER, UserType.TA})
-  public static long getHelpCallCount() {
+  public static int getHelpCallCount() {
     final EntityManager em = EMF.get().createEntityManager();
     Query q = em.createQuery("select count(o) from HelpCall o"); //$NON-NLS-1$
     Object result = q.getSingleResult();
     em.close();
-    return ((Long)result).longValue();
+    return ((Long)result).intValue();
   }
 
   /**
@@ -308,7 +314,7 @@ public class HelpCall extends AbstractEntity<Integer> {
    * @return 何番目かどうか。1番目ならば0、2番目なら1...
    */
   @Invoker({UserType.STUDENT})
-  public static long getPosition() {
+  public static int getPosition() {
     final User loginUser = ServiceUtil.getLoginUser();
     final HelpCall helpCall = getHelpCall(loginUser.getAccount().getId());
     if (helpCall == null) return -1;

@@ -7,6 +7,7 @@ import org.mklab.taskit.client.LocalDatabase.Query;
 import org.mklab.taskit.client.activity.HelpCallObserver;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.TaskitRequestFactory;
+import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -14,9 +15,12 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 
 import com.google.gwt.media.client.Audio;
-import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
+
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.RemoteEventService;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 
 /*
@@ -34,17 +38,16 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public class HelpCallWatcher {
 
-  private static final int WATCH_PERIOD = 60 * 1000;
-  private Timer helpCallWatchTimer;
   private HelpCallObserver helpCallObserver;
   private boolean running = false;
   private LocalDatabase database;
   private int lastHelpCallCount = 0;
+  private RemoteEventService remoteEventService;
 
-  private Query<Long> helpCallCountQuery = new Query<Long>() {
+  private Query<Integer> helpCallCountQuery = new Query<Integer>() {
 
     @Override
-    public void query(TaskitRequestFactory requestFactory, Receiver<Long> receiver) {
+    public void query(TaskitRequestFactory requestFactory, Receiver<Integer> receiver) {
       requestFactory.helpCallRequest().getHelpCallCount().fire(receiver);
     }
   };
@@ -52,16 +55,10 @@ public class HelpCallWatcher {
   /**
    * {@link HelpCallWatcher}オブジェクトを構築します。
    */
-  HelpCallWatcher(LocalDatabase database) {
+  HelpCallWatcher(LocalDatabase database, RemoteEventService remoteEventService) {
+    if (database == null || remoteEventService == null) throw new NullPointerException();
     this.database = database;
-    this.helpCallWatchTimer = new Timer() {
-
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void run() {
-        fetchHelpCallCount();
-      }
-    };
+    this.remoteEventService = remoteEventService;
   }
 
   /**
@@ -72,8 +69,17 @@ public class HelpCallWatcher {
   public void start() {
     if (isRunning()) return;
 
+    this.remoteEventService.addListener(HelpCallEvent.DOMAIN, new RemoteEventListener() {
+
+      @Override
+      public void apply(Event anEvent) {
+        if (anEvent instanceof HelpCallEvent == false) return;
+
+        fireHelpCallCountChanged(((HelpCallEvent)anEvent).getHelpCallCount());
+      }
+    });
+
     fetchHelpCallCount();
-    this.helpCallWatchTimer.scheduleRepeating(WATCH_PERIOD);
     this.running = true;
   }
 
@@ -82,7 +88,7 @@ public class HelpCallWatcher {
    */
   public void stop() {
     if (isRunning() == false) return;
-    this.helpCallWatchTimer.cancel();
+    this.remoteEventService.removeListeners(HelpCallEvent.DOMAIN);
   }
 
   private boolean isRunning() {
@@ -169,10 +175,10 @@ public class HelpCallWatcher {
   }
 
   private void fetchHelpCallCount() {
-    this.database.execute(this.helpCallCountQuery, new Receiver<Long>() {
+    this.database.execute(this.helpCallCountQuery, new Receiver<Integer>() {
 
       @Override
-      public void onSuccess(Long response) {
+      public void onSuccess(Integer response) {
         fireHelpCallCountChanged(response.intValue());
       }
     });

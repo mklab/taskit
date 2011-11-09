@@ -12,6 +12,11 @@ import javax.servlet.http.HttpSession;
 
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.domain.Domain;
+import de.novanic.eventservice.service.registry.EventRegistry;
+import de.novanic.eventservice.service.registry.EventRegistryFactory;
+
 
 /**
  * サービスで共通に利用する処理を定義したユーティリティクラスです。
@@ -59,7 +64,7 @@ public class ServiceUtil {
   @SuppressWarnings({"nls", "unchecked"})
   public static <T> List<T> getAllEntities(String tableName) {
     final EntityManager em = EMF.get().createEntityManager();
-    final Query q = em.createQuery("select o from " + tableName+" o");
+    final Query q = em.createQuery("select o from " + tableName + " o");
     try {
       return q.getResultList();
     } finally {
@@ -106,6 +111,17 @@ public class ServiceUtil {
    */
   public static boolean isLoggedIn() {
     return impl.isLoggedIn();
+  }
+
+  /**
+   * domainに興味のあるクライアントに対しイベントを配信します。
+   * 
+   * @param domain ドメイン
+   * @param event イベント
+   */
+  public static void fireEvent(Domain domain, Event event) {
+    final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+    registory.addEvent(domain, event);
   }
 
   static interface ServiceUtilImplementation {

@@ -113,10 +113,10 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
    * 自分が何番目の呼び出しなのかを表すポジションを非同期で更新しビューに反映します。
    */
   void updateHelpCallPositionAsync() {
-    getClientFactory().getRequestFactory().helpCallRequest().getPosition().fire(new Receiver<Long>() {
+    getClientFactory().getRequestFactory().helpCallRequest().getPosition().fire(new Receiver<Integer>() {
 
       @Override
-      public void onSuccess(Long response) {
+      public void onSuccess(Integer response) {
         ((StudentView)getTaskitView()).setHelpCallPosition(response.intValue());
       }
     });

@@ -32,7 +32,7 @@ public interface HelpCallRequest extends RequestContext {
 
   Request<List<HelpCallListItemProxy>> getHelpCallListItems();
 
-  Request<Long> getHelpCallCount();
+  Request<Integer> getHelpCallCount();
 
-  Request<Long> getPosition();
+  Request<Integer> getPosition();
 }

@@ -29,30 +29,20 @@
 		</init-param>
 	</servlet>
 
-<!-- 	<servlet>
+	<servlet>
 		<servlet-name>EventService</servlet-name>
 		<servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
 	</servlet>
-
-	<servlet>
-		<servlet-name>ServerMessageGeneratorService</servlet-name>
-		<servlet-class>de.novanic.gwteventservice.demo.hello.server.ServerMessageGeneratorServiceImpl</servlet-class>
-	</servlet> -->
 
 	<servlet-mapping>
 		<servlet-name>requestFactoryServlet</servlet-name>
 		<url-pattern>/gwtRequest</url-pattern>
 	</servlet-mapping>
 
-<!-- 	<servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>EventService</servlet-name>
 		<url-pattern>/taskit/gwteventservice</url-pattern>
 	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>ServerMessageGeneratorService</servlet-name>
-		<url-pattern>/taskit/ServerMessageGeneratorService</url-pattern>
-	</servlet-mapping> -->
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

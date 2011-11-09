@@ -248,7 +248,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * {@inheritDoc}
    */
   @Override
-  public final void helpCallCountChanged(int count) {
+  public void helpCallCountChanged(int count) {
     if (this.view == null) return;
     if (this.view instanceof HelpCallDisplayable) {
       ((HelpCallDisplayable)this.view).showHelpCallCount(count);
