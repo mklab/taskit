@@ -7,7 +7,6 @@ import org.mklab.taskit.client.LocalDatabase.Query;
 import org.mklab.taskit.client.activity.HelpCallObserver;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.TaskitRequestFactory;
-import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.List;
 import java.util.Set;
@@ -18,31 +17,21 @@ import com.google.gwt.media.client.Audio;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
-import de.novanic.eventservice.client.event.Event;
-import de.novanic.eventservice.client.event.RemoteEventService;
-import de.novanic.eventservice.client.event.listener.RemoteEventListener;
-
 
 /*
  * TODO パッケージの移動 
  * TODO Server Push
  */
 /**
- * ヘルプコールを監視するクラスです。
- * <p>
- * ヘルプコールの監視は、通信量を減らすため件数のみ行います。<br>
- * その他ヘルプコールの詳細を取得にもこのクラスを用いることにより、件数の変更を検出し{@link HelpCallObserver}
- * に通知することが出来ます。
+ * ヘルプコールの取得、変更の監視を行うクラスです。
  * 
  * @author Yuhi Ishikura
  */
 public class HelpCallWatcher {
 
   private HelpCallObserver helpCallObserver;
-  private boolean running = false;
   private LocalDatabase database;
   private int lastHelpCallCount = 0;
-  private RemoteEventService remoteEventService;
 
   private Query<Integer> helpCallCountQuery = new Query<Integer>() {
 
@@ -55,44 +44,9 @@ public class HelpCallWatcher {
   /**
    * {@link HelpCallWatcher}オブジェクトを構築します。
    */
-  HelpCallWatcher(LocalDatabase database, RemoteEventService remoteEventService) {
-    if (database == null || remoteEventService == null) throw new NullPointerException();
+  HelpCallWatcher(LocalDatabase database) {
+    if (database == null) throw new NullPointerException();
     this.database = database;
-    this.remoteEventService = remoteEventService;
-  }
-
-  /**
-   * 監視を開始します。
-   * <p>
-   * 複数回呼び出しても、多重に監視が働いてしまうことはありません。
-   */
-  public void start() {
-    if (isRunning()) return;
-
-    this.remoteEventService.addListener(HelpCallEvent.DOMAIN, new RemoteEventListener() {
-
-      @Override
-      public void apply(Event anEvent) {
-        if (anEvent instanceof HelpCallEvent == false) return;
-
-        fireHelpCallCountChanged(((HelpCallEvent)anEvent).getHelpCallCount());
-      }
-    });
-
-    fetchHelpCallCount();
-    this.running = true;
-  }
-
-  /**
-   * 監視を終了します。
-   */
-  public void stop() {
-    if (isRunning() == false) return;
-    this.remoteEventService.removeListeners(HelpCallEvent.DOMAIN);
-  }
-
-  private boolean isRunning() {
-    return this.running;
   }
 
   /**
@@ -141,7 +95,7 @@ public class HelpCallWatcher {
    * <p>
    * 取得完了までブロックすることはありません。
    */
-  public void watchNow() {
+  public void updateHelpCallCount() {
     fetchHelpCallCount();
   }
 

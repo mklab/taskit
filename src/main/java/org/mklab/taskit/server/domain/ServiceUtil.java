@@ -22,6 +22,9 @@ import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.service.registry.EventRegistry;
 import de.novanic.eventservice.service.registry.EventRegistryFactory;
+import de.novanic.eventservice.service.registry.user.UserInfo;
+import de.novanic.eventservice.service.registry.user.UserManager;
+import de.novanic.eventservice.service.registry.user.UserManagerFactory;
 
 
 /**
@@ -136,6 +139,8 @@ public class ServiceUtil {
     }
 
     final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+    final UserManager userManager = UserManagerFactory.getInstance().getUserManager();
+
     final Class<? extends InvocationEntrance> entranceClass = invoker.entrance();
     if (entranceClass == InvocationEntrance.class) {
       for (final String userId : registory.getRegisteredUserIds(domain)) {
@@ -144,7 +149,8 @@ public class ServiceUtil {
 
         for (final UserType userType : invoker.value()) {
           if (eventTargetUser.getType() == userType) {
-            registory.addEventUserSpecific(userId, event);
+            final UserInfo userInGwtEventService = userManager.getUser(userId);
+            userInGwtEventService.addEvent(domain, event);
           }
         }
       }

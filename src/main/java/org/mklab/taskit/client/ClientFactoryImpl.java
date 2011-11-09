@@ -49,6 +49,7 @@ public class ClientFactoryImpl implements ClientFactory {
   private HelpCallWatcher helpCallWatcher;
   private LocalDatabase localDatabase;
   private RemoteEventService remoteEventService;
+  private PageLayout pageLayout;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -103,7 +104,7 @@ public class ClientFactoryImpl implements ClientFactory {
   @Override
   public HelpCallWatcher getHelpCallWatcher() {
     if (this.helpCallWatcher == null) {
-      this.helpCallWatcher = new HelpCallWatcher(getLocalDatabase(), getRemoteEventService());
+      this.helpCallWatcher = new HelpCallWatcher(getLocalDatabase());
     }
     return this.helpCallWatcher;
   }
@@ -132,7 +133,10 @@ public class ClientFactoryImpl implements ClientFactory {
    */
   @Override
   public PageLayout getPageLayout() {
-    return new PageLayoutImpl(this);
+    if (this.pageLayout == null) {
+      this.pageLayout = new PageLayoutImpl(this);
+    }
+    return this.pageLayout;
   }
 
   /**

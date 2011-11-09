@@ -12,6 +12,7 @@ import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -21,6 +22,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
+
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.RemoteEventService;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 
 /**
@@ -113,13 +118,25 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
 
     final HelpCallWatcher helpCallWatcher = this.clientFactory.getHelpCallWatcher();
     if (user.getType() == UserType.STUDENT) {
-      helpCallWatcher.stop();
       if (this.view instanceof HelpCallDisplayable) {
         ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(false);
       }
     } else {
+      final RemoteEventService eventService = getClientFactory().getRemoteEventService();
+      if (eventService.getActiveDomains().contains(HelpCallEvent.DOMAIN) == false) {
+        eventService.addListener(HelpCallEvent.DOMAIN, new RemoteEventListener() {
+
+          @Override
+          public void apply(Event anEvent) {
+            if (anEvent instanceof HelpCallEvent) {
+              helpCallCountChanged(((HelpCallEvent)anEvent).getHelpCallCount());
+            }
+          }
+        });
+        helpCallWatcher.updateHelpCallCount();
+      }
       helpCallWatcher.setHelpCallObserver(this);
-      helpCallWatcher.start();
+
       if (this.view instanceof HelpCallDisplayable) {
         ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
         ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallWatcher.getHelpCallCount());
@@ -161,7 +178,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   @Override
   public final void logout() {
-    this.clientFactory.getHelpCallWatcher().stop();
     this.clientFactory.getLocalDatabase().clearAllCache();
 
     /*
@@ -250,6 +266,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   @Override
   public void helpCallCountChanged(int count) {
     if (this.view == null) return;
+
     if (this.view instanceof HelpCallDisplayable) {
       ((HelpCallDisplayable)this.view).showHelpCallCount(count);
     }
