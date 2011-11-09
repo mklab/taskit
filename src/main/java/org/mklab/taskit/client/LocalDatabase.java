@@ -3,7 +3,7 @@
  */
 package org.mklab.taskit.client;
 
-import org.mklab.taskit.shared.HelpCallListItemProxy;
+import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.TaskitRequestFactory;
 import org.mklab.taskit.shared.UserProxy;
@@ -52,11 +52,11 @@ public class LocalDatabase {
   };
 
   /** 全講義のリストを取得するクエリです。 */
-  public static Query<List<HelpCallListItemProxy>> CALL_LIST = new Query<List<HelpCallListItemProxy>>() {
+  public static Query<List<HelpCallProxy>> CALL_LIST = new Query<List<HelpCallProxy>>() {
 
     @Override
-    public void query(TaskitRequestFactory requestFactory, Receiver<List<HelpCallListItemProxy>> receiver) {
-      requestFactory.helpCallRequest().getHelpCallListItems().with("helpCall.caller", "usersInCharge").fire(receiver); //$NON-NLS-1$ //$NON-NLS-2$
+    public void query(TaskitRequestFactory requestFactory, Receiver<List<HelpCallProxy>> receiver) {
+      requestFactory.helpCallRequest().getAllHelpCalls().with("caller").fire(receiver); //$NON-NLS-1$ 
     }
 
   };

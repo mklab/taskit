@@ -4,9 +4,10 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.shared.HelpCallListItemProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
 
   private Presenter presenter;
   @UiField(provided = true)
-  CellList<HelpCallListItemProxy> list;
+  CellList<HelpCallListItem> list;
   @UiField
   Label messageLabel;
   @UiField
@@ -63,14 +64,19 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
    * {@inheritDoc}
    */
   @Override
-  public void setHelpCalls(List<HelpCallListItemProxy> helpCalls) {
+  public void setHelpCalls(List<HelpCallProxy> helpCalls) {
     if (helpCalls.isEmpty()) {
       this.messageLabel.setText(getClientFactory().getMessages().nooneCallingMessage());
     } else {
       this.messageLabel.setText(getClientFactory().getMessages().callingMessage(String.valueOf(helpCalls.size())));
     }
 
-    this.list.setRowData(helpCalls);
+    final List<HelpCallListItem> listItems = new ArrayList<HelpCallListItem>(helpCalls.size());
+    for (HelpCallProxy call : helpCalls) {
+      listItems.add(new HelpCallListItem(call));
+    }
+
+    this.list.setRowData(listItems);
   }
 
   /**
@@ -81,16 +87,39 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
     this.presenter = presenter;
   }
 
+  static class HelpCallListItem {
+
+    HelpCallProxy helpCall;
+    List<String> usersInCharge = Collections.emptyList();
+
+    HelpCallListItem(HelpCallProxy helpCall) {
+      this.helpCall = helpCall;
+    }
+
+    HelpCallProxy getHelpCall() {
+      return this.helpCall;
+    }
+
+    List<String> getUsersInCharge() {
+      return this.usersInCharge;
+    }
+
+    void setUsersInCharge(List<String> usersInCharge) {
+      this.usersInCharge = usersInCharge;
+    }
+
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected Widget initContent() {
-    this.list = new CellList<HelpCallListItemProxy>(new AbstractCell<HelpCallListItemProxy>() {
+    this.list = new CellList<HelpCallListItem>(new AbstractCell<HelpCallListItem>() {
 
       @SuppressWarnings({"deprecation", "nls"})
       @Override
-      public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallListItemProxy value, SafeHtmlBuilder sb) {
+      public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallListItem value, SafeHtmlBuilder sb) {
         final HelpCallProxy helpCall = value.getHelpCall();
         if (helpCall == null) throw new IllegalArgumentException();
         final Date date = helpCall.getDate();
@@ -104,16 +133,15 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
         appendCallerInfo(sb, callerId, message);
         if (isReceived) {
           sb.appendHtmlConstant("<br>");
-          appendUsersInCharge(sb, value);
+          appendUsersInCharge(sb, value.getUsersInCharge());
         }
         sb.appendHtmlConstant("</div>");
       }
 
       @SuppressWarnings("nls")
-      private void appendUsersInCharge(SafeHtmlBuilder sb, HelpCallListItemProxy value) {
-        if (value.getUsersInCharge().size() == 0) return;
+      private void appendUsersInCharge(SafeHtmlBuilder sb, List<String> usersInCharge) {
+        if (usersInCharge.size() == 0) return;
 
-        final List<String> usersInCharge = value.getUsersInCharge();
         final StringBuilder userList = new StringBuilder();
         for (int i = 0; i < usersInCharge.size(); i++) {
           if (i != 0) userList.append(",");
@@ -138,13 +166,13 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
 
     });
 
-    final SingleSelectionModel<HelpCallListItemProxy> selectionModel = new SingleSelectionModel<HelpCallListItemProxy>();
+    final SingleSelectionModel<HelpCallListItem> selectionModel = new SingleSelectionModel<HelpCallListItem>();
     selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 
       @SuppressWarnings("synthetic-access")
       @Override
       public void onSelectionChange(@SuppressWarnings("unused") SelectionChangeEvent event) {
-        final HelpCallListItemProxy selectedCall = selectionModel.getSelectedObject();
+        final HelpCallListItem selectedCall = selectionModel.getSelectedObject();
         HelpCallListViewImpl.this.presenter.helpCallSelected(selectedCall.getHelpCall());
       }
     });
