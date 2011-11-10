@@ -8,10 +8,14 @@ import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
 import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
+
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 
 /**
@@ -39,6 +43,16 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
         updateHelpCallPositionAsync();
       }
     };
+
+    clientFactory.getRemoteEventService().addListener(MyRecordChangeEvent.DOMAIN, new RemoteEventListener() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void apply(Event anEvent) {
+        if (anEvent instanceof MyRecordChangeEvent == false) return;
+        updateRecordAsync();
+      }
+    });
   }
 
   /**
@@ -59,6 +73,21 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   protected void onViewShown() {
     super.onViewShown();
 
+    updateRecordAsync();
+    getClientFactory().getRequestFactory().helpCallRequest().isCalling().fire(new Receiver<Boolean>() {
+
+      @Override
+      public void onSuccess(Boolean response) {
+        showInformationMessage(getClientFactory().getMessages().fetchedHelpCallState());
+        setCalling(response.booleanValue());
+      }
+    });
+  }
+
+  /**
+   * 
+   */
+  private void updateRecordAsync() {
     final StudentwiseRecordQuery query = new StudentwiseRecordQuery(getClientFactory());
     final StudentView studentView = (StudentView)getTaskitView();
 
@@ -73,14 +102,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
         studentView.highlightRow(latestScore);
       }
     });
-    getClientFactory().getRequestFactory().helpCallRequest().isCalling().fire(new Receiver<Boolean>() {
-
-      @Override
-      public void onSuccess(Boolean response) {
-        showInformationMessage(getClientFactory().getMessages().fetchedHelpCallState());
-        setCalling(response.booleanValue());
-      }
-    });
   }
 
   /**
@@ -90,6 +111,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   public void onStop() {
     super.onStop();
     this.helpCallPositionUpdater.cancel();
+    getClientFactory().getRemoteEventService().removeListeners(MyRecordChangeEvent.DOMAIN);
   }
 
   /**

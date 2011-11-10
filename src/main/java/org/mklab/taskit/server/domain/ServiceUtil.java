@@ -10,6 +10,7 @@ import org.mklab.taskit.shared.UserType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -40,8 +41,6 @@ public class ServiceUtil {
   /** セッション中のユーザーオブジェクトのキーです。 */
   public static final String USER_KEY = "user"; //$NON-NLS-1$
   private static ServiceUtilImplementation impl = new DefaultServiceUtilImplementation();
-  /** gwteventserviceで利用するクライアントIDからユーザーへのマップです。 */
-  private static Map<String, User> clientIdToUser = new HashMap<String, User>();
 
   static ServiceUtilImplementation getImplementation() {
     return impl;
@@ -126,50 +125,42 @@ public class ServiceUtil {
   }
 
   /**
+   * 特定のクライアントに対しイベントを配信します。
+   * <p>
+   * 配信先ユーザーがアクティブではなかった場合には何も行いません。
+   * 
+   * @param domain ドメイン
+   * @param event イベント
+   * @param accountId TASKitにおけるアカウントID
+   * @throws IllegalArgumentException 与えられたアカウントIDが存在しない場合
+   */
+  public static void fireEvent(Domain domain, Event event, String accountId) {
+    User user = User.getUserByAccountId(accountId);
+    if (user == null) throw new IllegalArgumentException("No such user : " + accountId); //$NON-NLS-1$
+    fireEvent(domain, event, user);
+  }
+
+  /**
+   * 特定のクライアントに対しイベントを配信します。
+   * <p>
+   * 配信先ユーザーがアクティブではなかった場合には何も行いません。
+   * 
+   * @param domain ドメイン
+   * @param event イベント
+   * @param user ユーザー
+   */
+  public static void fireEvent(Domain domain, Event event, User user) {
+    impl.fireEvent(domain, event, user);
+  }
+
+  /**
    * domainに興味のあるクライアントに対しイベントを配信します。
    * 
    * @param domain ドメイン
    * @param event イベント
    */
   public static void fireEvent(Domain domain, Event event) {
-    final Invoker invoker = event.getClass().getAnnotation(Invoker.class);
-    if (invoker == null) {
-      System.err.println("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
-      throw new IllegalStateException("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
-    }
-
-    final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
-    final UserManager userManager = UserManagerFactory.getInstance().getUserManager();
-
-    final Class<? extends InvocationEntrance> entranceClass = invoker.entrance();
-    if (entranceClass == InvocationEntrance.class) {
-      for (final String userId : registory.getRegisteredUserIds(domain)) {
-        final User eventTargetUser = clientIdToUser.get(userId);
-        if (eventTargetUser == null) continue;
-
-        for (final UserType userType : invoker.value()) {
-          if (eventTargetUser.getType() == userType) {
-            final UserInfo userInGwtEventService = userManager.getUser(userId);
-            userInGwtEventService.addEvent(domain, event);
-          }
-        }
-      }
-    } else {
-      final InvocationEntrance entrance;
-      try {
-        entrance = entranceClass.newInstance();
-      } catch (Throwable e) {
-        throw new RuntimeException(e);
-      }
-      for (final String userId : registory.getRegisteredUserIds(domain)) {
-        final User eventTargetUser = clientIdToUser.get(userId);
-        if (eventTargetUser == null) continue;
-
-        if (entrance.accept(eventTargetUser)) {
-          registory.addEventUserSpecific(userId, event);
-        }
-      }
-    }
+    impl.fireEvent(domain, event);
   }
 
   /**
@@ -182,7 +173,7 @@ public class ServiceUtil {
     if (user == null) {
       throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
     }
-    clientIdToUser.put(clientId, user);
+    impl.registerClient(clientId, user);
   }
 
   /**
@@ -191,7 +182,7 @@ public class ServiceUtil {
    * @param clientId クライアントID
    */
   public static void unregisterClient(String clientId) {
-    clientIdToUser.remove(clientId);
+    impl.unregisterClient(clientId);
   }
 
   static interface ServiceUtilImplementation {
@@ -204,9 +195,35 @@ public class ServiceUtil {
 
     void logout();
 
+    void registerClient(String clientId, User user);
+
+    void unregisterClient(String clientId);
+
+    /**
+     * 特定のクppppライアントに対しイベントを配信します。
+     * <p>
+     * 配信先ユーザーがアクティブではなかった場合には何も行いません。
+     * 
+     * @param domain ドメイン
+     * @param event イベント
+     * @param user ユーザー
+     */
+    void fireEvent(Domain domain, Event event, User user);
+
+    /**
+     * domainに興味のあるクライアントに対しイベントを配信します。
+     * 
+     * @param domain ドメイン
+     * @param event イベント
+     */
+    void fireEvent(Domain domain, Event event);
+
   }
 
   static class DefaultServiceUtilImplementation implements ServiceUtilImplementation {
+
+    /** gwteventserviceで利用するクライアントIDからユーザーへのマップです。 */
+    private Map<String, User> clientIdToUser = new HashMap<String, User>();
 
     @Override
     public void login(User user) {
@@ -253,5 +270,135 @@ public class ServiceUtil {
       if (req == null) throw new NullPointerException("Thread local request was null."); //$NON-NLS-1$
       return req;
     }
+
+    /**
+     * 与えられたユーザーに対応するGWTEventServiceにおけるクライアントIDを取得します。
+     * 
+     * @param user ユーザー
+     * @return GWTEventServiceにおけるクライアントID
+     */
+    private String getClientIdOfGwtEventService(User user) {
+      for (Entry<String, User> entry : this.clientIdToUser.entrySet()) {
+        if (entry.getValue().getAccount().getId().equals(user.getId()) == false) continue;
+        return entry.getKey();
+      }
+      return null;
+    }
+
+    /**
+     * 特定のクライアントに対しイベントを配信します。
+     * <p>
+     * 配信先ユーザーがアクティブではなかった場合には何も行いません。
+     * 
+     * @param domain ドメイン
+     * @param event イベント
+     * @param user ユーザー
+     */
+    @Override
+    public void fireEvent(Domain domain, Event event, User user) {
+      final Invoker invoker = event.getClass().getAnnotation(Invoker.class);
+      if (invoker == null) {
+        System.err.println("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
+        throw new IllegalStateException("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
+      }
+
+      final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+      final UserManager userManager = UserManagerFactory.getInstance().getUserManager();
+      final String clientId = getClientIdOfGwtEventService(user);
+      if (clientId == null) return;
+
+      final Class<? extends InvocationEntrance> entranceClass = invoker.entrance();
+      if (entranceClass == InvocationEntrance.class) {
+        for (final UserType userType : invoker.value()) {
+          if (user.getType() == userType) {
+            final UserInfo userInGwtEventService = userManager.getUser(clientId);
+            userInGwtEventService.addEvent(domain, event);
+          }
+        }
+      } else {
+        final InvocationEntrance entrance;
+        try {
+          entrance = entranceClass.newInstance();
+        } catch (Throwable e) {
+          throw new RuntimeException(e);
+        }
+        if (entrance.accept(user)) {
+          registory.addEventUserSpecific(clientId, event);
+        }
+      }
+    }
+
+    /**
+     * domainに興味のあるクライアントに対しイベントを配信します。
+     * 
+     * @param domain ドメイン
+     * @param event イベント
+     */
+    @Override
+    public void fireEvent(Domain domain, Event event) {
+      final Invoker invoker = event.getClass().getAnnotation(Invoker.class);
+      if (invoker == null) {
+        System.err.println("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
+        throw new IllegalStateException("Invoker annotation was not set to " + event.getClass()); //$NON-NLS-1$
+      }
+
+      final EventRegistry registory = EventRegistryFactory.getInstance().getEventRegistry();
+      final UserManager userManager = UserManagerFactory.getInstance().getUserManager();
+
+      final Class<? extends InvocationEntrance> entranceClass = invoker.entrance();
+      if (entranceClass == InvocationEntrance.class) {
+        for (final String userId : registory.getRegisteredUserIds(domain)) {
+          final User eventTargetUser = this.clientIdToUser.get(userId);
+          if (eventTargetUser == null) continue;
+
+          for (final UserType userType : invoker.value()) {
+            if (eventTargetUser.getType() == userType) {
+              final UserInfo userInGwtEventService = userManager.getUser(userId);
+              userInGwtEventService.addEvent(domain, event);
+            }
+          }
+        }
+      } else {
+        final InvocationEntrance entrance;
+        try {
+          entrance = entranceClass.newInstance();
+        } catch (Throwable e) {
+          throw new RuntimeException(e);
+        }
+        for (final String userId : registory.getRegisteredUserIds(domain)) {
+          final User eventTargetUser = this.clientIdToUser.get(userId);
+          if (eventTargetUser == null) continue;
+
+          if (entrance.accept(eventTargetUser)) {
+            registory.addEventUserSpecific(userId, event);
+          }
+        }
+      }
+    }
+
+    /**
+     * gwteventserviceで利用するクライアントIDを登録します。
+     * 
+     * @param clientId クライアントID
+     * @param user ユーザー
+     */
+    @Override
+    public void registerClient(String clientId, User user) {
+      if (user == null) {
+        throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
+      }
+      this.clientIdToUser.put(clientId, user);
+    }
+
+    /**
+     * クライアントIDの登録を抹消します。
+     * 
+     * @param clientId クライアントID
+     */
+    @Override
+    public void unregisterClient(String clientId) {
+      this.clientIdToUser.remove(clientId);
+    }
+
   }
 }

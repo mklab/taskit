@@ -3,6 +3,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
 import java.util.Date;
 import java.util.List;
@@ -162,6 +163,8 @@ public class Attendance extends AbstractEntity<Integer> {
     if (isAlreadyMarked(this)) throw new IllegalArgumentException("Already marked."); //$NON-NLS-1$
     setDate(new Date());
     super.persist();
+
+    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.attender.getId());
   }
 
   /**
@@ -191,6 +194,7 @@ public class Attendance extends AbstractEntity<Integer> {
   @Invoker({UserType.TA, UserType.TEACHER})
   public void delete() {
     super.delete();
+    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.attender.getId());
   }
 
   /**
