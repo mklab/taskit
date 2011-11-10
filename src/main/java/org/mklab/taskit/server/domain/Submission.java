@@ -233,7 +233,7 @@ public class Submission extends AbstractEntity<Integer> {
   }
 
   private void recomputeScore() {
-    RecordService.getRecordStatistics().recompute(this.submitter.getId());
+    RecordService.recomputeScore(this.submitter.getId());
   }
 
   /**
