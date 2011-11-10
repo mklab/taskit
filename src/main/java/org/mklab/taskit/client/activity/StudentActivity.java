@@ -104,6 +104,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
         studentView.highlightRow(latestScore);
       }
     });
+    updateScorePercentageAsync();
   }
 
   private void updateHelpCallStateAsync() {
@@ -113,6 +114,16 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
       public void onSuccess(Boolean response) {
         showInformationMessage(getClientFactory().getMessages().fetchedHelpCallState());
         setCalling(response.booleanValue());
+      }
+    });
+  }
+
+  private void updateScorePercentageAsync() {
+    getClientFactory().getRequestFactory().recordRequest().getPercentageOfMySubmissionScore().fire(new Receiver<Double>() {
+
+      @Override
+      public void onSuccess(Double response) {
+        ((StudentView)getTaskitView()).setScore(response.doubleValue());
       }
     });
   }

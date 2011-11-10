@@ -217,6 +217,7 @@ public class Submission extends AbstractEntity<Integer> {
     setDate(new Date());
     super.persist();
 
+    recomputeScore();
     ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.submitter.getId());
   }
 
@@ -227,7 +228,12 @@ public class Submission extends AbstractEntity<Integer> {
   public void update() {
     super.update();
 
+    recomputeScore();
     ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.submitter.getId());
+  }
+
+  private void recomputeScore() {
+    RecordService.getRecordStatistics().recompute(this.submitter.getId());
   }
 
   /**

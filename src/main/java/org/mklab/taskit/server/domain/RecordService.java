@@ -15,9 +15,24 @@ import java.util.List;
 /**
  * 学生の成績に関するサービスを提供するクラスです。
  * 
- * @author ishikura
+ * @author Yuhi Ishikura
  */
 public class RecordService {
+
+  private static RecordStatistics recordStatistics = new RecordStatistics();
+
+  static {
+    recordStatistics.start();
+  }
+
+  /**
+   * 成績の統計処理を行うオブジェクトを取得します。
+   * 
+   * @return 成績の統計処理を行うオブジェクト
+   */
+  static RecordStatistics getRecordStatistics() {
+    return recordStatistics;
+  }
 
   /**
    * 与えられたアカウントIDの生徒の、講義別成績を取得します。
@@ -55,6 +70,17 @@ public class RecordService {
   public static LecturewiseRecords getMyLecturewiseRecords() {
     final User loginUser = ServiceUtil.getLoginUser();
     return getLecturewiseRecordsByAccountId(loginUser.getAccount().getId());
+  }
+
+  /**
+   * 現時点での提出物の得点率を取得します。
+   * 
+   * @return 現時点での提出物の得点率
+   */
+  @Invoker({UserType.STUDENT})
+  public static double getPercentageOfMySubmissionScore() {
+    final double p = recordStatistics.getPercentageOfSubmissionScore(ServiceUtil.getLoginUser().getAccount().getId());
+    return p;
   }
 
   /**

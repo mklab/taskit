@@ -35,7 +35,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  */
 public class StudentListActivity extends TaskitActivity implements StudentListView.Presenter {
 
-  private static final boolean TOKEN_FOLLOWS_STUDENT_SELECTION = false;
+  private static final boolean TOKEN_FOLLOWS_STUDENT_SELECTION = true;
   private StudentListView view;
   private StudentwiseRecordQuery query;
 

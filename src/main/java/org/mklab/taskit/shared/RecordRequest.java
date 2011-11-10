@@ -23,4 +23,6 @@ public interface RecordRequest extends RequestContext {
 
   Request<LecturewiseRecordsProxy> getLecturewiseRecordsByAccountId(String accountId);
 
+  Request<Double> getPercentageOfMySubmissionScore();
+
 }

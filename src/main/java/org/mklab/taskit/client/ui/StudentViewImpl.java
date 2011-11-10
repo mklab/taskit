@@ -4,14 +4,17 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
+import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -45,6 +48,23 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   TextBox helpCallMessage;
   @UiField
   VerticalPanel helpCallArea;
+
+  // profile
+  @UiField
+  CaptionPanel profileCaption;
+  @UiField
+  Label userIdLabel;
+  @UiField
+  Label userNameLabel;
+  @UiField
+  Label scoreLabel;
+  @UiField
+  Label userName;
+  @UiField
+  Label userId;
+  @UiField
+  Label score;
+
   private boolean editable;
 
   /**
@@ -103,8 +123,17 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
     this.helpCallButton.getDownFace().setImage(waitImage);
     this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
     this.helpCallArea.setCellHorizontalAlignment(this.helpCallButton, HasHorizontalAlignment.ALIGN_CENTER);
-    this.helpCallMessageLabel.setText(getClientFactory().getMessages().messageLabel() + ":"); //$NON-NLS-1$
+    localizeLabels(getClientFactory().getMessages());
+
     return widget;
+  }
+
+  private void localizeLabels(Messages messages) {
+    this.userIdLabel.setText(messages.userIdLabel() + ": "); //$NON-NLS-1$
+    this.userNameLabel.setText(messages.userNameLabel() + ": "); //$NON-NLS-1$
+    this.profileCaption.setCaptionText(messages.profileLabel());
+    this.helpCallMessageLabel.setText(messages.messageLabel() + ":"); //$NON-NLS-1$
+    this.scoreLabel.setText(messages.scoreLabel() + ": "); //$NON-NLS-1$
   }
 
   @UiHandler("helpCallButton")
@@ -134,4 +163,27 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
     this.helpCallPosition.setText(getClientFactory().getMessages().helpCallPositionMessage(String.valueOf(position + 1)));
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setLoginUser(UserProxy loginUser) {
+    this.userId.setText(loginUser.getAccount().getId());
+    this.userName.setText(loginUser.getName() == null ? getClientFactory().getMessages().unsetLabel() : loginUser.getName());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setScore(double percentage) {
+    final double p = (double)((int)(percentage * 1000)) / 1000 * 100;
+    String s = String.valueOf(p);
+    if (p == 100) {
+      s = "100"; //$NON-NLS-1$
+    } else if (s.length() > 4) {
+      s = s.substring(0, 4);
+    }
+    this.score.setText(s + "%"); //$NON-NLS-1$
+  }
 }

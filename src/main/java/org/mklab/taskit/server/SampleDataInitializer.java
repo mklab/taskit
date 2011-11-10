@@ -55,7 +55,7 @@ public class SampleDataInitializer {
     Lecture lecture = new Lecture();
     lecture.setTitle("lecture" + lectureNumber);
     lecture.setDescription("This is lecture" + lectureNumber + ".");
-    lecture.setDate(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7 * lectureNumber)));
+    lecture.setDate(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7 * lectureNumber - 365)));
 
     List<Report> reports = new ArrayList<Report>();
     for (int i = 0; i < reportCount; i++) {
@@ -86,8 +86,12 @@ public class SampleDataInitializer {
     for (User student : students) {
       for (Lecture lecture : lectures) {
         for (Report report : lecture.getReports()) {
-          if (Math.random() < 0.3) continue;
-          Submission submission = new Submission((int)(Math.random() * 100), student.getAccount(), report);
+          int point = ((int)(Math.random() * 4)) * 50;
+          if (point > 100) {
+            continue;
+          }
+
+          Submission submission = new Submission(point, student.getAccount(), report);
           submission.persist();
         }
       }

@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
+import org.mklab.taskit.shared.UserProxy;
 
 
 /**
@@ -47,6 +48,20 @@ public interface StudentView extends TaskitView {
    * @param position 自分が何番目の呼び出しかどうか
    */
   void setHelpCallPosition(int position);
+
+  /**
+   * ログインユーザー情報を設定します。
+   * 
+   * @param loginUser ログインユーザー情報
+   */
+  void setLoginUser(UserProxy loginUser);
+
+  /**
+   * 得点率を設定します。
+   * 
+   * @param percentage 得点率
+   */
+  void setScore(double percentage);
 
   /**
    * {@link StudentView}で利用するプレゼンターです。

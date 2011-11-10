@@ -186,6 +186,23 @@ public class Report extends AbstractEntity<Integer> {
   }
 
   /**
+   * 現在時刻までの講義に属するすべての課題を取得します。
+   * 
+   * @return 現在時刻までの講義に属するすべての課題
+   */
+  @SuppressWarnings("unchecked")
+  public static List<Report> getAllReportsBeforeNow() {
+    final EntityManager em = EMF.get().createEntityManager();
+    try {
+      Query q = em.createQuery("select r from Report r where r.lecture.date < :currentTime order by r.lecture.date"); //$NON-NLS-1$
+      q.setParameter("currentTime", new Date()); //$NON-NLS-1$
+      return q.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  /**
    * IDを元に課題データを取得します。
    * 
    * @param id 課題ID

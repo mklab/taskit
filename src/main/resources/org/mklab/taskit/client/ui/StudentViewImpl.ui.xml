@@ -5,25 +5,52 @@
 
 	<ui:style>
 		.padding {
-			width:10px;
+		width:10px;
 		}
 		.helpCallArea {
-			border : solid 2px gray;
+		border : solid 2px gray;
+		}
+		.padding {
+		height : 30px;
+		}
+		.fillHorizontal {
+		width : 100%;
 		}
 	</ui:style>
 
-	<g:HorizontalPanel>
-		<mk:StudentwiseRecordPanel ui:field='scorePanel'></mk:StudentwiseRecordPanel>
-		<g:HTMLPanel styleName='{style.padding}'></g:HTMLPanel>
-		<g:FlowPanel>
-			<g:VerticalPanel styleName='{style.helpCallArea}'
-				ui:field='helpCallArea'>
-				<g:Label ui:field='helpCallPosition'></g:Label>
-				<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
-				<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
-				<g:TextBox ui:field='helpCallMessage'></g:TextBox>
+	<g:VerticalPanel>
+		<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
+			<g:VerticalPanel styleName='{style.fillHorizontal}'>
+				<g:HorizontalPanel>
+					<g:Label ui:field='userIdLabel'>User ID:</g:Label>
+					<g:Label ui:field='userId'></g:Label>
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Label ui:field='userNameLabel'>User Name:</g:Label>
+					<g:Label ui:field='userName'></g:Label>
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Label ui:field='scoreLabel'>Score:</g:Label>
+					<g:Label ui:field='score'></g:Label>
+				</g:HorizontalPanel>
 			</g:VerticalPanel>
-		</g:FlowPanel>
-	</g:HorizontalPanel>
+		</g:CaptionPanel>
+
+		<g:Label styleName='{style.padding}'></g:Label>
+
+		<g:HorizontalPanel>
+			<mk:StudentwiseRecordPanel ui:field='scorePanel'></mk:StudentwiseRecordPanel>
+			<g:HTMLPanel styleName='{style.padding}'></g:HTMLPanel>
+			<g:FlowPanel>
+				<g:VerticalPanel styleName='{style.helpCallArea}'
+					ui:field='helpCallArea'>
+					<g:Label ui:field='helpCallPosition'></g:Label>
+					<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
+					<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
+					<g:TextBox ui:field='helpCallMessage'></g:TextBox>
+				</g:VerticalPanel>
+			</g:FlowPanel>
+		</g:HorizontalPanel>
+	</g:VerticalPanel>
 
 </ui:UiBinder> 
