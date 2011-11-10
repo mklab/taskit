@@ -15,9 +15,7 @@
 			</g:FlowPanel>
 		</g:north>
 		<g:center>
-			<g:ScrollPanel>
-				<cw:CellTable ui:field='table'></cw:CellTable>
-			</g:ScrollPanel>
+			<cw:DataGrid ui:field='table'></cw:DataGrid>
 		</g:center>
 	</g:DockLayoutPanel>
 

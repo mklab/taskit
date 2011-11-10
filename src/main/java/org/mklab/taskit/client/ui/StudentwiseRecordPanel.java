@@ -27,8 +27,8 @@ import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
@@ -41,7 +41,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class StudentwiseRecordPanel extends Composite {
 
-  private CellTable<LectureScore> table;
+  private DataGrid<LectureScore> table;
   private StudentwiseRecordModel model;
   private Presenter presenter;
   private TableRowElement lastHighlightElement;
@@ -57,7 +57,7 @@ public class StudentwiseRecordPanel extends Composite {
   public StudentwiseRecordPanel(Messages messages, boolean editable) {
     if (messages == null) throw new NullPointerException();
 
-    this.table = new CellTable<StudentwiseRecordModel.LectureScore>();
+    this.table = new DataGrid<StudentwiseRecordModel.LectureScore>();
     this.editable = editable;
     this.messages = messages;
     initColumns();

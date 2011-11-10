@@ -11,6 +11,7 @@ import org.mklab.taskit.shared.UserProxy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -36,6 +37,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiField(provided = true)
   ValueListBox<UserProxy> userList;
   @UiField(provided = true)
+  ValueListBox<SortType> sortTypeList;
+  @UiField(provided = true)
   StudentwiseRecordPanel panel;
   @UiField
   Label userName;
@@ -60,6 +63,10 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
   interface Binder extends UiBinder<Widget, StudentListViewImpl> {
     // empty
+  }
+
+  static enum SortType {
+    SCORE_ASCENDING, SCORE_DESCENDING, ID_ASCENDING, ID_DESCENDING
   }
 
   /**
@@ -122,6 +129,29 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     final Messages messages = getClientFactory().getMessages();
     this.panel = new StudentwiseRecordPanel(messages, true);
 
+    initUserList(messages);
+    this.sortTypeList = new ValueListBox<StudentListViewImpl.SortType>(new Renderer<SortType>() {
+
+      @Override
+      public String render(SortType object) {
+        if (object == null) return ""; //$NON-NLS-1$
+        return object.name();
+      }
+
+      @Override
+      public void render(SortType object, Appendable appendable) throws IOException {
+        appendable.append(render(object));
+      }
+    });
+    this.sortTypeList.setAcceptableValues(Arrays.asList(SortType.values()));
+    final Widget widget = binder.createAndBindUi(this);
+
+    localizeMessages(messages);
+
+    return widget;
+  }
+
+  private void initUserList(final Messages messages) {
     this.userList = new ValueListBox<UserProxy>(new Renderer<UserProxy>() {
 
       @Override
@@ -147,11 +177,6 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
         StudentListViewImpl.this.presenter.listSelectionChanged(event.getValue());
       }
     });
-    final Widget widget = binder.createAndBindUi(this);
-
-    localizeMessages(messages);
-
-    return widget;
   }
 
   private void localizeMessages(final Messages messages) {

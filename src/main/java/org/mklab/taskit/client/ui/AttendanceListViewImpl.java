@@ -30,8 +30,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -47,7 +47,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
   @UiField(provided = true)
   ValueListBox<LectureListItem> lectureList;
   @UiField(provided = true)
-  CellTable<AttendanceListItem> table;
+  DataGrid<AttendanceListItem> table;
 
   interface Binder extends UiBinder<Widget, AttendanceListViewImpl> {
     // empty
@@ -100,7 +100,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
       }
     });
 
-    this.table = new CellTable<AttendanceListItem>();
+    this.table = new DataGrid<AttendanceListItem>();
     final Column<AttendanceListItem, UserProxy> userColumn = new Column<AttendanceListItem, UserProxy>(new AbstractCell<UserProxy>() {
 
       @Override

@@ -13,46 +13,51 @@
 		.fillHorizontal {
 			width : 100%;
 		}
+		.records {
+			width : 100%;
+			height : 100%;
+		}
 	</ui:style>
 
 	<g:DockLayoutPanel unit='EM'>
 		<!-- User List -->
-		<g:north size='2'>
-			<g:HTMLPanel styleName='{style.userListArea}'>
-				<g:HorizontalPanel>
+		<g:north size='10'>
+			<g:VerticalPanel styleName='{style.fillHorizontal}'>
+				<g:HorizontalPanel styleName='{style.userListArea}'>
 					<g:cell verticalAlignment="ALIGN_MIDDLE">
 						<g:Label ui:field='userListLabel'>User List: </g:Label>
 					</g:cell>
 					<g:cell verticalAlignment="ALIGN_MIDDLE">
 						<g:ValueListBox ui:field='userList'></g:ValueListBox>
 					</g:cell>
-					<g:Button ui:field='reloadButton'></g:Button>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:ValueListBox ui:field='sortTypeList'></g:ValueListBox>
+					</g:cell>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:Button ui:field='reloadButton'></g:Button>
+					</g:cell>
 				</g:HorizontalPanel>
-			</g:HTMLPanel>
+				<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
+					<g:VerticalPanel styleName='{style.fillHorizontal}'>
+						<g:HorizontalPanel>
+							<g:Label ui:field='userIdLabel'>User ID:</g:Label>
+							<g:Label ui:field='userId'></g:Label>
+						</g:HorizontalPanel>
+						<g:HorizontalPanel>
+							<g:Label ui:field='userNameLabel'>User Name:</g:Label>
+							<g:Label ui:field='userName'></g:Label>
+						</g:HorizontalPanel>
+						<g:cell horizontalAlignment="ALIGN_RIGHT">
+							<g:Button ui:field='uncallButton'>Uncall</g:Button>
+						</g:cell>
+					</g:VerticalPanel>
+				</g:CaptionPanel>
+			</g:VerticalPanel>
 		</g:north>
 		<!-- Profile and Scores -->
 		<g:center>
-			<g:ScrollPanel>
-				<g:VerticalPanel>
-					<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
-						<g:VerticalPanel styleName='{style.fillHorizontal}'>
-							<g:HorizontalPanel>
-								<g:Label ui:field='userIdLabel'>User ID:</g:Label>
-								<g:Label ui:field='userId'></g:Label>
-							</g:HorizontalPanel>
-							<g:HorizontalPanel>
-								<g:Label ui:field='userNameLabel'>User Name:</g:Label>
-								<g:Label ui:field='userName'></g:Label>
-							</g:HorizontalPanel>
-							<g:cell horizontalAlignment="ALIGN_RIGHT">
-								<g:Button ui:field='uncallButton'>Uncall</g:Button>
-							</g:cell>
-						</g:VerticalPanel>
-					</g:CaptionPanel>
-					<mk:StudentwiseRecordPanel ui:field='panel'></mk:StudentwiseRecordPanel>
-				</g:VerticalPanel>
-			</g:ScrollPanel>
+			<mk:StudentwiseRecordPanel ui:field='panel'></mk:StudentwiseRecordPanel>
 		</g:center>
 	</g:DockLayoutPanel>
-
+	
 </ui:UiBinder> 
