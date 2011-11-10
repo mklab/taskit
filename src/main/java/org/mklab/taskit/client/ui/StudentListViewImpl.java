@@ -12,6 +12,7 @@ import org.mklab.taskit.shared.UserProxy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -30,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 /**
- * @author ishikura
+ * @author Yuhi Ishikura
  */
 public class StudentListViewImpl extends AbstractTaskitView implements StudentListView {
 
@@ -59,6 +60,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   Button reloadButton;
 
   private Presenter presenter;
+  private List<UserProxy> selectableUsers;
   private static final Binder binder = GWT.create(Binder.class);
 
   interface Binder extends UiBinder<Widget, StudentListViewImpl> {
@@ -100,7 +102,31 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void setListData(List<UserProxy> listData) {
-    final List<UserProxy> acceptableValues = new ArrayList<UserProxy>(listData);
+    this.selectableUsers = listData;
+    resetListData();
+  }
+
+  private void resetListData() {
+    if (this.selectableUsers == null || this.selectableUsers.size() == 0) {
+      this.userList.setAcceptableValues(Collections.<UserProxy> emptyList());
+      return;
+    }
+
+    final List<UserProxy> acceptableValues = new ArrayList<UserProxy>(this.selectableUsers);
+    final SortType sortType = this.sortTypeList.getValue();
+    if (sortType != null && sortType != SortType.ID_ASCENDING) {
+      switch (sortType) {
+        case ID_DESCENDING:
+          Collections.reverse(acceptableValues);
+          break;
+        case SCORE_ASCENDING:
+          break;
+        case SCORE_DESCENDING:
+          break;
+        default:
+          break;
+      }
+    }
     acceptableValues.add(0, null);
     this.userList.setAcceptableValues(acceptableValues);
   }
@@ -130,6 +156,15 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     this.panel = new StudentwiseRecordPanel(messages, true);
 
     initUserList(messages);
+    initSortTypeList();
+    final Widget widget = binder.createAndBindUi(this);
+
+    localizeMessages(messages);
+
+    return widget;
+  }
+
+  private void initSortTypeList() {
     this.sortTypeList = new ValueListBox<StudentListViewImpl.SortType>(new Renderer<SortType>() {
 
       @Override
@@ -144,11 +179,16 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       }
     });
     this.sortTypeList.setAcceptableValues(Arrays.asList(SortType.values()));
-    final Widget widget = binder.createAndBindUi(this);
+    this.sortTypeList.setValue(SortType.ID_ASCENDING);
 
-    localizeMessages(messages);
+    this.sortTypeList.addValueChangeHandler(new ValueChangeHandler<StudentListViewImpl.SortType>() {
 
-    return widget;
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onValueChange(@SuppressWarnings("unused") ValueChangeEvent<SortType> event) {
+        resetListData();
+      }
+    });
   }
 
   private void initUserList(final Messages messages) {
