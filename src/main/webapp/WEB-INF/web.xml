@@ -30,6 +30,11 @@
 	</servlet>
 
 	<servlet>
+		<servlet-name>RoomMapService</servlet-name>
+		<servlet-class>org.mklab.taskit.server.RoomMapServlet</servlet-class>
+	</servlet>
+
+	<servlet>
 		<servlet-name>EventService</servlet-name>
 		<servlet-class>org.mklab.taskit.server.TaskitEventServiceServlet</servlet-class>
 	</servlet>
@@ -37,6 +42,11 @@
 	<servlet-mapping>
 		<servlet-name>requestFactoryServlet</servlet-name>
 		<url-pattern>/gwtRequest</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>RoomMapService</servlet-name>
+		<url-pattern>/roommap</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

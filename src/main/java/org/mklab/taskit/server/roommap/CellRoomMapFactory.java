@@ -9,10 +9,6 @@ import org.mklab.taskit.server.roommap.cell.CellRoomMap;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 
 /**
@@ -67,11 +63,6 @@ public class CellRoomMapFactory implements RoomMapFactory {
     }
 
     return image;
-  }
-
-  public static void main(String[] args) throws IOException {
-    CellRoomMap map = CellRoomMap.load(new File("programmings2011.csv"));
-    ImageIO.write(new CellRoomMapFactory(map).getRoomMapFor("11236040"), "png", new File("map.png"));
   }
 
 }
