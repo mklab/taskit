@@ -42,7 +42,7 @@ import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
  */
 public class ClientFactoryImpl implements ClientFactory {
 
-  private EventBus eventBus = new SimpleEventBus();
+  private EventBus eventBus;
   private PlaceController placeController;
   private Messages messages;
   private TaskitRequestFactory requestFactory;
@@ -57,10 +57,26 @@ public class ClientFactoryImpl implements ClientFactory {
   public ClientFactoryImpl() {
     this.eventBus = new SimpleEventBus();
     this.placeController = new PlaceController(this.eventBus);
+
+    initialize();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void initialize() {
     this.messages = GWT.create(Messages.class);
 
     this.requestFactory = GWT.create(TaskitRequestFactory.class);
     this.requestFactory.initialize(this.eventBus);
+
+    if (this.remoteEventService != null) this.remoteEventService.removeListeners();
+    this.remoteEventService = null;
+    this.helpCallWatcher = null;
+    if (this.localDatabase != null) this.localDatabase.clearAllCache();
+    this.localDatabase = null;
+    this.pageLayout = null;
   }
 
   /**

@@ -178,8 +178,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   @Override
   public final void logout() {
-    this.clientFactory.getLocalDatabase().clearAllCache();
-
     /*
      * ログアウトを先にしてしまうと、Activity#onStop()での処理がログアウト後になってしまい行えないため。
      * アクティビティの移動後ログアウトを行う。
@@ -194,6 +192,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     } finally {
       Cookies.removeCookie(LoginActivity.COOKIE_AUTO_LOGIN_KEY);
     }
+    this.clientFactory.initialize();
   }
 
   /**

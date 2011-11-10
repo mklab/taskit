@@ -32,6 +32,11 @@ import de.novanic.eventservice.client.event.RemoteEventService;
 public interface ClientFactory {
 
   /**
+   * オブジェクト生成時の状態に初期化します。
+   */
+  void initialize();
+
+  /**
    * RequestFactoryを取得します。
    * 
    * @return RequestFactory
