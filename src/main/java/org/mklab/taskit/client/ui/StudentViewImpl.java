@@ -169,7 +169,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @Override
   public void setLoginUser(UserProxy loginUser) {
     this.userId.setText(loginUser.getAccount().getId());
-    this.userName.setText(loginUser.getName() == null ? getClientFactory().getMessages().unsetLabel() : loginUser.getName());
+    this.userName.setText(loginUser.getName() == null ? "<< " + getClientFactory().getMessages().unsetLabel() + " >>" : loginUser.getName()); //$NON-NLS-1$//$NON-NLS-2$
   }
 
   /**

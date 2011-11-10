@@ -85,6 +85,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   protected void onViewShown() {
     super.onViewShown();
 
+    ((StudentView)getTaskitView()).setLoginUser(getLoginUser());
     updateRecordAsync();
     updateHelpCallStateAsync();
   }
