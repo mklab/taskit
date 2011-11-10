@@ -51,27 +51,36 @@ public class CellRoomMap {
    * @throws IOException 読み込めなかった場合
    */
   public static CellRoomMap load(Reader reader) throws IOException {
-    List<Cell[]> cellList = new ArrayList<Cell[]>();
+    List<List<Cell>> cellList = new ArrayList<List<Cell>>();
+    int maximumColumnCount = 0;
+
     final BufferedReader br = new BufferedReader(reader);
     String line;
     while ((line = br.readLine()) != null) {
       line = line.replaceAll(",,", ", ,"); //$NON-NLS-1$ //$NON-NLS-2$
       final String[] s = line.split(","); //$NON-NLS-1$
-      if (cellList.size() > 0) {
-        if (cellList.get(0).length != s.length) throw new IOException("invalid column count."); //$NON-NLS-1$
-      }
-      final Cell[] cellsX = new Cell[s.length];
-      for (int i = 0; i < cellsX.length; i++) {
+      final List<Cell> cellsX = new ArrayList<Cell>(s.length);
+      for (int i = 0; i < cellsX.size(); i++) {
         String cell = s[i].trim();
         if (cell.length() == 0) {
-          cellsX[i] = Cell.EMPTY_CELL;
+          cellsX.add(Cell.EMPTY_CELL);
         } else {
-          cellsX[i] = new Cell(cell);
+          cellsX.add(new Cell(cell));
         }
       }
+      if (cellsX.size() > maximumColumnCount) maximumColumnCount = cellsX.size();
       cellList.add(cellsX);
     }
-    return new CellRoomMap(cellList.toArray(new Cell[cellList.size()][]));
+
+    final Cell[][] cells = new Cell[cellList.size()][maximumColumnCount];
+    int i = 0;
+    for (List<Cell> row : cellList) {
+      while (row.size() < maximumColumnCount) {
+        row.add(Cell.EMPTY_CELL);
+      }
+      cells[i++] = row.toArray(new Cell[row.size()]);
+    }
+    return new CellRoomMap(cells);
   }
 
   private CellRoomMap(Cell[][] cells) {
