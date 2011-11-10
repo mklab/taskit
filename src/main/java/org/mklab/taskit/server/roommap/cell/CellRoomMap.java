@@ -4,7 +4,10 @@
 package org.mklab.taskit.server.roommap.cell;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +26,24 @@ public class CellRoomMap {
   private Map<String, Cell> userIdToCell = new HashMap<String, Cell>();
 
   /**
+   * CSVファイルからmapfileを読み込みます。
+   * 
+   * @param file ファイル
+   * @return マップ
+   * @throws IOException 読み込めなかった場合
+   */
+  public static CellRoomMap load(File file) throws IOException {
+    Reader reader = new InputStreamReader(new FileInputStream(file));
+    try {
+      return load(reader);
+    } catch (IOException ex) {
+      throw ex;
+    } finally {
+      reader.close();
+    }
+  }
+
+  /**
    * CSVのマップファイルを読み込みます。
    * 
    * @param reader リーダー
@@ -34,6 +55,7 @@ public class CellRoomMap {
     final BufferedReader br = new BufferedReader(reader);
     String line;
     while ((line = br.readLine()) != null) {
+      line = line.replaceAll(",,", ", ,"); //$NON-NLS-1$ //$NON-NLS-2$
       final String[] s = line.split(","); //$NON-NLS-1$
       if (cellList.size() > 0) {
         if (cellList.get(0).length != s.length) throw new IOException("invalid column count."); //$NON-NLS-1$

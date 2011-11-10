@@ -11,7 +11,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 
 import javax.imageio.ImageIO;
 
@@ -22,7 +21,7 @@ import javax.imageio.ImageIO;
 public class CellRoomMapFactory implements RoomMapFactory {
 
   private static final int BORDER_WIDTH = 1;
-  private static final int CELL_WIDTH = 5;
+  private static final int CELL_WIDTH = 10;
 
   CellRoomMap roomMap;
 
@@ -71,8 +70,8 @@ public class CellRoomMapFactory implements RoomMapFactory {
   }
 
   public static void main(String[] args) throws IOException {
-    CellRoomMap map = CellRoomMap.load(new StringReader("1,2,3, \n4,5,6,7"));
-    ImageIO.write(new CellRoomMapFactory(map).getRoomMapFor("1"), "png", new File("map.png"));
+    CellRoomMap map = CellRoomMap.load(new File("programmings2011.csv"));
+    ImageIO.write(new CellRoomMapFactory(map).getRoomMapFor("11236040"), "png", new File("map.png"));
   }
 
 }
