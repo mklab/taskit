@@ -8,22 +8,28 @@ import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.CellPreviewEvent;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
@@ -43,7 +49,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
 
   private Presenter presenter;
   @UiField(provided = true)
-  CellList<HelpCallListItem> list;
+  CellTable<HelpCallListItem> table;
   @UiField
   Label messageLabel;
   @UiField
@@ -112,7 +118,7 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
       }
     }
 
-    this.list.setRowData(this.listItems);
+    this.table.setRowData(this.listItems);
   }
 
   /**
@@ -151,57 +157,99 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
    */
   @Override
   protected Widget initContent() {
-    this.list = new CellList<HelpCallListItem>(new AbstractCell<HelpCallListItem>() {
+    this.table = new CellTable<HelpCallListViewImpl.HelpCallListItem>();
+    initColumns();
+    listenSelectionEvent();
 
-      @SuppressWarnings({"deprecation", "nls"})
+    final Widget widget = binder.createAndBindUi(this);
+    this.checkInListButton.setText(getClientFactory().getMessages().checkInListLabel());
+
+    return widget;
+  }
+
+  private void initColumns() {
+    this.table.addColumn(new Column<HelpCallListViewImpl.HelpCallListItem, String>(new TextCell()) {
+
+      @SuppressWarnings("deprecation")
       @Override
-      public void render(@SuppressWarnings("unused") com.google.gwt.cell.client.Cell.Context context, HelpCallListItem value, SafeHtmlBuilder sb) {
-        final HelpCallProxy helpCall = value.getHelpCall();
-        if (helpCall == null) throw new IllegalArgumentException();
-        final Date date = helpCall.getDate();
-        final String callerId = helpCall.getCaller().getId();
-        final String message = helpCall.getMessage();
-        final boolean isReceived = value.getUsersInCharge().size() > 0;
+      public String getValue(HelpCallListItem object) {
+        return object.getHelpCall().getDate().toLocaleString();
+      }
+    }, getClientFactory().getMessages().dateLabel());
+    this.table.addColumn(new Column<HelpCallListItem, String>(new TextCell()) {
 
-        sb.appendHtmlConstant("<div style='background-color:" + (isReceived ? "#ddd" : "white") + ";'>");
-        sb.appendHtmlConstant(date.toLocaleString());
-        sb.appendHtmlConstant("<br>");
-        appendCallerInfo(sb, callerId, message);
-        if (isReceived) {
-          sb.appendHtmlConstant("<br>");
-          appendUsersInCharge(sb, value.getUsersInCharge());
-        }
-        sb.appendHtmlConstant("</div>");
+      @Override
+      public String getValue(HelpCallListItem object) {
+        return object.getHelpCall().getCaller().getId();
       }
 
-      @SuppressWarnings("nls")
-      private void appendUsersInCharge(SafeHtmlBuilder sb, List<String> usersInCharge) {
-        if (usersInCharge.size() == 0) return;
+    }, getClientFactory().getMessages().callerColumnLabel());
+    this.table.addColumn(new Column<HelpCallListItem, String>(new TextCell()) {
+
+      @Override
+      public String getValue(HelpCallListItem object) {
+        return object.getHelpCall().getMessage();
+      }
+    }, getClientFactory().getMessages().messageLabel());
+    this.table.addColumn(new Column<HelpCallListItem, String>(new TextCell()) {
+
+      @Override
+      public String getValue(HelpCallListItem object) {
+        List<String> usersInCharge = object.getUsersInCharge();
+        if (usersInCharge == null) return getClientFactory().getMessages().notLoadedYetMessage();
 
         final StringBuilder userList = new StringBuilder();
         for (int i = 0; i < usersInCharge.size(); i++) {
-          if (i != 0) userList.append(",");
+          if (i != 0) userList.append(","); //$NON-NLS-1$
           userList.append(usersInCharge.get(i));
         }
-
-        sb.appendHtmlConstant("<i>");
-        sb.appendEscaped("==>");
-        sb.appendEscaped(getClientFactory().getMessages().receivedByMessage(userList.toString()));
-        sb.appendHtmlConstant("</i>");
+        return userList.toString();
       }
 
-      @SuppressWarnings("nls")
-      private void appendCallerInfo(SafeHtmlBuilder sb, final String callerId, final String message) {
-        sb.appendHtmlConstant("<b>" + SafeHtmlUtils.htmlEscape(callerId) + "</b>");
-        if (message != null && message.length() > 0) {
-          sb.appendHtmlConstant("<font color='red'> '");
-          sb.appendEscaped(message);
-          sb.appendHtmlConstant("'</font>");
-        }
+    }, getClientFactory().getMessages().acceptingColumnLabel());
+
+    Column<HelpCallListItem, String> locationButtonColumn = new Column<HelpCallListItem, String>(new ButtonCell()) {
+
+      @Override
+      public String getValue(@SuppressWarnings("unused") HelpCallListItem object) {
+        return getClientFactory().getMessages().locationLabel();
       }
 
+    };
+    locationButtonColumn.setFieldUpdater(new FieldUpdater<HelpCallListViewImpl.HelpCallListItem, String>() {
+
+      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
+      @Override
+      public void update(int index, HelpCallListItem object, @SuppressWarnings("unused") String value) {
+        final int y = table.getRowElement(index).getAbsoluteBottom();
+        final int x = table.getAbsoluteLeft() + table.getOffsetWidth();
+        final String userId = object.getHelpCall().getCaller().getId();
+
+        showUserMap(x, y, userId);
+      }
     });
+    this.table.addColumn(locationButtonColumn);
+  }
 
+  private static void showUserMap(final int x, final int y, String userId) {
+    final Image image = new Image("roommap?id=" + userId); //$NON-NLS-1$
+    final PopupPanel popup = new PopupPanel();
+    popup.setAutoHideEnabled(true);
+    popup.add(image);
+    popup.setVisible(false);
+    popup.show();
+    image.addLoadHandler(new LoadHandler() {
+
+      @Override
+      public void onLoad(@SuppressWarnings("unused") LoadEvent event) {
+        popup.setPopupPosition(x - image.getWidth(), y);
+        popup.setVisible(true);
+      }
+    });
+  }
+
+  private void listenSelectionEvent() {
+    // テーブルの選択変更を監視
     final SingleSelectionModel<HelpCallListItem> selectionModel = new SingleSelectionModel<HelpCallListItem>();
     selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 
@@ -212,12 +260,22 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
         HelpCallListViewImpl.this.presenter.helpCallSelected(selectedCall.getHelpCall());
       }
     });
-    this.list.setSelectionModel(selectionModel);
 
-    final Widget widget = binder.createAndBindUi(this);
-    this.checkInListButton.setText(getClientFactory().getMessages().checkInListLabel());
+    // テーブルの選択イベントを、選択されたのがボタンの場合は発生しないようにフィルタリング
+    CellPreviewEvent.Handler<HelpCallListViewImpl.HelpCallListItem> cellPreviewHandler = new DefaultSelectionEventManager<HelpCallListViewImpl.HelpCallListItem>(null) {
 
-    return widget;
+      @Override
+      public void onCellPreview(CellPreviewEvent<HelpCallListItem> event) {
+        @SuppressWarnings("unqualified-field-access")
+        Column<?, ?> column = table.getColumn(event.getColumn());
+        if (column.getCell() instanceof ButtonCell) {
+          return;
+        }
+
+        super.onCellPreview(event);
+      }
+    };
+    this.table.setSelectionModel(selectionModel, cellPreviewHandler);
+    this.table.addCellPreviewHandler(cellPreviewHandler);
   }
-
 }
