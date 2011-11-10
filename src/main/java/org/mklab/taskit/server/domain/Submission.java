@@ -221,6 +221,16 @@ public class Submission extends AbstractEntity<Integer> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void update() {
+    super.update();
+
+    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.submitter.getId());
+  }
+
+  /**
    * 提出を行います。
    * 
    * @param submitter 提出する学生のアカウント

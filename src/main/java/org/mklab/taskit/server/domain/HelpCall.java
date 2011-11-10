@@ -6,6 +6,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.event.HelpCallEvent;
+import org.mklab.taskit.shared.event.MyHelpCallEvent;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -172,7 +173,7 @@ public class HelpCall extends AbstractEntity<Integer> {
       em.persist(call);
       t.commit();
 
-      ServiceUtil.fireEvent(HelpCallEvent.DOMAIN, new HelpCallEvent(call.getDate(), call.getCaller().getId(), message, HelpCallEvent.Type.ADDED, getHelpCallCount()));
+      fireHelpCallStateChanged(loginUser, HelpCallEvent.Type.ADDED, call.getDate(), message);
     } catch (Throwable e) {
       t.rollback();
     } finally {
@@ -222,11 +223,27 @@ public class HelpCall extends AbstractEntity<Integer> {
       q.executeUpdate();
       t.commit();
 
-      ServiceUtil.fireEvent(HelpCallEvent.DOMAIN, new HelpCallEvent(new Date(), accountId, null, HelpCallEvent.Type.DELETED, getHelpCallCount()));
+      fireHelpCallStateChanged(User.getUserByAccountId(accountId), HelpCallEvent.Type.DELETED, new Date(), null);
     } catch (Throwable e) {
       t.rollback();
     } finally {
       em.close();
+    }
+  }
+
+  private static void fireHelpCallStateChanged(User user, HelpCallEvent.Type type, Date date, String message) {
+    // TA、Teacherに通知
+    ServiceUtil.fireEvent(HelpCallEvent.DOMAIN, new HelpCallEvent(date, user.getAccount().getId(), message, type, getHelpCallCount()));
+
+    // 呼び出している学生本人に通知
+    final MyHelpCallEvent event = new MyHelpCallEvent();
+    ServiceUtil.fireEvent(MyHelpCallEvent.DOMAIN, event, user);
+    // その他の呼び出し中の学生に通知
+    for (HelpCall helpCall : getAllHelpCalls()) {
+      // 本人はすでに通知済み
+      if (helpCall.getCaller().getId().equals(user.getAccount().getId())) continue;
+
+      ServiceUtil.fireEvent(MyHelpCallEvent.DOMAIN, event);
     }
   }
 

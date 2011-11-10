@@ -168,6 +168,15 @@ public class Attendance extends AbstractEntity<Integer> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void update() {
+    super.update();
+    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.attender.getId());
+  }
+
+  /**
    * 講義の出席状況を記録します。
    * 
    * @param attender 出席者

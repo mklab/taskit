@@ -279,7 +279,7 @@ public class ServiceUtil {
      */
     private String getClientIdOfGwtEventService(User user) {
       for (Entry<String, User> entry : this.clientIdToUser.entrySet()) {
-        if (entry.getValue().getAccount().getId().equals(user.getId()) == false) continue;
+        if (entry.getValue().getAccount().getId().equals(user.getAccount().getId()) == false) continue;
         return entry.getKey();
       }
       return null;

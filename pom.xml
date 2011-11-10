@@ -31,12 +31,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-dev</artifactId>
-			<version>${gwtVersion}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.google.web.bindery</groupId>
 			<artifactId>requestfactory-server</artifactId>
 			<version>${gwtVersion}</version>
@@ -121,7 +115,7 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1.2</version>
 		</dependency>
-		<!--  -->
+		<!-- -->
 		<dependency>
 			<groupId>com.google.code.gwteventservice</groupId>
 			<artifactId>gwteventservice</artifactId>
@@ -177,9 +171,16 @@
 					<i18nMessagesBundle>org.mklab.taskit.client.Messages</i18nMessagesBundle>
 					<draftCompile>true</draftCompile>
 					<disableClassMetadata>true</disableClassMetadata>
-					<extraJvmArgs>-Xmx256m</extraJvmArgs>
+					<extraJvmArgs>-Xmx1024m</extraJvmArgs>
 					<style>${gwt.style}</style>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.gwt</groupId>
+						<artifactId>gwt-dev</artifactId>
+						<version>${gwtVersion}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<!-- Annotation Processor for GWT RequestFactory -->
 			<plugin>
