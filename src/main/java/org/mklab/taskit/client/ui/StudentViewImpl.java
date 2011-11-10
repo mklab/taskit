@@ -7,10 +7,12 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
+import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -176,14 +178,9 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    * {@inheritDoc}
    */
   @Override
-  public void setScore(double percentage) {
-    final double p = (double)((int)(percentage * 1000)) / 1000 * 100;
-    String s = String.valueOf(p);
-    if (p == 100) {
-      s = "100"; //$NON-NLS-1$
-    } else if (s.length() > 4) {
-      s = s.substring(0, 4);
-    }
-    this.score.setText(s + "%"); //$NON-NLS-1$
+  public void setRecord(RecordProxy record) {
+    final NumberFormat fmt = NumberFormat.getFormat("00.00"); //$NON-NLS-1$
+    this.score.setText(fmt.format(record.getDeviation()));
   }
+
 }

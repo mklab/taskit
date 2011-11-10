@@ -8,8 +8,6 @@ import org.mklab.taskit.shared.UserType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,10 +19,10 @@ import java.util.List;
  */
 public class RecordService {
 
-  private static RecordStatistics recordStatistics = new RecordStatistics();
+  private static StatisticsCollector statisticsCollector = new StatisticsCollector();
 
   static {
-    recordStatistics.start();
+    statisticsCollector.start();
   }
 
   /**
@@ -33,7 +31,7 @@ public class RecordService {
    * @param accountId アカウントID
    */
   static void recomputeScore(String accountId) {
-    recordStatistics.recompute(accountId);
+    statisticsCollector.recompute(accountId);
   }
 
   /**
@@ -75,18 +73,17 @@ public class RecordService {
   }
 
   /**
-   * 現時点での提出物の得点率を取得します。
+   * 現時点での成績情報を取得します。
    * 
-   * @return 現時点での提出物の得点率
+   * @return 現時点での成績情報
    */
   @Invoker({UserType.STUDENT})
-  public static double getPercentageOfMySubmissionScore() {
-    final double p = recordStatistics.getPercentageOfSubmissionScore(ServiceUtil.getLoginUser().getAccount().getId());
-    return p;
+  public static Record getMyRecord() {
+    return statisticsCollector.getRecord(ServiceUtil.getLoginUser().getAccount().getId());
   }
 
-  static double getPercentageOfSubmissionScore(String id) {
-    return recordStatistics.getPercentageOfSubmissionScore(id);
+  static Record getRecord(String id) {
+    return statisticsCollector.getRecord(id);
   }
 
   /**
@@ -100,26 +97,6 @@ public class RecordService {
     final User user = User.getUserByAccountId(id);
     final List<Lecture> lectures = Lecture.getAllLectures();
     return new StudentwiseRecords(lectures, Arrays.asList(getRecord(user)));
-  }
-
-  /**
-   * 生徒を成績順で取得します。
-   * 
-   * @return 成績順にソートした生徒
-   */
-  @Invoker({UserType.TA, UserType.TEACHER})
-  public static List<User> getStudentsOrderByRecord() {
-    List<User> users = User.getAllStudents();
-    Collections.sort(users, new Comparator<User>() {
-
-      @Override
-      public int compare(User o1, User o2) {
-        final double d1 = getPercentageOfSubmissionScore(o1.getAccount().getId());
-        final double d2 = getPercentageOfSubmissionScore(o2.getAccount().getId());
-        return d1 > d2 ? 1 : d1 < d2 ? -1 : 0;
-      }
-    });
-    return users;
   }
 
   private static StudentwiseRecord getRecord(User user) {

@@ -8,6 +8,7 @@ import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.event.MyHelpCallEvent;
 import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
@@ -120,11 +121,11 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   }
 
   private void updateScorePercentageAsync() {
-    getClientFactory().getRequestFactory().recordRequest().getPercentageOfMySubmissionScore().fire(new Receiver<Double>() {
+    getClientFactory().getRequestFactory().recordRequest().getMyRecord().fire(new Receiver<RecordProxy>() {
 
       @Override
-      public void onSuccess(Double response) {
-        ((StudentView)getTaskitView()).setScore(response.doubleValue());
+      public void onSuccess(RecordProxy response) {
+        ((StudentView)getTaskitView()).setRecord(response);
       }
     });
   }
