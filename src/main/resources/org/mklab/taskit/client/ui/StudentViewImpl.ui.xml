@@ -5,16 +5,20 @@
 
 	<ui:style>
 		.padding {
-		width:10px;
+			width:10px;
+		}
+		.rightSideBar {
+			width:100%;
 		}
 		.helpCallArea {
-		border : solid 2px gray;
+			width:100%;
+			border : solid 2px gray;
 		}
 		.padding {
-		height : 30px;
+			height : 30px;
 		}
 		.fillHorizontal {
-		width : 100%;
+			width : 100%;
 		}
 	</ui:style>
 
@@ -42,13 +46,16 @@
 		<g:center>
 			<mk:StudentwiseRecordPanel ui:field='scorePanel'></mk:StudentwiseRecordPanel>
 		</g:center>
-		<g:east size='20'>
-			<g:VerticalPanel styleName='{style.helpCallArea}'
-				ui:field='helpCallArea'>
-				<g:Label ui:field='helpCallPosition'></g:Label>
-				<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
-				<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
-				<g:TextBox ui:field='helpCallMessage'></g:TextBox>
+		<g:east size='15'>
+			<g:VerticalPanel styleName='{style.rightSideBar}'>
+				<g:VerticalPanel styleName='{style.helpCallArea}'
+					ui:field='helpCallArea'>
+					<g:Label ui:field='helpCallPosition'></g:Label>
+					<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
+					<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
+					<g:TextBox ui:field='helpCallMessage'></g:TextBox>
+				</g:VerticalPanel>
+				<mk:RecordView></mk:RecordView>
 			</g:VerticalPanel>
 		</g:east>
 	</g:DockLayoutPanel>
