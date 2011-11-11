@@ -60,7 +60,7 @@ public class CellRoomMap {
       line = line.replaceAll(",,", ", ,"); //$NON-NLS-1$ //$NON-NLS-2$
       final String[] s = line.split(","); //$NON-NLS-1$
       final List<Cell> cellsX = new ArrayList<Cell>(s.length);
-      for (int i = 0; i < cellsX.size(); i++) {
+      for (int i = 0; i < s.length; i++) {
         String cell = s[i].trim();
         if (cell.length() == 0) {
           cellsX.add(Cell.EMPTY_CELL);
