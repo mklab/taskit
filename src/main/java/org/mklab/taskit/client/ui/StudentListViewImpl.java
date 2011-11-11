@@ -212,7 +212,19 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       @Override
       public String render(SortType object) {
         if (object == null) return ""; //$NON-NLS-1$
-        return object.name();
+        final Messages messages = getClientFactory().getMessages();
+        switch (object) {
+          case ID_ASCENDING:
+            return messages.sortTypeIdAscending();
+          case ID_DESCENDING:
+            return messages.sortTypeIdDescending();
+          case SCORE_ASCENDING:
+            return messages.sortTypeScoreAscending();
+          case SCORE_DESCENDING:
+            return messages.sortTypeScoreDescending();
+          default:
+            throw new IllegalStateException("Unknown sort type : " + object); //$NON-NLS-1$
+        }
       }
 
       @Override
@@ -223,7 +235,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     this.sortTypeList.setAcceptableValues(Arrays.asList(SortType.values()));
     this.sortTypeList.setValue(SortType.ID_ASCENDING);
 
-    this.sortTypeList.addValueChangeHandler(new ValueChangeHandler<StudentListViewImpl.SortType>() {
+    this.sortTypeList.addValueChangeHandler(new ValueChangeHandler<SortType>() {
 
       @SuppressWarnings("synthetic-access")
       @Override
