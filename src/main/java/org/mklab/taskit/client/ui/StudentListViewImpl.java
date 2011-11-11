@@ -41,17 +41,11 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   ValueListBox<SortType> sortTypeList;
   @UiField(provided = true)
   StudentwiseRecordPanel panel;
-  @UiField
-  Label userName;
-  @UiField
-  Label userId;
+  @UiField(provided = true)
+  UserInfoView userInfoView;
 
   @UiField
-  CaptionPanel profileCaption;
-  @UiField
-  Label userIdLabel;
-  @UiField
-  Label userNameLabel;
+  CaptionPanel userInfoCaption;
   @UiField
   Label userListLabel;
   @UiField
@@ -154,6 +148,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
     this.panel = new StudentwiseRecordPanel(messages, true);
+    this.userInfoView = new UserInfoView(messages);
 
     initUserList(messages);
     initSortTypeList();
@@ -220,10 +215,9 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   }
 
   private void localizeMessages(final Messages messages) {
-    this.userIdLabel.setText(messages.userIdLabel() + ": "); //$NON-NLS-1$
-    this.userNameLabel.setText(messages.userNameLabel() + ": "); //$NON-NLS-1$
+    this.userInfoView.setUser(getSelectedUser());
     this.userListLabel.setText(messages.userListLabel() + ": "); //$NON-NLS-1$
-    this.profileCaption.setCaptionText(messages.profileLabel());
+    this.userInfoCaption.setCaptionText(messages.userInfoLabel());
     this.uncallButton.setText(messages.uncallLabel());
     this.reloadButton.setText(messages.reloadLabel());
   }
@@ -233,8 +227,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void showUserPage(UserProxy user, StudentwiseRecordModel model) {
-    this.userId.setText(user.getAccount().getId());
-    this.userName.setText(user.getName() != null ? user.getName() : "<< " + getClientFactory().getMessages().unsetLabel() + " >>"); //$NON-NLS-1$ //$NON-NLS-2$
+    this.userInfoView.setUser(user);
     this.panel.showUserPage(model);
   }
 

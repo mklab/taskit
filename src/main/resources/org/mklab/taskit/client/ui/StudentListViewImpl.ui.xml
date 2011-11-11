@@ -37,16 +37,9 @@
 						<g:Button ui:field='reloadButton'></g:Button>
 					</g:cell>
 				</g:HorizontalPanel>
-				<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
+				<g:CaptionPanel captionText='User Info' ui:field='userInfoCaption'>
 					<g:VerticalPanel styleName='{style.fillHorizontal}'>
-						<g:HorizontalPanel>
-							<g:Label ui:field='userIdLabel'>User ID:</g:Label>
-							<g:Label ui:field='userId'></g:Label>
-						</g:HorizontalPanel>
-						<g:HorizontalPanel>
-							<g:Label ui:field='userNameLabel'>User Name:</g:Label>
-							<g:Label ui:field='userName'></g:Label>
-						</g:HorizontalPanel>
+						<mk:UserInfoView ui:field='userInfoView'></mk:UserInfoView>
 						<g:cell horizontalAlignment="ALIGN_RIGHT">
 							<g:Button ui:field='uncallButton'>Uncall</g:Button>
 						</g:cell>

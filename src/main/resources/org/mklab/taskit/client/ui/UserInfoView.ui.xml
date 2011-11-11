@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<g:VerticalPanel>
+		<g:HorizontalPanel>
+			<g:Label ui:field='userIdLabel'>User ID:</g:Label>
+			<g:Label ui:field='userId'></g:Label>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel>
+			<g:Label ui:field='userNameLabel'>User Name:</g:Label>
+			<g:Label ui:field='userName'></g:Label>
+		</g:HorizontalPanel>
+	</g:VerticalPanel>
+
+</ui:UiBinder> 

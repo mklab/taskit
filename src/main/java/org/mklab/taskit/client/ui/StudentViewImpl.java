@@ -50,19 +50,14 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @UiField
   VerticalPanel helpCallArea;
 
-  // profile
   @UiField
-  CaptionPanel profileCaption;
+  CaptionPanel userInfoCaption;
   @UiField
-  Label userIdLabel;
-  @UiField
-  Label userNameLabel;
-  @UiField
-  Label userName;
-  @UiField
-  Label userId;
-  @UiField
-  RecordView recordView;
+  CaptionPanel statisticsCaption;
+  @UiField(provided = true)
+  UserInfoView userInfoView;
+  @UiField(provided = true)
+  StatisticsView statisticsView;
 
   private boolean editable;
 
@@ -113,7 +108,10 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   protected Widget initContent() {
-    this.scorePanel = new StudentwiseRecordPanel(getClientFactory().getMessages(), this.editable);
+    final Messages messages = getClientFactory().getMessages();
+    this.statisticsView = new StatisticsView(messages);
+    this.scorePanel = new StudentwiseRecordPanel(messages, this.editable);
+    this.userInfoView = new UserInfoView(messages);
 
     final Widget widget = binder.createAndBindUi(this);
     final Image helpImage = new Image("taskit/help128.png"); //$NON-NLS-1$
@@ -122,15 +120,14 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
     this.helpCallButton.getDownFace().setImage(waitImage);
     this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
     this.helpCallArea.setCellHorizontalAlignment(this.helpCallButton, HasHorizontalAlignment.ALIGN_CENTER);
-    localizeLabels(getClientFactory().getMessages());
+    localizeLabels(messages);
 
     return widget;
   }
 
   private void localizeLabels(Messages messages) {
-    this.userIdLabel.setText(messages.userIdLabel() + ": "); //$NON-NLS-1$
-    this.userNameLabel.setText(messages.userNameLabel() + ": "); //$NON-NLS-1$
-    this.profileCaption.setCaptionText(messages.profileLabel());
+    this.statisticsCaption.setCaptionText(messages.statisticsLabel());
+    this.userInfoCaption.setCaptionText(messages.userInfoLabel());
     this.helpCallMessageLabel.setText(messages.messageLabel() + ":"); //$NON-NLS-1$
   }
 
@@ -166,8 +163,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   public void setLoginUser(UserProxy loginUser) {
-    this.userId.setText(loginUser.getAccount().getId());
-    this.userName.setText(loginUser.getName() == null ? "<< " + getClientFactory().getMessages().unsetLabel() + " >>" : loginUser.getName()); //$NON-NLS-1$//$NON-NLS-2$
+    this.userInfoView.setUser(loginUser);
   }
 
   /**
@@ -175,7 +171,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   public void setRecord(RecordProxy record) {
-    this.recordView.setRecord(record);
+    this.statisticsView.setRecord(record);
   }
 
 }
