@@ -19,9 +19,9 @@
 		}
 	</ui:style>
 
-	<g:DockLayoutPanel unit='EM'>
+	<g:SplitLayoutPanel>
 		<!-- User List -->
-		<g:north size='10'>
+		<g:north size='120'>
 			<g:VerticalPanel styleName='{style.fillHorizontal}'>
 				<g:HorizontalPanel styleName='{style.userListArea}'>
 					<g:cell verticalAlignment="ALIGN_MIDDLE">
@@ -51,6 +51,6 @@
 		<g:center>
 			<mk:StudentwiseRecordPanel ui:field='panel'></mk:StudentwiseRecordPanel>
 		</g:center>
-	</g:DockLayoutPanel>
+	</g:SplitLayoutPanel>
 	
 </ui:UiBinder> 

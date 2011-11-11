@@ -18,11 +18,11 @@
 		}
 	</ui:style>
 
-	<g:DockLayoutPanel unit='EM'>
+	<g:SplitLayoutPanel>
 		<g:center>
 			<mk:StudentwiseRecordPanel ui:field='scorePanel'></mk:StudentwiseRecordPanel>
 		</g:center>
-		<g:east size='15'>
+		<g:east size='200'>
 			<g:VerticalPanel styleName='{style.rightSideBar}'>
 				<g:VerticalPanel ui:field='helpCallArea'>
 					<g:Label ui:field='helpCallPosition'></g:Label>
@@ -39,6 +39,6 @@
 				</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:east>
-	</g:DockLayoutPanel>
+	</g:SplitLayoutPanel>
 
 </ui:UiBinder> 
