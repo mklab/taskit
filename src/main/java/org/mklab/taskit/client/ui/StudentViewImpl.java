@@ -12,7 +12,6 @@ import org.mklab.taskit.shared.UserProxy;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -59,13 +58,11 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @UiField
   Label userNameLabel;
   @UiField
-  Label scoreLabel;
-  @UiField
   Label userName;
   @UiField
   Label userId;
   @UiField
-  Label score;
+  RecordView recordView;
 
   private boolean editable;
 
@@ -135,7 +132,6 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
     this.userNameLabel.setText(messages.userNameLabel() + ": "); //$NON-NLS-1$
     this.profileCaption.setCaptionText(messages.profileLabel());
     this.helpCallMessageLabel.setText(messages.messageLabel() + ":"); //$NON-NLS-1$
-    this.scoreLabel.setText(messages.scoreLabel() + ": "); //$NON-NLS-1$
   }
 
   @UiHandler("helpCallButton")
@@ -179,8 +175,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
    */
   @Override
   public void setRecord(RecordProxy record) {
-    final NumberFormat fmt = NumberFormat.getFormat("00.00"); //$NON-NLS-1$
-    this.score.setText(fmt.format(record.getDeviation()));
+    this.recordView.setRecord(record);
   }
 
 }

@@ -23,7 +23,7 @@
 	</ui:style>
 
 	<g:DockLayoutPanel unit='EM'>
-		<g:north size='7'>
+		<g:north size='6'>
 			<g:FlowPanel>
 				<g:CaptionPanel captionText='Profile' ui:field='profileCaption'>
 					<g:VerticalPanel>
@@ -34,10 +34,6 @@
 						<g:HorizontalPanel>
 							<g:Label ui:field='userNameLabel'>User Name:</g:Label>
 							<g:Label ui:field='userName'></g:Label>
-						</g:HorizontalPanel>
-						<g:HorizontalPanel>
-							<g:Label ui:field='scoreLabel'>Score:</g:Label>
-							<g:Label ui:field='score'></g:Label>
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:CaptionPanel>
@@ -55,7 +51,7 @@
 					<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
 					<g:TextBox ui:field='helpCallMessage'></g:TextBox>
 				</g:VerticalPanel>
-				<mk:RecordView></mk:RecordView>
+				<mk:RecordView ui:field='recordView'></mk:RecordView>
 			</g:VerticalPanel>
 		</g:east>
 	</g:DockLayoutPanel>

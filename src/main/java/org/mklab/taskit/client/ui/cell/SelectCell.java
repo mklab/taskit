@@ -98,6 +98,8 @@ public class SelectCell<E> extends AbstractInputCell<E, E> {
    */
   @Override
   public void onBrowserEvent(com.google.gwt.cell.client.Cell.Context context, Element parent, E value, NativeEvent event, ValueUpdater<E> valueUpdater) {
+    if (this.editable == false) return;
+
     if ("change".equals(event.getType()) == false) return; //$NON-NLS-1$
 
     final SelectElement select = getSelectElement(parent);
@@ -128,7 +130,15 @@ public class SelectCell<E> extends AbstractInputCell<E, E> {
     if (this.editable) {
       sb.appendHtmlConstant("<select>");
     } else {
-      sb.appendHtmlConstant("<select disabled>");
+      int index = 0;
+      for (E option : this.options) {
+        final boolean selected = this.comparator.equals(option, value);
+        if (selected) {
+          final String escapedOption = SafeHtmlUtils.htmlEscape(this.renderer.render(index++, option));
+          sb.appendEscaped(escapedOption);
+        }
+      }
+      return;
     }
 
     int index = 0;
