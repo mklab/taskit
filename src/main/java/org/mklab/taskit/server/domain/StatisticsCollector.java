@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.server.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class StatisticsCollector {
   Statistics statistics;
   Timer updateTimer;
   TimerTask computeTask;
+  boolean computed = false;
 
   /**
    * {@link StatisticsCollector}オブジェクトを構築します。
@@ -82,6 +84,7 @@ public class StatisticsCollector {
    */
   public synchronized void init() {
     this.recordMap.clear();
+    this.computed = false;
     this.statistics.setMaximumScore(computeMaximumScore());
   }
 
@@ -93,13 +96,25 @@ public class StatisticsCollector {
    */
   public synchronized Record getRecord(String userId) {
     Record record = this.recordMap.get(userId);
-    if (record == null) {
+    if (this.computed == false) {
       recompute();
     }
     if (record == null) {
       throw new IllegalArgumentException("Unknown user : " + userId); //$NON-NLS-1$
     }
     return record;
+  }
+
+  /**
+   * 全生徒の成績を取得します。
+   * 
+   * @return 全生徒の成績
+   */
+  public synchronized List<Record> getAllRecords() {
+    if (this.computed == false) {
+      recompute();
+    }
+    return new ArrayList<Record>(this.recordMap.values());
   }
 
   /**
@@ -117,12 +132,13 @@ public class StatisticsCollector {
     }
 
     updateStatistics();
+    this.computed = true;
   }
 
   private Record getOrCreateRecord(final String accountId) {
     Record record = this.recordMap.get(accountId);
     if (record == null) {
-      record = new Record();
+      record = new Record(accountId);
       this.recordMap.put(accountId, record);
     }
     return record;

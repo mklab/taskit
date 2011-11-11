@@ -10,6 +10,8 @@ package org.mklab.taskit.server.domain;
  */
 public class Record {
 
+  /** ユーザーIDです。 */
+  String accountId;
   /** 全生徒の統計情報です。 */
   Statistics statistics;
   /** 全生徒中のランキングです。 */
@@ -18,6 +20,27 @@ public class Record {
   double score;
   /** 偏差値です。 */
   double deviation;
+
+  /**
+   * {@link Record}オブジェクトを構築します。
+   */
+  public Record() {
+    // only for serialization.
+  }
+
+  Record(String accountId) {
+    if (accountId == null) throw new NullPointerException();
+    this.accountId = accountId;
+  }
+
+  /**
+   * ユーザーアカウントのIDを取得します。
+   * 
+   * @return ユーザーアカウントのID
+   */
+  public String getAccountId() {
+    return this.accountId;
+  }
 
   /**
    * 全生徒の統計情報を取得します。

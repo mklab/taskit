@@ -5,6 +5,8 @@ package org.mklab.taskit.shared;
 
 import org.mklab.taskit.server.domain.RecordService;
 
+import java.util.List;
+
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
@@ -18,5 +20,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 public interface RecordRequest extends RequestContext {
 
   Request<RecordProxy> getMyRecord();
+
+  Request<List<RecordProxy>> getAllRecords();
 
 }

@@ -15,12 +15,15 @@ import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
+import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.ReportProxy;
 import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 import org.mklab.taskit.shared.UserProxy;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
 import com.google.web.bindery.requestfactory.shared.Receiver;
@@ -93,6 +96,17 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
         return ((StudentList)place).getStudentId();
       }
 
+    });
+    getClientFactory().getLocalDatabase().getCacheAndExecute(LocalDatabase.RECORDS, new Receiver<List<RecordProxy>>() {
+
+      @Override
+      public void onSuccess(List<RecordProxy> response) {
+        Map<String, RecordProxy> userIdToRecord = new HashMap<String, RecordProxy>();
+        for (final RecordProxy record : response) {
+          userIdToRecord.put(record.getAccountId(), record);
+        }
+        ((StudentListView)getTaskitView()).setRecords(userIdToRecord);
+      }
     });
   }
 

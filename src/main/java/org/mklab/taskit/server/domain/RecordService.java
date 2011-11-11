@@ -6,9 +6,6 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -42,6 +39,16 @@ public class RecordService {
   @Invoker({UserType.STUDENT})
   public static Record getMyRecord() {
     return statisticsCollector.getRecord(ServiceUtil.getLoginUser().getAccount().getId());
+  }
+
+  /**
+   * 全生徒の現時点での成績情報を取得します。
+   * 
+   * @return 現時点での成績情報
+   */
+  @Invoker({UserType.TA, UserType.TEACHER})
+  public static List<Record> getAllRecords() {
+    return statisticsCollector.getAllRecords();
   }
 
   static Record getRecord(String id) {

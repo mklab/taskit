@@ -7,13 +7,16 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordModel.LectureScore;
+import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -55,6 +58,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
   private Presenter presenter;
   private List<UserProxy> selectableUsers;
+  private Map<String, RecordProxy> userIdToRecord;
   private static final Binder binder = GWT.create(Binder.class);
 
   interface Binder extends UiBinder<Widget, StudentListViewImpl> {
@@ -114,8 +118,10 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
           Collections.reverse(acceptableValues);
           break;
         case SCORE_ASCENDING:
+          if (sortByScore(acceptableValues, true) == false) return;
           break;
         case SCORE_DESCENDING:
+          if (sortByScore(acceptableValues, false) == false) return;
           break;
         default:
           break;
@@ -123,6 +129,47 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     }
     acceptableValues.add(0, null);
     this.userList.setAcceptableValues(acceptableValues);
+  }
+
+  /**
+   * 成績順にソートします。
+   * 
+   * @param users ユーザーリスト
+   * @param isAscending trueならば昇順、falseならば降順
+   * @return ソートできたらtrue,できなかったらfalse
+   */
+  private boolean sortByScore(List<UserProxy> users, final boolean isAscending) {
+    if (this.userIdToRecord == null) {
+      showErrorDialog("User records not loaded. Please wait a moment or reload."); //$NON-NLS-1$
+      return false;
+    }
+
+    class UserComparatorByRecord implements Comparator<UserProxy> {
+
+      Map<String, RecordProxy> map;
+      boolean ascending;
+
+      UserComparatorByRecord(Map<String, RecordProxy> map) {
+        this.map = map;
+        this.ascending = isAscending;
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public int compare(UserProxy o1, UserProxy o2) {
+        final RecordProxy r1 = this.map.get(o1.getAccount().getId());
+        final RecordProxy r2 = this.map.get(o2.getAccount().getId());
+        int toReturn = r1.getScore() > r2.getScore() ? 1 : r1.getScore() < r2.getScore() ? -1 : 0;
+        return this.ascending ? toReturn : -toReturn;
+      }
+
+    }
+
+    Collections.sort(users, new UserComparatorByRecord(this.userIdToRecord));
+
+    return true;
   }
 
   /**
@@ -247,6 +294,14 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @Override
   public UserProxy getSelectedUser() {
     return this.userList.getValue();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setRecords(Map<String, RecordProxy> records) {
+    this.userIdToRecord = records;
   }
 
 }

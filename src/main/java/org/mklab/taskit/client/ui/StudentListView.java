@@ -8,11 +8,13 @@ import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.LectureProxy;
+import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.ReportProxy;
 import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.UserProxy;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -73,6 +75,13 @@ public interface StudentListView extends TaskitView {
    * @return 選択されているユーザー
    */
   UserProxy getSelectedUser();
+
+  /**
+   * 全生徒の成績統計情報を取得します。
+   * 
+   * @param records 全生徒の成績統計
+   */
+  void setRecords(Map<String, RecordProxy> records);
 
   /**
    * プレゼンターです。

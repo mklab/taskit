@@ -16,6 +16,8 @@ import com.google.web.bindery.requestfactory.shared.ValueProxy;
 @SuppressWarnings("javadoc")
 public interface RecordProxy extends ValueProxy {
 
+  String getAccountId();
+
   StatisticsProxy getStatistics();
 
   int getRank();
