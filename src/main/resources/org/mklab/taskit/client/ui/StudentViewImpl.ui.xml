@@ -11,25 +11,33 @@
 			background:#eeeeee;
 		}
 		.verticalSpace {
-			height : 30px;
+			height : 10px;
 		}
 		.fillHorizontal {
 			width : 100%;
 		}
 	</ui:style>
 
-	<g:SplitLayoutPanel>
+	<g:DockLayoutPanel unit='EM'>
 		<g:center>
 			<mk:StudentPanel ui:field='scorePanel'></mk:StudentPanel>
 		</g:center>
-		<g:east size='200'>
+		<g:east size='16'>
 			<g:VerticalPanel styleName='{style.rightSideBar}'>
-				<g:VerticalPanel ui:field='helpCallArea'>
-					<g:Label ui:field='helpCallPosition'></g:Label>
-					<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
-					<g:Label ui:field='helpCallMessageLabel'>Message:</g:Label>
-					<g:TextBox ui:field='helpCallMessage'></g:TextBox>
-					<g:VerticalPanel styleName='{style.verticalSpace}'></g:VerticalPanel>
+				<g:VerticalPanel styleName='{style.fillHorizontal}'>
+					<!-- Help call area -->
+					<g:VerticalPanel horizontalAlignment='ALIGN_CENTER' styleName='{style.fillHorizontal}'>
+						<g:Label ui:field='helpCallPosition'></g:Label>
+						<g:ToggleButton ui:field='helpCallButton'></g:ToggleButton>
+						<g:TextBox ui:field='helpCallMessage' width='12em'></g:TextBox>
+					</g:VerticalPanel>
+					
+					<!-- Vertical space here -->
+					<g:HTML>
+						<div style='height:10px'></div>
+					</g:HTML>
+					
+					<!-- misc. -->
 					<g:CaptionPanel ui:field='userInfoCaption'>
 						<mk:UserInfoView ui:field='userInfoView'></mk:UserInfoView>
 					</g:CaptionPanel>
@@ -39,6 +47,6 @@
 				</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:east>
-	</g:SplitLayoutPanel>
+	</g:DockLayoutPanel>
 
 </ui:UiBinder> 

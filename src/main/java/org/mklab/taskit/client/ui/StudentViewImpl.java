@@ -16,12 +16,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.CaptionPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -44,11 +42,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @UiField
   Label helpCallPosition;
   @UiField
-  Label helpCallMessageLabel;
-  @UiField
   TextBox helpCallMessage;
-  @UiField
-  VerticalPanel helpCallArea;
 
   @UiField
   CaptionPanel userInfoCaption;
@@ -119,7 +113,6 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
     this.helpCallButton.getUpFace().setImage(helpImage);
     this.helpCallButton.getDownFace().setImage(waitImage);
     this.helpCallButton.setSize("133px", "133px"); //$NON-NLS-1$ //$NON-NLS-2$
-    this.helpCallArea.setCellHorizontalAlignment(this.helpCallButton, HasHorizontalAlignment.ALIGN_CENTER);
     localizeLabels(messages);
 
     return widget;
@@ -128,7 +121,6 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   private void localizeLabels(Messages messages) {
     this.statisticsCaption.setCaptionText(messages.statisticsLabel());
     this.userInfoCaption.setCaptionText(messages.userInfoLabel());
-    this.helpCallMessageLabel.setText(messages.messageLabel() + ":"); //$NON-NLS-1$
   }
 
   @UiHandler("helpCallButton")
