@@ -16,11 +16,14 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 /**
+ * 学生の成績を表示するビューです。
+ * 
+ * @see RecordProxy
  * @author Yuhi Ishikura
  */
-public class StatisticsView extends Composite {
+public class RecordView extends Composite {
 
-  static interface Binder extends UiBinder<Widget, StatisticsView> {
+  static interface Binder extends UiBinder<Widget, RecordView> {
     // noting to do
   }
 
@@ -39,14 +42,23 @@ public class StatisticsView extends Composite {
   private Messages messages;
 
   /**
-   * {@link StatisticsView}オブジェクトを構築します。
+   * {@link RecordView}オブジェクトを構築します。
    * 
    * @param messages ローカライズに利用するメッセージ
    */
-  public StatisticsView(Messages messages) {
+  public RecordView(Messages messages) {
     this.messages = messages;
     final Binder binder = GWT.create(Binder.class);
     initWidget(binder.createAndBindUi(this));
+
+    localizeMessages();
+  }
+
+  @SuppressWarnings("nls")
+  private void localizeMessages() {
+    this.rankLabel.setText(this.messages.rankLabel() + ": ");
+    this.scoreLabel.setText(this.messages.scoreLabel() + ": ");
+    this.deviationLabel.setText(this.messages.deviationLabel() + ": ");
   }
 
   /**
@@ -57,9 +69,6 @@ public class StatisticsView extends Composite {
   @SuppressWarnings("nls")
   public void setRecord(RecordProxy record) {
     final NumberFormat fmt = NumberFormat.getFormat("00.00");
-    this.rankLabel.setText(this.messages.rankLabel() + ": ");
-    this.scoreLabel.setText(this.messages.scoreLabel() + ": ");
-    this.deviationLabel.setText(this.messages.deviationLabel() + ": ");
     this.rank.setText(String.valueOf(record.getRank()) + "/" + String.valueOf(record.getStatistics().getStudentCount()));
     this.score.setText(fmt.format(record.getScore()) + "/" + fmt.format(record.getStatistics().getMaximumScore()));
     this.deviation.setText(fmt.format(record.getDeviation()));

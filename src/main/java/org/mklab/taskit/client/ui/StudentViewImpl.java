@@ -38,7 +38,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
 
   private Presenter presenter;
   @UiField(provided = true)
-  StudentwiseRecordPanel scorePanel;
+  StudentPanel scorePanel;
   @UiField
   ToggleButton helpCallButton;
   @UiField
@@ -57,7 +57,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @UiField(provided = true)
   UserInfoView userInfoView;
   @UiField(provided = true)
-  StatisticsView statisticsView;
+  RecordView statisticsView;
 
   private boolean editable;
 
@@ -109,8 +109,8 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   @Override
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
-    this.statisticsView = new StatisticsView(messages);
-    this.scorePanel = new StudentwiseRecordPanel(messages, this.editable);
+    this.statisticsView = new RecordView(messages);
+    this.scorePanel = new StudentPanel(messages, this.editable);
     this.userInfoView = new UserInfoView(messages);
 
     final Widget widget = binder.createAndBindUi(this);

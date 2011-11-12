@@ -71,6 +71,11 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     super.onViewShown();
     final StudentListView list = (StudentListView)getTaskitView();
 
+    final List<RecordProxy> recordsCache = getClientFactory().getLocalDatabase().getCache(LocalDatabase.RECORDS);
+    if (recordsCache != null) {
+      setRecordsToView(recordsCache);
+    }
+
     getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.STUDENT_LIST, new Receiver<List<UserProxy>>() {
 
       @SuppressWarnings("synthetic-access")
@@ -101,13 +106,18 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
 
       @Override
       public void onSuccess(List<RecordProxy> response) {
-        Map<String, RecordProxy> userIdToRecord = new HashMap<String, RecordProxy>();
-        for (final RecordProxy record : response) {
-          userIdToRecord.put(record.getAccountId(), record);
-        }
-        ((StudentListView)getTaskitView()).setRecords(userIdToRecord);
+        setRecordsToView(response);
       }
+
     });
+  }
+
+  void setRecordsToView(List<RecordProxy> recordList) {
+    Map<String, RecordProxy> userIdToRecord = new HashMap<String, RecordProxy>();
+    for (final RecordProxy record : recordList) {
+      userIdToRecord.put(record.getAccountId(), record);
+    }
+    ((StudentListView)getTaskitView()).setRecords(userIdToRecord);
   }
 
   /**

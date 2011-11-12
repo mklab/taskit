@@ -4,7 +4,7 @@
 package org.mklab.taskit.server.domain;
 
 /**
- * 成績を表すクラスです。
+ * 個人の順位や得点、統計情報を含む成績を表すクラスです。
  * 
  * @author Yuhi Ishikura
  */

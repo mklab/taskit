@@ -59,7 +59,7 @@
 		</g:north>
 		<!-- Profile and Scores -->
 		<g:center>
-			<mk:StudentwiseRecordPanel ui:field='panel'></mk:StudentwiseRecordPanel>
+			<mk:StudentPanel ui:field='panel'></mk:StudentPanel>
 		</g:center>
 	</g:DockLayoutPanel>
 

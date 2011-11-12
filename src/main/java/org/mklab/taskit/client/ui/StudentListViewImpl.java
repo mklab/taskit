@@ -44,7 +44,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiField(provided = true)
   ValueListBox<SortType> sortTypeList;
   @UiField(provided = true)
-  StudentwiseRecordPanel panel;
+  StudentPanel panel;
   @UiField(provided = true)
   UserInfoView userInfoView;
   @UiField
@@ -63,13 +63,14 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   private List<UserProxy> selectableUsers;
   private Map<String, RecordProxy> userIdToRecord;
   private static final Binder binder = GWT.create(Binder.class);
+  private static SortType lastSortType = SortType.ID_ASCENDING;
 
   interface Binder extends UiBinder<Widget, StudentListViewImpl> {
     // empty
   }
 
   static enum SortType {
-    SCORE_ASCENDING, SCORE_DESCENDING, ID_ASCENDING, ID_DESCENDING
+    ID_ASCENDING, ID_DESCENDING, SCORE_ASCENDING, SCORE_DESCENDING
   }
 
   /**
@@ -113,25 +114,25 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       return;
     }
 
-    final List<UserProxy> acceptableValues = new ArrayList<UserProxy>(this.selectableUsers);
+    final List<UserProxy> sortedListData = new ArrayList<UserProxy>(this.selectableUsers);
     final SortType sortType = this.sortTypeList.getValue();
     if (sortType != null && sortType != SortType.ID_ASCENDING) {
       switch (sortType) {
         case ID_DESCENDING:
-          Collections.reverse(acceptableValues);
+          Collections.reverse(sortedListData);
           break;
         case SCORE_ASCENDING:
-          if (sortByScore(acceptableValues, true) == false) return;
+          if (sortByScore(sortedListData, true) == false) return;
           break;
         case SCORE_DESCENDING:
-          if (sortByScore(acceptableValues, false) == false) return;
+          if (sortByScore(sortedListData, false) == false) return;
           break;
         default:
           break;
       }
     }
-    acceptableValues.add(0, null);
-    this.userList.setAcceptableValues(acceptableValues);
+    sortedListData.add(0, null);
+    this.userList.setAcceptableValues(sortedListData);
   }
 
   /**
@@ -197,7 +198,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @Override
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
-    this.panel = new StudentwiseRecordPanel(messages, true);
+    this.panel = new StudentPanel(messages, true);
     this.userInfoView = new UserInfoView(messages);
     this.scoreButton = createToolButton("taskit/score32.png"); //$NON-NLS-1$
     this.uncallButton = createToolButton("taskit/uncall32.png"); //$NON-NLS-1$
@@ -246,13 +247,14 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       }
     });
     this.sortTypeList.setAcceptableValues(Arrays.asList(SortType.values()));
-    this.sortTypeList.setValue(SortType.ID_ASCENDING);
+    this.sortTypeList.setValue(lastSortType);
 
     this.sortTypeList.addValueChangeHandler(new ValueChangeHandler<SortType>() {
 
-      @SuppressWarnings("synthetic-access")
+      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
       @Override
       public void onValueChange(@SuppressWarnings("unused") ValueChangeEvent<SortType> event) {
+        lastSortType = sortTypeList.getValue();
         resetListData();
       }
     });
@@ -316,7 +318,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     if (record == null) return;
 
     final PopupPanel popup = new PopupPanel(true);
-    final StatisticsView statisticsView = new StatisticsView(getClientFactory().getMessages());
+    final RecordView statisticsView = new RecordView(getClientFactory().getMessages());
     statisticsView.setRecord(record);
     popup.add(statisticsView);
     popup.setPopupPosition(evt.getClientX(), evt.getClientY());

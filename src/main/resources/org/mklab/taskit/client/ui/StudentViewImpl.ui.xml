@@ -20,7 +20,7 @@
 
 	<g:SplitLayoutPanel>
 		<g:center>
-			<mk:StudentwiseRecordPanel ui:field='scorePanel'></mk:StudentwiseRecordPanel>
+			<mk:StudentPanel ui:field='scorePanel'></mk:StudentPanel>
 		</g:center>
 		<g:east size='200'>
 			<g:VerticalPanel styleName='{style.rightSideBar}'>
@@ -34,7 +34,7 @@
 						<mk:UserInfoView ui:field='userInfoView'></mk:UserInfoView>
 					</g:CaptionPanel>
 					<g:CaptionPanel ui:field='statisticsCaption'>
-						<mk:StatisticsView ui:field='statisticsView'></mk:StatisticsView>
+						<mk:RecordView ui:field='statisticsView'></mk:RecordView>
 					</g:CaptionPanel>
 				</g:VerticalPanel>
 			</g:VerticalPanel>

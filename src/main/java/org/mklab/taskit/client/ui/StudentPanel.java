@@ -37,9 +37,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 /**
- * @author ishikura
+ * 単一学生の情報を表示するビューです。
+ * <p>
+ * 全講義の課題提出状況、出席状況を表示します。
+ * 
+ * @author Yuhi Ishikura
  */
-public class StudentwiseRecordPanel extends Composite {
+public class StudentPanel extends Composite {
 
   private DataGrid<LectureScore> table;
   private StudentwiseRecordModel model;
@@ -49,12 +53,12 @@ public class StudentwiseRecordPanel extends Composite {
   Messages messages;
 
   /**
-   * {@link StudentwiseRecordPanel}オブジェクトを構築します。
+   * {@link StudentPanel}オブジェクトを構築します。
    * 
    * @param messages メッセージ
    * @param editable 編集可能かどうか
    */
-  public StudentwiseRecordPanel(Messages messages, boolean editable) {
+  public StudentPanel(Messages messages, boolean editable) {
     if (messages == null) throw new NullPointerException();
 
     this.table = new DataGrid<StudentwiseRecordModel.LectureScore>();
@@ -238,7 +242,7 @@ public class StudentwiseRecordPanel extends Composite {
 
       @Override
       public String render(@SuppressWarnings("unused") int index, AttendanceType value) {
-        return AttendanceListViewImpl.getLabelOfAttendanceType(StudentwiseRecordPanel.this.messages, value);
+        return AttendanceListViewImpl.getLabelOfAttendanceType(StudentPanel.this.messages, value);
       }
     });
     selectionCell.setEditable(this.editable);
@@ -283,7 +287,7 @@ public class StudentwiseRecordPanel extends Composite {
       @Override
       public Cell<String> getCell() {
         final SubmissionCell submissionCell = new SubmissionCell(this.options);
-        submissionCell.setEditable(StudentwiseRecordPanel.this.editable);
+        submissionCell.setEditable(StudentPanel.this.editable);
         return submissionCell;
       }
 
