@@ -129,7 +129,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
           @Override
           public void apply(Event anEvent) {
             if (anEvent instanceof HelpCallEvent) {
-              helpCallCountChanged(((HelpCallEvent)anEvent).getHelpCallCount());
+              helpCallWatcher.updateHelpCallCount();
             }
           }
         });
