@@ -110,10 +110,12 @@ public class HelpCallWatcher {
 
   void fireHelpCallCountChanged(int count) {
     if (this.helpCallObserver != null && this.lastHelpCallCount != count) {
+      final int myLastHelpCallCount = this.lastHelpCallCount;
+      this.lastHelpCallCount = count;
       this.helpCallObserver.helpCallCountChanged(count);
 
       // TAへの通知。オブザーバーに記述したいけれどもアクティビティの切り替えの度に音がなることになってしまう
-      if (this.lastHelpCallCount == 0 && count > 0) {
+      if (myLastHelpCallCount == 0 && count > 0) {
         playCallSound();
       }
     }
