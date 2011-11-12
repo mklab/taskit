@@ -4,21 +4,22 @@
 
 	<ui:style>
 		.base {
-		-moz-border-radius: 6px;
-		-webkit-border-radius: 6px;
-		border-radius: 6px;
-		background: literal("-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6C85A4), color-stop(50%, #556C89),color-stop(51%, #4B5F79), color-stop(100%, #415369))");
-		border: solid 1px
-		black;
+			-moz-border-radius: 6px;
+			-webkit-border-radius: 6px;
+			border-radius: 6px;
+			background:#6C85A4;
+			background: literal("-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #6C85A4), color-stop(50%, #556C89),color-stop(51%, #4B5F79), color-stop(100%, #415369))");
+			border: solid 1px
+			black;
 		}
 
 		.toolbar{
-		padding-left:10px;
-		height:32px;
+			padding-left:10px;
+			height:32px;
 		}
 
 		.label{
-		color:white;
+			color:white;
 		}
 	</ui:style>
 

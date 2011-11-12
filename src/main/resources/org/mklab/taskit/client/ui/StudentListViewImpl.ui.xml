@@ -27,7 +27,7 @@
 	</ui:style>
 
 	<g:DockLayoutPanel unit='EM'>
-		<g:north size='7'>
+		<g:north size='8.5'>
 			<g:VerticalPanel styleName='{style.fillHorizontal}'>
 				<g:HorizontalPanel styleName='{style.userListArea}'>
 					<g:HorizontalPanel>
@@ -40,17 +40,18 @@
 						<g:cell verticalAlignment="ALIGN_MIDDLE">
 							<g:ValueListBox ui:field='sortTypeList'></g:ValueListBox>
 						</g:cell>
-						<g:Label styleName='{style.horizontalSpace}'></g:Label>
-						<g:cell verticalAlignment="ALIGN_MIDDLE">
-							<g:Image ui:field='scoreButton'></g:Image>
-						</g:cell>
-						<g:cell verticalAlignment="ALIGN_MIDDLE">
-							<g:Image ui:field='reloadButton'></g:Image>
-						</g:cell>
-						<g:cell verticalAlignment="ALIGN_MIDDLE">
-							<g:Image ui:field='uncallButton'></g:Image>
-						</g:cell>
 					</g:HorizontalPanel>
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:Image ui:field='scoreButton'></g:Image>
+					</g:cell>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:Image ui:field='reloadButton'></g:Image>
+					</g:cell>
+					<g:cell verticalAlignment="ALIGN_MIDDLE">
+						<g:Image ui:field='uncallButton'></g:Image>
+					</g:cell>
 				</g:HorizontalPanel>
 				<g:CaptionPanel ui:field='userInfoPanel' styleName='{style.userInfoArea}'>
 					<mk:UserInfoView ui:field='userInfoView'></mk:UserInfoView>

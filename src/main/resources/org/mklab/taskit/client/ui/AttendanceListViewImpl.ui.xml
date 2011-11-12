@@ -9,7 +9,7 @@
 	</ui:style>
 
 	<g:DockLayoutPanel unit='EM'>
-		<g:north size='1.5'>
+		<g:north size='2'>
 			<g:FlowPanel>
 				<g:ValueListBox ui:field='lectureList'></g:ValueListBox>
 			</g:FlowPanel>

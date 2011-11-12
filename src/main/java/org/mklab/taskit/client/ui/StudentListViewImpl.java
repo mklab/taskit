@@ -247,7 +247,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       }
     });
     this.sortTypeList.setAcceptableValues(Arrays.asList(SortType.values()));
-    this.sortTypeList.setValue(lastSortType);
+    this.sortTypeList.setValue(lastSortType, false);
 
     this.sortTypeList.addValueChangeHandler(new ValueChangeHandler<SortType>() {
 
