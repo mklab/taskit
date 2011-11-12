@@ -14,6 +14,7 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
 
 /**
+ * @see Lecture
  * @author yuhi
  */
 @ProxyFor(value = Lecture.class, locator = LectureLocator.class)

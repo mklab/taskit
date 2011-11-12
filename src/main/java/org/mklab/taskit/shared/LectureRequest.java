@@ -14,6 +14,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 
 /**
+ * @see Lecture
  * @author ishikura
  */
 @Service(value = Lecture.class)

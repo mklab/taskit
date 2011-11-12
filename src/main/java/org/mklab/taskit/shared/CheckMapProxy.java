@@ -12,6 +12,10 @@ import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
 
+/**
+ * @see CheckMap
+ * @author Yuhi Ishikura
+ */
 @SuppressWarnings("javadoc")
 @ProxyFor(value = CheckMap.class, locator = CheckMapLocator.class)
 public interface CheckMapProxy extends EntityProxy {

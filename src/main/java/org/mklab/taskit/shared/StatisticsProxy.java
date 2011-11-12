@@ -10,6 +10,7 @@ import com.google.web.bindery.requestfactory.shared.ValueProxy;
 
 
 /**
+ * @see Statistics
  * @author Yuhi Ishikura
  */
 @ProxyFor(Statistics.class)

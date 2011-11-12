@@ -14,6 +14,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 
 /**
+ * @see Report
  * @author ishikura
  */
 @Service(Report.class)

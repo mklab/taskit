@@ -13,6 +13,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 
 /**
+ * @see user
  * @author ishikura
  */
 @Service(User.class)

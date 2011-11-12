@@ -11,7 +11,10 @@ import java.util.Date;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
-
+/**
+ * @see HelpCall
+ * @author Yuhi Ishikura
+ */
 @SuppressWarnings("javadoc")
 @ProxyFor(value = HelpCall.class, locator = HelpCallLocator.class)
 public interface HelpCallProxy extends EntityProxy {

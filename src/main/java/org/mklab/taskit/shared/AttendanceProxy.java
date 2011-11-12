@@ -8,7 +8,10 @@ import java.util.Date;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
-
+/**
+ * @see Attendance
+ * @author Yuhi Ishikura
+ */
 @ProxyFor(value = Attendance.class, locator = AttendanceLocator.class)
 @SuppressWarnings("javadoc")
 public interface AttendanceProxy extends EntityProxy {

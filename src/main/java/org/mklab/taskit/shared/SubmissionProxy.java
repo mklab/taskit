@@ -8,7 +8,10 @@ import java.util.Date;
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
-
+/**
+ * @see Submission
+ * @author Yuhi Ishikura
+ */
 @ProxyFor(value = Submission.class, locator = SubmissionLocator.class)
 @SuppressWarnings("javadoc")
 public interface SubmissionProxy extends EntityProxy {

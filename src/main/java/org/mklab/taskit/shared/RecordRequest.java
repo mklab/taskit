@@ -13,6 +13,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 
 /**
+ * @see RecordService
  * @author Yuhi Ishikura
  */
 @Service(value = RecordService.class)

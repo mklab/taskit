@@ -13,6 +13,7 @@ import com.google.web.bindery.requestfactory.shared.ProxyFor;
 
 
 /**
+ * @see Report
  * @author ishikura
  */
 @ProxyFor(value = Report.class, locator = ReportLocator.class)

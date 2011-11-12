@@ -11,7 +11,10 @@ import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
 
-
+/**
+ * @see HelpCall
+ * @author Yuhi Ishikura
+ */
 @SuppressWarnings("javadoc")
 @Service(HelpCall.class)
 public interface HelpCallRequest extends RequestContext {

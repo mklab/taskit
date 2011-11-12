@@ -13,6 +13,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 
 /**
+ * @see CheckMap
  * @author Yuhi Ishikura
  */
 @Service(CheckMap.class)

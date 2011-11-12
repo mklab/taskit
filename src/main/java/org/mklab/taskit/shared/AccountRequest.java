@@ -8,6 +8,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 
 
 /**
+ * @see Account
  * @author ishikura
  * @version $Revision$, 2011/09/18
  */

@@ -9,7 +9,10 @@ import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
 import com.google.web.bindery.requestfactory.shared.Service;
 
-
+/**
+ * @see Attendance
+ * @author Yuhi Ishikura
+ */
 @Service(Attendance.class)
 @SuppressWarnings("javadoc")
 public interface AttendanceRequest extends RequestContext {
