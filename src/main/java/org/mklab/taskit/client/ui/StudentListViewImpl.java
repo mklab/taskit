@@ -26,9 +26,10 @@ import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CaptionPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -46,15 +47,17 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   StudentwiseRecordPanel panel;
   @UiField(provided = true)
   UserInfoView userInfoView;
+  @UiField
+  CaptionPanel userInfoPanel;
 
   @UiField
-  CaptionPanel userInfoCaption;
-  @UiField
   Label userListLabel;
-  @UiField
-  Button uncallButton;
-  @UiField
-  Button reloadButton;
+  @UiField(provided = true)
+  Image uncallButton;
+  @UiField(provided = true)
+  Image reloadButton;
+  @UiField(provided = true)
+  Image scoreButton;
 
   private Presenter presenter;
   private List<UserProxy> selectableUsers;
@@ -196,6 +199,9 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     final Messages messages = getClientFactory().getMessages();
     this.panel = new StudentwiseRecordPanel(messages, true);
     this.userInfoView = new UserInfoView(messages);
+    this.scoreButton = createToolButton("taskit/score32.png"); //$NON-NLS-1$
+    this.uncallButton = createToolButton("taskit/uncall32.png"); //$NON-NLS-1$
+    this.reloadButton = createToolButton("taskit/reload32.png"); //$NON-NLS-1$
 
     initUserList(messages);
     initSortTypeList();
@@ -204,6 +210,13 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     localizeMessages(messages);
 
     return widget;
+  }
+
+  @SuppressWarnings("nls")
+  private static Image createToolButton(String imageUrl) {
+    Image image = new Image(imageUrl);
+    image.setSize("2em", "2em");
+    return image;
   }
 
   private void initSortTypeList() {
@@ -274,11 +287,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   }
 
   private void localizeMessages(final Messages messages) {
-    this.userInfoView.setUser(getSelectedUser());
     this.userListLabel.setText(messages.userListLabel() + ": "); //$NON-NLS-1$
-    this.userInfoCaption.setCaptionText(messages.userInfoLabel());
-    this.uncallButton.setText(messages.uncallLabel());
-    this.reloadButton.setText(messages.reloadLabel());
+    this.userInfoPanel.setCaptionText(messages.userInfoLabel());
   }
 
   /**
@@ -298,6 +308,25 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiHandler("reloadButton")
   void reloadUserPage(@SuppressWarnings("unused") ClickEvent evt) {
     this.presenter.reloadUserPage();
+  }
+
+  @UiHandler("scoreButton")
+  void showScore(ClickEvent evt) {
+    final RecordProxy record = getCurrentUserRecord();
+    if (record == null) return;
+
+    final PopupPanel popup = new PopupPanel(true);
+    final StatisticsView statisticsView = new StatisticsView(getClientFactory().getMessages());
+    statisticsView.setRecord(record);
+    popup.add(statisticsView);
+    popup.setPopupPosition(evt.getClientX(), evt.getClientY());
+    popup.show();
+  }
+
+  private RecordProxy getCurrentUserRecord() {
+    final UserProxy selectedUser = getSelectedUser();
+    if (selectedUser == null) return null;
+    return this.userIdToRecord.get(selectedUser.getAccount().getId());
   }
 
   /**
