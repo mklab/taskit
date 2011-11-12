@@ -66,7 +66,7 @@ public class PageLayoutImpl implements PageLayout {
     this.header.setUserId(name);
     this.header.setUserType(user.getType().name());
 
-    final DockLayoutPanel pn = new DockLayoutPanel(Unit.PX);
+    final DockLayoutPanel pn = new DockLayoutPanel(Unit.PT);
     pn.addNorth(this.header, this.header.getHeight());
     pn.add(taskitView);
 

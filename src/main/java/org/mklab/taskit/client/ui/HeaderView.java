@@ -42,7 +42,7 @@ public interface HeaderView extends IsWidget {
   void addSeparator();
 
   /**
-   * 高さをpxで取得します。
+   * 高さをptで取得します。
    * 
    * @return 高さ
    */

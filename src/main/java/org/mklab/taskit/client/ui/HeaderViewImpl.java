@@ -62,7 +62,7 @@ public class HeaderViewImpl extends Composite implements HeaderView {
       @Override
       public void setIcon(String icon) {
         final Image image = new Image(icon);
-        image.setSize("32px", "32px"); //$NON-NLS-1$ //$NON-NLS-2$
+        image.setSize("24pt", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
         button.getUpFace().setImage(image);
       }
 
@@ -94,7 +94,7 @@ public class HeaderViewImpl extends Composite implements HeaderView {
    */
   @Override
   public int getHeight() {
-    return 40;
+    return 32;
   }
 
   /**

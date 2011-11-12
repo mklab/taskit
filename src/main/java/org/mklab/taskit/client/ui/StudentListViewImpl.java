@@ -216,7 +216,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @SuppressWarnings("nls")
   private static Image createToolButton(String imageUrl) {
     Image image = new Image(imageUrl);
-    image.setSize("2em", "2em");
+    image.setSize("24pt", "24pt");
     return image;
   }
 

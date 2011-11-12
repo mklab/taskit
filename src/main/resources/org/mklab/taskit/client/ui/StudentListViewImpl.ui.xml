@@ -27,7 +27,7 @@
 	</ui:style>
 
 	<g:DockLayoutPanel unit='EM'>
-		<g:north size='8.5'>
+		<g:north size='10'>
 			<g:VerticalPanel styleName='{style.fillHorizontal}'>
 				<g:HorizontalPanel styleName='{style.userListArea}'>
 					<g:HorizontalPanel>
