@@ -12,7 +12,6 @@ import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.event.MyHelpCallEvent;
 import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
-import com.google.gwt.user.client.Timer;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -30,8 +29,6 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
  */
 public class StudentActivity extends TaskitActivity implements StudentView.Presenter {
 
-  private Timer helpCallPositionUpdater;
-
   /**
    * {@link StudentActivity}オブジェクトを構築します。
    * 
@@ -39,13 +36,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
    */
   public StudentActivity(ClientFactory clientFactory) {
     super(clientFactory);
-    this.helpCallPositionUpdater = new Timer() {
-
-      @Override
-      public void run() {
-        updateHelpCallPositionAsync();
-      }
-    };
 
     final RemoteEventService remoteEventService = clientFactory.getRemoteEventService();
     remoteEventService.addListener(MyRecordChangeEvent.DOMAIN, new RemoteEventListener() {
@@ -136,7 +126,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   @Override
   public void onStop() {
     super.onStop();
-    this.helpCallPositionUpdater.cancel();
     getClientFactory().getRemoteEventService().removeListeners(MyRecordChangeEvent.DOMAIN);
   }
 
@@ -151,9 +140,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
     ((StudentView)getTaskitView()).setCalling(calling);
     if (calling) {
       updateHelpCallPositionAsync();
-      this.helpCallPositionUpdater.scheduleRepeating(5 * 1000);
-    } else {
-      this.helpCallPositionUpdater.cancel();
     }
   }
 
