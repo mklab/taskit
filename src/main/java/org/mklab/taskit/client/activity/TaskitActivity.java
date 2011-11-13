@@ -174,7 +174,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   }
 
   /**
-   * @{inheritDoc
+   * {@inheritDoc}
    */
   @Override
   public final void logout() {
