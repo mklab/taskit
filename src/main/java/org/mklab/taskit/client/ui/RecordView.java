@@ -39,6 +39,15 @@ public class RecordView extends Composite {
   Label deviationLabel;
   @UiField
   Label deviation;
+  @UiField
+  Label averageLabel;
+  @UiField
+  Label average;
+  @UiField
+  Label standardDeviationLabel;
+  @UiField
+  Label standardDeviation;
+
   private Messages messages;
 
   /**
@@ -59,6 +68,8 @@ public class RecordView extends Composite {
     this.rankLabel.setText(this.messages.rankLabel() + ": ");
     this.scoreLabel.setText(this.messages.scoreLabel() + ": ");
     this.deviationLabel.setText(this.messages.deviationLabel() + ": ");
+    this.averageLabel.setText(this.messages.averageLabel() + ": ");
+    this.standardDeviationLabel.setText(this.messages.standardDeviation() + ": ");
   }
 
   /**
@@ -68,10 +79,14 @@ public class RecordView extends Composite {
    */
   @SuppressWarnings("nls")
   public void setRecord(RecordProxy record) {
+    final double percentOfAverage = record.getStatistics().getAverage() / record.getStatistics().getMaximumScore() * 100;
+
     final NumberFormat fmt = NumberFormat.getFormat("00.00");
     this.rank.setText(String.valueOf(record.getRank()) + "/" + String.valueOf(record.getStatistics().getStudentCount()));
     this.score.setText(fmt.format(record.getScore()) + "/" + fmt.format(record.getStatistics().getMaximumScore()));
     this.deviation.setText(fmt.format(record.getDeviation()));
+    this.average.setText(fmt.format(record.getStatistics().getAverage()) + "(" + fmt.format(percentOfAverage) + ")");
+    this.standardDeviation.setText(fmt.format(record.getStatistics().getStandardDeviation()));
   }
 
 }

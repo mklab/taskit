@@ -16,5 +16,16 @@
 			<g:Label ui:field='deviationLabel'>Deviation:</g:Label>
 			<g:Label ui:field='deviation'></g:Label>
 		</g:HorizontalPanel>
+		<g:HTML>
+			<hr />
+		</g:HTML>
+		<g:HorizontalPanel>
+			<g:Label ui:field='averageLabel'>Average:</g:Label>
+			<g:Label ui:field='average'></g:Label>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel>
+			<g:Label ui:field='standardDeviationLabel'>Standard Deviation:</g:Label>
+			<g:Label ui:field='standardDeviation'></g:Label>
+		</g:HorizontalPanel>
 	</g:VerticalPanel>
 </ui:UiBinder> 
