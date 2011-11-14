@@ -5,6 +5,7 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.Domains;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 import org.mklab.taskit.shared.event.MyHelpCallEvent;
 
@@ -233,7 +234,9 @@ public class HelpCall extends AbstractEntity<Integer> {
 
   private static void fireHelpCallStateChanged(User user, HelpCallEvent.Type type, Date date, String message) {
     // TA、Teacherに通知
-    ServiceUtil.fireEvent(HelpCallEvent.DOMAIN, new HelpCallEvent(date, user.getAccount().getId(), message, type, getHelpCallCount()));
+    final HelpCallEvent eventForTaAndTeacher = new HelpCallEvent(date, user.getAccount().getId(), message, type, getHelpCallCount());
+    ServiceUtil.fireEvent(Domains.TEACHER, eventForTaAndTeacher);
+    ServiceUtil.fireEvent(Domains.TA, eventForTaAndTeacher);
 
     // 呼び出している学生本人に通知
     final MyHelpCallEvent event = new MyHelpCallEvent();

@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
@@ -14,10 +15,6 @@ import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
-
-import de.novanic.eventservice.client.event.Event;
-import de.novanic.eventservice.client.event.RemoteEventService;
-import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 
 /**
@@ -36,26 +33,37 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
    */
   public StudentActivity(ClientFactory clientFactory) {
     super(clientFactory);
+  }
 
-    final RemoteEventService remoteEventService = clientFactory.getRemoteEventService();
-    remoteEventService.addListener(MyRecordChangeEvent.DOMAIN, new RemoteEventListener() {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("synthetic-access")
+  protected StudentRemoteEventListenerDecorator createRemoteEventListenerForStudent() {
+    StudentRemoteEventListenerDecorator l = super.createRemoteEventListenerForStudent();
+    l.setListener(new StudentRemoteEventListenerDecorator() {
 
-      @SuppressWarnings("synthetic-access")
+      /**
+       * {@inheritDoc}
+       */
       @Override
-      public void apply(Event anEvent) {
-        if (anEvent instanceof MyRecordChangeEvent == false) return;
+      public void myHelpCallChanged(MyHelpCallEvent evt) {
+        super.myHelpCallChanged(evt);
+        updateHelpCallStateAsync();
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+
+      @Override
+      public void myRecordChanged(MyRecordChangeEvent evt) {
+        super.myRecordChanged(evt);
         updateRecordAsync();
       }
     });
-    remoteEventService.addListener(MyHelpCallEvent.DOMAIN, new RemoteEventListener() {
-
-      @SuppressWarnings("synthetic-access")
-      @Override
-      public void apply(Event anEvent) {
-        if (anEvent instanceof MyHelpCallEvent == false) return;
-        updateHelpCallStateAsync();
-      }
-    });
+    return l;
   }
 
   /**
@@ -126,7 +134,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   @Override
   public void onStop() {
     super.onStop();
-    getClientFactory().getRemoteEventService().removeListeners(MyRecordChangeEvent.DOMAIN);
   }
 
   /**

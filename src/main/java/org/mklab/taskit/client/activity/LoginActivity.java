@@ -90,10 +90,11 @@ public final class LoginActivity extends AbstractActivity {
   void tryAutoLoginAsync() {
     this.clientFactory.getRequestFactory().userRequest().getLoginUser().fire(new Receiver<UserProxy>() {
 
+      @SuppressWarnings("synthetic-access")
       @Override
       public void onSuccess(UserProxy response) {
         if (response == null) return;
-        goToTopPage(response);
+        startApplication(response);
       }
 
     });
@@ -113,13 +114,13 @@ public final class LoginActivity extends AbstractActivity {
 
       @SuppressWarnings("synthetic-access")
       @Override
-      public void onSuccess(UserProxy response) {
+      public void onSuccess(UserProxy loginUser) {
         view.setStatusText(LoginActivity.this.clientFactory.getMessages().loginSuccessMessage());
 
         final boolean autoLoginEnabled = view.isAutoLoginEnabled();
         storeAutoLoginState(autoLoginEnabled);
 
-        goToTopPage(response);
+        startApplication(loginUser);
       }
 
       private void storeAutoLoginState(final boolean autoLoginEnabled) {
@@ -136,6 +137,16 @@ public final class LoginActivity extends AbstractActivity {
         view.setStatusText("Login failure. " + error.getMessage()); //$NON-NLS-1$
       }
     });
+  }
+
+  /**
+   * ログインが完了した後のアプリケーションの開始を行います。
+   * 
+   * @param user ログインユーザー
+   */
+  private void startApplication(UserProxy user) {
+    this.clientFactory.getSystem().start(user);
+    goToTopPage(user);
   }
 
   /**

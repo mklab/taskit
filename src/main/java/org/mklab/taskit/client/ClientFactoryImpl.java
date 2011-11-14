@@ -30,9 +30,6 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 
-import de.novanic.eventservice.client.event.RemoteEventService;
-import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
-
 
 /**
  * 画面の大きさによる制約のないデスクトップ向けのビューを提供する{@link ClientFactory}の実装クラスです。
@@ -48,8 +45,8 @@ public class ClientFactoryImpl implements ClientFactory {
   private TaskitRequestFactory requestFactory;
   private HelpCallWatcher helpCallWatcher;
   private LocalDatabase localDatabase;
-  private RemoteEventService remoteEventService;
   private PageLayout pageLayout;
+  private TaskitSystem system;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -71,8 +68,10 @@ public class ClientFactoryImpl implements ClientFactory {
     this.requestFactory = GWT.create(TaskitRequestFactory.class);
     this.requestFactory.initialize(this.eventBus);
 
-    if (this.remoteEventService != null) this.remoteEventService.removeListeners();
-    this.remoteEventService = null;
+    if (this.system != null && this.system.isRunning()) {
+      this.system.stop();
+      this.system = null;
+    }
     this.helpCallWatcher = null;
     if (this.localDatabase != null) this.localDatabase.clearAllCache();
     this.localDatabase = null;
@@ -129,11 +128,12 @@ public class ClientFactoryImpl implements ClientFactory {
    * {@inheritDoc}
    */
   @Override
-  public RemoteEventService getRemoteEventService() {
-    if (this.remoteEventService == null) {
-      this.remoteEventService = RemoteEventServiceFactory.getInstance().getRemoteEventService();
+  public TaskitSystem getSystem() {
+    if (this.system == null) {
+      this.system = new TaskitSystem();
     }
-    return this.remoteEventService;
+
+    return this.system;
   }
 
   /**

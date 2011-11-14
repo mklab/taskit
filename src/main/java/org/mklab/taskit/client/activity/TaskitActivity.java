@@ -4,14 +4,16 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.HelpCallWatcher;
 import org.mklab.taskit.client.LocalDatabase;
+import org.mklab.taskit.client.event.RemoteEventListenerDecorator;
+import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
+import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
+import org.mklab.taskit.client.event.TeacherRemoteEventListenerDecorator;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -22,10 +24,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
-
-import de.novanic.eventservice.client.event.Event;
-import de.novanic.eventservice.client.event.RemoteEventService;
-import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 
 /**
@@ -116,34 +114,29 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
 
-    final HelpCallWatcher helpCallWatcher = this.clientFactory.getHelpCallWatcher();
-    if (user.getType() == UserType.STUDENT) {
-      if (this.view instanceof HelpCallDisplayable) {
-        ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(false);
-      }
-    } else {
-      final RemoteEventService eventService = getClientFactory().getRemoteEventService();
-      if (eventService.getActiveDomains().contains(HelpCallEvent.DOMAIN) == false) {
-        eventService.addListener(HelpCallEvent.DOMAIN, new RemoteEventListener() {
+    observeRemoteEvent(user);
+    onViewShown();
+  }
 
-          @Override
-          public void apply(Event anEvent) {
-            if (anEvent instanceof HelpCallEvent) {
-              helpCallWatcher.updateHelpCallCount();
-            }
-          }
-        });
-        helpCallWatcher.updateHelpCallCount();
-      }
-      helpCallWatcher.setHelpCallObserver(this);
-
-      if (this.view instanceof HelpCallDisplayable) {
-        ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
-        ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallWatcher.getHelpCallCount());
-      }
+  @SuppressWarnings({"rawtypes", "unchecked"})
+  private void observeRemoteEvent(UserProxy user) {
+    final RemoteEventListenerDecorator<?> listener;
+    switch (user.getType()) {
+      case STUDENT:
+        listener = createRemoteEventListenerForStudent();
+        break;
+      case TA:
+        listener = createRemoteEventListenerForTa();
+        break;
+      case TEACHER:
+        listener = createRemoteEventListenerForTeacher();
+        break;
+      default:
+        throw new UnsupportedOperationException();
     }
 
-    onViewShown();
+    final RemoteEventListenerDecorator globalListener = getClientFactory().getSystem().getGlobalListener();
+    globalListener.setListener(listener);
   }
 
   /**
@@ -178,6 +171,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   @Override
   public final void logout() {
+    getClientFactory().getSystem().stop();
     /*
      * ログアウトを先にしてしまうと、Activity#onStop()での処理がログアウト後になってしまい行えないため。
      * アクティビティの移動後ログアウトを行う。
@@ -202,6 +196,59 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   protected final ClientFactory getClientFactory() {
     return this.clientFactory;
+  }
+
+  /**
+   * 先生用のリモートイベントリスナを生成します。
+   * 
+   * @return 先生用のリモートイベントリスナ
+   */
+  protected TeacherRemoteEventListenerDecorator createRemoteEventListenerForTeacher() {
+    final TaRemoteEventListenerDecorator l = createRemoteEventListenerForTa();
+    return new TeacherRemoteEventListenerDecorator() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void helpCallChanged(HelpCallEvent evt) {
+        super.helpCallChanged(evt);
+        l.helpCallChanged(evt);
+      }
+    };
+  }
+
+  /**
+   * TA用のリモートイベントリスナを生成します。
+   * 
+   * @return TA用のリモートイベントリスナ
+   */
+  protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
+    return new TaRemoteEventListenerDecorator() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
+      @Override
+      public void helpCallChanged(HelpCallEvent evt) {
+        super.helpCallChanged(evt);
+        if (view instanceof HelpCallDisplayable) {
+          ((HelpCallDisplayable)view).setHelpCallDisplayEnabled(true);
+          ((HelpCallDisplayable)view).showHelpCallCount(evt.getHelpCallCount());
+        }
+        helpCallCountChanged(evt.getHelpCallCount());
+      }
+    };
+  }
+
+  /**
+   * 生徒用のリモートイベントリスナを生成します。
+   * 
+   * @return 生徒用のリモートイベントリスナ
+   */
+  protected StudentRemoteEventListenerDecorator createRemoteEventListenerForStudent() {
+    return new StudentRemoteEventListenerDecorator();
   }
 
   /**

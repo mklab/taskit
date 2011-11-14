@@ -18,8 +18,6 @@ import org.mklab.taskit.shared.TaskitRequestFactory;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 
-import de.novanic.eventservice.client.event.RemoteEventService;
-
 
 /**
  * クライアントの端末に応じたビューや、すべてのビューで共通して利用するオブジェクトを提供するインターフェースです。
@@ -65,13 +63,11 @@ public interface ClientFactory {
   LocalDatabase getLocalDatabase();
 
   /**
-   * リモートイベントサービスを取得します。
-   * <p>
-   * サーバーサイドで発生したイベントを受け取るために利用します。
+   * TASKitを駆動するシステムを取得します。
    * 
-   * @return リモートイベントサービス
+   * @return TASKitを駆動するシステム
    */
-  RemoteEventService getRemoteEventService();
+  TaskitSystem getSystem();
 
   /**
    * ヘルプコール監視オブジェクトを取得します。

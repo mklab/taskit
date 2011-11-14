@@ -9,8 +9,6 @@ import org.mklab.taskit.shared.UserType;
 import java.util.Date;
 
 import de.novanic.eventservice.client.event.Event;
-import de.novanic.eventservice.client.event.domain.Domain;
-import de.novanic.eventservice.client.event.domain.DomainFactory;
 
 
 /**
@@ -39,9 +37,6 @@ public class HelpCallEvent implements Event {
 
   /** for serialization. */
   private static final long serialVersionUID = 2376190021474079729L;
-
-  /** このイベントのドメインです。 */
-  public static final Domain DOMAIN = DomainFactory.getDomain("helpcall"); //$NON-NLS-1$
 
   private int helpCallCount;
   private String callerId;
