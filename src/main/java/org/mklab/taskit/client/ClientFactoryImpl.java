@@ -31,6 +31,9 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+
 
 /**
  * 画面の大きさによる制約のないデスクトップ向けのビューを提供する{@link ClientFactory}の実装クラスです。
@@ -47,7 +50,6 @@ public class ClientFactoryImpl implements ClientFactory {
   private LocalDatabase localDatabase;
   private PageLayout pageLayout;
   private GlobalEventListener globalEventListener;
-  private TaskitSystem system;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -117,20 +119,15 @@ public class ClientFactoryImpl implements ClientFactory {
    * {@inheritDoc}
    */
   @Override
-  public TaskitSystem getSystem() {
-    if (this.system == null) {
-      this.system = new TaskitSystem(this);
-    }
-    return this.system;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public GlobalEventListener getGlobalEventListener() {
     if (this.globalEventListener == null) {
-      this.globalEventListener = new GlobalEventListener(getSystem());
+      this.globalEventListener = new GlobalEventListener(new RemoteEventListener() {
+
+        @Override
+        public void apply(@SuppressWarnings("unused") Event anEvent) {
+          // do nothing
+        }
+      });
     }
 
     return this.globalEventListener;

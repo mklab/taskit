@@ -65,8 +65,7 @@ public class CheckInListActivity extends TaskitActivity implements CheckInListVi
    */
   @Override
   protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
-    TaRemoteEventListenerDecorator listener = super.createRemoteEventListenerForTa();
-    listener.setListener(new TaRemoteEventListenerDecorator() {
+    return new TaRemoteEventListenerDecorator(super.createRemoteEventListenerForTa()) {
 
       /**
        * {@inheritDoc}
@@ -76,8 +75,7 @@ public class CheckInListActivity extends TaskitActivity implements CheckInListVi
       public void checkMapChanged(@SuppressWarnings("unused") CheckMapEvent evt) {
         updateCheckInListAsync();
       }
-    });
-    return listener;
+    };
   }
 
   /**

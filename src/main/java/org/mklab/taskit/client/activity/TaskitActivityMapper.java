@@ -47,9 +47,7 @@ public class TaskitActivityMapper implements ActivityMapper {
   public Activity getActivity(final Place place) {
     if (place instanceof Login) return new LoginActivity(this.clientFactory);
 
-    final TaskitActivity taskitActivity = getTaskitActivity(place);
-    taskitActivity.setActivityObserver(this.clientFactory.getSystem());
-    return taskitActivity;
+    return getTaskitActivity(place);
   }
 
   private TaskitActivity getTaskitActivity(final Place place) {

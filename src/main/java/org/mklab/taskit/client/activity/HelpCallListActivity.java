@@ -142,8 +142,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
    */
   @Override
   protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
-    final TaRemoteEventListenerDecorator l = super.createRemoteEventListenerForTa();
-    l.setListener(new TaRemoteEventListenerDecorator() {
+    return new TaRemoteEventListenerDecorator(super.createRemoteEventListenerForTa()) {
 
       /**
        * {@inheritDoc}
@@ -162,8 +161,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
         super.checkMapChanged(evt);
         updateHelpCallListAsync(true);
       }
-    });
-    return l;
+    };
   }
 
 }

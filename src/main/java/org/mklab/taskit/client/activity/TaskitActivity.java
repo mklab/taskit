@@ -3,9 +3,9 @@
  */
 package org.mklab.taskit.client.activity;
 
-import org.mklab.taskit.client.ActivityObserver;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
+import org.mklab.taskit.client.event.GlobalEventListener;
 import org.mklab.taskit.client.event.RemoteEventListenerDecorator;
 import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
 import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
@@ -14,9 +14,13 @@ import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.UserProxy;
+import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.event.CheckMapEvent;
 import org.mklab.taskit.shared.event.HelpCallEvent;
+
+import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
@@ -43,7 +47,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   private UserProxy loginUser;
   private TaskitView view;
   private PageLayout layout;
-  private ActivityObserver observer;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -57,37 +60,13 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     this.layout.setPresenter(this);
   }
 
-  final void setActivityObserver(ActivityObserver observer) {
-    this.observer = observer;
-  }
-
   /**
    * {@inheritDoc}
    */
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
-    this.observer.onActivityStart(this);
     this.container = panel;
     updateLoginUserInfoAsync();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public final void onStop() {
-    super.onStop();
-    this.observer.onActivityStop(this);
-    handleOnStop();
-  }
-
-  /**
-   * アクティビティ停止時に呼び出されます。
-   * 
-   * @see #onStop()
-   */
-  protected void handleOnStop() {
-    // do nothing
   }
 
   /**
@@ -137,15 +116,49 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     if (user == null) throw new NullPointerException();
     this.loginUser = user;
 
+    // ログイン後、初めて表示されるアクティビティの場合にのみ、リモートイベントの監視を開始する。
+    final GlobalEventListener globalEventListener = this.clientFactory.getGlobalEventListener();
+    if (globalEventListener.isListening() == false) {
+      globalEventListener.listenWith(user);
+    }
+
     this.view = createTaskitView(this.clientFactory);
-    Widget page = this.layout.layout(this.view, user);
+    updateHelpCallDisplayAsync();
+
+    final Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
-    this.observer.onActivityViewShown(this, this.view, user);
 
     observeRemoteEvent(user);
     onViewShown();
   }
 
+  /**
+   * 現在のヘルプコール数を取得し、ビューに表示します。
+   * <p>
+   * {@link LocalDatabase}を使用しており、過去に取得していれば新たに取得は行わずに過去のデータを利用します。
+   */
+  private void updateHelpCallDisplayAsync() {
+    if (this.view instanceof HelpCallDisplayable) {
+      final HelpCallDisplayable helpCallDisplay = (HelpCallDisplayable)this.view;
+      final boolean isDisplayable = getLoginUser().getType() != UserType.STUDENT;
+      helpCallDisplay.setHelpCallDisplayEnabled(isDisplayable);
+      if (isDisplayable) {
+        getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+
+          @Override
+          public void onSuccess(List<HelpCallProxy> response) {
+            helpCallDisplay.showHelpCallCount(response.size());
+          }
+        });
+      }
+    }
+  }
+
+  /**
+   * ユーザー種別を元に適切なEventListenerを生成し、設定します。
+   * 
+   * @param user ログインユーザー
+   */
   @SuppressWarnings({"rawtypes", "unchecked"})
   private void observeRemoteEvent(UserProxy user) {
     final RemoteEventListenerDecorator<?> listener;
@@ -235,7 +248,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   protected TeacherRemoteEventListenerDecorator createRemoteEventListenerForTeacher() {
     final TaRemoteEventListenerDecorator l = createRemoteEventListenerForTa();
-    return new TeacherRemoteEventListenerDecorator() {
+    return new TeacherRemoteEventListenerDecorator(null) {
 
       /**
        * {@inheritDoc}
@@ -263,7 +276,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * @return TA用のリモートイベントリスナ
    */
   protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
-    return new TaRemoteEventListenerDecorator() {
+    return new TaRemoteEventListenerDecorator(null) {
 
       /**
        * {@inheritDoc}
@@ -276,6 +289,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
           ((HelpCallDisplayable)view).setHelpCallDisplayEnabled(true);
           ((HelpCallDisplayable)view).showHelpCallCount(evt.getHelpCallCount());
         }
+        getClientFactory().getLocalDatabase().execute(LocalDatabase.CALL_LIST);
       }
     };
   }
@@ -286,7 +300,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * @return 生徒用のリモートイベントリスナ
    */
   protected StudentRemoteEventListenerDecorator createRemoteEventListenerForStudent() {
-    return new StudentRemoteEventListenerDecorator();
+    return new StudentRemoteEventListenerDecorator(null);
   }
 
   /**

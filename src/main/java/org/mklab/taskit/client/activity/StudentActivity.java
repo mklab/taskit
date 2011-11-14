@@ -41,8 +41,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   @Override
   @SuppressWarnings("synthetic-access")
   protected StudentRemoteEventListenerDecorator createRemoteEventListenerForStudent() {
-    StudentRemoteEventListenerDecorator l = super.createRemoteEventListenerForStudent();
-    l.setListener(new StudentRemoteEventListenerDecorator() {
+    return new StudentRemoteEventListenerDecorator(super.createRemoteEventListenerForStudent()) {
 
       /**
        * {@inheritDoc}
@@ -62,8 +61,7 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
         super.myRecordChanged(evt);
         updateRecordAsync();
       }
-    });
-    return l;
+    };
   }
 
   /**

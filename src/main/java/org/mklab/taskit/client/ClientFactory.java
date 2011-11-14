@@ -71,13 +71,6 @@ public interface ClientFactory {
   GlobalEventListener getGlobalEventListener();
 
   /**
-   * アプリケーションを駆動するシステムを取得します。
-   * 
-   * @return アプリケーションを駆動するシステム
-   */
-  TaskitSystem getSystem();
-
-  /**
    * 文字列管理を行う{@link Messages}インスタンスを取得します。
    * 
    * @return {@link Messages}インスタンス

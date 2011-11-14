@@ -19,6 +19,15 @@ public class TaRemoteEventListenerDecorator implements RemoteEventListenerDecora
   private TaRemoteEventListenerDecorator listener;
 
   /**
+   * {@link TaRemoteEventListenerDecorator}オブジェクトを構築します。
+   * 
+   * @param listener リスナー
+   */
+  public TaRemoteEventListenerDecorator(TaRemoteEventListenerDecorator listener) {
+    this.listener = listener;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

@@ -19,6 +19,15 @@ public class StudentRemoteEventListenerDecorator implements RemoteEventListenerD
   private StudentRemoteEventListenerDecorator listener;
 
   /**
+   * {@link StudentRemoteEventListenerDecorator}オブジェクトを構築します。
+   * 
+   * @param listener リスナ
+   */
+  public StudentRemoteEventListenerDecorator(StudentRemoteEventListenerDecorator listener) {
+    this.listener = listener;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

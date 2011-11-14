@@ -10,6 +10,13 @@ package org.mklab.taskit.client.event;
  */
 public class TeacherRemoteEventListenerDecorator extends TaRemoteEventListenerDecorator {
 
-  // currently same as TA
+  /**
+   * {@link TeacherRemoteEventListenerDecorator}オブジェクトを構築します。
+   * 
+   * @param listener リスナ
+   */
+  public TeacherRemoteEventListenerDecorator(TeacherRemoteEventListenerDecorator listener) {
+    super(listener);
+  }
 
 }

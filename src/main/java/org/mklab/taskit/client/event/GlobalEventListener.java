@@ -48,15 +48,15 @@ public class GlobalEventListener {
     final Domain domain;
     switch (user.getType()) {
       case STUDENT:
-        this.globalListener = new StudentRemoteEventListenerDecorator();
+        this.globalListener = new StudentRemoteEventListenerDecorator(null);
         domain = Domains.STUDENT;
         break;
       case TA:
-        this.globalListener = new TaRemoteEventListenerDecorator();
+        this.globalListener = new TaRemoteEventListenerDecorator(null);
         domain = Domains.TA;
         break;
       case TEACHER:
-        this.globalListener = new TeacherRemoteEventListenerDecorator();
+        this.globalListener = new TeacherRemoteEventListenerDecorator(null);
         domain = Domains.TEACHER;
         break;
       default:
