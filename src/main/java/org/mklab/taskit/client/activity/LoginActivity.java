@@ -145,7 +145,6 @@ public final class LoginActivity extends AbstractActivity {
    * @param user ログインユーザー
    */
   private void startApplication(UserProxy user) {
-    this.clientFactory.getSystem().start(user);
     goToTopPage(user);
   }
 

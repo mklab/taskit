@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
+import org.mklab.taskit.client.event.GlobalEventListener;
 import org.mklab.taskit.client.event.RemoteEventListenerDecorator;
 import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
 import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
@@ -14,6 +15,7 @@ import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
+import org.mklab.taskit.shared.UserType;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -34,13 +36,17 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
-public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, HelpCallObserver {
+public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter {
 
   private ClientFactory clientFactory;
   private AcceptsOneWidget container;
   private UserProxy loginUser;
   private TaskitView view;
   private PageLayout layout;
+
+  // TODO 削除。アクティビティ間で共有するコンテキストを提供したい。
+  /** 最後に取得したヘルプコール数を保持する変数です。 */
+  private static int lastHelpCallCount = 0;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -114,6 +120,35 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
 
+    /*
+     * ログイン後、初めて表示されるアクティビティの場合にのみ、リモートイベントの監視を開始する。
+     */
+    final GlobalEventListener globalEventListener = getClientFactory().getGlobalEventListener();
+    if (globalEventListener.isListening() == false) {
+      globalEventListener.listenWith(user);
+      if (this.view instanceof HelpCallDisplayable && (user.getType() == UserType.TA || user.getType() == UserType.TEACHER)) {
+        getClientFactory().getRequestFactory().helpCallRequest().getHelpCallCount().fire(new Receiver<Integer>() {
+
+          @SuppressWarnings("synthetic-access")
+          @Override
+          public void onSuccess(Integer response) {
+            ((HelpCallDisplayable)TaskitActivity.this.view).showHelpCallCount(response.intValue());
+            lastHelpCallCount = response.intValue();
+          }
+        });
+      }
+    }
+
+    // ユーザーによってヘルプコール数の通知領域の表示・非表示切り替え
+    if (this.view instanceof HelpCallDisplayable) {
+      final HelpCallDisplayable helpCallDisplay = (HelpCallDisplayable)this.view;
+      final boolean isDisplayable = user.getType() != UserType.STUDENT;
+      helpCallDisplay.setHelpCallDisplayEnabled(isDisplayable);
+      if (isDisplayable) {
+        helpCallDisplay.showHelpCallCount(lastHelpCallCount);
+      }
+    }
+
     observeRemoteEvent(user);
     onViewShown();
   }
@@ -135,7 +170,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
         throw new UnsupportedOperationException();
     }
 
-    final RemoteEventListenerDecorator globalListener = getClientFactory().getSystem().getGlobalListener();
+    final RemoteEventListenerDecorator globalListener = getClientFactory().getGlobalEventListener().getGlobalListener();
     globalListener.setListener(listener);
   }
 
@@ -171,7 +206,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   @Override
   public final void logout() {
-    getClientFactory().getSystem().stop();
+    getClientFactory().getGlobalEventListener().unlisten();
     /*
      * ログアウトを先にしてしまうと、Activity#onStop()での処理がログアウト後になってしまい行えないため。
      * アクティビティの移動後ログアウトを行う。
@@ -236,8 +271,8 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
         if (view instanceof HelpCallDisplayable) {
           ((HelpCallDisplayable)view).setHelpCallDisplayEnabled(true);
           ((HelpCallDisplayable)view).showHelpCallCount(evt.getHelpCallCount());
+          lastHelpCallCount = evt.getHelpCallCount();
         }
-        helpCallCountChanged(evt.getHelpCallCount());
       }
     };
   }
@@ -304,18 +339,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   protected final void showInformationMessage(String message) {
     if (this.view == null) showInformationDialog(message);
     this.view.showInformationMessage(message);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void helpCallCountChanged(int count) {
-    if (this.view == null) return;
-
-    if (this.view instanceof HelpCallDisplayable) {
-      ((HelpCallDisplayable)this.view).showHelpCallCount(count);
-    }
   }
 
 }

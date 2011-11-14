@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.event.GlobalEventListener;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.AttendanceListViewImpl;
 import org.mklab.taskit.client.ui.CheckInListView;
@@ -43,10 +44,9 @@ public class ClientFactoryImpl implements ClientFactory {
   private PlaceController placeController;
   private Messages messages;
   private TaskitRequestFactory requestFactory;
-  private HelpCallWatcher helpCallWatcher;
   private LocalDatabase localDatabase;
   private PageLayout pageLayout;
-  private TaskitSystem system;
+  private GlobalEventListener globalEventListener;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -68,11 +68,10 @@ public class ClientFactoryImpl implements ClientFactory {
     this.requestFactory = GWT.create(TaskitRequestFactory.class);
     this.requestFactory.initialize(this.eventBus);
 
-    if (this.system != null && this.system.isRunning()) {
-      this.system.stop();
-      this.system = null;
+    if (this.globalEventListener != null && this.globalEventListener.isListening()) {
+      this.globalEventListener.unlisten();
+      this.globalEventListener = null;
     }
-    this.helpCallWatcher = null;
     if (this.localDatabase != null) this.localDatabase.clearAllCache();
     this.localDatabase = null;
     this.pageLayout = null;
@@ -117,23 +116,12 @@ public class ClientFactoryImpl implements ClientFactory {
    * {@inheritDoc}
    */
   @Override
-  public HelpCallWatcher getHelpCallWatcher() {
-    if (this.helpCallWatcher == null) {
-      this.helpCallWatcher = new HelpCallWatcher(getLocalDatabase());
-    }
-    return this.helpCallWatcher;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public TaskitSystem getSystem() {
-    if (this.system == null) {
-      this.system = new TaskitSystem();
+  public GlobalEventListener getGlobalEventListener() {
+    if (this.globalEventListener == null) {
+      this.globalEventListener = new GlobalEventListener();
     }
 
-    return this.system;
+    return this.globalEventListener;
   }
 
   /**

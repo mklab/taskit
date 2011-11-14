@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.client.event.GlobalEventListener;
 import org.mklab.taskit.client.ui.AttendanceListView;
 import org.mklab.taskit.client.ui.CheckInListView;
 import org.mklab.taskit.client.ui.HeaderView;
@@ -63,18 +64,11 @@ public interface ClientFactory {
   LocalDatabase getLocalDatabase();
 
   /**
-   * TASKitを駆動するシステムを取得します。
+   * アプリケーション全体で利用するイベントを監視するリスナーを取得します。
    * 
-   * @return TASKitを駆動するシステム
+   * @return アプリケーション全体で利用するイベントを監視するリスナー
    */
-  TaskitSystem getSystem();
-
-  /**
-   * ヘルプコール監視オブジェクトを取得します。
-   * 
-   * @return ヘルプコール監視オブジェクト
-   */
-  HelpCallWatcher getHelpCallWatcher();
+  GlobalEventListener getGlobalEventListener();
 
   /**
    * 文字列管理を行う{@link Messages}インスタンスを取得します。

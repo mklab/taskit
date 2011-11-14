@@ -4,7 +4,9 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.Messages;
+import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
 import org.mklab.taskit.client.place.CheckInList;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HelpCallListView;
@@ -12,6 +14,7 @@ import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
+import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +77,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
      * ValueProxyのリストの場合、Resolutionがリストの最後の要素にしか適用されず、その結果
      * 最後のHelpCallListItem要素以外のHelpCallProxyのcallerがnullになってしまう。
      */
-    getClientFactory().getHelpCallWatcher().getHelpCallList(new Receiver<List<HelpCallProxy>>() {
+    getClientFactory().getLocalDatabase().getCacheAndExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
 
       @Override
       public void onSuccess(List<HelpCallProxy> response) {
@@ -137,9 +140,20 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
    * {@inheritDoc}
    */
   @Override
-  public void helpCallCountChanged(int count) {
-    super.helpCallCountChanged(count);
-    updateHelpCallListAsync(true);
+  protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
+    final TaRemoteEventListenerDecorator l = super.createRemoteEventListenerForTa();
+    l.setListener(new TaRemoteEventListenerDecorator() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void helpCallChanged(HelpCallEvent evt) {
+        super.helpCallChanged(evt);
+        updateHelpCallListAsync(true);
+      }
+    });
+    return l;
   }
 
 }
