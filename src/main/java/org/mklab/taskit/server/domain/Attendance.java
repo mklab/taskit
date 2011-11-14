@@ -3,6 +3,7 @@ package org.mklab.taskit.server.domain;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.AttendanceType;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.Domains;
 import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
 import java.util.Date;
@@ -164,7 +165,7 @@ public class Attendance extends AbstractEntity<Integer> {
     setDate(new Date());
     super.persist();
 
-    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.attender.getId());
+    ServiceUtil.fireEvent(Domains.STUDENT, new MyRecordChangeEvent(), this.attender.getId());
   }
 
   /**
@@ -173,7 +174,7 @@ public class Attendance extends AbstractEntity<Integer> {
   @Override
   public void update() {
     super.update();
-    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.attender.getId());
+    ServiceUtil.fireEvent(Domains.STUDENT, new MyRecordChangeEvent(), this.attender.getId());
   }
 
   /**
@@ -203,7 +204,7 @@ public class Attendance extends AbstractEntity<Integer> {
   @Invoker({UserType.TA, UserType.TEACHER})
   public void delete() {
     super.delete();
-    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.attender.getId());
+    ServiceUtil.fireEvent(Domains.STUDENT, new MyRecordChangeEvent(), this.attender.getId());
   }
 
   /**

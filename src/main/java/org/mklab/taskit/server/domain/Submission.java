@@ -2,6 +2,7 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.Domains;
 import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
 import java.util.Date;
@@ -218,7 +219,7 @@ public class Submission extends AbstractEntity<Integer> {
     super.persist();
 
     recomputeScore();
-    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.submitter.getId());
+    ServiceUtil.fireEvent(Domains.STUDENT, new MyRecordChangeEvent(), this.submitter.getId());
   }
 
   /**
@@ -229,7 +230,7 @@ public class Submission extends AbstractEntity<Integer> {
     super.update();
 
     recomputeScore();
-    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.submitter.getId());
+    ServiceUtil.fireEvent(Domains.STUDENT, new MyRecordChangeEvent(), this.submitter.getId());
   }
 
   private void recomputeScore() {
@@ -263,7 +264,7 @@ public class Submission extends AbstractEntity<Integer> {
   @Invoker({UserType.TA, UserType.TEACHER})
   public void delete() {
     super.delete();
-    ServiceUtil.fireEvent(MyRecordChangeEvent.DOMAIN, new MyRecordChangeEvent(), this.submitter.getId());
+    ServiceUtil.fireEvent(Domains.STUDENT, new MyRecordChangeEvent(), this.submitter.getId());
   }
 
   @SuppressWarnings({"nls", "unchecked"})

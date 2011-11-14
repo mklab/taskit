@@ -99,6 +99,7 @@ public class StatisticsCollector {
     if (this.computed == false) {
       recompute();
     }
+    record = this.recordMap.get(userId);
     if (record == null) {
       throw new IllegalArgumentException("Unknown user : " + userId); //$NON-NLS-1$
     }

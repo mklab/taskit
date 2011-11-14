@@ -240,13 +240,13 @@ public class HelpCall extends AbstractEntity<Integer> {
 
     // 呼び出している学生本人に通知
     final MyHelpCallEvent event = new MyHelpCallEvent();
-    ServiceUtil.fireEvent(MyHelpCallEvent.DOMAIN, event, user);
+    ServiceUtil.fireEvent(Domains.STUDENT, event, user);
     // その他の呼び出し中の学生に通知
     for (HelpCall helpCall : getAllHelpCalls()) {
       // 本人はすでに通知済み
       if (helpCall.getCaller().getId().equals(user.getAccount().getId())) continue;
 
-      ServiceUtil.fireEvent(MyHelpCallEvent.DOMAIN, event);
+      ServiceUtil.fireEvent(Domains.STUDENT, event);
     }
   }
 
