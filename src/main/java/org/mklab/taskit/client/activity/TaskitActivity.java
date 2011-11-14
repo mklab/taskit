@@ -11,9 +11,11 @@ import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
+import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.CheckMapEvent;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.List;
@@ -245,19 +247,36 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
           onHelpCallListChanged(response);
         }
       });
+    } else if (evt instanceof CheckMapEvent) {
+      getClientFactory().getLocalDatabase().execute(LocalDatabase.CHECKS, new Receiver<List<CheckMapProxy>>() {
+
+        @Override
+        public void onSuccess(List<CheckMapProxy> response) {
+          onCheckMapChanged(response);
+        }
+      });
     }
   }
 
   /**
    * ヘルプコールリストに変更が発生した場合に呼び出されます。
    * 
-   * @param helpCallList 最新のヘルプコールリスト
+   * @param helpCalls 最新のヘルプコールリスト
    */
-  protected void onHelpCallListChanged(List<HelpCallProxy> helpCallList) {
+  protected void onHelpCallListChanged(List<HelpCallProxy> helpCalls) {
     if (this.view instanceof HelpCallDisplayable) {
       ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
-      ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallList.size());
+      ((HelpCallDisplayable)this.view).showHelpCallCount(helpCalls.size());
     }
+  }
+
+  /**
+   * チェックイン状態に変更があったときに呼び出されます。
+   * 
+   * @param checks 全TA、先生のチェックイン状態
+   */
+  protected void onCheckMapChanged(@SuppressWarnings("unused") List<CheckMapProxy> checks) {
+    // do nothing
   }
 
   /**

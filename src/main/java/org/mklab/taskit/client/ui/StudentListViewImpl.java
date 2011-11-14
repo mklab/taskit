@@ -58,6 +58,10 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   Image reloadButton;
   @UiField(provided = true)
   Image scoreButton;
+  @UiField
+  Label viewersLabel;
+  @UiField
+  Label viewers;
 
   private Presenter presenter;
   private List<UserProxy> selectableUsers;
@@ -209,6 +213,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     final Widget widget = binder.createAndBindUi(this);
 
     localizeMessages(messages);
+    this.viewersLabel.setVisible(false);
 
     return widget;
   }
@@ -291,6 +296,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   private void localizeMessages(final Messages messages) {
     this.userListLabel.setText(messages.userListLabel() + ": "); //$NON-NLS-1$
     this.userInfoPanel.setCaptionText(messages.userInfoLabel());
+    this.viewersLabel.setText(messages.viewersLabel() + ": "); //$NON-NLS-1$
   }
 
   /**
@@ -348,11 +354,31 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   }
 
   /**
-   * {@inheritDoc}
+   * {@inheritDoc}true ;
    */
   @Override
   public void setUncallable(boolean uncallable) {
     this.uncallButton.setVisible(uncallable);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setViewers(List<String> viewers) {
+    if (viewers.size() == 0) {
+      this.viewersLabel.setVisible(false);
+      this.viewers.setText(""); //$NON-NLS-1$
+      return;
+    }
+    this.viewersLabel.setVisible(true);
+
+    StringBuilder sb = new StringBuilder();
+    for (String viewerId : viewers) {
+      if (sb.length() > 0) sb.append(","); //$NON-NLS-1$
+      sb.append(viewerId);
+    }
+    this.viewers.setText(sb.toString());
   }
 
 }

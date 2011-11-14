@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client;
 
+import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.RecordProxy;
@@ -72,12 +73,22 @@ public class LocalDatabase {
 
   };
 
-  /** 全生徒の成績統計です。 */
+  /** 全生徒の成績統計を取得するクエリです。 */
   public static Query<List<RecordProxy>> RECORDS = new Query<List<RecordProxy>>() {
 
     @Override
     public void query(TaskitRequestFactory requestFactory, Receiver<List<RecordProxy>> receiver) {
       requestFactory.recordRequest().getAllRecords().with("statistics").fire(receiver); //$NON-NLS-1$
+    }
+
+  };
+
+  /** どのTAがどの生徒を担当しているか(チェックイン状態)を取得するクエリです。 */
+  public static Query<List<CheckMapProxy>> CHECKS = new Query<List<CheckMapProxy>>() {
+
+    @Override
+    public void query(TaskitRequestFactory requestFactory, Receiver<List<CheckMapProxy>> receiver) {
+      requestFactory.checkMapRequest().getAllCheckMap().with("student").fire(receiver); //$NON-NLS-1$
     }
 
   };

@@ -84,6 +84,13 @@ public interface StudentListView extends TaskitView {
   void setRecords(Map<String, RecordProxy> records);
 
   /**
+   * 現在選択中の学生を閲覧中の指導者を設定します。
+   * 
+   * @param viewers 現在選択中の学生を閲覧中の指導者のIDのリスト`
+   */
+  void setViewers(List<String> viewers);
+
+  /**
    * 呼び出しキャンセルボタンの有効・無効を切り替えます。
    * 
    * @param uncallable キャンセルが有効かどうか

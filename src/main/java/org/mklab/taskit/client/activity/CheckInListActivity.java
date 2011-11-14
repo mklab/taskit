@@ -4,16 +4,14 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.ui.CheckInListView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.CheckMapProxy;
-import org.mklab.taskit.shared.event.CheckMapEvent;
 
 import java.util.List;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
-
-import de.novanic.eventservice.client.event.Event;
 
 
 /**
@@ -37,18 +35,22 @@ public class CheckInListActivity extends TaskitActivity implements CheckInListVi
    */
   @Override
   protected void onViewShown() {
-    updateCheckInListAsync();
+    updateCheckInListAsync(false);
   }
 
-  private void updateCheckInListAsync() {
-    getClientFactory().getRequestFactory().checkMapRequest().getAllCheckMap().with("student").fire(new Receiver<List<CheckMapProxy>>() { //$NON-NLS-1$
+  private void updateCheckInListAsync(boolean doReload) {
+    final Receiver<List<CheckMapProxy>> receiver = new Receiver<List<CheckMapProxy>>() {
 
-          @Override
-          public void onSuccess(List<CheckMapProxy> response) {
-            ((CheckInListView)getTaskitView()).setCheckInList(response);
-          }
-
-        });
+      @Override
+      public void onSuccess(List<CheckMapProxy> response) {
+        ((CheckInListView)getTaskitView()).setCheckInList(response);
+      }
+    };
+    if (doReload) {
+      getClientFactory().getLocalDatabase().getCacheAndExecute(LocalDatabase.CHECKS, receiver);
+    } else {
+      getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.CHECKS, receiver);
+    }
   }
 
   /**
@@ -65,11 +67,9 @@ public class CheckInListActivity extends TaskitActivity implements CheckInListVi
    * {@inheritDoc}
    */
   @Override
-  public void apply(Event evt) {
-    super.apply(evt);
-    if (evt instanceof CheckMapEvent) {
-      updateCheckInListAsync();
-    }
+  protected void onCheckMapChanged(List<CheckMapProxy> checks) {
+    super.onCheckMapChanged(checks);
+    updateCheckInListAsync(false);
   }
 
   /**
@@ -77,7 +77,7 @@ public class CheckInListActivity extends TaskitActivity implements CheckInListVi
    */
   @Override
   public void reloadButtonPressed() {
-    updateCheckInListAsync();
+    updateCheckInListAsync(true);
   }
 
 }

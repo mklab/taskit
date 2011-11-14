@@ -14,6 +14,7 @@ import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.RecordProxy;
@@ -22,6 +23,8 @@ import org.mklab.taskit.shared.SubmissionProxy;
 import org.mklab.taskit.shared.SubmissionRequest;
 import org.mklab.taskit.shared.UserProxy;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +117,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     });
 
     updateUncallableState();
+    updateViewers();
   }
 
   /**
@@ -123,6 +127,14 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   protected void onHelpCallListChanged(List<HelpCallProxy> helpCallList) {
     super.onHelpCallListChanged(helpCallList);
     updateUncallableState();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onCheckMapChanged(@SuppressWarnings("unused") List<CheckMapProxy> checks) {
+    updateViewers();
   }
 
   /**
@@ -148,6 +160,32 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
           }
         }
         StudentListActivity.this.view.setUncallable(uncallable);
+      }
+    });
+  }
+
+  private void updateViewers() {
+    final UserProxy selectedUser = this.view.getSelectedUser();
+    if (selectedUser == null) {
+      this.view.setViewers(Collections.<String> emptyList());
+      return;
+    }
+
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.CHECKS, new Receiver<List<CheckMapProxy>>() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(List<CheckMapProxy> response) {
+        final UserProxy loginUser = getLoginUser();
+        List<String> viewers = new ArrayList<String>();
+        for (CheckMapProxy check : response) {
+          if (check.getStudent().getId().equals(selectedUser.getAccount().getId())) {
+            if (check.getId().equals(loginUser.getAccount().getId()) == false) { // ログインユーザーは除外
+              viewers.add(check.getId());
+            }
+          }
+        }
+        StudentListActivity.this.view.setViewers(viewers);
       }
     });
   }
@@ -262,6 +300,8 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
     showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(student.getAccount().getId()));
     this.query.query(student.getAccount().getId(), new StudentwiseRecordQuery.Handler() {
 
+      boolean checkedIn = false;
+
       @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
       public void handleResult(StudentwiseRecordModel model) {
@@ -272,7 +312,10 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
         if (latestRow != null) {
           view.highlightRow(latestRow);
         }
-        checkInAsync(student);
+        if (this.checkedIn == false) {
+          checkInAsync(student);
+          this.checkedIn = true;
+        }
       }
     });
   }
