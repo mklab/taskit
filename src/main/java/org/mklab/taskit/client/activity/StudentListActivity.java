@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
@@ -45,6 +46,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   private static final boolean TOKEN_FOLLOWS_STUDENT_SELECTION = true;
   private StudentListView view;
   private StudentwiseRecordQuery query;
+  private UserProxy currentSelectedUser;
 
   /**
    * {@link StudentListActivity}オブジェクトを構築します。
@@ -99,6 +101,9 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
             }
           }
         }
+
+        updateUncallableState();
+        updateViewers();
       }
 
       private String getAccountIdInPlaceToken() {
@@ -115,9 +120,6 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
       }
 
     });
-
-    updateUncallableState();
-    updateViewers();
   }
 
   /**
@@ -203,7 +205,26 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    */
   @Override
   public void onStop() {
+    if (isUncallableCheckFromCache(this.currentSelectedUser)) {
+      final boolean doCancel = Window.confirm(getClientFactory().getMessages().autoUncallConfirmationMessage(this.currentSelectedUser.getAccount().getId()));
+      if (doCancel) {
+        uncall(this.currentSelectedUser.getAccount());
+      }
+    }
     checkOutAsync();
+  }
+
+  private boolean isUncallableCheckFromCache(UserProxy user) {
+    if (user == null) return false;
+    final List<HelpCallProxy> helpCalls = getClientFactory().getLocalDatabase().getCache(LocalDatabase.CALL_LIST);
+    if (helpCalls == null) return false;
+
+    for (HelpCallProxy helpCall : helpCalls) {
+      if (helpCall.getCaller().getId().equals(user.getAccount().getId())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -297,6 +318,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * @param student 表示するユーザー
    */
   private void showStudentRecordAsync(final UserProxy student) {
+    this.currentSelectedUser = student;
     showInformationMessage(getClientFactory().getMessages().fetchingUserRecordsMessage(student.getAccount().getId()));
     this.query.query(student.getAccount().getId(), new StudentwiseRecordQuery.Handler() {
 
