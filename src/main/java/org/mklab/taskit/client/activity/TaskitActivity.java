@@ -3,9 +3,9 @@
  */
 package org.mklab.taskit.client.activity;
 
+import org.mklab.taskit.client.ActivityObserver;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
-import org.mklab.taskit.client.event.GlobalEventListener;
 import org.mklab.taskit.client.event.RemoteEventListenerDecorator;
 import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
 import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
@@ -15,7 +15,7 @@ import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
-import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.CheckMapEvent;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -43,10 +43,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   private UserProxy loginUser;
   private TaskitView view;
   private PageLayout layout;
-
-  // TODO 削除。アクティビティ間で共有するコンテキストを提供したい。
-  /** 最後に取得したヘルプコール数を保持する変数です。 */
-  private static int lastHelpCallCount = 0;
+  private ActivityObserver observer;
 
   /**
    * {@link TaskitActivity}オブジェクトを構築します。
@@ -60,13 +57,37 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     this.layout.setPresenter(this);
   }
 
+  final void setActivityObserver(ActivityObserver observer) {
+    this.observer = observer;
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
   public final void start(AcceptsOneWidget panel, @SuppressWarnings("unused") EventBus eventBus) {
+    this.observer.onActivityStart(this);
     this.container = panel;
     updateLoginUserInfoAsync();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public final void onStop() {
+    super.onStop();
+    this.observer.onActivityStop(this);
+    handleOnStop();
+  }
+
+  /**
+   * アクティビティ停止時に呼び出されます。
+   * 
+   * @see #onStop()
+   */
+  protected void handleOnStop() {
+    // do nothing
   }
 
   /**
@@ -119,35 +140,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     this.view = createTaskitView(this.clientFactory);
     Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
-
-    /*
-     * ログイン後、初めて表示されるアクティビティの場合にのみ、リモートイベントの監視を開始する。
-     */
-    final GlobalEventListener globalEventListener = getClientFactory().getGlobalEventListener();
-    if (globalEventListener.isListening() == false) {
-      globalEventListener.listenWith(user);
-      if (this.view instanceof HelpCallDisplayable && (user.getType() == UserType.TA || user.getType() == UserType.TEACHER)) {
-        getClientFactory().getRequestFactory().helpCallRequest().getHelpCallCount().fire(new Receiver<Integer>() {
-
-          @SuppressWarnings("synthetic-access")
-          @Override
-          public void onSuccess(Integer response) {
-            ((HelpCallDisplayable)TaskitActivity.this.view).showHelpCallCount(response.intValue());
-            lastHelpCallCount = response.intValue();
-          }
-        });
-      }
-    }
-
-    // ユーザーによってヘルプコール数の通知領域の表示・非表示切り替え
-    if (this.view instanceof HelpCallDisplayable) {
-      final HelpCallDisplayable helpCallDisplay = (HelpCallDisplayable)this.view;
-      final boolean isDisplayable = user.getType() != UserType.STUDENT;
-      helpCallDisplay.setHelpCallDisplayEnabled(isDisplayable);
-      if (isDisplayable) {
-        helpCallDisplay.showHelpCallCount(lastHelpCallCount);
-      }
-    }
+    this.observer.onActivityViewShown(this, this.view, user);
 
     observeRemoteEvent(user);
     onViewShown();
@@ -206,7 +199,9 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    */
   @Override
   public final void logout() {
-    getClientFactory().getGlobalEventListener().unlisten();
+    if (getClientFactory().getGlobalEventListener().isListening()) {
+      getClientFactory().getGlobalEventListener().unlisten();
+    }
     /*
      * ログアウトを先にしてしまうと、Activity#onStop()での処理がログアウト後になってしまい行えないため。
      * アクティビティの移動後ログアウトを行う。
@@ -250,6 +245,15 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
         super.helpCallChanged(evt);
         l.helpCallChanged(evt);
       }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void checkMapChanged(CheckMapEvent evt) {
+        super.checkMapChanged(evt);
+        l.checkMapChanged(evt);
+      }
     };
   }
 
@@ -271,7 +275,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
         if (view instanceof HelpCallDisplayable) {
           ((HelpCallDisplayable)view).setHelpCallDisplayEnabled(true);
           ((HelpCallDisplayable)view).showHelpCallCount(evt.getHelpCallCount());
-          lastHelpCallCount = evt.getHelpCallCount();
         }
       }
     };

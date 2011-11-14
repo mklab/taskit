@@ -4,9 +4,11 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
 import org.mklab.taskit.client.ui.CheckInListView;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.CheckMapProxy;
+import org.mklab.taskit.shared.event.CheckMapEvent;
 
 import java.util.List;
 
@@ -56,6 +58,26 @@ public class CheckInListActivity extends TaskitActivity implements CheckInListVi
     final CheckInListView checkInListView = clientFactory.getCheckInListView();
     checkInListView.setPresenter(this);
     return checkInListView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
+    TaRemoteEventListenerDecorator listener = super.createRemoteEventListenerForTa();
+    listener.setListener(new TaRemoteEventListenerDecorator() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void checkMapChanged(@SuppressWarnings("unused") CheckMapEvent evt) {
+        updateCheckInListAsync();
+      }
+    });
+    return listener;
   }
 
   /**

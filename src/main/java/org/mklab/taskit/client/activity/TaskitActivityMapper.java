@@ -46,6 +46,13 @@ public class TaskitActivityMapper implements ActivityMapper {
   @Override
   public Activity getActivity(final Place place) {
     if (place instanceof Login) return new LoginActivity(this.clientFactory);
+
+    final TaskitActivity taskitActivity = getTaskitActivity(place);
+    taskitActivity.setActivityObserver(this.clientFactory.getSystem());
+    return taskitActivity;
+  }
+
+  private TaskitActivity getTaskitActivity(final Place place) {
     if (place instanceof StudentList) return new StudentListActivity(this.clientFactory);
     if (place instanceof AttendanceList) return new AttendanceListActivity(this.clientFactory);
     if (place instanceof Student) return new StudentActivity(this.clientFactory);

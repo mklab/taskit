@@ -124,7 +124,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
    * {@inheritDoc}
    */
   @Override
-  public void onStop() {
+  public void handleOnStop() {
     checkOutAsync();
   }
 

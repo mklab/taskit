@@ -129,14 +129,6 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void onStop() {
-    super.onStop();
-  }
-
-  /**
    * TAの呼び出し状況を変更します。
    * <p>
    * このメソッドは表示のみを更新するだけであり、サーバーへの呼び出しのリクエストは送信しません。

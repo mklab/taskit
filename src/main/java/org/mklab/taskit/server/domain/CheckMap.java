@@ -5,6 +5,8 @@ package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
+import org.mklab.taskit.shared.event.CheckMapEvent;
+import org.mklab.taskit.shared.event.Domains;
 
 import java.util.Date;
 import java.util.List;
@@ -104,6 +106,38 @@ public class CheckMap extends AbstractEntity<String> {
    */
   public void setDate(Date date) {
     this.date = date;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void delete() {
+    super.delete();
+    fireCheckMapChanged();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void update() {
+    super.update();
+    fireCheckMapChanged();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void persist() {
+    super.persist();
+    fireCheckMapChanged();
+  }
+
+  private static void fireCheckMapChanged() {
+    ServiceUtil.fireEvent(Domains.TA, new CheckMapEvent());
+    ServiceUtil.fireEvent(Domains.TEACHER, new CheckMapEvent());
   }
 
   /**

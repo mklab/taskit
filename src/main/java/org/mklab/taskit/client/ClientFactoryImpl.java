@@ -47,6 +47,7 @@ public class ClientFactoryImpl implements ClientFactory {
   private LocalDatabase localDatabase;
   private PageLayout pageLayout;
   private GlobalEventListener globalEventListener;
+  private TaskitSystem system;
 
   /**
    * {@link ClientFactoryImpl}オブジェクトを構築します。
@@ -116,9 +117,20 @@ public class ClientFactoryImpl implements ClientFactory {
    * {@inheritDoc}
    */
   @Override
+  public TaskitSystem getSystem() {
+    if (this.system == null) {
+      this.system = new TaskitSystem(this);
+    }
+    return this.system;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public GlobalEventListener getGlobalEventListener() {
     if (this.globalEventListener == null) {
-      this.globalEventListener = new GlobalEventListener();
+      this.globalEventListener = new GlobalEventListener(getSystem());
     }
 
     return this.globalEventListener;

@@ -14,6 +14,7 @@ import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
+import org.mklab.taskit.shared.event.CheckMapEvent;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.ArrayList;
@@ -150,6 +151,15 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
       @Override
       public void helpCallChanged(HelpCallEvent evt) {
         super.helpCallChanged(evt);
+        updateHelpCallListAsync(true);
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void checkMapChanged(CheckMapEvent evt) {
+        super.checkMapChanged(evt);
         updateHelpCallListAsync(true);
       }
     });
