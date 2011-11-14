@@ -7,9 +7,6 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.event.GlobalEventListener;
 import org.mklab.taskit.client.event.RemoteEventListenerDecorator;
-import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
-import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
-import org.mklab.taskit.client.event.TeacherRemoteEventListenerDecorator;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
@@ -17,7 +14,6 @@ import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.UserType;
-import org.mklab.taskit.shared.event.CheckMapEvent;
 import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.List;
@@ -31,6 +27,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+
 
 /**
  * 認証完了後のすべてのアクティビティの基底クラスです。
@@ -40,7 +39,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
-public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter {
+public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, RemoteEventListener {
 
   private ClientFactory clientFactory;
   private AcceptsOneWidget container;
@@ -121,6 +120,8 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     if (globalEventListener.isListening() == false) {
       globalEventListener.listenWith(user);
     }
+    final RemoteEventListenerDecorator globalListener = getClientFactory().getGlobalEventListener().getGlobalListener();
+    globalListener.setListener(this);
 
     this.view = createTaskitView(this.clientFactory);
     updateHelpCallDisplayAsync();
@@ -128,7 +129,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     final Widget page = this.layout.layout(this.view, user);
     this.container.setWidget(page);
 
-    observeRemoteEvent(user);
     onViewShown();
   }
 
@@ -152,32 +152,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
         });
       }
     }
-  }
-
-  /**
-   * ユーザー種別を元に適切なEventListenerを生成し、設定します。
-   * 
-   * @param user ログインユーザー
-   */
-  @SuppressWarnings({"rawtypes", "unchecked"})
-  private void observeRemoteEvent(UserProxy user) {
-    final RemoteEventListenerDecorator<?> listener;
-    switch (user.getType()) {
-      case STUDENT:
-        listener = createRemoteEventListenerForStudent();
-        break;
-      case TA:
-        listener = createRemoteEventListenerForTa();
-        break;
-      case TEACHER:
-        listener = createRemoteEventListenerForTeacher();
-        break;
-      default:
-        throw new UnsupportedOperationException();
-    }
-
-    final RemoteEventListenerDecorator globalListener = getClientFactory().getGlobalEventListener().getGlobalListener();
-    globalListener.setListener(listener);
   }
 
   /**
@@ -242,68 +216,6 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
   }
 
   /**
-   * 先生用のリモートイベントリスナを生成します。
-   * 
-   * @return 先生用のリモートイベントリスナ
-   */
-  protected TeacherRemoteEventListenerDecorator createRemoteEventListenerForTeacher() {
-    final TaRemoteEventListenerDecorator l = createRemoteEventListenerForTa();
-    return new TeacherRemoteEventListenerDecorator(null) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void helpCallChanged(HelpCallEvent evt) {
-        super.helpCallChanged(evt);
-        l.helpCallChanged(evt);
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void checkMapChanged(CheckMapEvent evt) {
-        super.checkMapChanged(evt);
-        l.checkMapChanged(evt);
-      }
-    };
-  }
-
-  /**
-   * TA用のリモートイベントリスナを生成します。
-   * 
-   * @return TA用のリモートイベントリスナ
-   */
-  protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
-    return new TaRemoteEventListenerDecorator(null) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
-      @Override
-      public void helpCallChanged(HelpCallEvent evt) {
-        super.helpCallChanged(evt);
-        if (view instanceof HelpCallDisplayable) {
-          ((HelpCallDisplayable)view).setHelpCallDisplayEnabled(true);
-          ((HelpCallDisplayable)view).showHelpCallCount(evt.getHelpCallCount());
-        }
-        getClientFactory().getLocalDatabase().execute(LocalDatabase.CALL_LIST);
-      }
-    };
-  }
-
-  /**
-   * 生徒用のリモートイベントリスナを生成します。
-   * 
-   * @return 生徒用のリモートイベントリスナ
-   */
-  protected StudentRemoteEventListenerDecorator createRemoteEventListenerForStudent() {
-    return new StudentRemoteEventListenerDecorator(null);
-  }
-
-  /**
    * エラーメッセージを表示します。
    * 
    * @param errorMessage エラーメッセージ
@@ -313,6 +225,38 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
       Window.alert(errorMessage);
     } else {
       this.view.showErrorDialog(errorMessage);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void apply(Event evt) {
+    if (evt instanceof HelpCallEvent) {
+      if (this.view instanceof HelpCallDisplayable) {
+        ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
+        ((HelpCallDisplayable)this.view).showHelpCallCount(((HelpCallEvent)evt).getHelpCallCount());
+      }
+      getClientFactory().getLocalDatabase().execute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+
+        @Override
+        public void onSuccess(List<HelpCallProxy> response) {
+          onHelpCallListChanged(response);
+        }
+      });
+    }
+  }
+
+  /**
+   * ヘルプコールリストに変更が発生した場合に呼び出されます。
+   * 
+   * @param helpCallList 最新のヘルプコールリスト
+   */
+  protected void onHelpCallListChanged(List<HelpCallProxy> helpCallList) {
+    if (this.view instanceof HelpCallDisplayable) {
+      ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
+      ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallList.size());
     }
   }
 

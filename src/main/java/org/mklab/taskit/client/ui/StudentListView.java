@@ -84,6 +84,13 @@ public interface StudentListView extends TaskitView {
   void setRecords(Map<String, RecordProxy> records);
 
   /**
+   * 呼び出しキャンセルボタンの有効・無効を切り替えます。
+   * 
+   * @param uncallable キャンセルが有効かどうか
+   */
+  void setUncallable(boolean uncallable);
+
+  /**
    * プレゼンターです。
    * 
    * @author ishikura

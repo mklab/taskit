@@ -6,7 +6,6 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.Messages;
-import org.mklab.taskit.client.event.TaRemoteEventListenerDecorator;
 import org.mklab.taskit.client.place.CheckInList;
 import org.mklab.taskit.client.place.StudentList;
 import org.mklab.taskit.client.ui.HelpCallListView;
@@ -15,7 +14,6 @@ import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.CheckMapProxy;
 import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.event.CheckMapEvent;
-import org.mklab.taskit.shared.event.HelpCallEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +23,8 @@ import java.util.Map;
 import com.google.gwt.place.shared.Place;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
+
+import de.novanic.eventservice.client.event.Event;
 
 
 /**
@@ -65,6 +65,9 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
 
   /**
    * ヘルプコールリストを非同期で更新します。
+   * <p>
+   * ローカルにキャッシュが存在した場合は新たに取得せずそれを表示します。(ヘルプコールはアプリケーション全体で同期しているため、
+   * このアクティビティで取得する必要はありません。)
    * 
    * @param isAuto 定期的に行う自動更新の場合はtrue,そうでなければfalse。この値は表示するステータスメッセージにのみ影響します。
    */
@@ -78,7 +81,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
      * ValueProxyのリストの場合、Resolutionがリストの最後の要素にしか適用されず、その結果
      * 最後のHelpCallListItem要素以外のHelpCallProxyのcallerがnullになってしまう。
      */
-    getClientFactory().getLocalDatabase().getCacheAndExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
 
       @Override
       public void onSuccess(List<HelpCallProxy> response) {
@@ -141,27 +144,20 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
    * {@inheritDoc}
    */
   @Override
-  protected TaRemoteEventListenerDecorator createRemoteEventListenerForTa() {
-    return new TaRemoteEventListenerDecorator(super.createRemoteEventListenerForTa()) {
+  public void apply(Event evt) {
+    super.apply(evt);
+    if (evt instanceof CheckMapEvent) {
+      updateHelpCallListAsync(true);
+    }
+  }
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void helpCallChanged(HelpCallEvent evt) {
-        super.helpCallChanged(evt);
-        updateHelpCallListAsync(true);
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void checkMapChanged(CheckMapEvent evt) {
-        super.checkMapChanged(evt);
-        updateHelpCallListAsync(true);
-      }
-    };
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onHelpCallListChanged(List<HelpCallProxy> helpCallList) {
+    super.onHelpCallListChanged(helpCallList);
+    ((HelpCallListView)getTaskitView()).setHelpCalls(helpCallList);
   }
 
 }

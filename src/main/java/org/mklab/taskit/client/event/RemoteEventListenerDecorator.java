@@ -3,6 +3,7 @@
  */
 package org.mklab.taskit.client.event;
 
+import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 
@@ -10,15 +11,43 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
  * イベント監視の開始・終了を行うインターフェースです。
  * 
  * @author Yuhi Ishikura
- * @param <E> リスナの種類
  */
-public interface RemoteEventListenerDecorator<E extends RemoteEventListenerDecorator<E>> extends RemoteEventListener {
+public class RemoteEventListenerDecorator implements RemoteEventListener {
+
+  private RemoteEventListener listener;
 
   /**
-   * 装飾対象のリスナを設定します。
-   * 
-   * @param listener 装飾対象のリスナ
+   * {@link RemoteEventListenerDecorator}オブジェクトを構築します。
    */
-  void setListener(E listener);
+  RemoteEventListenerDecorator() {
+    // do nothing 
+  }
+
+  /**
+   * {@link RemoteEventListenerDecorator}オブジェクトを構築します。
+   * 
+   * @param listener リスナ
+   */
+  public RemoteEventListenerDecorator(RemoteEventListener listener) {
+    if (listener == null) throw new NullPointerException();
+    this.listener = listener;
+  }
+
+  /**
+   * 装飾する対象のリスナーを設定します。
+   * 
+   * @param listener listener
+   */
+  public void setListener(RemoteEventListener listener) {
+    this.listener = listener;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void apply(Event anEvent) {
+    this.listener.apply(anEvent);
+  }
 
 }

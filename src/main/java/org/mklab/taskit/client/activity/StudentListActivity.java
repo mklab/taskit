@@ -14,6 +14,7 @@ import org.mklab.taskit.shared.AccountProxy;
 import org.mklab.taskit.shared.AttendanceProxy;
 import org.mklab.taskit.shared.AttendanceRequest;
 import org.mklab.taskit.shared.AttendanceType;
+import org.mklab.taskit.shared.HelpCallProxy;
 import org.mklab.taskit.shared.LectureProxy;
 import org.mklab.taskit.shared.RecordProxy;
 import org.mklab.taskit.shared.ReportProxy;
@@ -70,6 +71,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
   protected void onViewShown() {
     super.onViewShown();
     final StudentListView list = (StudentListView)getTaskitView();
+    list.setUncallable(false);
 
     final List<RecordProxy> recordsCache = getClientFactory().getLocalDatabase().getCache(LocalDatabase.RECORDS);
     if (recordsCache != null) {
@@ -109,6 +111,44 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
         setRecordsToView(response);
       }
 
+    });
+
+    updateUncallableState();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void onHelpCallListChanged(List<HelpCallProxy> helpCallList) {
+    super.onHelpCallListChanged(helpCallList);
+    updateUncallableState();
+  }
+
+  /**
+   * 現在選択している学生が呼び出し中かどうか調べ、ビューの呼び出しキャンセルボタンの有効/無効を設定します。
+   */
+  private void updateUncallableState() {
+    final UserProxy selectedUser = this.view.getSelectedUser();
+    if (selectedUser == null) {
+      this.view.setUncallable(false);
+      return;
+    }
+
+    getClientFactory().getLocalDatabase().getCacheOrExecute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void onSuccess(List<HelpCallProxy> response) {
+        boolean uncallable = false;
+        for (HelpCallProxy call : response) {
+          if (call.getCaller().getId().equals(selectedUser.getAccount().getId())) {
+            uncallable = true;
+            break;
+          }
+        }
+        StudentListActivity.this.view.setUncallable(uncallable);
+      }
     });
   }
 

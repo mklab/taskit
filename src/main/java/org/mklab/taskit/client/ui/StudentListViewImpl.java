@@ -347,4 +347,12 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     this.userIdToRecord = records;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setUncallable(boolean uncallable) {
+    this.uncallButton.setVisible(uncallable);
+  }
+
 }

@@ -23,7 +23,6 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 public class GlobalEventListener {
 
   private RemoteEventService eventService;
-  @SuppressWarnings("rawtypes")
   private RemoteEventListenerDecorator globalListener;
   private RemoteEventListener baseListener;
   private boolean running = false;
@@ -48,20 +47,18 @@ public class GlobalEventListener {
     final Domain domain;
     switch (user.getType()) {
       case STUDENT:
-        this.globalListener = new StudentRemoteEventListenerDecorator(null);
         domain = Domains.STUDENT;
         break;
       case TA:
-        this.globalListener = new TaRemoteEventListenerDecorator(null);
         domain = Domains.TA;
         break;
       case TEACHER:
-        this.globalListener = new TeacherRemoteEventListenerDecorator(null);
         domain = Domains.TEACHER;
         break;
       default:
         throw new UnsupportedOperationException();
     }
+    this.globalListener = new RemoteEventListenerDecorator();
     this.eventService.addListener(domain, new RemoteEventListener() {
 
       @SuppressWarnings("synthetic-access")
@@ -79,7 +76,6 @@ public class GlobalEventListener {
    * 
    * @return グローバルリスナ
    */
-  @SuppressWarnings("rawtypes")
   public RemoteEventListenerDecorator getGlobalListener() {
     if (isListening() == false) throw new IllegalStateException("system not started."); //$NON-NLS-1$
     return this.globalListener;

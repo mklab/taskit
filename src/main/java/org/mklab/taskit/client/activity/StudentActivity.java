@@ -4,7 +4,6 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
-import org.mklab.taskit.client.event.StudentRemoteEventListenerDecorator;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
@@ -15,6 +14,8 @@ import org.mklab.taskit.shared.event.MyRecordChangeEvent;
 
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
+
+import de.novanic.eventservice.client.event.Event;
 
 
 /**
@@ -39,29 +40,13 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("synthetic-access")
-  protected StudentRemoteEventListenerDecorator createRemoteEventListenerForStudent() {
-    return new StudentRemoteEventListenerDecorator(super.createRemoteEventListenerForStudent()) {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void myHelpCallChanged(MyHelpCallEvent evt) {
-        super.myHelpCallChanged(evt);
-        updateHelpCallStateAsync();
-      }
-
-      /**
-       * {@inheritDoc}
-       */
-
-      @Override
-      public void myRecordChanged(MyRecordChangeEvent evt) {
-        super.myRecordChanged(evt);
-        updateRecordAsync();
-      }
-    };
+  public void apply(Event evt) {
+    super.apply(evt);
+    if (evt instanceof MyHelpCallEvent) {
+      updateHelpCallStateAsync();
+    } else if (evt instanceof MyRecordChangeEvent) {
+      updateRecordAsync();
+    }
   }
 
   /**
