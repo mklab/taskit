@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.setup;
 
 import org.mklab.taskit.server.domain.Account;
 import org.mklab.taskit.server.domain.Attendance;

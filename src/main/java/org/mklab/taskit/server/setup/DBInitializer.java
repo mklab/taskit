@@ -1,10 +1,11 @@
 /**
  * 
  */
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.setup;
 
 import org.mklab.taskit.server.domain.Account;
 import org.mklab.taskit.server.domain.Lecture;
+import org.mklab.taskit.server.domain.PasswordUtil;
 import org.mklab.taskit.server.domain.Report;
 import org.mklab.taskit.shared.UserType;
 
@@ -74,17 +75,17 @@ public abstract class DBInitializer {
 
   private final void registerAccounts() {
     for (final String id : getStudentIds()) {
-      final String pass = Passwords.generatePassword(8);
+      final String pass = PasswordUtil.generatePassword(8);
       Account.registerNewAccount(id, pass, UserType.STUDENT);
       this.idToPass.put(id, pass);
     }
     for (final String id : getTaIds()) {
-      final String pass = Passwords.generatePassword(8);
+      final String pass = PasswordUtil.generatePassword(8);
       Account.registerNewAccount(id, pass, UserType.TA);
       this.idToPass.put(id, pass);
     }
     for (final String id : getTeacherIds()) {
-      final String pass = Passwords.generatePassword(8);
+      final String pass = PasswordUtil.generatePassword(8);
       Account.registerNewAccount(id, pass, UserType.TEACHER);
       this.idToPass.put(id, pass);
     }

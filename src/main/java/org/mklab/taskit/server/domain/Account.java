@@ -1,6 +1,5 @@
 package org.mklab.taskit.server.domain;
 
-import org.mklab.taskit.server.Passwords;
 import org.mklab.taskit.server.auth.AuthenticationEntryPoint;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
@@ -72,7 +71,7 @@ public class Account extends AbstractEntity<String> {
     final User loginUser = ServiceUtil.getLoginUser();
     if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
 
-    if (Passwords.checkPassword(oldPassword, loginUser.getAccount().getHashedPassword()) == false) {
+    if (PasswordUtil.checkPassword(oldPassword, loginUser.getAccount().getHashedPassword()) == false) {
       throw new IllegalArgumentException("Current password was wrong."); //$NON-NLS-1$
     }
 
@@ -89,7 +88,7 @@ public class Account extends AbstractEntity<String> {
   public static void changePassword(Account account, String newPassword) {
     Validator.validatePassword(newPassword);
 
-    account.setHashedPassword(Passwords.hashPassword(newPassword));
+    account.setHashedPassword(PasswordUtil.hashPassword(newPassword));
     account.update();
   }
 
@@ -103,7 +102,7 @@ public class Account extends AbstractEntity<String> {
   @Invoker({UserType.TEACHER})
   public static void registerNewAccount(String id, String password, UserType userType) {
     if (isAlreadyRegistered(id)) throw new IllegalArgumentException("id already exists."); //$NON-NLS-1$
-    final String hashedPassword = Passwords.hashPassword(password);
+    final String hashedPassword = PasswordUtil.hashPassword(password);
     final Account account = new Account();
     account.setId(id);
     account.setHashedPassword(hashedPassword);
@@ -159,7 +158,7 @@ public class Account extends AbstractEntity<String> {
   public static User login(String id, String password) {
     if (isAlreadyRegistered(id) == false) throw new IllegalArgumentException("ID not exists."); //$NON-NLS-1$
     final Account account = getAccountById(id);
-    if (Passwords.checkPassword(password, account.getHashedPassword()) == false) {
+    if (PasswordUtil.checkPassword(password, account.getHashedPassword()) == false) {
       throw new IllegalArgumentException("Password invalid."); //$NON-NLS-1$
     }
 

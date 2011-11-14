@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mklab.taskit.server;
+package org.mklab.taskit.server.domain;
 
 import org.mklab.taskit.shared.Validator;
 
@@ -16,7 +16,7 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 26, 2011
  */
-public class Passwords {
+public class PasswordUtil {
 
   /**
    * パスワードが正しいかどうかチェックします。
