@@ -2,15 +2,61 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:ce="urn:import:com.google.gwt.user.cellview.client">
 
-	<g:HorizontalPanel>
-		<g:cell verticalAlignment='ALIGN_TOP'>
+
+	<g:DockLayoutPanel unit='EM'>
+		<g:west size='10'>
 			<g:ScrollPanel>
 				<ce:CellList ui:field='userList'></ce:CellList>
 			</g:ScrollPanel>
-		</g:cell>
-		<g:cell verticalAlignment='ALIGN_TOP'>
-			<g:Label>test</g:Label>
-		</g:cell>
-	</g:HorizontalPanel>
+		</g:west>
+		<g:center>
+			<g:VerticalPanel>
+				<g:CaptionPanel captionText='User Info' ui:field='userInfoCaption'>
+					<g:Grid>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field='userIdLabel'>User ID: </g:Label>
+							</g:customCell>
+							<g:customCell>
+								<g:TextBox ui:field='userId'></g:TextBox>
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field='userTypeLabel'>User Type: </g:Label>
+							</g:customCell>
+							<g:customCell>
+								<g:ValueListBox ui:field='userType'></g:ValueListBox>
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field='passwordLabel'>Password: </g:Label>
+							</g:customCell>
+							<g:customCell>
+								<g:PasswordTextBox ui:field='password'></g:PasswordTextBox>
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label ui:field='nameLabel'>Name: </g:Label>
+							</g:customCell>
+							<g:customCell>
+								<g:TextBox ui:field='name'></g:TextBox>
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:CheckBox ui:field='newCheck'>New</g:CheckBox>
+							</g:customCell>
+							<g:customCell>
+								<g:Button ui:field='applyButton'>Apply</g:Button>
+							</g:customCell>
+						</g:row>
+					</g:Grid>
+				</g:CaptionPanel>
+			</g:VerticalPanel>
+		</g:center>
+	</g:DockLayoutPanel>
 
 </ui:UiBinder> 

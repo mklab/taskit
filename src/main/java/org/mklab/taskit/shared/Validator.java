@@ -62,7 +62,16 @@ public class Validator {
    * @throws IllegalArgumentException ユーザー名が不正な場合
    */
   public static void validateUserName(String userName) {
-    validateLength(userName, 4, 24);
+    validateLength(userName, 0, 24);
+  }
+
+  /**
+   * ユーザーIDを検証します。
+   * 
+   * @param userId ユーザーID
+   */
+  public static void validateUserId(String userId) {
+    validateLength(userId, 4, 24);
   }
 
   private static void validateBlank(String s) {

@@ -66,7 +66,7 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
     final Messages messages = getClientFactory().getMessages();
     this.lectureButton = new Button(messages.editLecturesLabel());
     this.reportButton = new Button(messages.editReportsLabel());
-    this.userButton = new Button("Edit User");
+    this.userButton = new Button(messages.editUsersLabel());
 
     this.lectureButton.setWidth("100%"); //$NON-NLS-1$
     this.reportButton.setWidth("100%"); //$NON-NLS-1$

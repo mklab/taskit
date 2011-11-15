@@ -132,7 +132,7 @@ public class User extends AbstractEntity<Integer> {
    * @param userName ユーザー名
    */
   @Invoker({UserType.TA, UserType.TEACHER, UserType.STUDENT})
-  public static void changeUserName(String userName) {
+  public static void changeMyUserName(String userName) {
     final User loginUser = ServiceUtil.getLoginUser();
     if (loginUser == null) throw new IllegalStateException("Not logged in."); //$NON-NLS-1$
 
@@ -140,6 +140,23 @@ public class User extends AbstractEntity<Integer> {
 
     loginUser.setName(userName);
     loginUser.update();
+  }
+
+  /**
+   * ユーザー名を変更します。
+   * 
+   * @param accountId アカウントID
+   * @param userName ユーザー名
+   */
+  @Invoker(UserType.TEACHER)
+  public static void changeUserName(String accountId, String userName) {
+    User user = getUserByAccountId(accountId);
+    if (user == null) throw new IllegalStateException("unknown account id:" + accountId); //$NON-NLS-1$
+
+    Validator.validateUserName(userName);
+
+    user.setName(userName);
+    user.update();
   }
 
   /**
@@ -175,6 +192,7 @@ public class User extends AbstractEntity<Integer> {
    * 
    * @return 全ユーザーのリスト
    */
+  @Invoker(UserType.TEACHER)
   public static List<User> getAllUsers() {
     return ServiceUtil.getAllEntities("User"); //$NON-NLS-1$
   }

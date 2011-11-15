@@ -36,4 +36,11 @@ public interface UserProxy extends EntityProxy {
    */
   String getName();
 
+  /**
+   * ユーザー名を設定します。
+   * 
+   * @param name ユーザー名
+   */
+  void setName(String name);
+
 }

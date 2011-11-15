@@ -83,7 +83,7 @@ public class ProfileActivity extends TaskitActivity implements ProfileView.Prese
   @Override
   public void changeUserName(String name) {
     final Messages messages = getClientFactory().getMessages();
-    getClientFactory().getRequestFactory().userRequest().changeUserName(name).fire(new Receiver<Void>() {
+    getClientFactory().getRequestFactory().userRequest().changeMyUserName(name).fire(new Receiver<Void>() {
 
       @Override
       public void onSuccess(@SuppressWarnings("unused") Void response) {

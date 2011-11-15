@@ -5,6 +5,7 @@ package org.mklab.taskit.client.ui.admin;
 
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.shared.UserProxy;
+import org.mklab.taskit.shared.UserType;
 
 import java.util.List;
 
@@ -45,18 +46,30 @@ public interface UserEditView extends TaskitView {
   public static interface Presenter {
 
     /**
-     * ユーザーの変更を反映します。
-     * 
-     * @param user ユーザー
-     */
-    void apply(UserProxy user);
-
-    /**
      * 新たなユーザーを生成します。
      * 
      * @param id ユーザーのID
+     * @param password パスワード
+     * @param userType ユーザー種別
      */
-    void createUser(String id);
+    void createUser(String id, String password, UserType userType);
+
+    /**
+     * パスワードを変更します。
+     * 
+     * @param id 変更するユーザーのID
+     * @param password パスワード
+     */
+    void changePassword(String id, String password);
+
+    /**
+     * ユーザー名を変更します。
+     * 
+     * @param id 変更するユーザーのID
+     * @param userName ユーザー名
+     */
+    void changeUserName(String id, String userName);
+
   }
 
 }
