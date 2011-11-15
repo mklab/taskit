@@ -5,13 +5,13 @@ package org.mklab.taskit.server.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 
@@ -129,7 +129,6 @@ public class StatisticsCollector {
       final String studentId = student.getAccount().getId();
       final Record record = getOrCreateRecord(studentId);
       record.setScore(computeUserScore(studentId));
-      recompute(student.getAccount().getId());
     }
 
     updateStatistics();
@@ -187,19 +186,10 @@ public class StatisticsCollector {
       record.setStatistics(this.statistics);
     }
 
-    final TreeSet<Record> sortedRecord = new TreeSet<Record>(new Comparator<Record>() {
-
-      @Override
-      public int compare(Record o1, Record o2) {
-        return o1.getScore() > o2.getScore() ? -1 : o1.getScore() < o2.getScore() ? 1 : 0;
-      }
-    });
-    sortedRecord.addAll(allRecords);
-
     int rank = 1;
     double lastScore = Double.NEGATIVE_INFINITY;
     int lastRank = Integer.MIN_VALUE;
-    for (Record record : sortedRecord) {
+    for (Record record : sortRecordsByScore(allRecords)) {
       if (record.getScore() == lastScore) {
         record.setRank(lastRank);
       } else {
@@ -209,6 +199,18 @@ public class StatisticsCollector {
       lastScore = record.getScore();
       rank++;
     }
+  }
+
+  private static List<Record> sortRecordsByScore(Collection<Record> collection) {
+    final List<Record> list = new ArrayList<Record>(collection);
+    Collections.sort(list, new Comparator<Record>() {
+
+      @Override
+      public int compare(Record o1, Record o2) {
+        return o1.getScore() > o2.getScore() ? -1 : o1.getScore() < o2.getScore() ? 1 : 0;
+      }
+    });
+    return list;
   }
 
   /**

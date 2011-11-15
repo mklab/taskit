@@ -66,7 +66,8 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiField
   Label viewers;
 
-  @UiField
+  @UiField(provided = true)
+  Image userIdButton;
   TextBox userIdText;
 
   private Presenter presenter;
@@ -236,9 +237,10 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
     final Messages messages = getClientFactory().getMessages();
     this.panel = new StudentPanel(messages, true);
     this.userInfoView = new UserInfoView(messages);
-    this.scoreButton = createToolButton("taskit/score32.png"); //$NON-NLS-1$
-    this.uncallButton = createToolButton("taskit/uncall32.png"); //$NON-NLS-1$
-    this.reloadButton = createToolButton("taskit/reload32.png"); //$NON-NLS-1$
+    this.scoreButton = createImageButton("taskit/score32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
+    this.uncallButton = createImageButton("taskit/uncall32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
+    this.reloadButton = createImageButton("taskit/reload32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
+    this.userIdButton = createImageButton("taskit/keyboard32.png", "16pt"); //$NON-NLS-1$ //$NON-NLS-2$
 
     initUserList(messages);
     initSortTypeList();
@@ -246,9 +248,16 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
     localizeMessages(messages);
     this.viewersLabel.setVisible(false);
+    this.userIdText = new TextBox();
     listenUserIdFilterChange();
 
     return widget;
+  }
+
+  private static Image createImageButton(String imageUrl, String sizeInPt) {
+    Image image = new Image(imageUrl);
+    image.setSize(sizeInPt, sizeInPt);
+    return image;
   }
 
   /**
@@ -269,13 +278,6 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
         }
       }
     });
-  }
-
-  @SuppressWarnings("nls")
-  private static Image createToolButton(String imageUrl) {
-    Image image = new Image(imageUrl);
-    image.setSize("24pt", "24pt");
-    return image;
   }
 
   private void initSortTypeList() {
@@ -369,6 +371,15 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiHandler("reloadButton")
   void reloadUserPage(@SuppressWarnings("unused") ClickEvent evt) {
     this.presenter.reloadUserPage();
+  }
+
+  @UiHandler("userIdButton")
+  void userIdInputButtonPressed(ClickEvent evt) {
+    final PopupPanel pn = new PopupPanel(true);
+    pn.add(this.userIdText);
+    pn.setPopupPosition(evt.getClientX(), evt.getClientY());
+    pn.show();
+    this.userIdText.setFocus(true);
   }
 
   @UiHandler("scoreButton")
