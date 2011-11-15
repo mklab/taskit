@@ -28,7 +28,6 @@ import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -48,19 +47,17 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   ValueListBox<SortType> sortTypeList;
   @UiField(provided = true)
   StudentPanel panel;
-  @UiField(provided = true)
-  UserInfoView userInfoView;
-  @UiField
-  CaptionPanel userInfoPanel;
 
-  @UiField
-  Label userListLabel;
   @UiField(provided = true)
   Image uncallButton;
   @UiField(provided = true)
   Image reloadButton;
   @UiField(provided = true)
   Image scoreButton;
+  @UiField(provided = true)
+  Image userInfoButton;
+  @UiField(provided = true)
+  Image mapButton;
   @UiField
   Label viewersLabel;
   @UiField
@@ -236,11 +233,12 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
     this.panel = new StudentPanel(messages, true);
-    this.userInfoView = new UserInfoView(messages);
+    this.userInfoButton = createImageButton("taskit/userinfo32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
     this.scoreButton = createImageButton("taskit/score32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
     this.uncallButton = createImageButton("taskit/uncall32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
     this.reloadButton = createImageButton("taskit/reload32.png", "24pt"); //$NON-NLS-1$ //$NON-NLS-2$
     this.userIdButton = createImageButton("taskit/keyboard32.png", "16pt"); //$NON-NLS-1$ //$NON-NLS-2$
+    this.mapButton = createImageButton("taskit/map32.png", "24pt"); //$NON-NLS-1$//$NON-NLS-2$
 
     initUserList(messages);
     initSortTypeList();
@@ -349,8 +347,6 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   }
 
   private void localizeMessages(final Messages messages) {
-    this.userListLabel.setText(messages.userListLabel() + ": "); //$NON-NLS-1$
-    this.userInfoPanel.setCaptionText(messages.userInfoLabel());
     this.viewersLabel.setText(messages.viewersLabel() + ": "); //$NON-NLS-1$
   }
 
@@ -358,8 +354,7 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    * {@inheritDoc}
    */
   @Override
-  public void showUserPage(UserProxy user, StudentwiseRecordModel model) {
-    this.userInfoView.setUser(user);
+  public void showUserPage(StudentwiseRecordModel model) {
     this.panel.showUserPage(model);
   }
 
@@ -375,23 +370,44 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
   @UiHandler("userIdButton")
   void userIdInputButtonPressed(ClickEvent evt) {
-    final PopupPanel pn = new PopupPanel(true);
-    pn.add(this.userIdText);
-    pn.setPopupPosition(evt.getClientX(), evt.getClientY());
-    pn.show();
+    showPopup(this.userIdText, evt.getClientX(), evt.getClientY());
     this.userIdText.setFocus(true);
   }
 
   @UiHandler("scoreButton")
-  void showScore(ClickEvent evt) {
+  void scoreButtonPressed(ClickEvent evt) {
     final RecordProxy record = getCurrentUserRecord();
     if (record == null) return;
 
+    final RecordView recordView = new RecordView(getClientFactory().getMessages());
+    recordView.setRecord(record);
+    showPopup(recordView, evt.getClientX(), evt.getClientY());
+  }
+
+  @UiHandler("userInfoButton")
+  void userInfoButtonPressed(ClickEvent evt) {
+    final UserProxy selectedUser = getSelectedUser();
+    if (selectedUser == null) return;
+
+    final UserInfoView userInfoView = new UserInfoView(getClientFactory().getMessages());
+    userInfoView.setUser(selectedUser);
+    showPopup(userInfoView, evt.getClientX(), evt.getClientY());
+  }
+
+  @UiHandler("mapButton")
+  void mapButtonPressed(ClickEvent evt) {
+    final UserProxy selectedUser = getSelectedUser();
+    if (selectedUser == null) return;
+    final Image mapImage = new Image("roommap?id=" + selectedUser.getAccount().getId()); //$NON-NLS-1$
+
+    showPopup(mapImage, evt.getClientX(), evt.getClientY());
+  }
+
+  private static void showPopup(Widget widget, int x, int y) {
     final PopupPanel popup = new PopupPanel(true);
-    final RecordView statisticsView = new RecordView(getClientFactory().getMessages());
-    statisticsView.setRecord(record);
-    popup.add(statisticsView);
-    popup.setPopupPosition(evt.getClientX(), evt.getClientY());
+    popup.setModal(true);
+    popup.add(widget);
+    popup.setPopupPosition(x, y);
     popup.show();
   }
 

@@ -154,8 +154,14 @@ public class StudentPanel extends Composite {
   }
 
   private void initCommonColumns() {
-    this.table.addColumn(createLectureNumberColumn(), this.messages.numberColumnLabel());
-    this.table.addColumn(createAttendanceColumn(), this.messages.attendenceTypeLabel());
+    final Column<LectureScore, LectureScore> lectureNumberColumn = createLectureNumberColumn();
+    final Column<LectureScore, AttendanceType> attendanceColumn = createAttendanceColumn();
+
+    this.table.addColumn(lectureNumberColumn, this.messages.numberColumnLabel());
+    this.table.addColumn(attendanceColumn, this.messages.attendenceTypeLabel());
+
+    this.table.setColumnWidth(lectureNumberColumn, "4em"); //$NON-NLS-1$
+    this.table.setColumnWidth(attendanceColumn, "6em"); //$NON-NLS-1$
   }
 
   @SuppressWarnings("static-method")
