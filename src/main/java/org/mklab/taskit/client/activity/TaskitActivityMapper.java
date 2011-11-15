@@ -14,6 +14,7 @@ import org.mklab.taskit.client.place.Profile;
 import org.mklab.taskit.client.place.ReportEdit;
 import org.mklab.taskit.client.place.Student;
 import org.mklab.taskit.client.place.StudentList;
+import org.mklab.taskit.client.place.UserEdit;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -60,6 +61,7 @@ public class TaskitActivityMapper implements ActivityMapper {
     if (place instanceof ReportEdit) return new ReportEditActivity(this.clientFactory);
     if (place instanceof Admin) return new AdminActivity(this.clientFactory);
     if (place instanceof CheckInList) return new CheckInListActivity(this.clientFactory);
+    if (place instanceof UserEdit) return new UserEditActivity(this.clientFactory);
 
     return null;
   }

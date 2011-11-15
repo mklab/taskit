@@ -23,6 +23,7 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
 
   Button lectureButton;
   Button reportButton;
+  Button userButton;
 
   /**
    * {@link AdminViewImpl}オブジェクトを構築します。
@@ -53,19 +54,31 @@ public class AdminViewImpl extends AbstractTaskitView implements AdminView {
    * {@inheritDoc}
    */
   @Override
+  public HasClickHandlers getUserEditorLink() {
+    return this.userButton;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
     this.lectureButton = new Button(messages.editLecturesLabel());
     this.reportButton = new Button(messages.editReportsLabel());
+    this.userButton = new Button("Edit User");
 
     this.lectureButton.setWidth("100%"); //$NON-NLS-1$
     this.reportButton.setWidth("100%"); //$NON-NLS-1$
+    this.userButton.setWidth("100%"); //$NON-NLS-1$
 
     final VerticalPanel pn = new VerticalPanel();
     pn.add(this.lectureButton);
     pn.add(this.reportButton);
+    pn.add(this.userButton);
     pn.setCellHorizontalAlignment(this.lectureButton, HasHorizontalAlignment.ALIGN_CENTER);
     pn.setCellHorizontalAlignment(this.reportButton, HasHorizontalAlignment.ALIGN_CENTER);
+    pn.setCellHorizontalAlignment(this.userButton, HasHorizontalAlignment.ALIGN_CENTER);
 
     final CaptionPanel caption = new CaptionPanel();
     caption.setCaptionText("Menu"); //$NON-NLS-1$

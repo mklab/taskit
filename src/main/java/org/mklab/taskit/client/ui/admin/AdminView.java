@@ -9,7 +9,9 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 
 
 /**
- * @author ishikura
+ * 管理者用のビューを表すインターフェースです。
+ * 
+ * @author Yuhi Ishikura
  */
 public interface AdminView extends TaskitView {
 
@@ -26,5 +28,12 @@ public interface AdminView extends TaskitView {
    * @return 課題データ編集アクティビティのリンク
    */
   HasClickHandlers getReportEditorLink();
+
+  /**
+   * ユーザーデータ編集アクティビティへのリンクを取得します。
+   * 
+   * @return ユーザーデータ編集アクティビティへのリンク
+   */
+  HasClickHandlers getUserEditorLink();
 
 }
