@@ -40,6 +40,9 @@
 						<g:cell verticalAlignment="ALIGN_MIDDLE">
 							<g:ValueListBox ui:field='sortTypeList'></g:ValueListBox>
 						</g:cell>
+						<g:cell verticalAlignment="ALIGN_MIDDLE">
+							<g:TextBox ui:field='userIdText'></g:TextBox>
+						</g:cell>
 					</g:HorizontalPanel>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>

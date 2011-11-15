@@ -20,6 +20,8 @@ import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.text.shared.Renderer;
@@ -30,6 +32,7 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -63,8 +66,12 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
   @UiField
   Label viewers;
 
+  @UiField
+  TextBox userIdText;
+
   private Presenter presenter;
-  private List<UserProxy> selectableUsers;
+  private List<UserProxy> allUsers;
+  private List<UserProxy> listItemUsers;
   private Map<String, RecordProxy> userIdToRecord;
   private static final Binder binder = GWT.create(Binder.class);
   private static SortType lastSortType = SortType.ID_ASCENDING;
@@ -108,17 +115,18 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
    */
   @Override
   public void setListData(List<UserProxy> listData) {
-    this.selectableUsers = listData;
+    this.allUsers = listData;
     resetListData();
   }
 
   private void resetListData() {
-    if (this.selectableUsers == null || this.selectableUsers.size() == 0) {
+    if (this.allUsers == null || this.allUsers.size() == 0) {
       this.userList.setAcceptableValues(Collections.<UserProxy> emptyList());
       return;
     }
 
-    final List<UserProxy> sortedListData = new ArrayList<UserProxy>(this.selectableUsers);
+    final List<UserProxy> sortedListData = filterStudentsByIdOrName();
+
     final SortType sortType = this.sortTypeList.getValue();
     if (sortType != null && sortType != SortType.ID_ASCENDING) {
       switch (sortType) {
@@ -136,7 +144,31 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
       }
     }
     sortedListData.add(0, null);
+    this.listItemUsers = sortedListData;
     this.userList.setAcceptableValues(sortedListData);
+  }
+
+  /**
+   * 現在選択可能な学生を、入力されているテキストからID、名前でフィルタリングした新しいリストを取得します。
+   * 
+   * @return フィルタリングされた新しいリスト
+   */
+  private List<UserProxy> filterStudentsByIdOrName() {
+    final String inputIdText = this.userIdText.getText();
+    final List<UserProxy> filteredListData;
+    if (inputIdText != null && inputIdText.length() > 0) {
+      filteredListData = new ArrayList<UserProxy>();
+      for (UserProxy user : this.allUsers) {
+        if (user.getAccount().getId().contains(inputIdText)) {
+          filteredListData.add(user);
+        } else if (user.getName() != null && user.getName().contains(inputIdText)) {
+          filteredListData.add(user);
+        }
+      }
+    } else {
+      filteredListData = new ArrayList<UserProxy>(this.allUsers);
+    }
+    return filteredListData;
   }
 
   /**
@@ -214,8 +246,29 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
     localizeMessages(messages);
     this.viewersLabel.setVisible(false);
+    listenUserIdFilterChange();
 
     return widget;
+  }
+
+  /**
+   * ユーザーID入力テキストを監視し、入力があればフィルタリングを行うようイベント処理します。
+   */
+  private void listenUserIdFilterChange() {
+    this.userIdText.addKeyUpHandler(new KeyUpHandler() {
+
+      @SuppressWarnings({"synthetic-access", "unqualified-field-access"})
+      @Override
+      public void onKeyUp(@SuppressWarnings("unused") KeyUpEvent event) {
+        resetListData();
+
+        final int selectableUserCount = listItemUsers.size() - 1; // 1つは初期選択用のnull
+        // 絞り込んだ結果一人しか選択可能な生徒がいない場合
+        if (listItemUsers != null && selectableUserCount == 1) {
+          presenter.listSelectionChanged(listItemUsers.get(1));
+        }
+      }
+    });
   }
 
   @SuppressWarnings("nls")
