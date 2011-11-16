@@ -46,7 +46,7 @@ public abstract class TooltipCell<C> extends AbstractCell<C> {
 
     final PopupPanel popup = new PopupPanel();
     popup.setAutoHideEnabled(true);
-    popup.setModal(true);
+    popup.setModal(false);
     popup.add(getTooltipOf(value));
     popup.setPopupPosition(event.getClientX(), event.getClientY());
     popup.show();
