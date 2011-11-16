@@ -45,10 +45,9 @@ public interface StudentListView extends TaskitView {
   /**
    * ユーザーの成績を表示します。
    * 
-   * @param user ユーザー
    * @param model 成績データ
    */
-  void showUserPage(UserProxy user, StudentwiseRecordModel model);
+  void showUserPage(StudentwiseRecordModel model);
 
   /**
    * ユーザーの成績の表示をクリアします。

@@ -6,6 +6,7 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.place.LectureEdit;
 import org.mklab.taskit.client.place.ReportEdit;
+import org.mklab.taskit.client.place.UserEdit;
 import org.mklab.taskit.client.ui.TaskitView;
 import org.mklab.taskit.client.ui.admin.AdminView;
 
@@ -47,6 +48,13 @@ public class AdminActivity extends TaskitActivity {
       @Override
       public void onClick(@SuppressWarnings("unused") ClickEvent event) {
         getClientFactory().getPlaceController().goTo(ReportEdit.INSTANCE);
+      }
+    });
+    adminView.getUserEditorLink().addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(UserEdit.INSTANCE);
       }
     });
     return adminView;

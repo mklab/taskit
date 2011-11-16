@@ -328,7 +328,7 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
       @Override
       public void handleResult(StudentwiseRecordModel model) {
         showInformationMessage(getClientFactory().getMessages().fetchedUserRecordsMessage(student.getAccount().getId()));
-        view.showUserPage(student, model);
+        view.showUserPage(model);
 
         final StudentwiseRecordModel.LectureScore latestRow = Util.getLatestScore(model);
         if (latestRow != null) {

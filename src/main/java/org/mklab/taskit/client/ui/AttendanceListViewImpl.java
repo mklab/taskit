@@ -127,6 +127,7 @@ public class AttendanceListViewImpl extends AbstractTaskitView implements Attend
       };
       this.table.addColumn(attendanceCell, getLabelOfAttendanceType(getClientFactory().getMessages(), type));
     }
+    this.table.setColumnWidth(userColumn, "7em"); //$NON-NLS-1$
 
     return binder.createAndBindUi(this);
   }
