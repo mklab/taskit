@@ -32,9 +32,9 @@ public class RecordView extends Composite {
   @UiField
   Label rank;
   @UiField
-  Label scoreLabel;
+  Label achievementRatioLabel;
   @UiField
-  Label score;
+  Label achievementRatio;
   @UiField
   Label deviationLabel;
   @UiField
@@ -66,10 +66,24 @@ public class RecordView extends Composite {
   @SuppressWarnings("nls")
   private void localizeMessages() {
     this.rankLabel.setText(this.messages.rankLabel() + ": ");
-    this.scoreLabel.setText(this.messages.scoreLabel() + ": ");
+    this.achievementRatioLabel.setText(this.messages.achievementRatioLabel() + ": ");
     this.deviationLabel.setText(this.messages.deviationLabel() + ": ");
     this.averageLabel.setText(this.messages.averageLabel() + ": ");
     this.standardDeviationLabel.setText(this.messages.standardDeviation() + ": ");
+  }
+
+  /*
+   * ここで見せる成績はあくまでTASKitが独自に計算しているもので
+   * 実際の成績とは直結しないため、むやみに見せるとまずい
+   */
+  /**
+   * 学生向けに見せる情報をフィルタリングします。
+   */
+  public void filterContentsForStudent() {
+    this.rankLabel.setVisible(false);
+    this.rank.setVisible(false);
+    this.deviationLabel.setVisible(false);
+    this.deviation.setVisible(false);
   }
 
   /**
@@ -83,9 +97,9 @@ public class RecordView extends Composite {
 
     final NumberFormat fmt = NumberFormat.getFormat("00.00");
     this.rank.setText(String.valueOf(record.getRank()) + "/" + String.valueOf(record.getStatistics().getStudentCount()));
-    this.score.setText(fmt.format(record.getScore()) + "/" + fmt.format(record.getStatistics().getMaximumScore()));
+    this.achievementRatio.setText(fmt.format(record.getScore() / record.getStatistics().getMaximumScore() * 100) + "%");
     this.deviation.setText(fmt.format(record.getDeviation()));
-    this.average.setText(fmt.format(record.getStatistics().getAverage()) + "(" + fmt.format(percentOfAverage) + ")");
+    this.average.setText(fmt.format(percentOfAverage) + "%");
     this.standardDeviation.setText(fmt.format(record.getStatistics().getStandardDeviation()));
   }
 

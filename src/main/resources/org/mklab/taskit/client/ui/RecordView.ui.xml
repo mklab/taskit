@@ -9,8 +9,8 @@
 			<g:Label ui:field='rank'></g:Label>
 		</g:HorizontalPanel>
 		<g:HorizontalPanel>
-			<g:Label ui:field='scoreLabel'>Score:</g:Label>
-			<g:Label ui:field='score'></g:Label>
+			<g:Label ui:field='achievementRatioLabel'>Score:</g:Label>
+			<g:Label ui:field='achievementRatio'></g:Label>
 		</g:HorizontalPanel>
 		<g:HorizontalPanel>
 			<g:Label ui:field='deviationLabel'>Deviation:</g:Label>

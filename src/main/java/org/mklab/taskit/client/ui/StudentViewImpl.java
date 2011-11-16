@@ -104,6 +104,7 @@ public class StudentViewImpl extends AbstractTaskitView implements StudentView {
   protected Widget initContent() {
     final Messages messages = getClientFactory().getMessages();
     this.statisticsView = new RecordView(messages);
+    this.statisticsView.filterContentsForStudent();
     this.scorePanel = new StudentPanel(messages, this.editable);
     this.userInfoView = new UserInfoView(messages);
 
