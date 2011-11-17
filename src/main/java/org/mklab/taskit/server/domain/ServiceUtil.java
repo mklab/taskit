@@ -17,6 +17,8 @@ import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
 import de.novanic.eventservice.client.event.Event;
@@ -36,6 +38,8 @@ import de.novanic.eventservice.service.registry.user.UserManagerFactory;
  * @author ishikura
  */
 public class ServiceUtil {
+
+  private static Logger logger = Logger.getLogger(ServiceUtil.class);
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
   /** セッション中のユーザーオブジェクトのキーです。 */
@@ -61,6 +65,9 @@ public class ServiceUtil {
     final EntityManager em = EMF.get().createEntityManager();
     try {
       return em.find(clazz, id);
+    } catch (Throwable e) {
+      logger.error("Failed to find entity:" + clazz, e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }
@@ -78,6 +85,9 @@ public class ServiceUtil {
     final Query q = em.createQuery("select o from " + tableName + " o");
     try {
       return q.getResultList();
+    } catch (Throwable e) {
+      logger.error("Failed to get all entities.", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }

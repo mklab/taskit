@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Version;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author ishikura
@@ -13,6 +15,8 @@ import javax.persistence.Version;
 public abstract class AbstractEntity<I> {
 
   private Integer version = Integer.valueOf(1);
+  /** インスタンスで利用するロガーです。 */
+  private static Logger logger = Logger.getLogger(AbstractEntity.class);
 
   /**
    * versionを取得します。
@@ -48,6 +52,15 @@ public abstract class AbstractEntity<I> {
   }
 
   /**
+   * 予期せぬ例外のログを取ります。
+   * 
+   * @param e 例外
+   */
+  protected static final void logThrown(Throwable e) {
+    logger.error("Unexpected exception.", e); //$NON-NLS-1$
+  }
+
+  /**
    * データベースに変更を反映します。
    * <p>
    * IDを変更してこのメソッドを呼び出すと、新たなエンティティとして登録されてしまうため注意してください。
@@ -60,7 +73,7 @@ public abstract class AbstractEntity<I> {
       em.merge(this);
       t.commit();
     } catch (Throwable ex) {
-      ex.printStackTrace();
+      logThrown(ex);
       t.rollback();
     } finally {
       em.close();
@@ -79,7 +92,7 @@ public abstract class AbstractEntity<I> {
       em.persist(this);
       t.commit();
     } catch (Throwable ex) {
-      ex.printStackTrace();
+      logThrown(ex);
       t.rollback();
     } finally {
       em.close();
@@ -113,7 +126,7 @@ public abstract class AbstractEntity<I> {
       }
       t.commit();
     } catch (Throwable ex) {
-      ex.printStackTrace();
+      logThrown(ex);
       t.rollback();
     } finally {
       em.close();

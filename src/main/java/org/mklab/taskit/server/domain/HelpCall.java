@@ -23,6 +23,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * TAコールに関する情報を保持するクラスです。
@@ -32,6 +34,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class HelpCall extends AbstractEntity<Integer> {
 
+  private static Logger logger = Logger.getLogger(HelpCall.class);
   private Integer id;
   /** 呼び出した人のアカウントです。 */
   private Account caller;
@@ -176,6 +179,7 @@ public class HelpCall extends AbstractEntity<Integer> {
 
       fireHelpCallStateChanged(loginUser, HelpCallEvent.Type.ADDED, call.getDate(), message);
     } catch (Throwable e) {
+      logger.error("Failed to call.", e); //$NON-NLS-1$
       t.rollback();
     } finally {
       em.close();
@@ -226,6 +230,7 @@ public class HelpCall extends AbstractEntity<Integer> {
 
       fireHelpCallStateChanged(User.getUserByAccountId(accountId), HelpCallEvent.Type.DELETED, new Date(), null);
     } catch (Throwable e) {
+      logger.error("Failed to cancel calling.", e); //$NON-NLS-1$
       t.rollback();
     } finally {
       em.close();
@@ -344,6 +349,9 @@ public class HelpCall extends AbstractEntity<Integer> {
     q.setParameter("date", helpCall.getDate()); //$NON-NLS-1$
     try {
       return ((Long)q.getResultList().get(0)).intValue();
+    } catch (Throwable e) {
+      logger.error("Failed to get student position at caller queue."); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }

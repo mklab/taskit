@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author ishikura
@@ -24,6 +26,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class Report extends AbstractEntity<Integer> {
+
+  private static Logger logger = Logger.getLogger(Report.class);
 
   private Integer id;
   /** 提出期限です。 */
@@ -180,6 +184,9 @@ public class Report extends AbstractEntity<Integer> {
     try {
       Query q = em.createQuery("select r from Report r order by r.lecture.date"); //$NON-NLS-1$
       return q.getResultList();
+    } catch (Throwable e) {
+      logger.error("Failed to get all reports.", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }
@@ -197,6 +204,9 @@ public class Report extends AbstractEntity<Integer> {
       Query q = em.createQuery("select r from Report r where r.lecture.date < :currentTime order by r.lecture.date"); //$NON-NLS-1$
       q.setParameter("currentTime", new Date()); //$NON-NLS-1$
       return q.getResultList();
+    } catch (Throwable e) {
+      logger.error("Failed to get all reports before now.", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }
@@ -218,6 +228,9 @@ public class Report extends AbstractEntity<Integer> {
       Query q = em.createQuery("select r from Report r where r.lecture.id=:lectureId"); //$NON-NLS-1$
       q.setParameter("lectureId", lectureId); //$NON-NLS-1$
       return q.getResultList().size() > 0;
+    } catch (Throwable e) {
+      logger.error("Failed to check if lecture is refered", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }
@@ -285,7 +298,7 @@ public class Report extends AbstractEntity<Integer> {
       q.executeUpdate();
       t.commit();
     } catch (Throwable ex) {
-      ex.printStackTrace();
+      logger.error("Failed to delete report.", ex); //$NON-NLS-1$
       t.rollback();
     } finally {
       em.close();

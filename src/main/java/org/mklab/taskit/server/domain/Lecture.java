@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author ishikura
@@ -25,6 +27,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class Lecture extends AbstractEntity<Integer> {
+
+  private static Logger logger = Logger.getLogger(Lecture.class);
 
   private Integer id;
   private Date date;
@@ -154,6 +158,9 @@ public class Lecture extends AbstractEntity<Integer> {
     final Query q = em.createQuery("select l from Lecture l order by l.date"); //$NON-NLS-1$
     try {
       return q.getResultList();
+    } catch (Throwable e) {
+      logger.error("Failed to get all lectures.", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }
@@ -172,6 +179,9 @@ public class Lecture extends AbstractEntity<Integer> {
     q.setParameter("title", title); //$NON-NLS-1$
     try {
       return q.getResultList();
+    } catch (Throwable e) {
+      logger.error("Failed to get lectures by title.", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }

@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * 出席状況を表すクラスです。
@@ -27,6 +29,8 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 public class Attendance extends AbstractEntity<Integer> {
+
+  private static Logger logger = Logger.getLogger(Attendance.class);
 
   /** IDです。 */
   private Integer id;
@@ -281,9 +285,12 @@ public class Attendance extends AbstractEntity<Integer> {
       Query q = em.createQuery("select a from Attendance a where a.lecture.id=:lectureId"); //$NON-NLS-1$
       q.setParameter("lectureId", lectureId); //$NON-NLS-1$
       return q.getResultList().size() > 0;
+    } catch (Throwable e) {
+      logger.error("Failed to check if lecture is refered.", e); //$NON-NLS-1$
     } finally {
       em.close();
     }
+    return false;
   }
 
 }

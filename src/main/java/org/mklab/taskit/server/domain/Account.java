@@ -13,6 +13,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Id;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author ishikura
@@ -21,6 +23,7 @@ import javax.persistence.Id;
 @Entity
 public class Account extends AbstractEntity<String> {
 
+  private static Logger logger = Logger.getLogger(Account.class);
   private String id;
   private String hashedPassword;
 
@@ -118,6 +121,7 @@ public class Account extends AbstractEntity<String> {
       em.persist(user);
       t.commit();
     } catch (Throwable ex) {
+      logger.error("Failed to register new account.", ex); //$NON-NLS-1$
       t.rollback();
     } finally {
       em.close();
@@ -141,6 +145,7 @@ public class Account extends AbstractEntity<String> {
       em.remove(account);
       t.commit();
     } catch (Throwable ex) {
+      logger.error("Failed to unregister account.", ex); //$NON-NLS-1$
       t.rollback();
     } finally {
       em.close();
