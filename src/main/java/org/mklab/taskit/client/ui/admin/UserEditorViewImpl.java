@@ -233,6 +233,7 @@ public class UserEditorViewImpl extends AbstractTaskitView implements UserEditVi
 
     if (isNew) {
       this.presenter.createUser(this.userId.getText(), this.password.getText(), this.userType.getValue());
+      this.presenter.changeUserName(this.edittingUser.getAccount().getId(), this.name.getText());
     } else {
       String p = this.password.getText();
       if (p != null && p.length() > 0) {
