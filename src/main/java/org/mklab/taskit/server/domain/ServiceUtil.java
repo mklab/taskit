@@ -7,6 +7,7 @@ import org.mklab.taskit.server.auth.InvocationEntrance;
 import org.mklab.taskit.server.auth.Invoker;
 import org.mklab.taskit.shared.UserType;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ import de.novanic.eventservice.service.registry.user.UserManagerFactory;
  */
 public class ServiceUtil {
 
-  private static Logger logger = Logger.getLogger(ServiceUtil.class);
+  static Logger logger = Logger.getLogger(ServiceUtil.class);
 
   static final String IS_LOGGED_IN_KEY = "loggedIn"; //$NON-NLS-1$
   /** セッション中のユーザーオブジェクトのキーです。 */
@@ -322,7 +323,11 @@ public class ServiceUtil {
         for (final UserType userType : invoker.value()) {
           if (user.getType() == userType) {
             final UserInfo userInGwtEventService = userManager.getUser(clientId);
-            userInGwtEventService.addEvent(domain, event);
+            if (userInGwtEventService == null) {
+              logger.error(MessageFormat.format("User {0} is not managed.", clientId)); //$NON-NLS-1$
+            } else {
+              userInGwtEventService.addEvent(domain, event);
+            }
           }
         }
       } else {
