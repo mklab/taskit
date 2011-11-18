@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * あるユーザーが現在どのユーザー(生徒)を見ているのかを表すクラスです。
@@ -27,6 +29,7 @@ import javax.persistence.Query;
 @Entity
 public class CheckMap extends AbstractEntity<String> {
 
+  private static Logger logger = Logger.getLogger(CheckMap.class);
   /** ユーザー(TAもしくは先生)のIDです。 */
   private String id;
   /** ユーザーが現在参照している学生です。 */
@@ -208,6 +211,7 @@ public class CheckMap extends AbstractEntity<String> {
       userIdList = q.getResultList();
       t.commit();
     } catch (Throwable e) {
+      logger.error("Failed to getUserInCheck()", e); //$NON-NLS-1$
       t.rollback();
     } finally {
       em.close();
@@ -227,6 +231,9 @@ public class CheckMap extends AbstractEntity<String> {
     final Query q = em.createQuery("select c from CheckMap c order by c.id"); //$NON-NLS-1$
     try {
       return q.getResultList();
+    } catch (Throwable e) {
+      logger.error("Failed to getAllCheckMap()", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }

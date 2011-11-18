@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Query;
 import javax.validation.constraints.NotNull;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * @author ishikura
@@ -26,6 +28,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Submission extends AbstractEntity<Integer> {
 
+  private static Logger logger = Logger.getLogger(Submission.class);
   private Integer id;
   /** 提出者のアカウントです。 */
   private Account submitter;
@@ -303,6 +306,9 @@ public class Submission extends AbstractEntity<Integer> {
       Query q = em.createQuery("select s from Submission s where s.report.id=:reportId"); //$NON-NLS-1$
       q.setParameter("reportId", reportId); //$NON-NLS-1$
       return q.getResultList().size() > 0;
+    } catch (Throwable e) {
+      logger.error("Failed to check if report is refered.", e); //$NON-NLS-1$
+      throw new RuntimeException(e);
     } finally {
       em.close();
     }

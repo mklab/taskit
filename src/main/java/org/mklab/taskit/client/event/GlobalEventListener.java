@@ -6,11 +6,17 @@ package org.mklab.taskit.client.event;
 import org.mklab.taskit.shared.UserProxy;
 import org.mklab.taskit.shared.event.Domains;
 
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.Domain;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+import de.novanic.eventservice.client.event.listener.unlisten.UnlistenEvent;
+import de.novanic.eventservice.client.event.listener.unlisten.UnlistenEventListener;
+import de.novanic.eventservice.client.event.listener.unlisten.UnlistenEventListenerAdapter;
 
 
 /**
@@ -59,6 +65,30 @@ public class GlobalEventListener {
         throw new UnsupportedOperationException();
     }
     this.globalListener = new RemoteEventListenerDecorator();
+    this.eventService.addUnlistenListener(UnlistenEventListener.Scope.LOCAL, new UnlistenEventListenerAdapter() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void onUnlisten(@SuppressWarnings("unused") UnlistenEvent anUnlistenEvent) {
+        if (isListening()) {
+          Window.alert("Detected connection timeout."); //$NON-NLS-1$
+          reload();
+        }
+      }
+    }, new AsyncCallback<Void>() {
+
+      @Override
+      public void onSuccess(@SuppressWarnings("unused") Void result) {
+        // never called.
+      }
+
+      @Override
+      public void onFailure(@SuppressWarnings("unused") Throwable caught) {
+        // never called.
+      }
+    });
     this.eventService.addListener(domain, new RemoteEventListener() {
 
       @SuppressWarnings("synthetic-access")
@@ -70,6 +100,13 @@ public class GlobalEventListener {
     });
     this.running = true;
   }
+
+  /**
+   * ブラウザの再読み込みを行います。
+   */
+  public native void reload() /*-{ 
+                              $wnd.location.reload(); 
+                              }-*/;
 
   /**
    * アクティビティ間で共通に利用するグローバルリスナを取得します。
@@ -86,6 +123,7 @@ public class GlobalEventListener {
    */
   public void unlisten() {
     if (this.running == false) throw new IllegalStateException();
+    this.running = false;
     this.eventService.removeListeners();
   }
 
