@@ -8,6 +8,7 @@ import org.mklab.taskit.shared.HelpCallProxy;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -170,10 +173,12 @@ public class HelpCallListViewImpl extends AbstractTaskitView implements HelpCall
   private void initColumns() {
     this.table.addColumn(new Column<HelpCallListViewImpl.HelpCallListItem, String>(new TextCell()) {
 
-      @SuppressWarnings("deprecation")
+      final DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM);
+
       @Override
       public String getValue(HelpCallListItem object) {
-        return object.getHelpCall().getDate().toLocaleString();
+        final Date date = object.getHelpCall().getDate();
+        return this.format.format(date);
       }
     }, getClientFactory().getMessages().dateLabel());
     this.table.addColumn(new Column<HelpCallListItem, String>(new TextCell()) {

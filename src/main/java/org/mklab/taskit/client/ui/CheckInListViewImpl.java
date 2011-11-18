@@ -7,11 +7,14 @@ import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.Messages;
 import org.mklab.taskit.shared.CheckMapProxy;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -94,10 +97,12 @@ public class CheckInListViewImpl extends AbstractTaskitView implements CheckInLi
     }, messages.studentLabel());
     this.table.addColumn(new Column<CheckMapProxy, String>(new TextCell()) {
 
-      @SuppressWarnings("deprecation")
+      private final DateTimeFormat format = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM);
+
       @Override
       public String getValue(CheckMapProxy object) {
-        return object.getDate().toLocaleString();
+        final Date date = object.getDate();
+        return this.format.format(date);
       }
     }, messages.checkInTimeLabel());
 
