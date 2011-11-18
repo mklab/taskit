@@ -405,7 +405,6 @@ public class StudentListViewImpl extends AbstractTaskitView implements StudentLi
 
   private static void showPopup(Widget widget, int x, int y) {
     final PopupPanel popup = new PopupPanel(true);
-    popup.setModal(false);
     popup.add(widget);
     popup.setPopupPosition(x, y);
     popup.show();
