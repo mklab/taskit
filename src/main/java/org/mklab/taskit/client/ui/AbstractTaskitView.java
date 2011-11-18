@@ -4,8 +4,11 @@
 package org.mklab.taskit.client.ui;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.place.HelpCallList;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -85,6 +88,15 @@ public abstract class AbstractTaskitView extends LayoutPanel implements TaskitVi
     dock.add(content);
 
     add(dock);
+
+    // ビューらしからぬ処理。どうにかしたい。
+    this.helpCallCountLabel.addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(@SuppressWarnings("unused") ClickEvent event) {
+        getClientFactory().getPlaceController().goTo(HelpCallList.INSTANCE);
+      }
+    });
   }
 
   /**
