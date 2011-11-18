@@ -7,8 +7,12 @@
 		<links>
 			<item name="Koga Laboratory" href="http://www.mk.ces.kyutech.ac.jp/" />
 		</links>
+		<menu name="General">
+			<item name="Active Lectures" href="./lectures.html"/>
+			<item name="Downloads" href="./download.html" />
+			<!--item name="Environment" href="./environment.html" /-->
+		</menu>
 		<menu name="Developer">
-			<item name="Environment" href="./environment.html" />
 		</menu>
 		${reports}
 	</body>

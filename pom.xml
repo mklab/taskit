@@ -8,6 +8,21 @@
 	<packaging>war</packaging>
 	<version>1.0.0</version>
 	<name>TASKit</name>
+	<description>TASKit supports TA works.</description>
+	<url>http://taskit.mk.ces.kyutech.ac.jp/</url>
+
+	<developers>
+		<developer>
+			<email>ishikura@mk.ces.kyutech.ac.jp</email>
+			<id>yishikura</id>
+			<name>Yuhi Ishikura</name>
+		</developer>
+		<developer>
+			<email>teshima@mk.ces.kyutech.ac.jp</email>
+			<id>hteshima</id>
+			<name>Hiroshi Teshima</name>
+		</developer>
+	</developers>
 
 	<properties>
 		<gwtVersion>2.4.0</gwtVersion>
@@ -379,6 +394,13 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>1.0</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<reporting>
@@ -407,4 +429,18 @@
 			<layout>default</layout>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>mklab-repository</id>
+			<name>MKLAB Maven Repository</name>
+			<url>scp://birdcage.mk.ces.kyutech.ac.jp/home/mutsuki/maven</url>
+			<layout>default</layout>
+		</repository>
+		<site>
+		<id>mklab-taskit-site</id>
+		<name>MKLAB TASKit Site</name>
+		<url>scp://birdcage.mk.ces.kyutech.ac.jp/home/mutsuki/document/taskit</url>
+		</site>
+	</distributionManagement>
 </project>
