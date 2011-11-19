@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.media.client.Audio;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -43,6 +44,7 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
  */
 public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, RemoteEventListener {
 
+  private static int lastHelpCallCount = 0;
   private ClientFactory clientFactory;
   private AcceptsOneWidget container;
   private UserProxy loginUser;
@@ -264,9 +266,25 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
    * @param helpCalls 最新のヘルプコールリスト
    */
   protected void onHelpCallListChanged(List<HelpCallProxy> helpCalls) {
+    final int helpCallCount = helpCalls.size();
     if (this.view instanceof HelpCallDisplayable) {
       ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
-      ((HelpCallDisplayable)this.view).showHelpCallCount(helpCalls.size());
+      ((HelpCallDisplayable)this.view).showHelpCallCount(helpCallCount);
+    }
+    if (lastHelpCallCount == 0 && helpCallCount > 0) {
+      playCallSound();
+    }
+    lastHelpCallCount = helpCallCount;
+  }
+
+  /**
+   * ヘルプコールが発生したことを示す音を鳴らします。
+   */
+  private static void playCallSound() {
+    final Audio audio = Audio.createIfSupported();
+    if (audio != null) {
+      audio.setSrc("taskit/call.mp3"); //$NON-NLS-1$
+      audio.play();
     }
   }
 
