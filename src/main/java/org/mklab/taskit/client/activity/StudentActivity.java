@@ -4,6 +4,7 @@
 package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
+import org.mklab.taskit.client.event.TimeoutRecoveryFailureException;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.ui.StudentView;
@@ -47,6 +48,15 @@ public class StudentActivity extends TaskitActivity implements StudentView.Prese
     } else if (evt instanceof MyRecordChangeEvent) {
       updateRecordAsync();
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void recoverFromTimeout() throws TimeoutRecoveryFailureException {
+    updateHelpCallStateAsync();
+    updateRecordAsync();
   }
 
   /**

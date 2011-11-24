@@ -5,6 +5,7 @@ package org.mklab.taskit.client.activity;
 
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
+import org.mklab.taskit.client.event.TimeoutRecoveryFailureException;
 import org.mklab.taskit.client.model.StudentwiseRecordModel;
 import org.mklab.taskit.client.model.StudentwiseRecordQuery;
 import org.mklab.taskit.client.place.StudentList;
@@ -112,6 +113,10 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
       }
 
     });
+    updateRecordsAsync();
+  }
+
+  private void updateRecordsAsync() {
     getClientFactory().getLocalDatabase().getCacheAndExecute(LocalDatabase.RECORDS, new Receiver<List<RecordProxy>>() {
 
       @Override
@@ -120,6 +125,15 @@ public class StudentListActivity extends TaskitActivity implements StudentListVi
       }
 
     });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void recoverFromTimeout() throws TimeoutRecoveryFailureException {
+    super.recoverFromTimeout();
+    updateRecordsAsync();
   }
 
   /**

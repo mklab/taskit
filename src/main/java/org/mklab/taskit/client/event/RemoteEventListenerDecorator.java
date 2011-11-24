@@ -43,6 +43,15 @@ public class RemoteEventListenerDecorator implements RemoteEventListener {
   }
 
   /**
+   * 装飾する対象のリスナーを取得します。
+   * 
+   * @return 装飾する対象のリスナー
+   */
+  public RemoteEventListener getListener() {
+    return this.listener;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override

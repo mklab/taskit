@@ -71,7 +71,7 @@ public final class HelpCallListActivity extends TaskitActivity implements HelpCa
    * 
    * @param isAuto 定期的に行う自動更新の場合はtrue,そうでなければfalse。この値は表示するステータスメッセージにのみ影響します。
    */
-  void updateHelpCallListAsync(final boolean isAuto) {
+  private void updateHelpCallListAsync(final boolean isAuto) {
     final Messages messages = getClientFactory().getMessages();
     showInformationMessage(isAuto ? messages.fetchingCallListAutoMessage() : messages.fetchingCallListMessage());
 
