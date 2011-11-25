@@ -31,6 +31,9 @@ public class GlobalEventListener {
   private RemoteEventService eventService;
   private RemoteEventListenerDecorator globalListener;
   private RemoteEventListener baseListener;
+  private int timeoutRecoveryFailureCount = 0;
+  /** ログインユーザーです。 */
+  private UserProxy loginUser;
   private boolean running = false;
 
   /**
@@ -50,8 +53,13 @@ public class GlobalEventListener {
    */
   public void listenWith(UserProxy user) {
     if (this.running) throw new IllegalStateException();
+    this.loginUser = user;
+    relisten();
+  }
+
+  private void relisten() {
     final Domain domain;
-    switch (user.getType()) {
+    switch (this.loginUser.getType()) {
       case STUDENT:
         domain = Domains.STUDENT;
         break;
@@ -64,6 +72,7 @@ public class GlobalEventListener {
       default:
         throw new UnsupportedOperationException();
     }
+
     this.globalListener = new RemoteEventListenerDecorator();
     this.eventService.addUnlistenListener(UnlistenEventListener.Scope.LOCAL, new UnlistenEventListenerAdapter() {
 
@@ -73,20 +82,20 @@ public class GlobalEventListener {
       @Override
       public void onUnlisten(@SuppressWarnings("unused") UnlistenEvent anUnlistenEvent) {
         if (isListening()) {
-          Window.alert("Detected connection timeout."); //$NON-NLS-1$
-          reload();
+          timeoutDetected();
         }
       }
     }, new AsyncCallback<Void>() {
 
       @Override
-      public void onSuccess(@SuppressWarnings("unused") Void result) {
-        // never called.
+      public void onFailure(@SuppressWarnings("unused") Throwable caught) {
+        // do nothing
       }
 
+      @SuppressWarnings({"unqualified-field-access", "synthetic-access"})
       @Override
-      public void onFailure(@SuppressWarnings("unused") Throwable caught) {
-        // never called.
+      public void onSuccess(@SuppressWarnings("unused") Void result) {
+        timeoutRecoveryFailureCount = 0;
       }
     });
     this.eventService.addListener(domain, new RemoteEventListener() {
@@ -101,21 +110,21 @@ public class GlobalEventListener {
     this.running = true;
   }
 
-  /**
-   * ブラウザの再読み込みを行います。
-   */
-  public native void reload() /*-{ 
-                              $wnd.location.reload(); 
-                              }-*/;
+  void timeoutDetected() {
+    // 復帰に失敗し続けると試みるのをやめる
+    if (this.timeoutRecoveryFailureCount++ > 5) {
+      return;
+    }
 
-  /**
-   * アクティビティ間で共通に利用するグローバルリスナを取得します。
-   * 
-   * @return グローバルリスナ
-   */
-  public RemoteEventListenerDecorator getGlobalListener() {
-    if (isListening() == false) throw new IllegalStateException("system not started."); //$NON-NLS-1$
-    return this.globalListener;
+    // 復帰を試みる
+    if (recoverFromTimeout()) {
+      relisten();
+      return;
+    }
+
+    // 復帰出来なければページをリロード
+    Window.alert("Detected connection timeout."); //$NON-NLS-1$
+    reload();
   }
 
   /**
@@ -128,12 +137,66 @@ public class GlobalEventListener {
   }
 
   /**
+   * タイムアウトからの復帰を試みます。
+   * 
+   * @return 復帰できたらtrue,できなければfalse
+   */
+  private boolean recoverFromTimeout() {
+    if (this.globalListener.getListener() instanceof TimeoutRecoverable) {
+      final TimeoutRecoverable recovery = (TimeoutRecoverable)this.globalListener.getListener();
+      try {
+        recovery.recoverFromTimeout();
+        return true;
+      } catch (TimeoutRecoveryFailureException e) {
+        return false;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * ブラウザの再読み込みを行います。
+   */
+  native void reload() /*-{ 
+                              $wnd.location.reload(); 
+                              }-*/;
+
+  /**
+   * リスナの実装を切り替えます。
+   * 
+   * @param listener リスナの実装
+   */
+  public void setImplementation(RemoteEventListener listener) {
+    if (listener == null) throw new NullPointerException();
+    this.globalListener.setListener(listener);
+  }
+
+  /**
    * システムが実行中か調べます。
    * 
    * @return 実行中かどうか
    */
   public boolean isListening() {
     return this.running;
+  }
+
+  /**
+   * 何も行わない非同期コールバックです。
+   * 
+   * @author Yuhi Ishikura
+   */
+  static final class VoidAsyncCallback implements AsyncCallback<Void> {
+
+    @Override
+    public void onSuccess(@SuppressWarnings("unused") Void result) {
+      // never called.
+    }
+
+    @Override
+    public void onFailure(@SuppressWarnings("unused") Throwable caught) {
+      // never called.
+    }
   }
 
 }

@@ -32,6 +32,77 @@
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>5.1.17</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<version>3.4.0.GA</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-c3p0</artifactId>
+					<version>3.6.7.Final</version>
+				</dependency>
+				<dependency>
+					<groupId>c3p0</groupId>
+					<artifactId>c3p0</artifactId>
+					<version>0.9.1.2</version>
+				</dependency>
+				<dependency>
+					<groupId>com.google.code.gwteventservice</groupId>
+					<artifactId>gwteventservice</artifactId>
+					<version>1.2.0-RC1</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>no-gpl</id>
+			<dependencies>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>5.1.17</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+					<version>3.4.0.GA</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-c3p0</artifactId>
+					<version>3.6.7.Final</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>c3p0</groupId>
+					<artifactId>c3p0</artifactId>
+					<version>0.9.1.2</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.google.code.gwteventservice</groupId>
+					<artifactId>gwteventservice</artifactId>
+					<version>1.2.0-RC1</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -55,20 +126,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.17</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.4.0.GA</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -113,28 +170,11 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-c3p0</artifactId>
-			<version>3.6.7.Final</version>
-		</dependency>
 		<!-- for IO -->
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 			<version>2.0</version>
-		</dependency>
-		<!-- DB Connection Pool -->
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
-		</dependency>
-		<!-- -->
-		<dependency>
-			<groupId>com.google.code.gwteventservice</groupId>
-			<artifactId>gwteventservice</artifactId>
-			<version>1.2.0-RC1</version>
 		</dependency>
 	</dependencies>
 
@@ -365,6 +405,7 @@
 										</versionRange>
 										<goals>
 											<goal>exploded</goal>
+											<goal>war</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -438,9 +479,9 @@
 			<layout>default</layout>
 		</repository>
 		<site>
-		<id>mklab-taskit-site</id>
-		<name>MKLAB TASKit Site</name>
-		<url>scp://birdcage.mk.ces.kyutech.ac.jp/home/mutsuki/document/taskit</url>
+			<id>mklab-taskit-site</id>
+			<name>MKLAB TASKit Site</name>
+			<url>scp://birdcage.mk.ces.kyutech.ac.jp/home/mutsuki/document/taskit</url>
 		</site>
 	</distributionManagement>
 </project>

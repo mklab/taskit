@@ -6,7 +6,8 @@ package org.mklab.taskit.client.activity;
 import org.mklab.taskit.client.ClientFactory;
 import org.mklab.taskit.client.LocalDatabase;
 import org.mklab.taskit.client.event.GlobalEventListener;
-import org.mklab.taskit.client.event.RemoteEventListenerDecorator;
+import org.mklab.taskit.client.event.TimeoutRecoverable;
+import org.mklab.taskit.client.event.TimeoutRecoveryFailureException;
 import org.mklab.taskit.client.place.Login;
 import org.mklab.taskit.client.ui.HelpCallDisplayable;
 import org.mklab.taskit.client.ui.PageLayout;
@@ -42,7 +43,7 @@ import de.novanic.eventservice.client.event.listener.RemoteEventListener;
  * @author Yuhi Ishikura
  * @version $Revision$, Jan 25, 2011
  */
-public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, RemoteEventListener {
+public abstract class TaskitActivity extends AbstractActivity implements PageLayout.Presenter, RemoteEventListener, TimeoutRecoverable {
 
   private static int lastHelpCallCount = 0;
   private ClientFactory clientFactory;
@@ -124,8 +125,7 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
     if (globalEventListener.isListening() == false) {
       globalEventListener.listenWith(user);
     }
-    final RemoteEventListenerDecorator globalListener = getClientFactory().getGlobalEventListener().getGlobalListener();
-    globalListener.setListener(this);
+    getClientFactory().getGlobalEventListener().setImplementation(this);
 
     this.view = createTaskitView(this.clientFactory);
     updateHelpCallDisplayAsync();
@@ -242,21 +242,41 @@ public abstract class TaskitActivity extends AbstractActivity implements PageLay
         ((HelpCallDisplayable)this.view).setHelpCallDisplayEnabled(true);
         ((HelpCallDisplayable)this.view).showHelpCallCount(((HelpCallEvent)evt).getHelpCallCount());
       }
-      getClientFactory().getLocalDatabase().execute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
-
-        @Override
-        public void onSuccess(List<HelpCallProxy> response) {
-          onHelpCallListChanged(response);
-        }
-      });
+      updateHelpCallListAsync();
     } else if (evt instanceof CheckMapEvent) {
-      getClientFactory().getLocalDatabase().execute(LocalDatabase.CHECKS, new Receiver<List<CheckMapProxy>>() {
+      updateChecksAsync();
+    }
+  }
 
-        @Override
-        public void onSuccess(List<CheckMapProxy> response) {
-          onCheckMapChanged(response);
-        }
-      });
+  private void updateHelpCallListAsync() {
+    getClientFactory().getLocalDatabase().execute(LocalDatabase.CALL_LIST, new Receiver<List<HelpCallProxy>>() {
+
+      @Override
+      public void onSuccess(List<HelpCallProxy> response) {
+        onHelpCallListChanged(response);
+      }
+    });
+  }
+
+  private void updateChecksAsync() {
+    getClientFactory().getLocalDatabase().execute(LocalDatabase.CHECKS, new Receiver<List<CheckMapProxy>>() {
+
+      @Override
+      public void onSuccess(List<CheckMapProxy> response) {
+        onCheckMapChanged(response);
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void recoverFromTimeout() throws TimeoutRecoveryFailureException {
+    final UserType loginUserType = getLoginUser().getType();
+    if (loginUserType == UserType.TA || loginUserType == UserType.TEACHER) {
+      updateHelpCallListAsync();
+      updateChecksAsync();
     }
   }
 
