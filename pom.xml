@@ -6,7 +6,7 @@
 	<groupId>org.mklab</groupId>
 	<artifactId>taskit</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>TASKit</name>
 	<description>TASKit supports TA works.</description>
 	<url>http://taskit.mk.ces.kyutech.ac.jp/</url>
@@ -23,6 +23,18 @@
 			<name>Hiroshi Teshima</name>
 		</developer>
 	</developers>
+
+	<scm>
+		<connection>scm:git:git://gitolite@birdcage.mk.ces.kyutech.ac.jp/taskit.git</connection>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<properties>
 		<gwtVersion>2.4.0</gwtVersion>
@@ -338,6 +350,14 @@
 				<configuration>
 					<descriptor>${basedir}/src/assembly/package.xml</descriptor>
 					<attach>false</attach>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.2.1</version>
+				<configuration>
+					<preparationGoals>verify</preparationGoals>
 				</configuration>
 			</plugin>
 		</plugins>
