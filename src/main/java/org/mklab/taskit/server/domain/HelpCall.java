@@ -158,7 +158,7 @@ public class HelpCall extends AbstractEntity<Integer> {
    * @param message メッセージ。nullを許容します。
    */
   @Invoker(UserType.STUDENT)
-  public static void call(String message) {
+  public synchronized static void call(String message) {
     if (isCalling()) throw new IllegalStateException("Already been calling."); //$NON-NLS-1$
 
     final HelpCall call = new HelpCall();
@@ -215,7 +215,7 @@ public class HelpCall extends AbstractEntity<Integer> {
    * @param accountId キャンセルする生徒のアカウントID
    */
   @Invoker({UserType.TA, UserType.TEACHER})
-  public static void cancelCall(String accountId) {
+  public synchronized static void cancelCall(String accountId) {
     if (isCallingByAccountId(accountId) == false) throw new IllegalStateException("Not be calling now."); //$NON-NLS-1$
 
     final EntityManager em = EMF.get().createEntityManager();
@@ -279,7 +279,10 @@ public class HelpCall extends AbstractEntity<Integer> {
     @SuppressWarnings("unchecked")
     final List<HelpCall> result = q.getResultList();
     if (result.size() == 0) return null;
-    if (result.size() > 1) throw new IllegalStateException();
+    if (result.size() > 1) {
+      System.err.println("Multiple help call per user detected."); //$NON-NLS-1$
+      return result.get(0);
+    }
 
     return result.get(0);
   }
